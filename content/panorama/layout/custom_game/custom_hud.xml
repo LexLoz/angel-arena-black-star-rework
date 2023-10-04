@@ -6,11 +6,12 @@
 		<include src="file://{resources}/styles/dynamic_minimap.css" />
 	</styles>
 	<scripts>
-		<include src="file://{resources}/scripts/arena_util.js" />
+		<include src="file://{resources}/scripts/libraries/arena_util.js" />
 		<include src="file://{resources}/scripts/chat_smiles.js" />
 		<include src="file://{resources}/scripts/customchat.js" />
 		<include src="file://{resources}/scripts/entity_tooltips.js" />
 		<include src="file://{resources}/scripts/custom_hud.js" />
+		<include src="file://{resources}/scripts/stamina_button.js" />
 	</scripts>
 	<snippets>
 		<snippet name="ToastPanel">
@@ -34,9 +35,13 @@
 		<Panel id="CustomModifiersList" />
 		<Panel id="AbandonedPanel">
 			<Label id="AbandonedTitle" text="#abaddoned_panel_title" />
-			<Label id="AbandonedReason" text="#abaddoned_panel_reason" />
+			<Label id="AbandonedReason" text="#abaddoned_panel_reason" /> 
 			<Label id="AbandonedRedistribution" text="#abaddoned_panel_redistribution" />
 			<Label id="AbandonedRanked" text="#abaddoned_panel_ranked" />
+		</Panel>
+		<Panel id="ButtonSwapMana" class="SwapManaBar" hittest="false">
+			<Image id="Stamina" src="s2r://panorama/images/primary_attribute_icons/primary_attribute_icon_agility_psd.vtex" onactivate="ToggleOnStaminaBar()" hittest="true"/>
+			<Image id="Mana" src="s2r://panorama/images/primary_attribute_icons/primary_attribute_icon_intelligence_psd.vtex" onactivate="ToggleOnManaBar()" hittest="true"/>
 		</Panel>
 	</Panel>
 </root>

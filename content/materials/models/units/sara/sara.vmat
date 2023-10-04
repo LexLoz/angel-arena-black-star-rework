@@ -28,7 +28,7 @@ Layer0
 	g_flTexCoordRotation "0.000"
 	g_vTexCoordOffset "[0.000 0.000]"
 	g_vTexCoordScale "[1.000 1.000]"
-	TextureColor "materials/models/units/sara/sara_color.png"
+	TextureColor "materials/models/units/sara/sara_color.tga"
 
 	//---- Detail 1 ----
 	g_vDetailTexCoordScale "[1.000 1.000]"

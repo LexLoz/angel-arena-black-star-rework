@@ -7,7 +7,7 @@
 		<include src="file://{resources}/styles/metamorphosis_elixir.css" />
 	</styles>
 	<scripts>
-		<include src="file://{resources}/scripts/arena_util.js" />
+		<include src="file://{resources}/scripts/libraries/arena_util.js" />
 		<include src="file://{resources}/scripts/shared_hero_selection_script.js" />
 		<include src="file://{resources}/scripts/metamorphosis_elixir.js" />
 	</scripts>
@@ -17,6 +17,7 @@
 				<Panel class="HeroesPanelElement" id="HeroesByAttributes_0" />
 				<Panel class="HeroesPanelElement" id="HeroesByAttributes_1" />
 				<Panel class="HeroesPanelElement" id="HeroesByAttributes_2" />
+				<Panel class="HeroesPanelElement" id="HeroesByAttributes_3" />
 			</Panel>
 		</snippet>
 		<snippet name="HeroCard">

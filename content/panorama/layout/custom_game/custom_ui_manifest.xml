@@ -2,9 +2,10 @@
 	<scripts>
 		<include src="file://{resources}/scripts/libraries/lodash.min.js" />
 		<include src="file://{resources}/scripts/libraries/playertables_base.js" />
-		<include src="file://{resources}/scripts/arena_util.js" />
+		<include src="file://{resources}/scripts/libraries/arena_util.js" />
 		<include src="file://{resources}/scripts/options.js" />
 		<include src="file://{resources}/scripts/hotkey_tracker.js" />
+		<include src="file://{resources}/scripts/vector_targeting.js" />
 		<include src="file://{resources}/scripts/custom_ui_manifest.js" />
 	</scripts>
 	<Panel>
@@ -15,9 +16,11 @@
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/libraries/barebones_notifications.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/libraries/barebones_worldpanels.xml" />
 
+
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/custom_hud.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/boss_loot.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/libraries/containers/container_base.xml" />
+		<!-- <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/stamina_button.xml" /> -->
 
 		<CustomUIElement type="HudTopBar" layoutfile="file://{resources}/layout/custom_game/top_scoreboard.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/panorama_shop.xml" />

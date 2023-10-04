@@ -5,7 +5,7 @@
 		<include src="file://{resources}/styles/ability_shop.css" />
 	</styles>
 	<scripts>
-		<include src="file://{resources}/scripts/arena_util.js" />
+		<include src="file://{resources}/scripts/libraries/arena_util.js" />
 		<include src="file://{resources}/scripts/ability_shop.js" />
 	</scripts>
 	<snippets>
@@ -24,6 +24,7 @@
 				<Panel class="HeroesPanelElement" id="HeroesByAttributes_0" />
 				<Panel class="HeroesPanelElement" id="HeroesByAttributes_1" />
 				<Panel class="HeroesPanelElement" id="HeroesByAttributes_2" />
+				<Panel class="HeroesPanelElement" id="HeroesByAttributes_3" />
 			</Panel>
 		</snippet>
 	</snippets>

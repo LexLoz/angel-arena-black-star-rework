@@ -31,7 +31,7 @@ Layer0
 	g_flTexCoordRotation "0.000"
 	g_vTexCoordOffset "[0.000 0.000]"
 	g_vTexCoordScale "[1.000 1.000]"
-	TextureColor "materials/models/units/saitama/saitama1_color.png"
+	TextureColor "materials/models/units/saitama/saitama1_color.tga"
 
 	//---- Detail 1 ----
 	g_vDetailTexCoordScale "[1.000 1.000]"
@@ -66,5 +66,5 @@ Layer0
 
 	//---- Translucency ----
 	g_flAlphaTestReference "0.010"
-	TextureTranslucency "materials/models/units/saitama/saitama1_trans.png"
+	TextureTranslucency "materials/models/units/saitama/saitama1_trans.tga"
 }

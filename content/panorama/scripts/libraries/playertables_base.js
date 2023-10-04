@@ -1,3 +1,5 @@
+//playertables
+
 var count = 0;
 var PT = {
 	listeners: {},
@@ -7,7 +9,7 @@ var PT = {
 	subs: []
 };
 //TODO: Check if it fixed reconnect bugs
-var UTPromisedCalls = [];
+var UTPromisedCalls = []; 
 var connected = false;
 
 $.Msg("[playertables_base.js] Loaded");
@@ -16,6 +18,7 @@ var PlayerTables = {};
 
 PlayerTables.GetAllTableValues = function(tableName) {
 	var table = PT.tables[tableName];
+	// print(table)
 	if (table)
 		return JSON.parse(JSON.stringify(table));
 
@@ -33,7 +36,7 @@ PlayerTables.GetTableValue = function(tableName, keyName) {
 	if (typeof val === 'object')
 		return JSON.parse(JSON.stringify(val));
 
-	return val;
+	return val || null;
 };
 
 PlayerTables.SubscribeNetTableListener = function(tableName, callback) {
@@ -112,7 +115,8 @@ function ProcessTable(newTable, oldTable, changes, dels) {
 }
 
 function SendPID() {
-	var playerId = Players.GetLocalPlayer();
+	//Game.GetLocalPlayerID()
+	var playerId = Game.GetLocalPlayerID();
 	var spec = Players.IsSpectator(playerId);
 	//$.Msg(playerId, ' -- ', spec);
 	if (playerId == -1 && !spec) {

@@ -10,7 +10,7 @@
 		<include src="file://{resources}/styles/hero_selection_picking_player.css" />
 	</styles>
 	<scripts>
-		<include src="file://{resources}/scripts/arena_util.js" />
+		<include src="file://{resources}/scripts/libraries/arena_util.js" />
 		<include src="file://{resources}/scripts/shared_hero_selection_script.js" />
 		<include src="file://{resources}/scripts/hero_selection.js" />
 		<include src="file://{resources}/scripts/chat_smiles.js" />
@@ -22,16 +22,17 @@
 				<Panel id="HeroesByAttributes_0" class="HeroesPanelElement" />
 				<Panel id="HeroesByAttributes_1" class="HeroesPanelElement" />
 				<Panel id="HeroesByAttributes_2" class="HeroesPanelElement" />
+				<Panel id="HeroesByAttributes_3" class="HeroesPanelElement" />
 			</Panel>
 		</snippet>
 		<snippet name="HeroCard">
-			<Panel class="HeroCard Showing" hittest="false">
+			<Panel class="HeroCard Showing IsChanged" hittest="false">
 				<Panel id="Contents" hittest="false">
 					<Image id="HeroImage" hittest="false" />
 					<DOTAHeroMovie id="HeroMovie" hittest="false" />
 					<Label id="HeroName" hittest="false" />
 					<Image id="LockedIcon" hittest="false" />
-					<Panel id="HeroChangedBurstRoot" hittest="false" />
+					<DOTAScenePanel id="HeroChangedBurstRoot" map="scenes/hud/levelupburst" hittest="false" />
 					<Panel id="LinkedHeroesGroupRow" hittest="false" />
 				</Panel>
 				<Panel id="BannedOverlay" hittest="false" />
@@ -129,8 +130,7 @@
 							</Panel>
 						</Button>
 						<Button id="RandomButton" class="PickButton" onactivate="RandomHero()" >
-							<Panel />
-							<Label text="#random" />
+							<Label text="#hero_selection_button_random" />
 						</Button>
 					</Panel>
 					<Panel id="HeroListControlsGroup3" class="HeroListControlsGroup">
@@ -267,7 +267,7 @@
 							<DOTAGuideBrowser id="GuideBrowser" />
 						</Panel> -->
 						<Panel id="AboutTabContents" class="HeroPreviewSubTab">
-							<Label id="HeroPreviewOverview" class="HeroDescriptionText" text="{s:hero_hype}" />
+							<Label id="HeroPreviewOverview" class="HeroDescriptionText" text="" />
 							<!-- <Label class="HeroDescriptionHeader" text="#DOTA_HeroLoadout_Roles" />
 							<DOTAHeroRoles id="HeroRoleDetails" class="ColumnLayout" /> -->
 							<Label class="HeroDescriptionHeader" text="#DOTA_HeroLoadout_Biography" />
