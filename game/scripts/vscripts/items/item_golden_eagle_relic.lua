@@ -82,6 +82,7 @@ if IsServer() then
 		local attacker = keys.attacker
 		if attacker == self:GetParent() then
 			local ability = self:GetAbility()
+			ability.NoDamageAmp = true
 			if not (target.IsBoss and target:IsBoss()) and not attacker:IsIllusion() then
 				local dmg = Gold:GetGold(attacker) * ability:GetSpecialValueFor("active_gold_as_damage_pct") * 0.01
 				ApplyDamage({

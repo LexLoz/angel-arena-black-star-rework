@@ -25,7 +25,7 @@ function DoubleAttack(keys)
 					if not caster:IsRangedUnit() then
 						PerformGlobalAttack(caster, target, true, true, true, true, true, false, true, {bNoDoubleAttackMelee = true})
 					end
-					if not target:IsMagicImmune() then
+					if not target:IsMagicImmune() and not target:IsDebuffImmune() then
 						ability:ApplyDataDrivenModifier(caster, target, keys.modifier, nil)
 					end
 					if keys.Damage then

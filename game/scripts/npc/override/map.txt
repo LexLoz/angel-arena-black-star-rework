@@ -3,7 +3,7 @@
 	"filler_ability"
 	{
 		"MaxLevel"						"1"
-		"AbilityCooldown"				"90"
+		"AbilityCooldown"				"120"
 
 		"AbilitySpecial"
 		{
@@ -46,6 +46,11 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"radius"				"500"
+			}
+			"09"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"initial_cooldown"		"150"
 			}
 		}
 	}

@@ -1,0 +1,263 @@
+.AddonLoadingRoot {
+	width: 100%;
+	height: 100%;
+	overflow: clip;
+	background-image: url("file://{images}/custom_game/loading_screen/background.png");
+	background-size: 100% 100%; }
+	
+	#afterload_panel {
+	width: 100%;
+	height: 100%;
+	visibility: collapse;
+	flow-children: right; }
+	
+	#loading_base {
+	width: 100%;
+	height: 100%; }
+	
+	#loading-angel-arena {
+	margin-top: 18%;
+	margin-left: 70px;
+	animation-duration: 300s;
+	animation-iteration-count: infinite;
+	animation-name: LoadingScreenAngelArena;
+	animation-timing-function: linear;
+	align: center top;
+	flow-children: down; }
+	#loading-angel-arena > Image {
+	horizontal-align: center; }
+	
+	#loading-black-star {
+	margin-top: 10%;
+	margin-left: 90px;
+	animation-duration: 300s;
+	animation-iteration-count: infinite;
+	animation-name: LoadingScreenBlackStar;
+	animation-timing-function: linear;
+	align: center center;
+	flow-children: down; }
+	#loading-black-star > Image {
+	horizontal-align: center; }
+	
+	#loading-author {
+	margin: 8px;
+	align: right bottom; }
+	
+	#TipsPanel {
+	width: 42%;
+	min-height: 84px;
+	padding: 20px;
+	margin-right: 270px;
+	margin-bottom: 70px;
+	background-image: url("file://{images}/custom_game/loading_screen/tips.png");
+	background-size: 100% 100%;
+	box-shadow: -4px -4px 8px 8px rgba(20, 20, 20, 0.97);
+	align: right bottom; }
+	
+	.AspectRatio16x9 #TipsPanel {
+	width: 42%;
+	margin-right: 385px; }
+	
+	.AspectRatio16x9 #TipLabel {
+	font-size: 25px; }
+	
+	#TipSaitama {
+	width: 110px;
+	height: 150px;
+	margin-top: -100px;
+	margin-bottom: -10px;
+	margin-left: -20px;
+	vertical-align: bottom;
+	background-image: url("file://{images}/custom_game/loading_screen/saitama.png");
+	background-size: 100% 100%; }
+	
+	#TipLabel {
+	margin-left: 100px;
+	font-size: 22px;
+	color: white;
+	text-align: center;
+	align: center center; }
+	
+	#LocalPlayerData {
+	width: 100%;
+	height: 500px;
+	margin-top: 55px;
+	margin-left: 4px;
+	vertical-align: top;
+	horizontal-align: right; }
+	
+	#PlayerInfoLoading {
+	width: 40px;
+	height: 40px;
+	background-image: url("file://{images}/status_icons/loadingthrobber_round.png");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	visibility: collapse;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-name: PlayerLoadingAnim;
+	animation-timing-function: linear;
+	align: center center; }
+	
+	#OptionVotings {
+	width: 400px;
+	padding: 20px;
+	/* margin-bottom: 50px; */
+	/* margin-left: -70px; */
+	vertical-align: top;
+	background-image: url("file://{images}/custom_game/loading_screen/options-back.png");
+	background-size: 100% 100%;
+	opacity: 0;
+	transition-duration: .2s;
+	transition-property: opacity;
+	flow-children: down; }
+	#OptionVotings.Loaded {
+	opacity: 1; }
+	
+	.OptionVoting {
+	width: 100%;
+	margin: 3px 0;
+	flow-children: down; }
+	.OptionVoting:not(.ShouldGroup) .OptionVotingVariant {
+	width: 100%;
+	margin: 3px 10px; }
+	.OptionVoting.Voted .OptionVotingVariant {
+	wash-color: #999999;
+	saturation: 0; }
+	.OptionVoting.Voted .OptionVotingVariant > Label {
+	wash-color: #888888; }
+	
+	#OptionVotingTitle {
+	width: 100%;
+	height: 41px;
+	font-size: 30px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	color: white;
+	text-align: center;
+	text-overflow: shrink;
+	text-shadow: 0 0 3 black;
+	horizontal-align: center; }
+	
+	#OptionVotingVariants {
+	width: 100%;
+	flow-children: down; }
+	
+	.OptionVotingVariantRow {
+	width: 100%;
+	margin: 3px 10px; }
+	
+	.OptionVotingVariant {
+	width: 49%;
+	background-color: #1e1e1e; }
+	.OptionVotingVariant > Label {
+	font-size: 20px;
+	color: white;
+	horizontal-align: left; }
+	
+	.AspectRatio16x10 #TipsPanel {
+	margin-right: 325px; }
+	
+	#TopPlayers {
+	width: 0px /*360px;*/;
+	padding: 0px;
+	margin-top: 0px;
+	margin-left: 0px;
+	vertical-align: top;
+	flow-children: down; }
+	#TopPlayers .Spinner {
+	align: center center; }
+	#TopPlayers.Loaded .Spinner {
+	visibility: collapse; }
+	
+	#TopPlayersTitle {
+	width: 100%;
+	font-size: 30px;
+	font-weight: bold;
+	color: #fff;
+	text-align: center;
+	text-overflow: shrink; }
+	
+	#TopPlayersList {
+	width: 100%;
+	flow-children: down; }
+	
+	.TopPlayer {
+	width: 100%;
+	padding: 5px;
+	margin: 2px 0;
+	background-color: rgba(0, 0, 0, 0.7);
+	flow-children: right; }
+	.TopPlayer.LocalPlayer {
+	background-color: rgba(63, 63, 63, 0.7); }
+	
+	#PlayerPlace {
+	min-width: 42px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #fb0;
+	text-align: center;
+	align: right center; }
+	.NotInTop #PlayerPlace {
+	font-size: 18px;
+	font-weight: normal;
+	color: #fff; }
+	
+	#PlayerAvatar {
+	vertical-align: center; }
+	
+	#PlayerName {
+	margin-left: 4px;
+	vertical-align: center; }
+	#PlayerName > Label {
+	width: 100%;
+	font-size: 22px;
+	text-overflow: shrink; }
+	
+	#PlayerRating {
+	font-size: 24px;
+	font-weight: bold;
+	color: #fff;
+	align: right center; }
+	
+	#TopPlayersMore {
+	padding: 0 12px;
+	margin-top: 6px;
+	margin-left: 20px;
+	font-size: 24px;
+	font-weight: bold;
+	letter-spacing: 1px;
+	color: #fff;
+	text-align: center;
+	text-transform: uppercase;
+	background-color: rgba(0, 0, 0, 0.95);
+	border: 1px solid #0f0;
+	border-radius: 5px;
+	visibility: collapse;
+	transition-duration: .2s;
+	transition-property: color;
+	horizontal-align: center; }
+	
+	#AdsBanner {
+	padding: 2px;
+	margin: 4px 0;
+	margin-left: 54px;
+	transition-duration: .07s;
+	transition-property: pre-transform-scale2d, brightness;
+	brightness: .98; }
+	#AdsBanner:active {
+	pre-transform-scale2d: 1.02;
+	brightness: 1.3; }
+	#AdsBanner > Label {
+	margin-right: 6px;
+	margin-bottom: -2px;
+	font-size: 48px;
+	font-weight: bold;
+	color: #ffd700;
+	transition-duration: .2s;
+	transition-property: saturation;
+	align: right bottom; }
+	
+	#GCColumn {
+	flow-children: down; }

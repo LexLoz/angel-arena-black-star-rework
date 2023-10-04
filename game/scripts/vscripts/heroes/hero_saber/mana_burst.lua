@@ -58,7 +58,7 @@ if IsServer() then
 				ParticleManager:DestroyParticle(self.pfx, false)
 				self.pfx = nil
 			end
-			if ability:GetAutoCastState() and manacost * 2 < parent:GetMana() then
+			if ability:GetAutoCastState() and manacost * 2 < parent:GetMana() and not parent:IsChanneling() and not parent:IsInvisible() then
 				parent:CastAbilityNoTarget(ability, parent:GetPlayerID())
 			end
 		end
@@ -80,7 +80,9 @@ function modifier_saber_mana_burst_active:GetModifierPreAttack_BonusDamage()
 	return self:GetStackCount() * self:GetAbility():GetSpecialValueFor("damage_per_mana")
 end
 function modifier_saber_mana_burst_active:GetModifierPhysicalArmorBonus()
-	return self:GetStackCount() * self:GetAbility():GetSpecialValueFor("armor_per_mana")
+	local armorBonus = self:GetStackCount() * self:GetAbility():GetSpecialValueFor("armor_per_mana")
+	if armorBonus > 20 then armorBonus = 20 end
+	return armorBonus
 end
 if IsServer() then
 	function modifier_saber_mana_burst_active:OnCreated()

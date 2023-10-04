@@ -4,8 +4,14 @@ function StealArmor(keys)
 	local ability = keys.ability
 
 	if target:IsConsideredHero() and not target:IsIllusion() and not target:IsBoss() then
-		ModifyStacks(ability, caster, caster, "modifier_apocalypse_agnis_touch_armor", ability:GetAbilitySpecial("armor_per_attack"), false)
-		ModifyStacks(ability, caster, target, "modifier_apocalypse_agnis_touch_disarmor", ability:GetAbilitySpecial("armor_per_attack"), false)
+		local modifier_caster = ModifyStacks(ability, caster, caster, "modifier_apocalypse_agnis_touch_armor", ability:GetAbilitySpecial("armor_per_attack"), false)
+		local modifier_target = ModifyStacks(ability, caster, target, "modifier_apocalypse_agnis_touch_disarmor", ability:GetAbilitySpecial("armor_per_attack"), false)
+		local stacks = modifier_target:GetStackCount()
+		if stacks > 40 then
+			--print(stacks)
+			modifier_target:SetStackCount(40)
+			modifier_caster:SetStackCount(modifier_caster:GetStackCount() - 1)
+		end
 		if not ability.damaged_units then
 			ability.damaged_units = {}
 		end

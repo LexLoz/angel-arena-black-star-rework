@@ -11,7 +11,10 @@ if IsServer() then
 		caster:EmitSound("Item.GuardianGreaves.Activate")
 		ParticleManager:CreateParticle("particles/items3_fx/warmage.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
 		for _,v in ipairs(FindUnitsInRadius(caster:GetTeamNumber(), caster:GetAbsOrigin(), nil, self:GetSpecialValueFor("radius"), self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)) do
-			SafeHeal(v, self:GetSpecialValueFor("replenish_health"), self)
+			SafeHeal(v, self:GetSpecialValueFor("replenish_health"), self, true, {
+				amplify = true,
+				strengthAMP = true,
+			})
 			v:GiveMana(self:GetSpecialValueFor("replenish_mana"))
 			ParticleManager:CreateParticle("particles/items3_fx/warmage_recipient.vpcf", PATTACH_ABSORIGIN_FOLLOW, v, caster)
 			v:EmitSound("Item.GuardianGreaves.Target")

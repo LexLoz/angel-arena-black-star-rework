@@ -1,0 +1,24 @@
+"DOTAAbilities"
+{
+    "jungle_bears_passive"
+    {
+        "BaseClass"             		"ability_datadriven"
+        "MaxLevel" 						"1"
+        "AbilityTextureName"			"arena/jungle_bears_passive"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+        "AbilityValues"
+        {
+            "up_per_level"              "200"
+        }
+
+        "OnCreated"
+		{
+			"RunScript"
+			{
+				"ScriptFile"	"heroes/bosses/boss_armor.lua"
+				"Function"		"Init"
+			}
+		}
+    }
+}

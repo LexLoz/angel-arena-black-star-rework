@@ -4,27 +4,6 @@ if not CustomRunes then
 	CustomRunes.ModifierApplier = CreateItem("item_dummy", nil, nil)
 end
 
-local modifiers = {
-	"tripledamage",
-	"haste",
-	"invisibility",
-	"arcane",
-	"flame",
-	"acceleration",
-	"vibration",
-	"spikes",
-	"soul_steal",
-	soul_steal_effect = "soul_steal"
-}
-for k,v in pairs(modifiers) do
-	if type(k) == "string" then
-		k, v = v, k
-	else
-		k = nil
-	end
-	ModuleLinkLuaModifier(..., "modifier_arena_rune_" .. v, "modifiers/modifier_arena_rune_" .. (k or v))
-end
-
 function CustomRunes:ActivateRune(unit, runeType, rune_multiplier)
 	local settings = {}
 	table.merge(settings, RUNE_SETTINGS[runeType])
@@ -54,15 +33,16 @@ function CustomRunes:ActivateRune(unit, runeType, rune_multiplier)
 	elseif runeType == ARENA_RUNE_HASTE then
 		unit:AddNewModifier(unit, CustomRunes.ModifierApplier, "modifier_arena_rune_haste", {duration = settings.duration}):SetStackCount(settings.movespeed)
 	elseif runeType == ARENA_RUNE_ILLUSION then
-		Illusions:create({
-			unit = unit,
-			count = settings.illusion_count,
-			padding = 100,
-			scramblePosition = true,
-			damageIncoming = settings.illusion_incoming_damage,
-			damageOutgoing = settings.illusion_outgoing_damage,
-			duration = settings.duration,
-		})
+		for i = 1, settings.illusion_count do
+			Illusions:create({
+				unit = unit,
+				ability = CustomRunes.ModifierApplier,
+				origin = unit:GetAbsOrigin() + RandomVector(100),
+				damageIncoming = settings.illusion_incoming_damage,
+				damageOutgoing = settings.illusion_outgoing_damage,
+				duration = settings.duration,
+			})
+		end
 	elseif runeType == ARENA_RUNE_INVISIBILITY then
 		unit:AddNewModifier(unit, CustomRunes.ModifierApplier, "modifier_arena_rune_invisibility", {duration = settings.duration})
 	elseif runeType == ARENA_RUNE_REGENERATION then
@@ -94,6 +74,7 @@ end
 
 function CustomRunes:CreateRune(position, runeType)
 	local settings = RUNE_SETTINGS[runeType]
+	-- print(settings.item)
 	local entity = CreateItem(settings.item, nil, nil)
 	entity.RuneType = runeType
 	local container = CreateItemOnPositionSync(position, entity)
@@ -124,20 +105,24 @@ function CustomRunes:SpawnRunes()
 	local spawners = Entities:FindAllByName("target_mark_rune_spawner")
 	local bountySpawner = RandomInt(1, #spawners)
 	for k,v in ipairs(spawners) do
+		-- print(v.RuneEntity)
 		if IsValidEntity(v.RuneEntity) then
 			v.RuneEntity:GetContainer():ClearNetworkableEntityInfo()
 			v.RuneEntity:GetContainer():Destroy()
-			UTIL_Remove(v.RuneEntity)
+			UTIL_RemoveImmediate(v.RuneEntity)
 		end
 		v.RuneEntity = CustomRunes:CreateRune(v:GetAbsOrigin(), k == bountySpawner and ARENA_RUNE_BOUNTY or RandomInt(ARENA_RUNE_FIRST, ARENA_RUNE_LAST))
+		-- print(v.RuneEntity)
 	end
 end
 
 function CustomRunes:PickUpRune(unit, rune)
+	-- print(rune)
 	if IsValidEntity(unit) and IsValidEntity(rune) then
 		local runeType = rune.RuneType
 		rune:GetContainer():ClearNetworkableEntityInfo()
-		UTIL_Remove(rune)
+		rune:GetContainer():Destroy()
+		UTIL_RemoveImmediate(rune)
 
 		local bottle
 		local runeKeeper

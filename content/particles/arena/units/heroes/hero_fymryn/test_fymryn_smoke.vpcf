@@ -1,0 +1,45 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vrfunknown:version{4f75132e-4f5d-493c-958e-3bb4328089ba} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_bShouldHitboxesFallbackToRenderBounds = false
+	m_nMaxParticles = 0
+	m_ConstantColor = 
+	[
+		220,
+		222,
+		28,
+		255,
+	]
+	m_flCullRadius = 50.000000
+	m_nBehaviorVersion = 12
+	m_controlPointConfigurations = 
+	[
+		
+		{
+			m_name = "preview"
+			m_drivers = 
+			[
+				
+				{
+					m_iAttachType = "PATTACH_WORLDORIGIN"
+					m_entityName = "self"
+				},
+			]
+		},
+	]
+	m_Children = 
+	[
+		
+		{
+			m_ChildRef = resource:"particles/test_fymryn_smoke_smoke.vpcf"
+		},
+		
+		{
+			m_ChildRef = resource:"particles/test_fymryn_smoke_mushroom.vpcf"
+		},
+		
+		{
+			m_ChildRef = resource:"particles/windwalk_particle_fymryn.vpcf"
+		},
+	]
+}

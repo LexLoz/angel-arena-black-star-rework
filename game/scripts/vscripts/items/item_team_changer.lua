@@ -17,8 +17,15 @@ function ChangeTeam(keys)
 	GameRules:SetCustomGameTeamMaxPlayers(oldTeam, GameRules:GetCustomGameTeamMaxPlayers(oldTeam) - 1)
 
 	FindClearSpaceForUnit(caster, FindFountain(newTeam):GetAbsOrigin(), true)
+
 	local courier = Structures:GetCourier(playerId)
-	FindClearSpaceForUnit(courier, caster:GetAbsOrigin() + RandomVector(150), true)
+	UTIL_Remove(courier)
+	caster:GetPlayerOwner():SpawnCourierAtPosition(FindFountain(newTeam):GetAbsOrigin())
+	
+	Timers:CreateTimer(1, function()
+		ReloadUnitModifiers(caster)
+		-- ReloadUnitModifiers(courier)
+	end)
 
 	ability:SpendCharge()
 end

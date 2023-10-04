@@ -1,0 +1,167 @@
+"DOTAAbilities"
+{
+    "fymryn_shadowmourne"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_fymryn/fymryn_shadowmourne"  
+        "AbilityTextureName"            "arena/fymryn_shadowmourne" 
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+        "AbilityCooldown"               "20 18 16 14"
+        "AbilityManaCost"               "90 100 110 120"
+        "AbilityCastRange"              "600"
+        "AbilityCastPoint"              "0.25"
+        "AbilityCastAnimation"          "ACT_DOTA_CAST_ABILITY_1"
+        "AbilityUnitTargetTeam"         "DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "AbilityUnitTargetType"         "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+        "AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_YES"
+
+        "AbilityValues"
+        {
+            "silence_duration"                      "0.6 1 1.4 1.8"
+            "damage"
+			{
+				"value"							    "60 125 185 245"	
+			}
+            "damage_from_attack"        "40"
+        }
+    }
+
+    "fymryn_shadow_step"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_fymryn/fymryn_shadow_step"  
+        "AbilityTextureName"            "arena/fymryn_shadow_step" 
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+        "AbilityCooldown"               "23 19 15 11"
+        "AbilityManaCost"               "80"
+        "AbilityCastAnimation"          "ACT_DOTA_CAST_ABILITY_3"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_YES"
+        "AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+
+        "AbilityValues"
+        {
+            "duration"
+			{
+				"value"							    "1.6 1.8 2 2.2"		
+			}
+            "speed"
+			{
+				"value"							    "1000"			
+			}
+            "end_delay"                 "0.25"
+
+            "slow_enemy"                "-100"
+            "duration_slow"             "0.3"
+
+            "damage_from_attack"        "50"
+            "buff_attack_speed"         "60 80 100 120"
+            "creep_damage"              "100"
+        }
+    }
+
+    "fymryn_stretching"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_fymryn/fymryn_stretching"  
+        "AbilityTextureName"            "arena/fymryn_stretching" 
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_NO"
+
+        "AbilityValues"
+        {
+            "attacks_hero"
+			{
+				"value"							    "5 4 3 2"		
+			}
+            "attacks_enemy"
+			{
+				"value"							    "8 7 6 5"			
+			}
+            "cooldown_reduction"        "1"
+            
+            "damage_bonus_magical"                  "40 80 120 160"
+            "radius_damage"                         "300"
+
+            "duration"                  "7"
+
+            "aoe_true_sight"            "300 325 350 375"
+        }
+    }
+
+    "fymryn_black_mirror"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_fymryn/fymryn_black_mirror"  
+        "AbilityTextureName"            "arena/fymryn_black_mirror" 
+        "AbilityCastPoint"              "0.1"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+        "AbilityUnitTargetTeam"         "DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "AbilityUnitTargetType"         "DOTA_UNIT_TARGET_HERO"
+        "AbilityCastRange"              "1000"
+        "AbilityManaCost"               "120 150 180"
+        "AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+        "AbilityType"					"DOTA_ABILITY_TYPE_ULTIMATE"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_YES"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_NO"
+
+        "AbilityValues"
+        {
+            "illusion_count"
+			{
+				"value"							    "3 4 5"				
+			}
+
+            "duration"                  "13"
+            "radius"                    "600"
+            "radius_out"                "200"
+            "slow"                      "-50"
+
+            "illusion_respawn_delay"    "0.5"
+            "delay_spawn"               "1"
+
+            "min_delay"                 "0.2"
+            "max_delay"                 "1"
+
+            "illusion_damage_incoming"      "400 350 300"
+
+            "illusion_damage_outgoing"
+			{
+				"value"							    "50"		
+			}
+
+            "AbilityCooldown"
+			{
+				"value"							    "75 60 45"		
+			}
+
+            "chance"                    "30 60 90"
+        }
+    }
+
+    "fymryn_mirror"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_fymryn/fymryn_mirror"  
+        "AbilityTextureName"            "arena/fymryn_mirror" 
+        "MaxLevel"                      "1"
+        "AbilityCastPoint"				"0"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+        "AbilityCooldown"				"15"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_YES"
+    }
+    "fymryn_mirror_cancel"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_fymryn/fymryn_mirror"  
+        "AbilityTextureName"            "arena/fymryn_mirror" 
+        "MaxLevel"                      "1"
+        "AbilityCastPoint"				"0"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_YES"
+    }
+}

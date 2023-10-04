@@ -3,6 +3,7 @@ modifier_talent_movespeed_pct = class({
 	IsPermanent     = function() return true end,
 	IsPurgable      = function() return false end,
 	DestroyOnExpire = function() return false end,
+	AllowIllusionDuplicate = function() return true end,
 })
 
 function modifier_talent_movespeed_pct:DeclareFunctions()

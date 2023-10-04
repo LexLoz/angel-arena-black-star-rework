@@ -4,6 +4,7 @@
 	{
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1200"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_diffusal_blade_arena"
@@ -17,6 +18,7 @@
 	{
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1200"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_diffusal_blade_arena_2"
@@ -30,6 +32,7 @@
 	{
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1200"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_diffusal_blade_arena_3"
@@ -56,6 +59,7 @@
 	{
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1200"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_diffusal_blade_arena_5"
@@ -96,7 +100,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"25 35 45 55 65"
+				"bonus_agility"			"20 25 30 35 40"
 			}
 			"02"
 			{
@@ -131,12 +135,22 @@
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"80 90 100 110 120"
+				"damage_per_burn_pct"		"50 55 60 65 70"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"		"500 550 600 650 700"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"mana_burn_pct"			"0.0 0.0 0.5 1.0 1.5"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"illusion_mana_burn"			"30"
 			}
 		}
 
@@ -180,6 +194,8 @@
 						"feedback_mana_burn"				"%feedback_mana_burn"
 						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
 						"damage_per_burn_pct"				"%damage_per_burn_pct"
+						"mana_burn_pct"						"%mana_burn_pct"
+						"illusion_mana_burn"				"%illusion_mana_burn"
 					}
 				}
 			}
@@ -243,7 +259,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"25 35 45 55 65"
+				"bonus_agility"			"20 25 30 35 40"
 			}
 			"02"
 			{
@@ -278,12 +294,22 @@
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"80 90 100 110 120"
+				"damage_per_burn_pct"		"50 55 60 65 70"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"		"500 550 600 650 700"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"mana_burn_pct"			"0.0 0.0 0.5 1.0 1.5"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"illusion_mana_burn"			"30"
 			}
 		}
 
@@ -327,6 +353,8 @@
 						"feedback_mana_burn"				"%feedback_mana_burn"
 						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
 						"damage_per_burn_pct"				"%damage_per_burn_pct"
+						"mana_burn_pct"						"%mana_burn_pct"
+						"illusion_mana_burn"				"%illusion_mana_burn"
 					}
 				}
 			}
@@ -390,7 +418,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"25 35 45 55 65"
+				"bonus_agility"			"20 25 30 35 40"
 			}
 			"02"
 			{
@@ -425,12 +453,22 @@
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"80 90 100 110 120"
+				"damage_per_burn_pct"		"50 55 60 65 70"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"		"500 550 600 650 700"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"mana_burn_pct"			"0.0 0.0 0.5 1.0 1.5"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"illusion_mana_burn"			"30"
 			}
 		}
 
@@ -474,6 +512,8 @@
 						"feedback_mana_burn"				"%feedback_mana_burn"
 						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
 						"damage_per_burn_pct"				"%damage_per_burn_pct"
+						"mana_burn_pct"						"%mana_burn_pct"
+						"illusion_mana_burn"				"%illusion_mana_burn"
 					}
 				}
 			}
@@ -537,7 +577,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"25 35 45 55 65"
+				"bonus_agility"			"20 25 30 35 40"
 			}
 			"02"
 			{
@@ -572,12 +612,22 @@
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"80 90 100 110 120"
+				"damage_per_burn_pct"		"50 55 60 65 70"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"		"500 550 600 650 700"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"mana_burn_pct"			"0.0 0.0 0.5 1.0 1.5"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"illusion_mana_burn"			"30"
 			}
 		}
 
@@ -621,6 +671,8 @@
 						"feedback_mana_burn"				"%feedback_mana_burn"
 						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
 						"damage_per_burn_pct"				"%damage_per_burn_pct"
+						"mana_burn_pct"						"%mana_burn_pct"
+						"illusion_mana_burn"				"%illusion_mana_burn"
 					}
 				}
 			}
@@ -684,7 +736,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"25 35 45 55 65"
+				"bonus_agility"			"20 25 30 35 40"
 			}
 			"02"
 			{
@@ -719,12 +771,22 @@
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"80 90 100 110 120"
+				"damage_per_burn_pct"		"50 55 60 65 70"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"		"500 550 600 650 700"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"mana_burn_pct"			"0.0 0.0 0.5 1.0 1.5"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"illusion_mana_burn"			"30"
 			}
 		}
 
@@ -768,6 +830,8 @@
 						"feedback_mana_burn"				"%feedback_mana_burn"
 						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
 						"damage_per_burn_pct"				"%damage_per_burn_pct"
+						"mana_burn_pct"						"%mana_burn_pct"
+						"illusion_mana_burn"				"%illusion_mana_burn"
 					}
 				}
 			}

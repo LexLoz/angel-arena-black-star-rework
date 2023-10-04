@@ -30,6 +30,7 @@ if IsServer() then
 				self.BonusDamageTarget = nil
 			else
 				self.BonusDamageTarget = keys.target
+				keys.attacker.FeastBonusDamage = self.BonusDamageTarget:GetHealth() * self:GetAbility():GetSpecialValueFor("hp_leech_percent") * 0.01
 			end
 		end
 	end
@@ -41,7 +42,9 @@ if IsServer() then
 			local target = keys.target
 			if IsValidEntity(self.BonusDamageTarget) then
 				local leech = self.BonusDamageTarget:GetHealth() * self:GetAbility():GetSpecialValueFor("hp_leech_percent") * 0.01
-				SafeHeal(attacker, leech, ability, true)
+				SafeHeal(attacker, leech, ability, true, {
+					lifesteal = true,
+				})
 				-- original uses particles/generic_gameplay/generic_lifesteal.vpcf for some reason
 				ParticleManager:CreateParticle("particles/units/heroes/hero_life_stealer/life_stealer_feast.vpcf", PATTACH_ABSORIGIN_FOLLOW, attacker)
 			end

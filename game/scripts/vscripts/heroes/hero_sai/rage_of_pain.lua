@@ -25,7 +25,7 @@ end
 function modifier_sai_rage_of_pain:OnIntervalThink()
 	local ability = self:GetAbility()
 	local parent = self:GetParent()
-	local health_per_stack_pct = ability:GetSpecialValueFor("health_per_stack_pct")
+	local health_per_stack_pct = ability:GetSpecialValueFor("health_per_stack_pct") + 1
 	self:SetStackCount(health_per_stack_pct - math.ceil(parent:GetHealth() / parent:GetMaxHealth() * health_per_stack_pct))
 end
 
@@ -42,6 +42,14 @@ end
 
 function modifier_sai_rage_of_pain:GetModifierBaseDamageOutgoing_Percentage(keys)
 	local ability = self:GetAbility()
-
-	return (ability:GetSpecialValueFor("damage_per_stack_pct") + self:GetParent():GetMaxMana() / ability:GetSpecialValueFor("mana_for_bonus_damage")) * self:GetStackCount()
+	local parent = self:GetParent()
+	local bonus = (ability:GetSpecialValueFor("damage_per_stack_pct") + (parent:GetNetworkableEntityInfo("MaxMana") or parent:GetMaxMana()) / ability:GetSpecialValueFor("mana_for_bonus_damage")) * self:GetStackCount()
+	--[[if parent:HasModifier("modifier_sai_release_of_forge") then
+		local release_of_forge_modifier = parent:FindModifierByName("modifier_sai_release_of_forge")
+		if release_of_forge_modifier then
+			print(bonus * (1 + release_of_forge_modifier:GetAbility():GetSpecialValueFor("rage_of_pain_multiplier_pct") * 0.01))
+			return bonus * (1 + release_of_forge_modifier:GetAbility():GetSpecialValueFor("rage_of_pain_multiplier_pct") * 0.01)
+		end
+	end]]
+	return bonus
 end

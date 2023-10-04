@@ -2,7 +2,7 @@ function CDOTA_BaseNPC:UnitHasSlotForItem(itemname, bBackpack)
 	if self.HasRoomForItem then
 		return self:HasRoomForItem(itemname, bBackpack, true) ~= 4
 	else
-		for i = 0, bBackpack and DOTA_STASH_SLOT_6 or DOTA_ITEM_SLOT_10 do
+		for i = 0, bBackpack and DOTA_STASH_SLOT_6 or DOTA_ITEM_SLOT_9 do
 			local item = self:GetItemInSlot(i)
 			if not IsValidEntity(item) or (item:GetAbilityName() == itemname and item:IsStackable()) then
 				return true
@@ -13,7 +13,7 @@ function CDOTA_BaseNPC:UnitHasSlotForItem(itemname, bBackpack)
 end
 
 function FillSlotsWithDummy(unit, bNoStash)
-	for i = 0, bNoStash and DOTA_ITEM_SLOT_10 or DOTA_STASH_SLOT_6 do
+	for i = 0, bNoStash and DOTA_ITEM_SLOT_9 or DOTA_STASH_SLOT_6 do
 		local current_item = unit:GetItemInSlot(i)
 		if not current_item then
 			unit:AddItemByName("item_dummy")
@@ -22,7 +22,7 @@ function FillSlotsWithDummy(unit, bNoStash)
 end
 
 function ClearSlotsFromDummy(unit, bNoStash)
-	for i = 0, bNoStash and DOTA_ITEM_SLOT_10 or DOTA_STASH_SLOT_6 do
+	for i = 0, bNoStash and DOTA_ITEM_SLOT_9 or DOTA_STASH_SLOT_6 do
 		local current_item = unit:GetItemInSlot(i)
 		if current_item and current_item:GetAbilityName() == "item_dummy" then
 			unit:RemoveItem(current_item)
@@ -32,7 +32,7 @@ function ClearSlotsFromDummy(unit, bNoStash)
 end
 
 function SetAllItemSlotsLocked(unit, locked, bNoStash)
-	for i = 0, bNoStash and DOTA_ITEM_SLOT_10 or DOTA_STASH_SLOT_6 do
+	for i = 0, bNoStash and DOTA_ITEM_SLOT_9 or DOTA_STASH_SLOT_6 do
 		local current_item = unit:GetItemInSlot(i)
 		if current_item then
 			if locked or not current_item.player_locked then
@@ -59,11 +59,15 @@ function swap_to_item(unit, srcItem, newItem)
 	ClearSlotsFromDummy(unit)
 end
 
-function FindItemInInventoryByName(unit, itemname, searchStash, onlyStash, ignoreBackpack)
-	local lastSlot = ignoreBackpack and DOTA_ITEM_SLOT_6 or DOTA_ITEM_SLOT_10
+function FindItemInInventoryByName(unit, itemname, searchStash, onlyStash, ignoreBackpack, all)
+	local lastSlot = ignoreBackpack and DOTA_ITEM_SLOT_6 or DOTA_ITEM_SLOT_9
 	local startSlot = 0
 	if searchStash then lastSlot = DOTA_STASH_SLOT_6 end
 	if onlyStash then startSlot = DOTA_STASH_SLOT_1 end
+	if all then
+		startSlot = 0
+		lastSlot = DOTA_ITEM_NEUTRAL_SLOT
+	end
 	for slot = startSlot, lastSlot do
 		local item = unit:GetItemInSlot(slot)
 		if item and item:GetAbilityName() == itemname then
@@ -79,4 +83,28 @@ function CDOTA_Item:SpendCharge(amount)
 	else
 		self:SetCurrentCharges(newCharges)
 	end
+end
+
+function CheckBackpack(unit, backpack)
+	local update = false
+	if not backpack then
+		backpack = {}
+	end
+
+	local index = 0
+	for slot = DOTA_ITEM_SLOT_7, DOTA_ITEM_SLOT_9  do
+		index = index + 1
+		local item = unit:GetItemInSlot(slot)
+		if item ~= backpack[index] then
+			backpack[index] = item
+			update = true
+		end
+	end
+
+	if update then
+		--print("yes")
+		Attributes:UpdateAll(unit, 1)
+	end
+
+	return backpack
 end

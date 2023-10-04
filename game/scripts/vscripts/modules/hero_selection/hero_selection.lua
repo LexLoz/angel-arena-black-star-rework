@@ -5,9 +5,9 @@ CUSTOM_GOLD_REPICK_COST = 200
 
 MAX_SPAWNBOXES_SELECTED = 3
 
-HERO_SELECTION_PICK_TIME = 70
+HERO_SELECTION_PICK_TIME = 60
 HERO_SELECTION_STRATEGY_TIME = 20
-HERO_SELECTION_BANNING_TIME = 40
+HERO_SELECTION_BANNING_TIME = 20
 
 HERO_SELECTION_PHASE_NOT_STARTED = 0
 HERO_SELECTION_PHASE_BANNING = 1
@@ -32,20 +32,27 @@ ModuleRequire(..., "util")
 ModuleRequire(..., "linked")
 ModuleRequire(..., "hero_replacer")
 ModuleRequire(..., "client_actions")
-ModuleLinkLuaModifier(..., "modifier_hero_selection_transformation")
 
-Events:Register("activate", function ()
+Events:Register("activate", function()
 	GameRules:SetHeroSelectionTime(-1)
 	local preTime = HERO_SELECTION_PICK_TIME + HERO_SELECTION_STRATEGY_TIME + 3.75 + Options:GetValue("PreGameTime")
 	if Options:GetValue("BanningPhaseBannedPercentage") > 0 then
 		preTime = preTime + HERO_SELECTION_BANNING_TIME
 	end
 	GameRules:SetPreGameTime(preTime)
+
+	--GameRules:GetGameModeEntity():SetDraftingHeroPickSelectTimeOverride(preTime - Options:GetValue("PreGameTime"))
+
 	GameRules:GetGameModeEntity():SetCustomGameForceHero(FORCE_PICKED_HERO)
+	--HeroSelection:NoHeroFix()
+
 	CustomGameEventManager:RegisterListener("hero_selection_player_hover", Dynamic_Wrap(HeroSelection, "OnHeroHover"))
-	CustomGameEventManager:RegisterListener("hero_selection_player_select", Dynamic_Wrap(HeroSelection, "OnHeroSelectHero"))
-	CustomGameEventManager:RegisterListener("hero_selection_player_random", Dynamic_Wrap(HeroSelection, "OnHeroRandomHero"))
-	CustomGameEventManager:RegisterListener("hero_selection_minimap_set_spawnbox", Dynamic_Wrap(HeroSelection, "OnMinimapSetSpawnbox"))
+	CustomGameEventManager:RegisterListener("hero_selection_player_select",
+		Dynamic_Wrap(HeroSelection, "OnHeroSelectHero"))
+	CustomGameEventManager:RegisterListener("hero_selection_player_random",
+		Dynamic_Wrap(HeroSelection, "OnHeroRandomHero"))
+	CustomGameEventManager:RegisterListener("hero_selection_minimap_set_spawnbox",
+		Dynamic_Wrap(HeroSelection, "OnMinimapSetSpawnbox"))
 	CustomGameEventManager:RegisterListener("hero_selection_player_repick", Dynamic_Wrap(HeroSelection, "OnHeroRepick"))
 	PlayerTables:CreateTable("hero_selection_banning_phase", {}, AllPlayersInterval)
 
@@ -62,6 +69,7 @@ Events:Register("activate", function ()
 	end, "Skips current phase", FCVAR_CHEAT)
 
 	HeroSelection:PrepareTables()
+	HeroSelection:SetState(HERO_SELECTION_PHASE_NOT_STARTED)
 end)
 
 function HeroSelection:PrepareTables()
@@ -96,7 +104,7 @@ function HeroSelection:PrepareTables()
 			heroesData[name] = heroData
 		end
 	end
-	for name,enabled in pairsByKeys(ENABLED_HEROES[Options:GetValue("MainHeroList")]) do
+	for name, enabled in pairsByKeys(ENABLED_HEROES[Options:GetValue("MainHeroList")]) do
 		if enabled == 1 then
 			if not heroesData[name] or heroesData[name].Enabled == 0 then
 				error(name .. " is enabled in hero list, but not a valid hero")
@@ -106,8 +114,8 @@ function HeroSelection:PrepareTables()
 			table.insert(data.HeroTabs[tabIndex], name)
 		end
 	end
-	for _,tab in pairs(data.HeroTabs) do
-		for _,name in ipairs(tab) do
+	for _, tab in pairs(data.HeroTabs) do
+		for _, name in ipairs(tab) do
 			if heroesData[name] and
 				not heroesData[name].linked_heroes and
 				not HeroSelection:IsHeroUnreleased(name) then
@@ -126,27 +134,38 @@ end
 function HeroSelection:SetState(state)
 	HeroSelection.CurrentState = state
 	PlayerTables:SetTableValue("hero_selection_available_heroes", "HeroSelectionState", state)
+
+	if state == HERO_SELECTION_PHASE_END then
+		PlayerTables:SetTableValue("hero_selection_available_heroes", "HeroSelectionEnded", 1)
+	end
 end
 
 function HeroSelection:GetState()
 	return HeroSelection.CurrentState
 end
 
-function HeroSelection:CreateTimer(...)
-	local t = Timers:CreateTimer(...)
+function HeroSelection:CreateTimer(d, f)
+	local t = Timers:CreateTimer(d, f)
 	table.insert(HeroSelection.GameStartTimers, t)
 	return t
 end
 
 function HeroSelection:DismissTimers()
-	for _,v in ipairs(HeroSelection.GameStartTimers) do
+	for _, v in ipairs(HeroSelection.GameStartTimers) do
 		Timers:RemoveTimer(v)
 	end
 	HeroSelection.GameStartTimers = {}
+	--Timers:start()
 end
 
 function HeroSelection:HeroSelectionStart()
 	GameRules:GetGameModeEntity():SetAnnouncerDisabled(true)
+	for i = 0, 23 do
+		if PlayerResource:IsValidPlayerID(i) and not PlayerResource:GetSelectedHeroEntity(i) then
+			PlayerResource:ReplaceHeroWith(i, FORCE_PICKED_HERO, 0, 0)
+		end
+	end
+
 	if Options:GetValue("BanningPhaseBannedPercentage") > 0 then
 		EmitAnnouncerSound("announcer_ann_custom_mode_05")
 		HeroSelection:SetState(HERO_SELECTION_PHASE_BANNING)
@@ -157,6 +176,8 @@ function HeroSelection:HeroSelectionStart()
 	else
 		HeroSelection:StartStateHeroPick()
 	end
+
+	--HeroSelection:NoHeroFix()
 end
 
 function HeroSelection:StartStateHeroPick()
@@ -190,10 +211,12 @@ function HeroSelection:StartStateHeroPick()
 	end
 
 	HeroSelection:DismissTimers()
+	local pick_data = PlayerTables:GetAllTableValuesForReadOnly("hero_selection_heroes_data")
+	PrintTable(pick_data)
 	EmitAnnouncerSound("announcer_ann_custom_draft_01")
 	HeroSelection:SetState(HERO_SELECTION_PHASE_HERO_PICK)
 	HeroSelection:SetTimerDuration(HERO_SELECTION_PICK_TIME)
-	for _,sec in ipairs({30, 15, 10, "05"}) do
+	for _, sec in ipairs({ 30, 15, 10, "05" }) do
 		HeroSelection:CreateTimer(HERO_SELECTION_PICK_TIME - tonumber(sec), function()
 			EmitAnnouncerSound("announcer_ann_custom_timer_sec_" .. sec)
 		end)
@@ -201,14 +224,16 @@ function HeroSelection:StartStateHeroPick()
 	HeroSelection:CreateTimer(HERO_SELECTION_PICK_TIME, function()
 		HeroSelection:StartStateStrategy()
 	end)
+
+	--HeroSelection:NoHeroFix()
 end
 
 function HeroSelection:StartStateStrategy()
 	HeroSelection:DismissTimers()
 	HeroSelection:PreformRandomForNotPickedUnits()
 	local toPrecache = {}
-	for team,_v in pairs(PlayerTables:GetAllTableValues("hero_selection")) do
-		for plyId,v in pairs(_v) do
+	for team, _v in pairs(PlayerTables:GetAllTableValues("hero_selection")) do
+		for plyId, v in pairs(_v) do
 			local heroNameTransformed = GetKeyValue(v.hero, "base_hero") or v.hero
 			toPrecache[heroNameTransformed] = false
 			PrecacheUnitByNameAsync(heroNameTransformed, function()
@@ -221,16 +246,38 @@ function HeroSelection:StartStateStrategy()
 	GameRules:GetGameModeEntity():SetAnnouncerDisabled(false)
 	--CustomGameEventManager:Send_ServerToAllClients("hero_selection_show_precache", {})
 
-	HeroSelection:SetTimerDuration(HERO_SELECTION_STRATEGY_TIME)
 	HeroSelection:SetState(HERO_SELECTION_PHASE_STRATEGY)
-	HeroSelection:CreateTimer(HERO_SELECTION_STRATEGY_TIME, function()
+
+	local current_time = math.abs(GameRules:GetDOTATime(true, true))
+	local needed_time = Options:GetValue("PreGameTime")
+	local difference = current_time - needed_time + HERO_SELECTION_STRATEGY_TIME
+	local mult = math.max(1, difference / HERO_SELECTION_STRATEGY_TIME)
+	-- print('current_time: '..current_time)
+	-- print('needed_time: '..needed_time)
+	-- print('difference: '..difference)
+	-- print('mult: '..mult)
+	Convars:SetInt("host_timescale", mult)
+	HeroSelection:SetTimerDuration(math.ceil(HERO_SELECTION_STRATEGY_TIME * mult))
+	HeroSelection:CreateTimer(math.ceil(HERO_SELECTION_STRATEGY_TIME * mult), function()
 		HeroSelection:StartStateInGame(toPrecache)
 	end)
+
+	--HeroSelection:NoHeroFix()
 end
 
 function HeroSelection:StartStateInGame(toPrecache)
+	--print('start')
 	HeroSelection:DismissTimers()
+	Convars:SetInt("host_timescale", 1)
+	StatsClient:AddGuide(nil)
 
+	--[[local targets = Entities:FindAllByClassname("info_target")
+	for _,v in ipairs(targets) do
+		local entname = v:GetName()
+		print(entname)
+	end]]
+
+	--HeroSelection:NoHeroFix()
 	for i = 0, DOTA_MAX_TEAM_PLAYERS - 1 do
 		if PLAYER_DATA[i].adsClicked then
 			Gold:ModifyGold(i, ADS_CLICKED_BONUS_GOLD)
@@ -240,8 +287,9 @@ function HeroSelection:StartStateInGame(toPrecache)
 	Timers:CreateTimer({
 		useGameTime = false,
 		callback = function()
+			--print("timer")
 			local canEnd = true
-			for k,v in pairs(toPrecache) do
+			for k, v in pairs(toPrecache) do
 				if not v then
 					canEnd = false
 					break
@@ -251,9 +299,14 @@ function HeroSelection:StartStateInGame(toPrecache)
 			if canEnd then
 				--Actually enter in-game state
 				HeroSelection:SetState(HERO_SELECTION_PHASE_END)
-				for team,_v in pairs(PlayerTables:GetAllTableValues("hero_selection")) do
-					for plyId,v in pairs(_v) do
+				for _, _v in pairs(PlayerTables:GetAllTableValues("hero_selection")) do
+					for plyId, v in pairs(_v) do
 						if not PlayerResource:IsPlayerAbandoned(plyId) then
+							local Player = PlayerResource:GetPlayer(plyId)
+							-- print(Player:GetAssignedHero())
+							if not Player:GetAssignedHero() then
+								--Player:SetSelectedHero(FORCE_PICKED_HERO)
+							end
 							HeroSelection:SelectHero(plyId, tostring(v.hero), nil, nil, true)
 						end
 					end

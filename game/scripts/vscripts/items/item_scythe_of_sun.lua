@@ -18,6 +18,7 @@ if IsServer() then
 				target:Kill(self, caster)
 			else
 				target:TriggerSpellReflect(self)
+				--print(target:GetStatusResistance())
 				target:AddNewModifier(caster, self, "modifier_item_scythe_of_sun_hex", {duration = self:GetSpecialValueFor("hex_duration")})
 				ApplyDamage({
 					attacker = caster,
@@ -104,7 +105,7 @@ function modifier_item_scythe_of_sun_hex:CheckState()
 		[MODIFIER_STATE_SILENCED] = true,
 		[MODIFIER_STATE_MUTED] = true,
 		[MODIFIER_STATE_DISARMED] = true,
-		[MODIFIER_STATE_PASSIVES_DISABLED] = true,
+		--[MODIFIER_STATE_PASSIVES_DISABLED] = true,
 		[MODIFIER_STATE_BLOCK_DISABLED] = true,
 		[MODIFIER_STATE_EVADE_DISABLED] = true,
 		[MODIFIER_STATE_HEXED] = true,

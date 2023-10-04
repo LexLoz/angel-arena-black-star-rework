@@ -25,18 +25,23 @@ if IsServer() then
 	function modifier_item_piercing_blade:OnAttackLanded(keys)
 		local attacker = keys.attacker
 		if attacker ~= self:GetParent() then return end
+		--if keys.target:IsBoss() then return end
 		local ability = self:GetAbility()
 		local target = keys.target
 
 		if attacker:FindAllModifiersByName(self:GetName())[1] ~= self then return end
 
 		if IsModifierStrongest(attacker, self:GetName(), MODIFIER_PROC_PRIORITY.pure_damage) then
+
+			local damage = target:GetHealth() * ability:GetSpecialValueFor("max_health_damage")  * 0.01
+			ability.NoDamageAmp = true
 			ApplyDamage({
 				victim = target,
 				attacker = attacker,
-				damage = keys.original_damage * ability:GetSpecialValueFor("attack_damage_to_pure_pct") * 0.01,
+				damage = damage,
 				damage_type = ability:GetAbilityDamageType(),
 				damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+				ability = ability
 			})
 		end
 	end

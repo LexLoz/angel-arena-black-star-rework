@@ -18,7 +18,7 @@
 		"AbilityCastRange"				"%range"
 		"AbilityCastPoint"				"0.3 0.3 0.3 0.3 0.3 0.2 0.1"
 		
-		"AbilityUnitDamageSubType"	"DAMAGE_SUBTYPE_WATER"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_WATER"
 
 		"AbilitySpecial"
 		{
@@ -41,6 +41,12 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"projectile_width"	"100"
+			}
+			"99"
+			{
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"3.0"
+				"CalculateSpellDamageTooltip"		"0"
 			}
 		}
 
@@ -103,7 +109,7 @@
 		"AbilityManaCost"				"80"
 		"AbilityDamage"					"20 40 60 80 100 120 140"
 		
-		"AbilityUnitDamageSubType"	"DAMAGE_SUBTYPE_WATER"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_WATER"
 
 		"AbilitySpecial"
 		{
@@ -349,7 +355,7 @@
 		"AbilityCastPoint"				"0.4 0.4 0.4 0.4 0.4 0.35 0.3"
 		"AbilityCastRange"				"800 900 1000 1100 1200 1300 1400"
 		
-		"AbilityUnitDamageSubType"	"DAMAGE_SUBTYPE_WATER"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_WATER"
 
 		"precache"
 		{

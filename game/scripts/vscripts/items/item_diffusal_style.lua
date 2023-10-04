@@ -25,15 +25,20 @@ end
 function modifier_item_diffusal_style_invulnerability_on_destroy(keys)
 	local caster = keys.caster
 	local ability = keys.ability
-	caster.MantaIllusions = Illusions:create({
-		unit = caster,
-		count = ability:GetSpecialValueFor("images_count"),
-		padding = 100,
-		scramblePosition = true,
-		damageIncoming = ability:GetSpecialValueFor("illusion_damage_percent_incoming_tooltip"),
-		damageOutgoing = ability:GetSpecialValueFor("illusion_damage_percent_outgoing_tooltip"),
-		duration = ability:GetSpecialValueFor("illusion_duration"),
-	})
+	local caster_origin = caster:GetAbsOrigin()
+	FindClearSpaceForUnit(caster, caster_origin + RandomVector(100), true)
+	caster.MantaIllusions = {}
+	for i = 1, ability:GetLevelSpecialValueFor("images_count", ability:GetLevel()-1) do
+		local illusion = Illusions:create({
+			unit = caster,
+			ability = ability,
+			origin = caster_origin + RandomVector(100),
+			damageIncoming = ability:GetSpecialValueFor("illusion_damage_percent_incoming_tooltip"),
+			damageOutgoing = ability:GetSpecialValueFor("illusion_damage_percent_outgoing_tooltip"),
+			duration = ability:GetSpecialValueFor("illusion_duration"),
+		})
+		table.insert(caster.MantaIllusions, illusion)
+	end
 
 	caster:RemoveNoDraw()
 end
@@ -42,18 +47,25 @@ function OnAttackLanded(keys)
 	local caster = keys.caster
 	local target = keys.target
 	local ability = keys.ability
-	if caster:IsIllusion() then return end
-	if not target:IsMagicImmune() and not target:IsInvulnerable() then
-		local manaburn = keys.feedback_mana_burn
+	--if caster:IsIllusion() then return end
+	if not target:IsMagicImmune() and not target:IsInvulnerable() and not target:IsDebuffImmune() then
+		local manaburn = keys.feedback_mana_burn + keys.mana_burn_pct * target:GetMana() * 0.01
 		local manadrain = manaburn * keys.feedback_mana_drain_pct * 0.01
+		if caster:IsIllusion() then
+			manaburn = manaburn * keys.illusion_mana_burn * 0.01
+			manadrain = 0
+		end
 		target:SpendMana(manaburn, ability)
 		caster:GiveMana(manadrain)
+
+		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = target,
 			attacker = caster,
 			damage = manaburn * keys.damage_per_burn_pct * 0.01,
 			damage_type = ability:GetAbilityDamageType(),
-			ability = ability
+			ability = ability,
+			--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION
 		})
 		ParticleManager:CreateParticle("particles/generic_gameplay/generic_manaburn.vpcf", PATTACH_ABSORIGIN_FOLLOW, target)
 		ParticleManager:CreateParticle("particles/arena/generic_gameplay/generic_manasteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
@@ -71,7 +83,7 @@ function OnAttackLanded(keys)
 			target:TrueKill(ability, caster)
 		else
 			target:Purge(true, false, false, false, false)
-			if not target:IsMagicImmune() and not target:IsInvulnerable() then
+			if not target:IsMagicImmune() and not target:IsInvulnerable() and not target:IsDebuffImmune() then
 				ability:ApplyDataDrivenModifier(caster, target, keys.modifier_root, {})
 				ability:ApplyDataDrivenModifier(caster, target, keys.modifier_slow, {})
 			end

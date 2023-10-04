@@ -14,6 +14,7 @@ function Transform(keys)
 		end
 	elseif not caster:IsInvulnerable() then
 		local hp = caster:GetHealth()
+		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = caster,
 			attacker = caster,

@@ -25,6 +25,7 @@ end
 
 function modifier_item_urn_of_souls_damage_on_interval_think(keys)
 	local target = keys.target
+	keys.ability.NoDamageAmp = true
 	local damage_to_deal = keys.TotalDamage / keys.TotalDuration * keys.Interval
 	target:SetMana(target:GetMana() - damage_to_deal)
 end

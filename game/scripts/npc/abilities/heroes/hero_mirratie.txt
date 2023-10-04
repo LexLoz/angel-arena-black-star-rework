@@ -253,7 +253,7 @@
 		"AbilityChannelTime"			"2"
 		"AbilityDamage"					"200 300 400 500 600 700 800"
 		
-		"AbilityUnitDamageSubType"	"DAMAGE_SUBTYPE_ENERGY"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_AIR"
 
 		"AbilitySpecial"
 		{
@@ -306,6 +306,12 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"impale_width"			"70"
+			}
+			"99"
+			{
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"10.0"
+				"CalculateSpellDamageTooltip"		"0"
 			}
 		}
 

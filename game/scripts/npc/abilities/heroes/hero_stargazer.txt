@@ -47,6 +47,12 @@
 				"var_type"			"FIELD_INTEGER"
 				"max_radius"		"800"
 			}
+			"99"
+			{
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"10.0"
+				"CalculateSpellDamageTooltip"		"0"
+			}
 		}
 
 		"precache"

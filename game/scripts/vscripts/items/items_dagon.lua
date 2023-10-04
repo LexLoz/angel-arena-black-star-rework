@@ -4,6 +4,8 @@ function Dagon(keys)
 	local ability = keys.ability
 	local Damage = keys.Damage
 
+	if target:TriggerSpellAbsorb(ability) then return end
+
 	local dagon_particle = ParticleManager:CreateParticle("particles/items_fx/dagon.vpcf",  PATTACH_ABSORIGIN_FOLLOW, caster)
 	ParticleManager:SetParticleControlEnt(dagon_particle, 1, target, PATTACH_POINT_FOLLOW, "attach_hitloc", target:GetAbsOrigin(), false)
 	local particle_effect_intensity = 300 + (100 * ability:GetLevel())
@@ -20,6 +22,8 @@ function BetterDagon(keys)
 	local target = keys.target
 	local ability = keys.ability
 	local Damage = keys.Damage
+
+	if target:TriggerSpellAbsorb(ability) then return end
 
 	local dagon_particle = ParticleManager:CreateParticle("particles/econ/events/ti4/dagon_ti4.vpcf",  PATTACH_ABSORIGIN_FOLLOW, caster)
 	ParticleManager:SetParticleControlEnt(dagon_particle, 1, target, PATTACH_POINT_FOLLOW, "attach_hitloc", target:GetAbsOrigin(), false)
@@ -40,6 +44,8 @@ function SunrayDagon(keys)
 	local ability = keys.ability
 	local Damage = keys.Damage
 
+	if target:TriggerSpellAbsorb(ability) then return end
+
 	local dagon_particle = ParticleManager:CreateParticle("particles/econ/events/ti5/dagon_lvl2_ti5.vpcf",  PATTACH_ABSORIGIN_FOLLOW, caster)
 	ParticleManager:SetParticleControlEnt(dagon_particle, 1, target, PATTACH_POINT_FOLLOW, "attach_hitloc", target:GetAbsOrigin(), false)
 	local particle_effect_intensity = 300 + (100 * ability:GetLevel())
@@ -51,5 +57,7 @@ function SunrayDagon(keys)
 		ability:ApplyDataDrivenModifier(caster, target, keys.modifier, {})
 	end
 	local PctDmg = caster:GetMaxHealth() * keys.DamagePct * 0.01
+	--ability.NoDamageAmp = true
+	local agilityMult = caster.DamageMultiplier or 1
 	ApplyDamage({victim = target, attacker = caster, damage = Damage + PctDmg, damage_type = DAMAGE_TYPE_MAGICAL, ability = ability})
 end

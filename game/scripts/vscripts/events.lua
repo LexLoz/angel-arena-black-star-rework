@@ -1,23 +1,78 @@
+--require("modules/duel/data")
+
 -- The overall game state has changed
 function GameMode:OnGameRulesStateChange(keys)
 	local newState = GameRules:State_Get()
-
-	if newState == DOTA_GAMERULES_STATE_CUSTOM_GAME_SETUP then
-		Events:Emit("AllPlayersLoaded")
-	end
-
 	if newState == DOTA_GAMERULES_STATE_PRE_GAME then
 		HeroSelection:CollectPD()
 		HeroSelection:HeroSelectionStart()
 		GameMode:OnHeroSelectionStart()
 	end
+end
 
-	if newState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		Spawner:RegisterTimers()
-		Timers:CreateTimer(function()
-			CustomRunes:SpawnRunes()
-			return CUSTOM_RUNE_SPAWN_TIME
+--events for update new bonuses from attrubutes
+function GameMode:InventoryItemAdded(keys)
+	--print("InventoryItemAdded")
+	local unit = EntIndexToHScript(keys.inventory_parent_entindex)
+
+	if unit:IsHero() and not unit:IsWukongsSummon() then
+		MeepoFixes:ShareItems(unit)
+		Timers:NextTick(function()
+			--Attributes:UpdateAll(unit)
 		end)
+	end
+
+	--print(keys.item_entindex)
+	local item = EntIndexToHScript(keys.item_entindex)
+	--InfinityStones:UpdateMinimapIcons()
+	Timers:CreateTimer(0.1, function()
+		if IsValidEntity(item) and (STONES_LIST[item:GetName()] or item:GetName() == "item_infinity_gauntlet") and IsValidEntity(unit) then
+			if not unit:IsHero() then
+				unit:DropItemAtPositionImmediate(item, unit:GetAbsOrigin() + RandomVector(RandomInt(90, 300)))
+			end
+		end
+	end)
+end
+
+function GameMode:OnReconnected(id)
+	print('reconnect')
+	Timers:CreateTimer(30, function()
+		ReconnectFix(PlayerResource:GetPlayer(id))
+	end)
+end
+
+function GameMode:InventoryItemChange(keys)
+	--print("InventoryItemChange")
+	local hero = EntIndexToHScript(keys.hero_entindex)
+	--InfinityStones:UpdateMinimapIcons()
+
+	if hero:IsHero() and not hero:IsWukongsSummon() then
+		MeepoFixes:ShareItems(hero)
+		Timers:NextTick(function()
+			--Attributes:UpdateAll(hero)
+		end)
+	end
+end
+
+function GameMode:HeroGainedLevel(keys)
+	--print("HeroGainedLevel")
+	local hero = EntIndexToHScript(keys.hero_entindex)
+
+	if hero:IsHero() and not hero:IsWukongsSummon() and not hero:IsIllusion() then
+		Timers:NextTick(function()
+			--Attributes:UpdateAll(hero)
+		end)
+
+		local parent = hero
+		if parent.CustomGain_Strength then
+			parent:ModifyStrength((parent.CustomGain_Strength - parent:GetKeyValue("AttributeStrengthGain", nil, true)))
+		end
+		if parent.CustomGain_Intelligence then
+			parent:ModifyIntellect((parent.CustomGain_Intelligence - parent:GetKeyValue("AttributeIntelligenceGain", nil, true)))
+		end
+		if parent.CustomGain_Agility then
+			parent:ModifyAgility((parent.CustomGain_Agility - parent:GetKeyValue("AttributeAgilityGain", nil, true)))
+		end
 	end
 end
 
@@ -26,9 +81,12 @@ function GameMode:OnNPCSpawned(keys)
 	local npc = EntIndexToHScript(keys.entindex)
 
 	if npc:IsCourier() then
+		print(npc:GetName())
 		Structures:OnCourierSpawn(npc)
 		return
 	end
+
+	--Timers:NextTick(function() npc:AddNewModifier(npc, nil, "modifier_arena_util", nil) end)
 
 	if not npc:IsHero() then return end
 	if HeroSelection:GetState() < HERO_SELECTION_PHASE_END then return end
@@ -38,7 +96,7 @@ function GameMode:OnNPCSpawned(keys)
 		local caster = tempest_modifier:GetCaster()
 		if npc:GetUnitName() == "npc_dota_hero" then
 			npc:SetUnitName("npc_dota_hero_arena_base")
-			npc:AddNewModifier(unit, nil, "modifier_dragon_knight_dragon_form", {duration = 0})
+			npc:AddNewModifier(npc, nil, "modifier_dragon_knight_dragon_form", { duration = 0 })
 		end
 
 		if npc.tempestDoubleSpawned then
@@ -61,37 +119,113 @@ function GameMode:OnNPCSpawned(keys)
 		if tempestDoubleAbility then tempestDoubleAbility:SetLevel(0) end
 	end
 
-	DynamicWearables:AutoEquip(npc)
-
-	if not npc:IsWukongsSummon() then
-		npc:AddNewModifier(npc, nil, "modifier_arena_hero", nil)
-	end
-
-	if npc:IsTrueHero() then
-		PlayerTables:SetTableValue("player_hero_indexes", npc:GetPlayerID(), npc:GetEntityIndex())
-
-		if not npc.isRespawning then
-			npc.isRespawning = true
-			Teams:RecalculateKillWeight(npc:GetTeam())
-		end
-
-		npc:ApplyDelayedTalents()
-		CustomAbilities:RandomOMGRollAbilities(npc)
-
-		if not npc.OnDuel and Duel:IsDuelOngoing() then
-			Duel:SetUpVisitor(npc)
-		end
-	end
-
-	-- modifier_illusion is applied after spawn event (even for native illusions)
+	--print("spawned")
 	Timers:NextTick(function()
-		if not IsValidEntity(npc) and npc:IsAlive() then return end
+		--print("spawned")
+		if not IsValidEntity(npc) or not npc:IsAlive() then return end
+		--local illusionParent = npc:GetIllusionParent()
+		--if illusionParent then Illusions:_copyEverything(illusionParent, npc) end
 
-		local illusionParent = npc:GetIllusionParent()
-		if illusionParent then
-			Illusions:_copyEverything(illusionParent, npc)
+		DynamicWearables:AutoEquip(npc)
+		if npc.ModelOverride then
+			npc:SetModel(npc.ModelOverride)
+			npc:SetOriginalModel(npc.ModelOverride)
+		end
+		if not npc:IsWukongsSummon() then
+			InitHero(npc)
+			npc:AddNewModifier(npc, nil, "modifier_arena_hero", nil)
+			npc:AddNewModifier(npc, nil, "modifier_stamina", nil)
+			npc:AddNewModifier(npc, nil, "modifier_arena_util", nil)
+
+			if npc.ArenaHero then
+				local parent = npc
+				--print(parent:GetFullName())
+				parent:CalculateStatBonus(true)
+				local primat = _G[NPC_HEROES_CUSTOM[npc:GetFullName()]["AttributePrimary"]]
+				if not primat then
+					primat = parent:GetPrimaryAttribute()
+				end
+				--print(primat)
+				if primat == DOTA_ATTRIBUTE_AGILITY then npc:AddNewModifier(npc, nil, "modifier_agility_primary_bonus",
+						nil) end
+				if primat == DOTA_ATTRIBUTE_STRENGTH then
+					npc:AddNewModifier(npc, nil, "modifier_strength_crit", nil)
+				end
+				if primat == DOTA_ATTRIBUTE_INTELLECT then npc:AddNewModifier(npc, nil,
+						"modifier_intelligence_primary_bonus", nil) end
+
+				if primat == DOTA_ATTRIBUTE_ALL then npc:AddNewModifier(npc, nil, "modifier_universal_attribute", nil) end
+			else
+				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_STRENGTH then
+					npc:AddNewModifier(npc, nil, "modifier_strength_crit", nil)
+				end
+				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_AGILITY then
+					npc:AddNewModifier(npc, nil,
+						"modifier_agility_primary_bonus", nil)
+					end
+				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT then npc:AddNewModifier(npc, nil,
+						"modifier_intelligence_primary_bonus", nil) end
+
+				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_ALL then npc:AddNewModifier(npc, nil,
+						"modifier_universal_attribute", nil) end
+			end
+
+			if npc:IsTrueHero() then
+				npc:ApplyDelayedTalents()
+
+				PlayerTables:SetTableValue("player_hero_indexes", npc:GetPlayerID(), npc:GetEntityIndex())
+				CustomAbilities:RandomOMGRollAbilities(npc)
+				if not npc.OnDuel and Duel:IsDuelOngoing() then
+					Duel:SetUpVisitor(npc)
+				end
+			end
+			if npc:IsIllusion() and not npc.isCustomIllusion then
+				local owner = PlayerResource:GetSelectedHeroEntity(npc:GetPlayerID())
+				Illusions:_copyShards(owner, npc)
+			end
+			Attributes:UpdateAll(npc)
 		end
 	end)
+end
+
+-- An item was picked up off the ground
+function GameMode:OnItemPickedUp(keys)
+	--print("OnItemPickedUp")
+	local unitEntity = nil
+	if keys.UnitEntitIndex then
+		unitEntity = EntIndexToHScript(keys.UnitEntitIndex)
+	elseif keys.HeroEntityIndex then
+		unitEntity = EntIndexToHScript(keys.HeroEntityIndex)
+	end
+
+	local itemEntity = EntIndexToHScript(keys.ItemEntityIndex)
+	local player = PlayerResource:GetPlayer(keys.PlayerID)
+	local itemname = keys.itemname
+	--[[if itemEntity.CanOverrideOwner and unitEntity and (unitEntity:IsHero() or unitEntity:IsConsideredHero()) then
+		itemEntity:SetOwner(PlayerResource:GetSelectedHeroEntity(keys.PlayerID))
+		itemEntity:SetPurchaser(PlayerResource:GetSelectedHeroEntity(keys.PlayerID))
+		itemEntity.CanOverrideOwner = nil
+	end]]
+
+	if unitEntity and unitEntity:IsHero() and not unitEntity:IsWukongsSummon() then
+		MeepoFixes:ShareItems(unitEntity)
+	end
+
+	local index = keys.item_entindex
+	if not index then
+		index = keys.ItemEntityIndex
+	end
+	local ability = EntIndexToHScript(index)
+
+	if not ability or not ability.GetBehaviorInt then return true end
+	local behavior = ability:GetBehaviorInt()
+
+	-- check if the item exists and if it is Vector targeting
+	if bit.band(behavior, DOTA_ABILITY_BEHAVIOR_VECTOR_TARGETING) ~= 0 then
+		VectorTarget:UpdateNettable(ability)
+	end
+
+	InfinityStones:OnItemPickedUp(EntIndexToHScript(keys.ItemEntityIndex))
 end
 
 -- An ability was used by a player
@@ -104,7 +238,8 @@ function GameMode:OnAbilityUsed(keys)
 		local ability = hero:FindAbilityByName(abilityname)
 		if not ability then ability = FindItemInInventoryByName(hero, abilityname, true) end
 		if abilityname == "night_stalker_darkness" and ability then
-			CustomGameEventManager:Send_ServerToAllClients("time_nightstalker_darkness", {duration = ability:GetLevelSpecialValueFor("duration", ability:GetLevel()-1)})
+			CustomGameEventManager:Send_ServerToAllClients("time_nightstalker_darkness",
+				{ duration = ability:GetLevelSpecialValueFor("duration", ability:GetLevel() - 1) })
 		end
 	end
 end
@@ -134,15 +269,53 @@ function GameMode:OnTeamKillCredit(keys)
 	end
 end
 
+--kill weight increase
+function GameMode:KillWeightIncrease()
+	local dota_time = GetDOTATimeInMinutesFull()
+	--print(GameMode.kill_weight_per_minute)
+	--print(dota_time - GameMode.endgame_duels)
+	if (dota_time - KILL_WEIGHT_START_INCREASE_MINUTE) == GameMode.kill_weight_per_minute then
+		for team, _ in pairsByKeys(Teams.Data) do
+			Teams:ChangeKillWeight(team, 1)
+		end
+		Notifications:TopToAll({ text = "#arena_kill_weight_increase_notifiaction", duration = 10 })
+		GameMode.kill_weight_per_minute = GameMode.kill_weight_per_minute + KILL_WEIGHT_BONUS_PER_MINUTE
+	end
+	return 1
+end
+
 -- An entity died
 function GameMode:OnEntityKilled(keys)
-	local killedUnit = EntIndexToHScript( keys.entindex_killed )
+	local killedUnit = EntIndexToHScript(keys.entindex_killed)
 	local killerEntity
 	if keys.entindex_attacker then
-		killerEntity = EntIndexToHScript( keys.entindex_attacker )
+		killerEntity = EntIndexToHScript(keys.entindex_attacker)
 	end
 
 	if killedUnit then
+		--[[--infinity stones drop
+		if
+		killerEntity:IsTrueHero() and
+		killedUnit:IsChampion() and
+		GetDOTATimeInMinutesFull() >= STONES_TIME_DROP and
+		DROPPED_STONES < #STONES_TABLE and
+
+		RollPercentage(CHAMPIONS_DROP_CHANCE[killerEntity:FindModifierByName("modifier_neutral_champion"):GetStackCount() * (PLAYERS_DROP_CHANCE[killerEntity:GetPlayerID()] or 1)]) then
+			local t = true
+			local stone
+			while t do
+				local i = math.random(1, #STONES_TABLE)
+				if STONES_TABLE[i][2] then
+					STONES_TABLE[i][2] = false
+					t = false
+					stone = STONES_TABLE[i][1]
+					DROPPED_STONES = DROPPED_STONES + 1
+				end
+			end
+			killedUnit:DropItemAtPositionImmediate(stone, killedUnit:GetAbsOrigin())
+			local drop_chance_mult = PLAYERS_DROP_CHANCE[killerEntity:GetPlayerID()]
+			PLAYERS_DROP_CHANCE[killerEntity:GetPlayerID()] = (drop_chance_mult or 1) / DROP_CHANCE_DECREASE
+		end]]
 		local killedTeam = killedUnit:GetTeam()
 		if killedUnit:IsHero() then
 			killedUnit:RemoveModifierByName("modifier_shard_of_true_sight") -- For some reason simple KV modifier not removes on death without this
@@ -158,7 +331,7 @@ function GameMode:OnEntityKilled(keys)
 				local killedUnits = killedUnit:GetFullName() == "npc_dota_hero_meepo" and
 					MeepoFixes:FindMeepos(PlayerResource:GetSelectedHeroEntity(killedUnit:GetPlayerID()), true) or
 					{ killedUnit }
-				for _,v in ipairs(killedUnits) do
+				for _, v in ipairs(killedUnits) do
 					v:SetTimeUntilRespawn(respawnTime)
 					v.RespawnTimeModifierBloodstone = nil
 					v.RespawnTimeModifierSaiReleaseOfForge = nil
@@ -202,38 +375,33 @@ function GameMode:OnEntityKilled(keys)
 					local shinobu_hide_in_shadows = individual_hero:FindAbilityByName("shinobu_hide_in_shadows")
 					if individual_hero:GetTeam() == killedUnit:GetTeam() and individual_hero:GetRangeToUnit(killedUnit) <= shinobu_hide_in_shadows:GetAbilitySpecial("ally_radius") then
 						individual_hero:SetHealth(individual_hero:GetMaxHealth())
-						shinobu_hide_in_shadows:ApplyDataDrivenModifier(individual_hero, individual_hero, "modifier_shinobu_hide_in_shadows_rage", nil)
+						shinobu_hide_in_shadows:ApplyDataDrivenModifier(individual_hero, individual_hero,
+							"modifier_shinobu_hide_in_shadows_rage", nil)
 					end
 				end
 			end
 
 			if killerEntity:GetTeam() ~= killedTeam and (killerEntity.GetPlayerID or killerEntity.GetPlayerOwnerID) then
-				local plId = killerEntity.GetPlayerID ~= nil and killerEntity:GetPlayerID() or killerEntity:GetPlayerOwnerID()
+				local plId = killerEntity.GetPlayerID ~= nil and killerEntity:GetPlayerID() or
+				killerEntity:GetPlayerOwnerID()
 				if plId > -1 and not (killerEntity.HasModifier and killerEntity:HasModifier("modifier_item_golden_eagle_relic_enabled")) then
 					local gold = RandomInt(killedUnit:GetMinimumGoldBounty(), killedUnit:GetMaximumGoldBounty())
 					Gold:ModifyGold(plId, gold)
-					SendOverheadEventMessage(killerEntity:GetPlayerOwner(), OVERHEAD_ALERT_GOLD, killedUnit, gold, killerEntity:GetPlayerOwner())
+					if killerEntity:FindModifierByName("modifier_alchemist_goblins_greed") then
+						Gold:ModifyGold(plId,
+							killerEntity:FindModifierByName("modifier_alchemist_goblins_greed"):GetStackCount())
+					end
+					SendOverheadEventMessage(killerEntity:GetPlayerOwner(), OVERHEAD_ALERT_GOLD, killedUnit,
+						gold * GetGoldMultiplier(killerEntity), killerEntity:GetPlayerOwner())
 				end
 			end
 		end
 	end
+	InfinityStones:OnEntityKilled(keys)
 end
-
--- Expired illusions don't trigger entity_killed event
-Events:Register("OnDeath", function(event)
-	local unit = event.unit
-	if unit:IsIllusion() then
-		unit:ClearNetworkableEntityInfo()
-	end
-end)
 
 -- This function is called once when the player fully connects and becomes "Ready" during Loading
 function GameMode:OnConnectFull(keys)
-	if not GameMode.firstPlayerLoaded then
-		GameMode:OnFirstPlayerLoaded()
-		GameMode.firstPlayerLoaded = true
-	end
-
 	if GameRules:State_Get() >= DOTA_GAMERULES_STATE_PRE_GAME and PlayerResource:IsBanned(keys.PlayerID) then
 		PlayerResource:KickPlayer(keys.PlayerID)
 	end
@@ -277,8 +445,8 @@ function GameMode:TrackInventory(unit)
 		local item = unit:GetItemInSlot(i)
 		if item then
 			unit.InventorySnapshot[i] = {
-				name=item:GetName(),
-				charges=item:GetCurrentCharges(),
+				name = item:GetName(),
+				charges = item:GetCurrentCharges(),
 				PurchaseTime = item:GetPurchaseTime(),
 				Purchaser = item:GetPurchaser(),
 				CooldownTimeRemaining = item:GetCooldownTimeRemaining(),
@@ -286,7 +454,6 @@ function GameMode:TrackInventory(unit)
 		end
 	end
 end
-
 
 function GameMode:OnKillGoalReached(team)
 	--Duel:EndDuel()

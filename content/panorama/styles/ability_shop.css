@@ -1,0 +1,235 @@
+#AbilityShopBase {
+width: 100%;
+height: 100%;
+visibility: collapse; }
+
+.base {
+width: 100%;
+height: 100%; }
+
+#InfoContainer {
+width: 160px;
+height: 40px;
+margin-right: 290px;
+margin-bottom: 5px;
+background-color: rgba(50, 50, 70, 0.94);
+border: 2px solid #fff;
+transition-duration: .06s;
+transition-property: pre-transform-scale2d;
+transition-timing-function: ease-in-out;
+align: right bottom; }
+#InfoContainer:hover {
+pre-transform-scale2d: 1.04; }
+#InfoContainer:active {
+pre-transform-scale2d: 1.01; }
+
+#InfoContainerMainLabel {
+margin-left: 9px;
+font-size: 17px;
+color: #fff;
+align: left center; }
+
+#InfoContainerPointsLabel {
+margin: 2px;
+font-size: 20px;
+color: #ffd700;
+align: right top; }
+
+#MainContainer {
+width: 1550px;
+height: 800px;
+background-color: rgba(30, 30, 70, 0.94);
+border: 3px solid #fff;
+opacity: 1;
+transition-duration: .15s;
+transition-property: opacity;
+align: center center;
+flow-children: down; }
+.MainHidden #MainContainer {
+opacity: 0; }
+
+#InfoToolbar {
+width: 100%;
+height: 40px;
+background-color: #282828;
+flow-children: right; }
+
+#PurchasedAbilitiesToggle {
+vertical-align: center; }
+
+#MainRoot {
+width: 100%;
+height: 100%; }
+
+#MainHeroesRoot {
+width: 100%;
+height: 100%;
+flow-children: down; }
+
+#MainHeroesList {
+width: 90%;
+height: 80%; }
+
+#HeroesToolbar {
+width: 100%;
+height: 100%;
+margin: 7px;
+margin-top: 0px; }
+
+#MainSearchRoot {
+width: 100%;
+height: 100%;
+margin: 6px;
+margin-right: 12px;
+margin-left: 32px;
+overflow: squish scroll;
+visibility: collapse;
+flow-children: right-wrap; }
+
+.InSearchMode #MainHeroesRoot {
+visibility: collapse; }
+
+.InSearchMode #MainSearchRoot {
+visibility: visible; }
+
+#CloseButton {
+align: right center; }
+
+.AbilityGroup {
+flow-children: right; }
+
+.FilterHidden {
+visibility: collapse; }
+
+.Ability {
+width: 72px;
+height: 72px;
+margin: 5px;
+border: 1px solid #fff;
+border-radius: .1px; }
+.Ability.Purchased {
+border: 3px solid #0f0; }
+.Ability.Purchased.MaxUpgraded {
+border: 4px solid #ffd700; }
+.Ability > Label {
+font-weight: bold;
+text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
+
+#AbilityImage {
+width: 100%;
+height: 100%; }
+.MaxUpgraded #AbilityImage {
+saturation: 0; }
+.NoPoints #AbilityImage {
+saturation: .1; }
+
+#PointCost {
+margin-bottom: -3px;
+margin-left: 3px;
+font-size: 22px;
+color: #ffd700;
+align: left bottom; }
+
+#SellReturn {
+margin-bottom: -1px;
+margin-left: 2px;
+font-size: 22px;
+color: #0f0;
+visibility: collapse;
+align: left bottom; }
+
+#SellCost {
+margin-top: 2px;
+margin-left: 2px;
+font-size: 20px;
+color: #ffd700;
+visibility: collapse;
+align: left top; }
+
+#AbilityLevel {
+margin-top: 2px;
+margin-right: 1px;
+font-size: 20px;
+color: #0ff;
+visibility: collapse;
+align: right top; }
+.Purchased #AbilityLevel {
+visibility: visible; }
+
+.CanDelete #AbilityImage {
+saturation: .1;
+wash-color: rgba(255, 0, 0, 0.8); }
+
+.CanDelete #PointCost {
+visibility: collapse; }
+
+.CanDelete #SellReturn {
+visibility: visible; }
+
+.CanDelete #SellCost {
+visibility: visible; }
+
+#BannedOverlay {
+visibility: collapse; }
+.Banned #BannedOverlay {
+visibility: visible; }
+
+.HeroListElement {
+width: 76.296px;
+height: 42.9165px;
+margin-top: 10px;
+margin-right: -10px;
+margin-bottom: 0;
+margin-left: 15px;
+transition-duration: .1s;
+transition-property: pre-transform-scale2d; }
+.HeroListElement:hover {
+pre-transform-scale2d: 1.2; }
+
+.ChangedHeroPanel {
+border: 2px solid #f00; }
+
+.HeroPanelSelected {
+border: 4px solid #b2da25;
+pre-transform-scale2d: .95; }
+
+.HeroesPanelPage {
+width: 100%;
+height: 100%;
+flow-children: down; }
+
+.HeroesPanelElement {
+width: 100%;
+height: 20.0%;
+padding-left: 20px;
+flow-children: right-wrap; }
+
+#HeroAbilitiesRoot {
+background-color: rgba(0, 0, 0, 0.8);
+flow-children: right;
+align: center center; }
+#HeroAbilitiesRoot .Ability {
+width: 96px;
+height: 96px; }
+
+#ShiftStateLabel {
+width: 730px;
+margin-left: 20px;
+color: #fff;
+vertical-align: center; }
+
+#SwitchHeroesButton {
+align: left center; }
+
+DOTAHud.IsBeforeGameplay #InfoContainer {
+transform: translateY(230px);
+transition-delay: 2s;
+transition-duration: 1s; }
+
+.AspectRatio5x4 .HeroListElement {
+width: 86.4px;
+height: 48.6px; }
+
+.AspectRatio4x3 .HeroListElement {
+width: 86.4px;
+height: 48.6px; }

@@ -91,10 +91,11 @@
 
 	"npc_arena_item_summoned_unit"
 	{
-		"BaseClass"	"npc_dota_lone_druid_bear"
+		"BaseClass"	"npc_dota_creature"
 		"Model"	"models/creeps/neutral_creeps/n_creep_ghost_b/n_creep_ghost_red.vmdl"
 
 		"IsSummoned"				"1"
+		"CanRespawn"				"1"
 		"HasInventory"				"1"
 		"Ability1"					"summoned_unit_return"
 
@@ -136,7 +137,6 @@
 
 		// Status
 		//----------------------------------------------------------------
-		"StatusHealth"				"1"		// Base health.
 		"StatusHealthRegen"			"0"			// Health regeneration rate.
 		"StatusMana"				"900"		// Base mana.
 

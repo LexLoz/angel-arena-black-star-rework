@@ -82,5 +82,6 @@ function modifier_sara_space_dissection_armor_reduction:DeclareFunctions()
 end
 
 function modifier_sara_space_dissection_armor_reduction:GetModifierPhysicalArmorBonus()
+	if self:GetStackCount() > 50 then self:SetStackCount(50) end
 	return -self:GetStackCount()
 end

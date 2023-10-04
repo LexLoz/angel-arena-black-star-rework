@@ -14,7 +14,7 @@ function CheckHealth(keys)
 	local ability = keys.ability
 	local level = ability:GetLevel() - 1
 	local hppct = (target:GetHealth() / target:GetMaxHealth()) * 100
-	if ability:IsCooldownReady() and ability:IsOwnersManaEnough() and not target:IsMagicImmune() then
+	if ability:IsCooldownReady() and ability:IsOwnersManaEnough() and not target:IsMagicImmune() and not target:IsDebuffImmune() then
 		if hppct <= ability:GetLevelSpecialValueFor("stun_health_pct", level) and RollPercentage(ability:GetLevelSpecialValueFor("stun_chance_pct", level)) and ability:PerformPrecastActions() then
 			ParticleManager:CreateParticle("particles/arena/units/heroes/hero_zaken/last_chance_stun.vpcf", PATTACH_ABSORIGIN, caster)
 			target:AddNewModifier(caster, ability, "modifier_stunned", {duration = ability:GetLevelSpecialValueFor("stun_duration", level)})

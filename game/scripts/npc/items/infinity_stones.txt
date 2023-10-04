@@ -1,0 +1,277 @@
+""
+{
+    "item_time_stone"
+    {
+        "BaseClass"             		"item_lua"
+        "Model"                         "models/props_gameplay/rune_regeneration01.vmdl"
+		"AbilityTextureName"			"item_arena/time_stone"
+        "ScriptFile"					"items/item_infinity_stones.lua"
+		"ItemPurchasableFilter"			"0"
+        "ItemCost"						"0"
+		"ItemQuality"					"legendary"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemSellable"					"0"
+		"ItemKillable"					"0"
+        "ItemIsNeutralDrop"				"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AllowedInBackpack"				"1"
+		"IsTempestDoubleClonable"		"0"
+        "ItemDroppable"				    "1"
+		//"ItemCanChangeContainer"		"0"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "bat_decrease_per_100_agility"  "0.05"
+            }
+            "02"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "max_agility"                   "500"
+            }
+            "03"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "bonus_status_resist_pct"       "25"
+            }
+            "04"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "bonus_agility"                 "60"
+            }
+        }
+    }
+
+    "item_power_stone"
+    {
+        "BaseClass"             		"item_lua"
+        "Model"							"models/props_gameplay/rune_arcane.vmdl"
+		"AbilityTextureName"			"item_arena/power_stone"
+        "ScriptFile"					"items/item_infinity_stones.lua"
+		"ItemPurchasableFilter"			"0"
+        "ItemCost"						"0"
+		"ItemQuality"					"legendary"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemSellable"					"0"
+		"ItemKillable"					"0"
+        "ItemIsNeutralDrop"				"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AllowedInBackpack"				"1"
+		"IsTempestDoubleClonable"		"0"
+        "ItemDroppable"					"1"
+		//"ItemCanChangeContainer"		"0"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "bonus_hp_per_strength" "30"
+            }
+            "02"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "bonus_base_damage_per_strength" "30"
+                "CalculateSpellDamageTooltip"    "0"
+            }
+            "03"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "bonus_strength"        "60"
+            }
+            "98"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"stamina_drain_reduction"	"90"
+			}
+        }
+    }
+
+    "item_mind_stone"
+    {
+        "BaseClass"             		"item_lua"
+        "Model"							"models/props_gameplay/rune_goldxp.vmdl"
+		"AbilityTextureName"			"item_arena/mind_stone"
+        "ScriptFile"					"items/item_infinity_stones.lua"
+		"ItemPurchasableFilter"			"0"
+        "ItemCost"						"0"
+		"ItemQuality"					"legendary"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemSellable"					"0"
+		"ItemKillable"					"0"
+		"ItemIsNeutralDrop"				"1"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AllowedInBackpack"				"1"
+		"IsTempestDoubleClonable"		"0"
+        "ItemDroppable"				    "1"
+		//"ItemCanChangeContainer"		"0"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                   "FIELD_INTEGER"
+                "bonus_base_damage_per_int"  "0.3"
+            }
+            "02"
+            {
+                "var_type"                   "FIELD_INTEGER"
+                "bonus_intellect"            "60"
+            }
+            "03"
+            {
+                "var_type"                  "FIELD_FLOAT"
+                "bonus_mana_pct"            "100.0"
+                
+            }
+            "04"
+            {
+                "var_type"                  "FIELD_INTEGER"
+                "bonus_spell_damage"        "25"
+            }
+        }
+    }
+
+    "item_soul_stone"
+    {
+        "AbilityUnitTargetTeam" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "Model"                         "models/props_gameplay/rune_illusion01.vmdl"
+		"AbilityUnitTargetType" 		"DOTA_UNIT_TARGET_HERO"
+		"AbilityUnitTargetFlags" 		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE | DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
+        "BaseClass"             		"item_lua"
+		"AbilityTextureName"			"item_arena/soul_stone"
+        "ScriptFile"					"items/item_infinity_stones.lua"
+		"ItemPurchasableFilter"			"0"
+        "ItemCost"						"0"
+		"ItemQuality"					"legendary"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemSellable"					"0"
+        "ItemKillable"					"0"
+        "ItemIsNeutralDrop"				"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AllowedInBackpack"				"1"
+		"IsTempestDoubleClonable"		"0"
+        "ItemDroppable"				    "1"
+		//"ItemCanChangeContainer"		"0"
+
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "status_resist_per_primary"     "0.15"
+            }
+            "02"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "stat_max"                      "0"
+            }
+            "03"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "duration"                      "10"
+            }
+            "04"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "radius"                        "1500"
+            }
+            "05"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "bonus_primary_stat"            "40"
+            }
+        }
+    }
+
+    "item_space_stone"
+    {
+        "BaseClass"             		"item_lua"
+        "Model"                         "models/props_gameplay/rune_water.vmdl"
+		"AbilityTextureName"			"item_arena/space_stone"
+        "ScriptFile"					"items/item_infinity_stones.lua"
+		"ItemPurchasableFilter"			"0"
+        "ItemCost"						"0"
+		"ItemQuality"					"legendary"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemSellable"					"0"
+		"ItemKillable"					"0"
+        "ItemIsNeutralDrop"				"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AllowedInBackpack"				"1"
+		"IsTempestDoubleClonable"		"0"
+        "ItemDroppable"				    "1"
+		//"ItemCanChangeContainer"		"0"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                  "FIELD_FLOAT"
+                "bonus_manareg_amp_per_int" "0.007"
+            }
+            "02"
+            {
+                "var_type"                          "FIELD_INTEGER"
+                "mana_in_health_convertation_pct"   "30"
+            }
+            "03"
+            {
+                "var_type"                  "FIELD_INTEGER"
+                "all_energies_bonus_pct"    "30"
+            }
+            "04"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "all_energies_regen_bonus_pct"    "100"
+            }
+        }
+    }
+
+    "item_reality_stone"
+    {
+        "BaseClass"             		"item_lua"
+        "Model"							"models/props_gameplay/rune_haste01.vmdl"
+		"AbilityTextureName"			"item_arena/reality_stone"
+        "ScriptFile"					"items/item_infinity_stones.lua"
+		"ItemPurchasableFilter"			"0"
+        "ItemCost"						"0"
+		"ItemQuality"					"legendary"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemSellable"					"0"
+		"ItemKillable"					"0"
+        "ItemIsNeutralDrop"				"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AllowedInBackpack"				"1"
+		"IsTempestDoubleClonable"		"0"
+        "ItemDroppable"				    "1"
+		//"ItemCanChangeContainer"		"0"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "bonus_mana_per_int"    "15"
+            }
+            "02"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "bonus_hp_per_strength"         "15"
+            }
+            "03"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "agility_requirement_decrease"  "2"
+            }
+            "04"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "bonus_all_stat"                "30"            
+            }
+        }
+    }
+}

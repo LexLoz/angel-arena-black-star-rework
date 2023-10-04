@@ -3,6 +3,36 @@ LinkLuaModifier("modifier_item_ultimate_scepter_arena", "items/item_ultimate_sce
 item_ultimate_scepter_arena = class({
 	GetIntrinsicModifierName = function() return "modifier_item_ultimate_scepter_arena" end,
 })
+function item_ultimate_scepter_arena:HasStaticCooldown() return true end
+
+if IsServer() then
+	function item_ultimate_scepter_arena:OnAbilityPhaseStart()
+		--particles/units/heroes/hero_skeletonking/wraith_king_death_e_reincarnate.vpcf
+		self:GetCaster():EmitSound("Arena.Items.Elderberry_Wand.Cast.Start")
+		local timer = 1
+		Timers:CreateTimer(function()
+			ParticleManager:CreateParticle("particles/items_fx/aegis_respawn_b.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster())
+			timer = timer - 0.1
+			if timer > 0 then return 0.1 end
+		end)
+		ParticleManager:CreateParticle("particles/items_fx/aegis_respawn_b.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster())
+	end
+	function item_ultimate_scepter_arena:OnSpellStart()
+		local caster = self:GetCaster()
+		local target = self:GetCursorTarget()
+
+		if not target:TriggerSpellAbsorb(self) and target:IsHero() then
+			target:TriggerSpellReflect(self)
+
+			local pfx = ParticleManager:CreateParticle("particles/econ/items/lion/lion_ti8/lion_spell_finger_of_death_charge_ti8.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
+			ParticleManager:SetParticleControlEnt(pfx, 1, target, PATTACH_POINT_FOLLOW, "attach_hitloc", target:GetAbsOrigin(), false)
+			caster:EmitSound("Arena.Items.Elderberry_Wand.Cast")
+			Timers:CreateTimer(0.5, function()
+				target:InstaKill(self, caster, false, nil, true)
+			end)
+		end
+	end
+end
 
 modifier_item_ultimate_scepter_arena = class({
 	RemoveOnDeath = function() return false end,

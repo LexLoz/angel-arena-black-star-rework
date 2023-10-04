@@ -3,11 +3,15 @@ modifier_arena_rune_arcane = class({})
 function modifier_arena_rune_arcane:DeclareFunctions()
 	return {
 		MODIFIER_PROPERTY_COOLDOWN_PERCENTAGE,
-		--MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE
+		MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE
 	}
 end
 
 function modifier_arena_rune_arcane:GetModifierPercentageCooldown()
+	return 30
+end
+
+function modifier_arena_rune_arcane:GetModifierSpellAmplify_Percentage()
 	return 30
 end
 

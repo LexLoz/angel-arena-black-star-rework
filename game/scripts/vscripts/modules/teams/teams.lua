@@ -89,6 +89,7 @@ Events:Register("activate", function ()
 	local mapinfo = LoadKeyValues("addoninfo.txt")[GetMapName()]
 	local num = math.floor(mapinfo.MaxPlayers / mapinfo.TeamCount)
 	local count = 0
+	Teams.players_count = {}
 	for team, data in pairsByKeys(Teams.Data) do
 		local playerCount = count < mapinfo.TeamCount and num or 0
 		GameRules:SetCustomGameTeamMaxPlayers(team, playerCount)
@@ -126,6 +127,10 @@ function Teams:GetAllEnabledTeams()
 		end
 	end
 	return teams
+end
+
+function Teams:GetPlayersCountInLobby()
+	return table.summation(Teams.players_count)
 end
 
 function Teams:GetScore(team)
@@ -173,8 +178,13 @@ function Teams:ModifyScore(team, value)
 end
 
 function Teams:SetTeamKillWeight(team, value)
-	Teams.Data[team].kill_weight = value
+	Teams.Data[team].kill_weight = value + (Teams.Data[team].kill_weight_increased or 0)
 	PlayerTables:SetTableValue("teams", team, table.deepcopy(Teams.Data[team]))
+end
+
+function Teams:ChangeKillWeight(team, value)
+	Teams.Data[team].kill_weight_increased = (Teams.Data[team].kill_weight_increased or 0) + value
+	Teams:RecalculateKillWeight(team)
 end
 
 function Teams:GetPlayerIDs(team, bNotAbandoned, bAbandoned)
@@ -192,6 +202,7 @@ function Teams:RecalculateKillWeight(team)
 	if not Teams:IsEnabled(team) then return end
 
 	local remaining = GetTeamPlayerCount(team)
+	Teams.players_count[team] = remaining
 	local value = remaining == 0 and 0 or 1
 	if value == 1 and Options:GetValue("DynamicKillWeight") then
 		local desired = Teams:GetDesiredPlayerCount(team)

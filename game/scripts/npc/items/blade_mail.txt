@@ -3,7 +3,7 @@
 	"item_recipe_blade_mail_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemRecipe"					"1"
@@ -17,7 +17,7 @@
 	"item_recipe_blade_mail_2"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"4000"
 		"ItemRecipe"					"1"
@@ -31,7 +31,7 @@
 	"item_recipe_blade_mail_3"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"12000"
 		"ItemRecipe"					"1"
@@ -69,7 +69,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"6 12 24"
+				"bonus_armor"			"6 10 12"
 			}
 			"03"
 			{
@@ -121,7 +121,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"6 12 24"
+				"bonus_armor"			"6 10 12"
 			}
 			"03"
 			{
@@ -173,7 +173,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"6 12 24"
+				"bonus_armor"			"6 10 12"
 			}
 			"03"
 			{
@@ -201,14 +201,14 @@
 	"item_recipe_sacred_blade_mail"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"5000"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_sacred_blade_mail"
 		"ItemRequirements"
 		{
-			"01"						"item_blade_mail_3;item_holy_knight_shield;item_reaver;item_relic;item_phantom_bone"
+			"01"						"item_blade_mail_3;item_reaver;item_relic;item_phantom_bone"
 		}
 	}
 
@@ -247,12 +247,7 @@
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"60"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_magical_armor"	"20"
+				"bonus_armor"			"35"
 			}
 			"06"
 			{
@@ -262,32 +257,17 @@
 			"07"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"reflected_damage_pct"	"100"
+				"reflected_damage_pct"	"120"
 			}
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"reduced_damage_pct"	"10"
+				"reduced_damage_pct"	"20"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_FLOAT"
 				"duration"				"4"
-			}
-			"10"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"buff_chance"			"10"
-			}
-			"11"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"buff_duration"			"1"
-			}
-			"12"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"buff_cooldown"			"12"
 			}
 		}
 	}

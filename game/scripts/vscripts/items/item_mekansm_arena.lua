@@ -11,7 +11,10 @@ if IsServer() then
 		caster:EmitSound("DOTA_Item.Mekansm.Activate")
 		ParticleManager:CreateParticle(self.pfx, PATTACH_ABSORIGIN_FOLLOW, caster)
 		for _,v in ipairs(FindUnitsInRadius(caster:GetTeamNumber(), caster:GetAbsOrigin(), nil, self:GetSpecialValueFor("radius"), self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)) do
-			SafeHeal(v, self:GetSpecialValueFor("heal_amount"), self)
+			SafeHeal(v, self:GetSpecialValueFor("heal_amount"), self, true, {
+				amplify = true,
+				strengthAMP = true,
+			})
 			ParticleManager:CreateParticle(self.recipient_pfx, PATTACH_ABSORIGIN_FOLLOW, v, caster)
 			v:EmitSound("DOTA_Item.Mekansm.Target")
 		end

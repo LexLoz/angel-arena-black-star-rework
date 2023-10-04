@@ -3,7 +3,7 @@ generator/settings.yml
 # content/panorama/styles/*
 game/resource/addon_*.txt
 game/panorama/localization
-game/scripts/npc/units/waves.txt
+# game/scripts/npc/units/waves.txt
 game/scripts/vscripts/modules/waves
 
 

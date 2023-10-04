@@ -4,6 +4,83 @@ CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER = 2
 CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER = 3
 
 return {
+	['reconnectfix'] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_PUBLIC,
+		f = function(args, hero)
+			ReconnectFix(hero:GetPlayerOwner())
+		end
+	},
+	["someshit"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER,
+		f = function()
+			HeroSelection:SetState(HERO_SELECTION_PHASE_END)
+			-- HeroSelection:StartStateInGame({})
+		end
+	},
+	["option"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT,
+		f = function(args, hero)
+			Options:SetValue(args[1], args[2] == "1" and true or false)
+		end
+	},
+	["killweight"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT,
+		f = function(args, hero)
+			for team, _ in pairsByKeys(Teams.Data) do
+				local current_weight = 0
+				Teams.Data[team].kill_weight_increased = 0
+				Teams:SetTeamKillWeight(team, args[1])
+			end
+		end
+	},
+	["respawn_zeld"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER,
+		f = function()
+			if not Bosses:IsAlive("cursed_zeld") then
+				Bosses:SpawnStaticBoss("cursed_zeld")
+			end
+		end
+	},
+	["spp"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER,
+		f = function()
+			if HeroSelection.CurrentState == HERO_SELECTION_PHASE_BANNING then
+				HeroSelection:StartStateHeroPick()
+			elseif HeroSelection.CurrentState == HERO_SELECTION_PHASE_HERO_PICK then
+				HeroSelection:StartStateStrategy()
+			elseif HeroSelection.CurrentState == HERO_SELECTION_PHASE_STRATEGY then
+				HeroSelection:StartStateInGame({})
+			elseif HeroSelection.CurrentState == HERO_SELECTION_PHASE_END then
+				Tutorial:ForceGameStart()
+			end
+		end
+	},
+	["mr"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
+		f = function()
+			for i = 0, 23 do
+				if PlayerResource:IsValidPlayerID(i) then
+					local hero = PlayerResource:GetSelectedHeroEntity(i)
+					ReloadUnitModifiers(hero)
+				end
+			end
+		end
+	},
+	["sr"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
+		f = function(args, hero)
+			-- StatsClient:AddGuide(nil)
+			SendToServerConsole('script_reload')
+		end
+	},
+	["timescale"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT,
+		f = function(args)
+			local value = tonumber(args[1])
+			if value < 1 then value = 1 end -- if arg < 1 server freezes
+			Convars:SetInt("host_timescale", value)
+		end
+	},
 	["gold"] = {
 		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT,
 		f = function(args, hero)
@@ -21,7 +98,8 @@ return {
 		f = function(args, hero)
 			for i = 2, 50 do
 				if XP_PER_LEVEL_TABLE[hero:GetLevel()] and XP_PER_LEVEL_TABLE[hero:GetLevel() + 1] then
-					hero:AddExperience(XP_PER_LEVEL_TABLE[hero:GetLevel() + 1] - XP_PER_LEVEL_TABLE[hero:GetLevel()], 0, false, false)
+					hero:AddExperience(XP_PER_LEVEL_TABLE[hero:GetLevel() + 1] - XP_PER_LEVEL_TABLE[hero:GetLevel()], 0,
+						false, false)
 				else
 					break
 				end
@@ -35,9 +113,13 @@ return {
 		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT,
 		f = function(args, hero)
 			local i = tonumber(args[1])
+			hero.Additional_str = (hero.Additional_str or 0) + i
+			hero.Additional_agi = (hero.Additional_agi or 0) + i
+			hero.Additional_int = (hero.Additional_int or 0) + i
 			hero:ModifyAgility(i)
 			hero:ModifyStrength(i)
 			hero:ModifyIntellect(i)
+			Attributes:UpdateAll(hero)
 		end
 	},
 	["duel"] = {
@@ -49,7 +131,7 @@ return {
 	["killcreeps"] = {
 		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT,
 		f = function(args, hero)
-			for _,v in ipairs(FindUnitsInRadius(hero:GetTeamNumber(), Vector(0, 0, 0), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_CREEP, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_ANY_ORDER, false)) do
+			for _, v in ipairs(FindUnitsInRadius(hero:GetTeamNumber(), Vector(0, 0, 0), nil, FIND_UNITS_EVERYWHERE, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_CREEP, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES, FIND_ANY_ORDER, false)) do
 				v:ForceKill(true)
 			end
 		end
@@ -115,6 +197,19 @@ return {
 		end
 	},
 
+
+	["debugallcalls"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
+		f = function()
+			DebugAllCalls()
+		end
+	},
+	["dcs"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
+		f = function()
+			_G.DebugConnectionStates = not DebugConnectionStates
+		end
+	},
 	["kick"] = {
 		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
 		f = function(args)
@@ -185,7 +280,17 @@ return {
 				HeroSelection:InitializeHeroClass(heroEntity, heroTableCustom)
 				if heroTableCustom.base_hero then
 					TransformUnitClass(heroEntity, heroTableCustom)
-					heroEntity:SetOverrideUnitName(heroName)
+					heroEntity.UnitName = heroName
+				end
+			end
+		end
+	},
+	["consts"] = {
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER,
+		f = function(args)
+			for k, v in pairs(_G) do
+				if string.find(k, args[1]) then
+					print(k, v)
 				end
 			end
 		end
@@ -209,7 +314,7 @@ return {
 		end
 	},
 	["console"] = {
-		level = CUSTOMCHAT_COMMAND_LEVEL_PUBLIC,
+		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
 		f = function(_, _, playerId)
 			Console:SetVisible(PlayerResource:GetPlayer(playerId))
 		end

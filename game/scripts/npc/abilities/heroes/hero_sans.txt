@@ -1,0 +1,147 @@
+"DOTAAbilities"
+{
+    "sans_dodger"
+    {
+        "BaseClass"             		"ability_lua"
+		"AbilityTextureName"			"arena/sans_dodger"
+		"ScriptFile"					"heroes/hero_sans/dodger.lua"
+        "MaxLevel"                      "7"
+        "LevelsBetweenUpgrades"         "1"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
+        "AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+        "AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "SpellDispellableType"			"SPELL_DISPELLABLE_NO"
+        "AbilityCastPoint"				"0.1"
+
+        "AbilityValues"
+        {
+            "max_charges"               "8 10 12 14 16 18 20"
+            "charge_per_kill"           "1"
+            "charge_cooldown"           "2"
+            "cooldown_after_damage"     "4"
+            "damage_threshold"          "30"
+            "dodge_cost"                "1"
+            "spell_dodge_cost"          "2"
+            "blink_cost"                "1"
+            "blink_distance"            "150 175 200 225 250 275 300"
+            "blink_cooldown"            "2"
+            "blink_damage"
+            {
+                "value"                 "75 90 105 120 135 150 165"
+                "CalculateSpellDamageTooltip"	"1"
+            }
+            "stun_duration"             "1"
+            "delay"                     "1"
+            "radius"                    "175"
+            "genocide_bonus_pct"        "50"
+        }
+        "precache"
+		{
+			"particle"  "particles/arena/units/heroes/hero_sans/sans_dodger_bones.vpcf"
+		}
+    }
+    "sans_blaster"
+    {
+        "BaseClass"             		"ability_lua"
+		"AbilityTextureName"			"arena/sans_gaster_blaster"
+		"ScriptFile"					"heroes/hero_sans/blaster.lua"
+        "MaxLevel"                      "7"
+        "LevelsBetweenUpgrades"         "1"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT | DOTA_ABILITY_BEHAVIOR_VECTOR_TARGETING"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+        "AbilityCastRange"				"300 350 400 450 500 550 600"
+        "AbilityCooldown"				"2"
+        "AbilityCastPoint"				"0.15"
+        
+
+        "AbilityValues"
+        {
+            "damage"
+            {
+                "value"                 "100 125 150 175 200 225 250"
+                "CalculateSpellDamageTooltip"	"1"
+            }
+            "cast_range_tooltip"        "300 350 400 450 500 550 600"
+            "delay"                     "0.9"
+            "duration"                  "1.6"
+            "charges_cost"              "3"
+            "ray_length"                "500"
+            "ray_width"                 "100"
+            "genocide_bonus_pct"        "100"
+        }
+        "precache"
+		{
+			"particle"  "particles/arena/units/heroes/hero_sans/gaster_blaster.vpcf"
+		}
+    }
+    "sans_ketchup"
+    {
+        "BaseClass"             		"ability_lua"
+		"AbilityTextureName"			"arena/sans_ketchup"
+		"ScriptFile"					"heroes/hero_sans/ketchup.lua"
+        "MaxLevel"                      "7"
+        "LevelsBetweenUpgrades"         "10"
+        "RequiredLevel"			        "4"
+        "AbilityCooldown"               "100"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+
+        "AbilityValues"
+        {
+            "duration"                  "6"
+            "charges_restore"           "2 3 4 5 6 7 8"
+            "scepter_genocide_mod_duration" "3.5"
+        }
+    }
+    "sans_curse"
+    {
+        "BaseClass"             		"ability_lua"
+		"AbilityTextureName"			"arena/sans_curse"
+		"ScriptFile"					"heroes/hero_sans/curse.lua"
+        "MaxLevel"                      "1"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+        "AbilityUnitDamageType"			"DAMAGE_TYPE_HP_REMOVAL"
+
+        "AbilityValues"
+        {
+            "min_interval"                  "0.01"
+            "max_interval"                  "0.5"
+            "damage_per_killed_creep_pct"   "0.1"
+            "damage_per_killed_hero_pct"    "20"
+            "damage_per_assist_pct"         "5"
+            "health_threshold_to_death_pct" "1"
+            "scepter_bonus_pct"             "0"
+            "genocide_bonus_pct"            "100"
+            
+        }
+    }
+    "sans_genocide_mod"
+    {
+        "BaseClass"             		"ability_lua"
+		"AbilityTextureName"			"arena/sans_genocide_mod"
+        "MaxLevel"                      "7"
+		"ScriptFile"					"heroes/hero_sans/genocide_mod.lua"
+        "AbilityType"					"DOTA_ABILITY_TYPE_ULTIMATE"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityUnitTargetTeam" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType" 		"DOTA_UNIT_TARGET_HERO"
+        "SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0.3"
+        "AbilityCooldown"               "120"
+        "AbilityCastRange"				"700"
+
+        "AbilityValues"
+        {
+            "duration"                  "5 5.5 6 6.5 7 7.5 8"
+            "bonus_cast_distance"       "100 150 200 250 300 350 400"
+            "charge_gain_increase_pct"  "100"
+            "debuff_radius"             "700"
+            "scepter_bones_radius"      "500"
+            "scepter_bones_interval"    "0.5"
+        }
+    }
+}

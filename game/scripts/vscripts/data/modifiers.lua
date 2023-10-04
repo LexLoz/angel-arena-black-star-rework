@@ -10,13 +10,26 @@ MODIFIERS_DEATH_PREVENTING = {
 	"modifier_saber_avalon_invulnerability",
 }
 
+DUEL_PURGED_MODIFIERS = {
+	"modifier_life_stealer_infest",
+	"modifier_tether_ally_aghanims",
+	"modifier_life_stealer_assimilate",
+	"modifier_life_stealer_assimilate_effect",
+	"modifier_item_black_king_bar_arena_active",
+	"modifier_item_titanium_bar_active",
+}
+
 MODIFIERS_TRUESIGHT = {
 	"modifier_item_dustofappearance",
 	"modifier_bounty_hunter_track",
 	"modifier_slardar_amplify_damage",
 }
 
-ONCLICK_PURGABLE_MODIFIERS = { "modifier_doppelganger_mimic" }
+ONCLICK_PURGABLE_MODIFIERS = {
+	"modifier_doppelganger_mimic",
+	"modifier_tether_ally_aghanims",
+	"modifier_universal_attribute"
+}
 
 UNDESTROYABLE_MODIFIERS = {
 	modifier_razor_static_link_debuff = true,
@@ -97,4 +110,61 @@ MODIFIER_PROC_PRIORITY = {
 		modifier_item_piercing_blade = 1,
 		modifier_item_soulcutter = 2,
 	},
+}
+
+
+REGEN_EXEPTIONS = {
+	{ "modifier_item_phantom_bone",                "bonus_hp_regen_pct" },
+	{ "modifier_item_heart_cyclone_regen",         "health_regen_percent_per_second" },
+	{ "modifier_item_heart_cyclone_active_regen",  "active_health_regen_percent_per_second" },
+	{ "modifier_item_heavy_war_axe_of_rage_regen", "health_regen_percent_per_second" },
+	{ "modifier_item_demonic_cuirass_ally_aura",   "aura_bonus_hp_regen_pct" },
+	{ "modifier_item_lotus_sphere",                "bonus_hp_regen_pct" },
+	{ "modifier_arthas_vikared",                   "health_regen_percent" },
+	{ "modifier_huskar_berserkers_blood",          "maximum_health_regen" },
+	{ "modifier_juggernaut_healing_ward_heal",     "healing_ward_heal_amount" },
+	{ "modifier_filler_heal",                      "hp_heal_pct" }
+}
+
+DAMAGE_REFLECT_MODIFIERS = {
+	["modifier_freya_pain_reflection"] = "freya_pain_reflection",
+	["modifier_item_blade_mail_arena_active"] = "item_blade_mail_arena",
+	["modifier_item_sacred_blade_mail_active"] = "item_sacred_blade_mail",
+}
+
+RELIABLE_DAMAGE_MODIFIERS = {
+	item_desolator4 = true,
+	item_desolator5 = true,
+	item_desolator6 = true,
+
+	item_soulcutter = true,
+	item_demon_king_bar = true,
+	item_bloodthorn_2 = true,
+	item_ultimate_splash = true,
+	item_radiance_frozen = true,
+	item_demonic_cuirass = true,
+	item_sacred_blade_mail = true,
+	item_titanium_bar = true,
+}
+
+REDUCES_STAMINA_COST_MODIFIERS = {
+	"modifier_sara_fragment_of_hate_damage",
+	"modifier_phantom_assassin_phantom_strike",
+	"modifier_alchemist_chemical_rage",
+	"modifier_troll_warlord_battle_trance",
+	"modifier_power_stone",
+	"modifier_ogre_magi_bloodlust",
+	"modifier_lycan_shapeshift",
+	"modifier_lycan_wolf_bite_attack_range",
+	"modifier_stegius_rage_of_desolus",
+	"modifier_sven_gods_strength",
+}
+
+BAT_DECREASE_MODIFIERS = {
+	modifier_alchemist_chemical_rage = true,
+	modifier_broodmother_insatiable_hunger = true,
+	modifier_terrorblade_metamorphosis = true,
+	modifier_troll_warlord_berserkers_rage = true,
+	modifier_snapfire_lil_shredder_buff = true,
+	modifier_lone_druid_true_form = true,
 }

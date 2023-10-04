@@ -3,7 +3,7 @@
 	"item_recipe_mekansm_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"900"
 		"ItemRecipe"					"1"
@@ -81,7 +81,7 @@
 	"item_recipe_mekansm_2"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"950"
 		"ItemRecipe"					"1"
@@ -159,7 +159,7 @@
 	"item_recipe_guardian_greaves_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"100"
 		"ItemRecipe"					"1"
@@ -260,7 +260,7 @@
 	"item_recipe_runic_mekansm"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1520"
 		"ItemRecipe"					"1"

@@ -7,7 +7,8 @@ function CreateSoul(keys)
 		target:GetTeamNumber() ~= caster:GetTeamNumber() and
 		not target:IsBoss() and
 		not target:IsChampion() and
-		not target:IsBuilding() then
+		not target:IsBuilding() and
+		not target:IsJungleBear() then
 
 		local soul = CreateUnitByName("npc_shinobu_soul", target:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_NEUTRALS)
 		soul:SetModel(target:GetModelName())

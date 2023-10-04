@@ -1,0 +1,50 @@
+.TooltipRoot {
+	max-width: 500px;
+min-width: 200px;
+flow-children: down; }
+
+#RequirementsPanel {
+width: 100%;
+height: 48px;
+flow-children: right; }
+
+#RequirementsImage {
+width: 48px;
+height: 48px;
+margin-right: 6px;
+horizontal-align: right; }
+
+#RequirementsTitle {
+font-size: 24px;
+color: white;
+vertical-align: center; }
+
+#CostPanel {
+width: 100%;
+flow-children: right; }
+
+#CostValue {
+margin-right: 6px;
+font-size: 24px;
+font-weight: bold;
+color: cyan;
+horizontal-align: right; }
+
+#CostTitle {
+font-size: 20px;
+color: white;
+vertical-align: center; }
+
+#TopInfoPanel {
+min-width: 100%; }
+
+#TitleLabel {
+margin-top: 6px;
+font-size: 24px;
+font-weight: bold;
+color: white; }
+
+#LevelLabel {
+margin-top: -10px;
+margin-right: -10px;
+horizontal-align: right; }

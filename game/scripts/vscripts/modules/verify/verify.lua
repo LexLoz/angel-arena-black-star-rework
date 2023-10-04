@@ -105,7 +105,7 @@ function Verify:All()
 	all.override = Verify:Override()
 	all.levels = Verify:Levels()
 	if table.count(all) > 0 then
-		PrintTable(all)
+		--PrintTable(all)
 	end
 end
 

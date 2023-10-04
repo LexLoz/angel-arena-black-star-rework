@@ -22,10 +22,18 @@ function CDOTABaseAbility:PerformPrecastActions()
 	return false
 end
 
+function CDOTABaseAbility:GetMulticastType()
+	local name = self:GetAbilityName()
+	if MULTICAST_ABILITIES[name] then return MULTICAST_ABILITIES[name] end
+	if self:IsToggle() then return MULTICAST_TYPE_NONE end
+	if self:HasBehavior(DOTA_ABILITY_BEHAVIOR_PASSIVE) then return MULTICAST_TYPE_NONE end
+	return self:HasBehavior(DOTA_ABILITY_BEHAVIOR_UNIT_TARGET) and MULTICAST_TYPE_DIFFERENT or MULTICAST_TYPE_SAME
+end
+
 function CDOTABaseAbility:ClearFalseInnateModifiers()
 	if self:GetKeyValue("HasInnateModifiers") ~= 1 then
 		for _,v in ipairs(self:GetCaster():FindAllModifiers()) do
-			if v:GetAbility() == self then
+			if v:GetAbility() and v:GetAbility() == self then
 				v:Destroy()
 			end
 		end
@@ -45,4 +53,12 @@ end
 
 function CDOTABaseAbility:AutoStartCooldown()
 	self:StartCooldown(self:GetReducedCooldown())
+end
+
+function CDOTABaseAbility:GetDamageSubType()
+	local ability = ABILITIES_LIST[self:GetAbilityName()]
+	if ability and ability.AbilityUnitDamageSubType then
+		return ability.AbilityUnitDamageSubType
+	end
+	return false
 end

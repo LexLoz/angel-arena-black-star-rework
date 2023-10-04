@@ -6,14 +6,21 @@ function DealDamage(keys)
 		attacker = caster,
 		victim = target,
 		damage_type = ability:GetAbilityDamageType(),
-		damage = (keys.damage + (caster:GetMaxHealth() - caster:GetHealth()) * keys.missing_hp_damage_pct * 0.01) * target:GetModifierStackCount("modifier_huskar_burning_spear_arena_debuff", caster),
+		damage = (keys.damage * (caster.DamageMultiplier or 1) * (1 + (caster:GetSpellAmplification(false) or 0)) + (caster:GetMaxHealth() - caster:GetHealth()) * keys.missing_hp_damage_pct * 0.01) * target:GetModifierStackCount("modifier_huskar_burning_spear_arena_debuff", caster),
 		ability = ability
 	})
 end
 
 function DoHealthCost(keys)
 	local caster = keys.caster
-	local cost = (keys.damage + (caster:GetMaxHealth() - caster:GetHealth()) * keys.missing_hp_damage_pct * 0.01) * keys.health_cost_pct * 0.01
+	local cost = (keys.damage + (caster:GetMaxHealth() - caster:GetHealth()) * keys.missing_hp_damage_pct * 0.01) + (caster:GetHealth() * keys.health_cost_pct * 0.01)
+	--[[ApplyDamage({
+		attacker = caster,
+		victim = caster,
+		damage_type = DAMAGE_TYPE_HP_REMOVAL,
+		damage = cost,
+		ability = keys.ability
+	})]]
 	caster:ModifyHealth(caster:GetHealth() - cost, keys.ability, false, 0)
 end
 

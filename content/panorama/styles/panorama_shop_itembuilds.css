@@ -1,0 +1,357 @@
+#GuidesBrowser {
+width: 800px;
+height: 600px;
+opacity: 0;
+transition-duration: .1s;
+transition-property: opacity;
+align: center center;
+flow-children: right; }
+
+#GuidesBrowserLeft {
+width: 266px;
+height: 100%;
+background-color: black;
+flow-children: down; }
+
+#GuidesAvaliableList {
+width: 100%;
+height: fill-parent-flow(1);
+overflow: clip scroll;
+flow-children: down; }
+
+#GuidesBrowserRight {
+width: fill-parent-flow(1);
+height: 100%;
+background-image: url("s2r://panorama/images/hud/reborn/bg_guides_psd.vtex");
+background-size: 100%; }
+
+.CloseButton {
+align: right top; }
+
+#GuidesHeader {
+width: 100%;
+height: 200px;
+padding-top: 4px;
+padding-left: 10px;
+margin-top: 10px;
+flow-children: down; }
+
+#GuidesHeaderTitleRow {
+width: 100%;
+flow-children: right; }
+
+#GuidesTitleLabel {
+max-width: 90%;
+font-size: 24px;
+letter-spacing: 1px;
+color: white; }
+#GuidesTitleLabel:disabled {
+color: white;
+background-color: transparent;
+border-color: transparent; }
+
+#GuideTogglePublish {
+height: 32px;
+min-height: 0;
+margin-left: 12px;
+vertical-align: center;
+visibility: collapse; }
+#GuideTogglePublish:not(.CanPublishBuild.InGuidePublishMode) {
+background-color: gradient(linear, 0 0, 0 100%, from(#2a481f), to(#226326));
+border-top-color: #355639;
+border-right-color: #214123;
+border-bottom-color: #1e371e;
+border-left-color: #2c4d30; }
+#GuideTogglePublish:not(.CanPublishBuild.InGuidePublishMode):active {
+background-color: gradient(linear, 0 0, 0 100%, from(#132416), to(#183019));
+border-top-color: #09110a;
+border-right-color: #172c19;
+border-bottom-color: #1f3820;
+border-left-color: #0f1b10; }
+
+.CanPublishBuild #GuideTogglePublish {
+visibility: visible; }
+
+.CanPublishBuild.InGuidePublishMode #GuideTogglePublishLabelCancel {
+visibility: visible; }
+
+.CanPublishBuild.InGuidePublishMode #GuideTogglePublishLabel {
+visibility: collapse; }
+
+.CanPublishBuild.InGuidePublishMode #GuidePublishBlock {
+visibility: visible; }
+
+#GuideTogglePublishLabelCancel {
+visibility: collapse; }
+
+#GuidesBrowserDescription {
+width: 100%;
+height: 100%;
+margin: 5px;
+margin-bottom: 15px;
+overflow: squish scroll;
+font-size: 18px;
+color: #5b6872; }
+
+#GuideArea {
+width: 100%;
+height: 100%;
+margin-top: 204px;
+flow-children: right; }
+
+#GuideItemBuild {
+width: 267px;
+height: 100%;
+margin-right: 10px;
+overflow: squish scroll;
+flow-children: down; }
+
+#GuideRightColumn {
+width: 50%;
+height: 100%;
+margin-right: 8px;
+flow-children: down; }
+
+#GuideRatingBlock {
+width: 100%;
+margin-right: 12px;
+visibility: collapse;
+flow-children: right; }
+
+#GuideRatingLabels {
+width: fill-parent-flow(1);
+flow-children: down; }
+
+#VotingButtons {
+flow-children: right; }
+
+#VoteUpButton {
+margin-left: 8px;
+tooltip-position: top;
+tooltip-body-position: 50% 50%;
+tooltip-arrow-position: 50% 50%;
+flow-children: right; }
+#VoteUpButton:hover .VoteIcon {
+wash-color: #a4e84a; }
+#VoteUpButton:active .VoteIcon {
+background-color: rgba(0, 0, 0, 0.00392); }
+
+#VoteDownButton {
+margin-left: 4px;
+tooltip-position: top;
+tooltip-body-position: 50% 50%;
+tooltip-arrow-position: 50% 50%;
+flow-children: right; }
+#VoteDownButton:hover .VoteIcon {
+wash-color: #cc4422; }
+#VoteDownButton:active .VoteIcon {
+background-color: rgba(0, 0, 0, 0.00392); }
+
+.VoteIcon {
+width: 28px;
+height: 28px;
+padding: 4px;
+margin-top: 2px;
+background-color: rgba(0, 0, 0, 0.4);
+border-radius: 3px;
+transition-duration: .2s;
+transition-property: wash-color;
+transition-timing-function: ease-in-out;
+wash-color: #7595b5; }
+
+.VoteIconFlipped {
+margin-top: 2px;
+margin-bottom: 0;
+transform: scaleX(-1) scaleY(-1); }
+
+.GuideStat {
+margin-bottom: -2px;
+font-size: 24px;
+color: #e1e2e2; }
+
+.GuideStatLabel {
+margin-bottom: 10px;
+font-size: 15px;
+color: #5b6872; }
+
+#GuideYouTubeLogo {
+width: 100%;
+height: width-percentage(62.22%);
+vertical-align: bottom;
+visibility: collapse; }
+#GuideYouTubeLogo > Image {
+width: 100%;
+height: 100%;
+transition-duration: .2s;
+transition-property: blur; }
+#GuideYouTubeLogo > Label {
+font-size: 28px;
+font-weight: bold;
+color: #fff;
+text-align: center;
+text-shadow: 2px 2px 4px 1 black;
+opacity: 0;
+transition-duration: .2s;
+transition-property: opacity;
+align: center center; }
+#GuideYouTubeLogo:hover > Image {
+blur: gaussian(5); }
+#GuideYouTubeLogo:hover > Label {
+opacity: 1; }
+#GuideYouTubeLogo:active {
+transform: translateY(1px); }
+#GuideYouTubeLogo:active > Image {
+blur: gaussian(4); }
+#GuideYouTubeLogo:active > Label {
+opacity: .8; }
+
+#GuidePublishBlock {
+width: 100%;
+margin-right: 12px;
+visibility: collapse;
+flow-children: down; }
+
+#GuidePublishButton {
+width: 100%; }
+
+.GuideListEntry {
+width: 100%;
+height: 50px;
+transition-duration: .05s;
+transition-property: background-color;
+flow-children: none; }
+.GuideListEntry .RadioBox {
+visibility: collapse; }
+.GuideListEntry.IsSelectedGuide {
+background-color: gradient(linear, 100% 0, 0 0, from(rgba(66, 74, 79, 0)), to(rgba(42, 45, 66, 0.00392))); }
+.GuideListEntry .PersonaName {
+font-size: 14px;
+font-weight: bold;
+color: #5b6872; }
+.GuideListEntry:selected {
+background-color: gradient(linear, 100% 0, 0 0, from(rgba(66, 74, 79, 0)), to(rgba(55, 63, 72, 0.53333))); }
+.GuideListEntry:selected:not(.IsSelectedGuide) #SelectGuideButton {
+visibility: visible; }
+
+#SelectedBar {
+width: 4px;
+height: 100%;
+background-color: #c8e7e7;
+opacity: 0;
+horizontal-align: left; }
+
+.IsSelectedGuide #SelectedBar {
+opacity: 1; }
+
+.IsSelectedGuide #SelectedGuideLabel {
+visibility: visible; }
+
+#GuideEntryTitles {
+width: 100%;
+height: 100%;
+padding-top: 7px;
+margin-left: 16px;
+horizontal-align: left; }
+
+#GuideEntryTitle {
+width: 208px;
+height: 19px;
+font-size: 16px;
+color: #e5e5e5; }
+
+#GuideEntryRightColumn {
+width: 40px;
+height: 100%;
+margin-right: 10px;
+horizontal-align: right;
+flow-children: down; }
+
+#GuideEntryRating {
+width: 100%;
+margin-top: 9px;
+font-size: 14px;
+color: #5b6872;
+text-align: right; }
+
+#SelectGuideButton {
+z-index: 10;
+width: 80px;
+height: 18px;
+margin-right: 12px;
+margin-bottom: 6px;
+vertical-align: bottom;
+background-color: gradient(linear, 0 0, 0 100%, from(#353c45), to(#4e5a63));
+border: 1px solid;
+border-top-color: #555555;
+border-right-color: #404040;
+border-bottom-color: #333333;
+border-left-color: #494949;
+visibility: collapse;
+horizontal-align: right; }
+#SelectGuideButton:hover {
+background-color: gradient(linear, 0 0, 0 100%, from(#454c55), to(#5e6a73)); }
+#SelectGuideButton:active {
+background-color: gradient(linear, 0 0, 0 100%, from(#252c35), to(#3e4a53)); }
+#SelectGuideButton Label {
+width: 100%;
+padding-top: 0;
+font-size: 12px;
+letter-spacing: 1px;
+color: #e1e2e2;
+text-align: center;
+text-shadow: 2px 2px 4px 1 black;
+text-transform: uppercase;
+vertical-align: center; }
+
+#SelectedGuideLabel {
+margin-right: 6px;
+margin-bottom: 6px;
+font-size: 14px;
+letter-spacing: 1px;
+color: #c8e7e7;
+text-transform: uppercase;
+vertical-align: bottom;
+visibility: collapse;
+horizontal-align: right; }
+
+#GuideEntrySubtitleRow {
+width: 160px;
+height: 16px;
+margin-top: 18px;
+flow-children: right; }
+
+#GuideEntryAuthor {
+width: 80%; }
+#GuideEntryAuthor > Label {
+font-size: 14px;
+font-weight: semi-bold;
+text-overflow: shrink; }
+
+#GuideEntryVersion {
+width: 20%;
+font-size: 14px;
+font-weight: semi-bold;
+color: #5b6872;
+text-align: right;
+text-overflow: shrink;
+horizontal-align: right; }
+
+.GuidesBrowserVisible #GuidesBrowser {
+opacity: 1; }
+
+.ShowVoteAndFavorite:not(.CanPublishBuild.InGuidePublishMode) #GuideRatingBlock {
+visibility: visible; }
+
+.VotedYes #VoteUpButton .VoteIcon {
+wash-color: #a4e84a; }
+
+.VotedNo #VoteDownButton .VoteIcon {
+wash-color: #cc4422; }
+
+.HasYouTubeVideo:not(.CanPublishBuild.InGuidePublishMode) #GuideYouTubeLogo {
+visibility: visible; }
+
+#SubtitleLabel .PersonaName {
+font-size: 14px;
+font-weight: bold;
+color: #5b6872; }

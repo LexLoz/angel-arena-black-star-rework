@@ -74,21 +74,26 @@ if IsServer() then
 				vDirection = RotatePosition(Vector(0,0,0), QAngle(0, fullAngle/2-factor*i, 0), base_direction)
 			end
 			local vHookOffset = Vector(0, 0, 96)
+			local vKillswitch = Vector( ( ( hook_distance / hook_speed ) * 2 ), 0, 0 )
 
-			local hook_chain_pfx = ParticleManager:CreateParticle("particles/units/heroes/hero_pudge/pudge_meathook_chain.vpcf", PATTACH_CUSTOMORIGIN, caster)
-			ParticleManager:SetParticleAlwaysSimulate(hook_chain_pfx)
-			ParticleManager:SetParticleControlEnt(hook_chain_pfx, 0, caster, PATTACH_POINT_FOLLOW, "attach_weapon_chain_rt", caster:GetOrigin() + vHookOffset, true)
-			ParticleManager:SetParticleControl(hook_chain_pfx, 1, caster:GetOrigin() + vHookOffset)
-			ParticleManager:SetParticleControl(hook_chain_pfx, 2, Vector(hook_speed, hook_distance, hook_width))
-			ParticleManager:SetParticleControl(hook_chain_pfx, 6, caster:GetOrigin() + vHookOffset)
-			ParticleManager:SetParticleControlEnt(hook_chain_pfx, 7, caster, PATTACH_CUSTOMORIGIN, nil, caster:GetOrigin(), true)
+			local hook_pfx = ParticleManager:CreateParticle("particles/units/heroes/hero_pudge/pudge_meathook.vpcf", PATTACH_CUSTOMORIGIN, nil)
+			ParticleManager:SetParticleAlwaysSimulate(hook_pfx)
+			ParticleManager:SetParticleControlEnt(hook_pfx, 0, caster, PATTACH_POINT_FOLLOW, "attach_weapon_chain_rt", caster:GetOrigin() + vHookOffset, true)
+			ParticleManager:SetParticleControl(hook_pfx, 1, caster:GetOrigin() + vHookOffset)
+			ParticleManager:SetParticleControl(hook_pfx, 2, Vector(hook_speed, hook_distance, hook_width))
+			ParticleManager:SetParticleControl( hook_pfx, 3, vKillswitch )
+			ParticleManager:SetParticleControl( hook_pfx, 4, Vector( 1, 0, 0 ) )
+            ParticleManager:SetParticleControl( hook_pfx, 5, Vector( 0, 0, 0 ) )
+			--ParticleManager:SetParticleControl(hook_pfx, 6, caster:GetOrigin() + vHookOffset)
+			ParticleManager:SetParticleControlEnt(hook_pfx, 7, caster, PATTACH_CUSTOMORIGIN, nil, caster:GetOrigin(), true)
+			
 			caster:EmitSound("Hero_Pudge.AttackHookExtend")
 			local projbase = {
 				fStartRadius = hook_width,
 				fEndRadius = hook_width,
 				fDistance = hook_distance,
 				Source = caster,
-				UnitTest = function(proj, unit)
+				UnitTest = function(proj, unit)	
 					return UnitFilter(unit, DOTA_UNIT_TARGET_TEAM_BOTH, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES + DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS, caster:GetTeamNumber()) == UF_SUCCESS
 				end,
 				WallBehavior = PROJECTILES_NOTHING,
@@ -141,7 +146,7 @@ if IsServer() then
 													hHook:RemoveEffects(EF_NODRAW)
 												end
 											end
-											caster:EmitSound("Hero_Pudge.AttackHookRetractStop")
+											--caster:EmitSound("Hero_Pudge.AttackHookRetractStop")
 										end
 
 										if proj.hVictim and #proj.hVictim > 0 then
@@ -154,7 +159,7 @@ if IsServer() then
 										end
 										Timers:RemoveTimer(proj.Thinker)
 										proj.hVictim = nil
-										ParticleManager:DestroyParticle(hook_chain_pfx, true)
+										ParticleManager:DestroyParticle(hook_pfx, true)
 									end,
 									hVictim = proj.hVictim,
 								}
@@ -164,7 +169,7 @@ if IsServer() then
 								proj.newProjectile = newProjectile
 								newProjectile.Thinker = Timers:CreateTimer(function()
 									if IsValidEntity(self) and IsValidEntity(caster) then
-										ParticleManager:SetParticleControl(hook_chain_pfx, 6, newProjectile:GetPosition() + vHookOffset)
+										--ParticleManager:SetParticleControl(hook_pfx, 6, newProjectile:GetPosition() + vHookOffset)
 										vVelocity = caster:GetAbsOrigin() - newProjectile:GetPosition()
 										vVelocity.z = 0
 										vVelocity = vVelocity:Normalized() * hook_speed
@@ -190,7 +195,7 @@ if IsServer() then
 							end
 							Timers:RemoveTimer(proj.Thinker)
 							proj.hVictim = nil
-							ParticleManager:DestroyParticle(hook_chain_pfx, true)
+							ParticleManager:DestroyParticle(hook_pfx, true)
 						end
 					else
 						if proj.hVictim then
@@ -203,7 +208,7 @@ if IsServer() then
 						end
 						Timers:RemoveTimer(proj.Thinker)
 						proj.hVictim = nil
-						ParticleManager:DestroyParticle(hook_chain_pfx, true)
+						ParticleManager:DestroyParticle(hook_pfx, true)
 					end
 				end,
 			}
@@ -211,7 +216,7 @@ if IsServer() then
 			local projectile = Projectiles:CreateProjectile(projectileTable)
 
 			projectile.Thinker = Timers:CreateTimer(function()
-				ParticleManager:SetParticleControl(hook_chain_pfx, 6, projectile:GetPosition() + vHookOffset)
+				--ParticleManager:SetParticleControl(hook_pfx, 6, projectile:GetPosition() + vHookOffset)
 				return 0.03
 			end)
 			projectile.hVictim = {}

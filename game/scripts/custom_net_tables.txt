@@ -4,6 +4,10 @@
 	[
 		"containers_lua",
 		"custom_entity_values",
-		"shared_modifiers"
+		"shared_modifiers",
+		"ability_damage_subtypes",
+		"units_subtypes_resistance",
+		"vector_targeting",
+		"attribute_constants",
 	]
 }

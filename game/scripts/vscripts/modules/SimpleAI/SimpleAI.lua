@@ -6,8 +6,6 @@ AI_STATE_RETURNING = 2
 AI_STATE_CASTING = 3
 AI_STATE_ORDER = 4
 
-ModuleLinkLuaModifier(..., "modifier_simple_ai")
-
 SimpleAI = {}
 SimpleAI.__index = SimpleAI
 
@@ -76,20 +74,18 @@ function SimpleAI:GlobalThink()
 end
 
 --Boss Thinkers
-	function SimpleAI:IdleThink()
-		--local units = Dynamic_Wrap(SimpleAI, "FindUnitsNearby")(self, self.aggroRange, false, true)
-		local units = self:FindUnitsNearby(self.aggroRange, false, true, nil, DOTA_UNIT_TARGET_FLAG_NO_INVIS)
-		if #units > 0 then
-			self.unit:MoveToTargetToAttack( units[1] )
-			self.aggroTarget = units[1]
-			self:SwitchState(AI_STATE_AGGRESSIVE)
-			return
-		end
-		if (self.spawnPos - self.unit:GetAbsOrigin()):Length2D() > 10 then
-			self:SwitchState(AI_STATE_RETURNING)
-			return
-		end
+function SimpleAI:IdleThink()
+	--local units = Dynamic_Wrap(SimpleAI, "FindUnitsNearby")(self, self.aggroRange, false, true)
+	local units = self:FindUnitsNearby(self.aggroRange, false, true, nil, DOTA_UNIT_TARGET_FLAG_NO_INVIS)
+	if #units > 0 then
+		self:Agr(units[1], self.unit)
+		return
 	end
+	if (self.spawnPos - self.unit:GetAbsOrigin()):Length2D() > 10 then
+		self:SwitchState(AI_STATE_RETURNING)
+		return
+	end
+end
 
 	function SimpleAI:AggressiveThink()
 		local aggroTarget = self.aggroTarget
@@ -135,11 +131,34 @@ end
 	end
 
 --Utils
+function SimpleAI:Agr(unit, boss)
+	if GetDOTATimeInMinutesFull() < 1 then
+		boss._waiting = true
+		return
+	end
+	boss._waiting = false
+	boss:MoveToTargetToAttack( unit )
+	self.aggroTarget = unit
+	self:SwitchState(AI_STATE_AGGRESSIVE)
+	boss._agr_delay = true
+end
+
+function SimpleAI:BossTimer(attacker, unit)
+	unit._waiting = true
+	Timers:CreateTimer(0, function()
+		if (self.spawnPos - attacker:GetAbsOrigin()):Length2D() < self.leashRange then
+			self:Agr(attacker, unit)
+			Timers:CreateTimer(0, function()
+				unit._agr_delay = false
+			end)
+		end
+		unit._waiting = false
+	end)
+end
+
 function SimpleAI:OnTakeDamage(attacker)
 	if (self.state == AI_STATE_IDLE or self.state == AI_STATE_RETURNING) and (self.spawnPos - attacker:GetAbsOrigin()):Length2D() < self.leashRange then
-		self.unit:MoveToTargetToAttack( attacker )
-		self.aggroTarget = attacker
-		self:SwitchState(AI_STATE_AGGRESSIVE)
+		self:Agr(attacker, self.unit)
 	end
 end
 

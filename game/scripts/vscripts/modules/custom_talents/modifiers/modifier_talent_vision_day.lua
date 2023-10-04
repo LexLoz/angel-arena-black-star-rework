@@ -4,6 +4,7 @@ modifier_talent_vision_day = class({
 	IsPurgable      = function() return false end,
 	DestroyOnExpire = function() return false end,
 	GetAttributes   = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	AllowIllusionDuplicate = function() return true end,
 })
 
 function modifier_talent_vision_day:DeclareFunctions()

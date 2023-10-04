@@ -1,6 +1,7 @@
 #base "units/thinkers.txt"
 #base "units/map.txt"
 #base "units/neutrals.txt"
+#base "units/waves.txt"
 #base "units/bosses.txt"
 #base "units/items.txt"
 #base "units/abilities.txt"

@@ -10,7 +10,7 @@ function DummyThink(keys)
 	local dummyPosition = dummy:GetAbsOrigin()
 	local radius = ability:GetLevelSpecialValueFor("aoe_radius", level)
 	for _,v in ipairs(FindUnitsInRadius(caster:GetTeam(), dummyPosition, nil, radius, ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)) do
-		if not v:IsMagicImmune() and not v:IsRooted() then
+		if (not v:IsMagicImmune() and not v:IsDebuffImmune()) and not v:IsRooted() then
 			local targetPosition = v:GetAbsOrigin()
 			local len = (dummyPosition - targetPosition):Length2D()
 			FindClearSpaceForUnit(v, len <= pull_speed and targetPosition or (targetPosition + (dummyPosition - targetPosition):Normalized() * pull_speed), false)

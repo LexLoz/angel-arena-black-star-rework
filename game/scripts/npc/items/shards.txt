@@ -4,14 +4,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_str_small"
-		"ItemCost"						"4500"
+		"ItemCost"						"1000"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
 		"ItemShopTags"					"str;stat;shard"
 		"ItemQuality"					"uncommon"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -19,7 +20,7 @@
 			"01"
 			{
 				"var_type"							"FIELD_INTEGER"
-				"strength"							"15"
+				"strength"							"5"
 			}
 		}
 	}
@@ -28,14 +29,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_str_medium"
-		"ItemCost"						"15000"
+		"ItemCost"						"10000"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
 		"ItemShopTags"					"str;stat;shard"
 		"ItemQuality"					"rare"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -52,14 +54,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_str_large"
-		"ItemCost"						"30000"
+		"ItemCost"						"20000"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
 		"ItemShopTags"					"str;stat;shard"
 		"ItemQuality"					"rare"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -76,14 +79,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_str_extreme"
-		"ItemCost"						"150000"
+		"ItemCost"						"100000"
 		"ItemShopTags"					"str;stat;shard"
 		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -96,18 +100,19 @@
 		}
 	}
 
-	"item_shard_agi_small"
+	"item_shard_str_ultimate"
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"item_arena/shard_agi_small"
-		"ItemCost"						"4500"
-		"ItemShopTags"					"agi;stat;shard"
-		"ItemQuality"					"uncommon"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_str_extreme"
+		"ItemCost"						"1000000"
+		"ItemShopTags"					"str;stat;shard"
+		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -115,7 +120,32 @@
 			"01"
 			{
 				"var_type"							"FIELD_INTEGER"
-				"agility"							"15"
+				"strength"							"5000"
+			}
+		}
+	}
+
+	"item_shard_agi_small"
+	{
+		"BaseClass"						"item_lua"
+		"ScriptFile"					"items/items_shards.lua"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_agi_small"
+		"ItemCost"						"1000"
+		"ItemShopTags"					"agi;stat;shard"
+		"ItemQuality"					"uncommon"
+
+		"ItemStackable"					"1"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"agility"							"5"
 			}
 		}
 	}
@@ -124,14 +154,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_agi_medium"
-		"ItemCost"						"15000"
+		"ItemCost"						"10000"
 		"ItemShopTags"					"agi;stat;shard"
 		"ItemQuality"					"rare"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -148,14 +179,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_agi_large"
-		"ItemCost"						"30000"
+		"ItemCost"						"20000"
 		"ItemShopTags"					"agi;stat;shard"
 		"ItemQuality"					"rare"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -172,14 +204,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_agi_extreme"
-		"ItemCost"						"150000"
+		"ItemCost"						"100000"
 		"ItemShopTags"					"agi;stat;shard"
 		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -192,18 +225,19 @@
 		}
 	}
 
-	"item_shard_int_small"
+	"item_shard_agi_ultimate"
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"item_arena/shard_int_small"
-		"ItemCost"						"4500"
-		"ItemShopTags"					"int;stat;shard"
-		"ItemQuality"					"uncommon"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_agi_extreme"
+		"ItemCost"						"1000000"
+		"ItemShopTags"					"agi;stat;shard"
+		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -211,7 +245,32 @@
 			"01"
 			{
 				"var_type"							"FIELD_INTEGER"
-				"intelligence"							"15"
+				"agility"							"5000"
+			}
+		}
+	}
+
+	"item_shard_int_small"
+	{
+		"BaseClass"						"item_lua"
+		"ScriptFile"					"items/items_shards.lua"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_int_small"
+		"ItemCost"						"1000"
+		"ItemShopTags"					"int;stat;shard"
+		"ItemQuality"					"uncommon"
+
+		"ItemStackable"					"1"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"intelligence"							"5"
 			}
 		}
 	}
@@ -220,14 +279,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_int_medium"
-		"ItemCost"						"15000"
+		"ItemCost"						"10000"
 		"ItemShopTags"					"int;stat;shard"
 		"ItemQuality"					"rare"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -244,14 +304,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_int_large"
-		"ItemCost"						"30000"
+		"ItemCost"						"20000"
 		"ItemShopTags"					"int;stat;shard"
 		"ItemQuality"					"rare"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -268,14 +329,15 @@
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityTextureName"			"item_arena/shard_int_extreme"
-		"ItemCost"						"150000"
+		"ItemCost"						"100000"
 		"ItemShopTags"					"int;stat;shard"
 		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -288,18 +350,19 @@
 		}
 	}
 
-	"item_shard_level"
+	"item_shard_int_ultimate"
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"item_arena/shard_level"
-		"ItemCost"						"1200"
-		"ItemShopTags"					"experience;level;shard"
-		"ItemQuality"					"rare"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_int_extreme"
+		"ItemCost"						"1000000"
+		"ItemShopTags"					"int;stat;shard"
+		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -307,23 +370,24 @@
 			"01"
 			{
 				"var_type"							"FIELD_INTEGER"
-				"levels"							"1"
+				"intelligence"							"5000"
 			}
 		}
 	}
 
-	"item_shard_level10"
+	"item_shard_ultimate_small"
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"item_arena/shard_level"
-		"ItemCost"						"12000"
-		"ItemShopTags"					"experience;level;shard"
-		"ItemQuality"					"rare"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_ultimate_small"
+		"ItemCost"						"1000000"
+		"ItemShopTags"					"all;stat;shard"
+		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -331,23 +395,24 @@
 			"01"
 			{
 				"var_type"							"FIELD_INTEGER"
-				"levels"							"10"
+				"stats"								"2000"
 			}
 		}
 	}
 
-	"item_shard_attackspeed"
+	"item_shard_ultimate_medium"
 	{
 		"BaseClass"						"item_lua"
 		"ScriptFile"					"items/items_shards.lua"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"item_arena/shard_attackspeed"
-		"ItemCost"						"3000"
-		"ItemShopTags"					"as;attackspeed;shard"
-		"ItemQuality"					"rare"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_ultimate_medium"
+		"ItemCost"						"10000000"
+		"ItemShopTags"					"all;stat;shard"
+		"ItemQuality"					"legendary"
 
 		"ItemStackable"					"1"
-		"ItemPermanent"					"1"
+		"ItemPermanent"					"0"
 		"ItemInitialCharges"			"1"
 
 		"AbilitySpecial"
@@ -355,8 +420,124 @@
 			"01"
 			{
 				"var_type"							"FIELD_INTEGER"
-				"attackspeed"							"55"
+				"stats"								"20000"
 			}
 		}
 	}
+
+	"item_shard_ultimate_large"
+	{
+		"BaseClass"						"item_lua"
+		"ScriptFile"					"items/items_shards.lua"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_ultimate_large"
+		"ItemCost"						"100000000"
+		"ItemShopTags"					"all;stat;shard"
+		"ItemQuality"					"legendary"
+
+		"ItemStackable"					"1"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"stats"								"200000"
+			}
+		}
+	}
+
+	"item_shard_ultimate_extreme"
+	{
+		"BaseClass"						"item_lua"
+		"ScriptFile"					"items/items_shards.lua"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/shard_ultimate_extreme"
+		"ItemCost"						"1000000000"
+		"ItemShopTags"					"all;stat;shard"
+		"ItemQuality"					"legendary"
+
+		"ItemStackable"					"1"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"stats"								"2000000"
+			}
+		}
+	}
+
+	"item_end_shard"
+	{
+		"BaseClass"						"item_lua"
+		"ScriptFile"					"items/items_shards.lua"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityTextureName"			"item_arena/end_shard"
+		"ItemCost"						"100000000"
+		"ItemShopTags"					"end"
+		"ItemQuality"					"legendary"
+
+		"ItemStackable"					"1"
+		"ItemPermanent"					"0"
+		"ItemInitialCharges"			"1"
+	}
+
+	// "item_shard_level"
+	// {
+	// 	"BaseClass"						"item_lua"
+	// 	"ScriptFile"					"items/items_shards.lua"
+	// 	"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	// 	"AbilityTextureName"			"item_arena/shard_level"
+	// 	"ItemCost"						"1500"
+	// 	"ItemShopTags"					"experience;level;shard"
+	// 	"ItemQuality"					"rare"
+
+	// 	"ItemStackable"					"1"
+	// 	"ItemPermanent"					"0"
+	// 	"ItemInitialCharges"			"1"
+
+	// 	"AbilitySpecial"
+	// 	{
+	// 		"01"
+	// 		{
+	// 			"var_type"							"FIELD_INTEGER"
+	// 			"levels"							"1"
+	// 		}
+	// 	}
+	// }
+
+	// "item_shard_level10"
+	// {
+	// 	"BaseClass"						"item_lua"
+	// 	"ScriptFile"					"items/items_shards.lua"
+	// 	"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+	// 	"AbilityTextureName"			"item_arena/shard_level"
+	// 	"ItemCost"						"15000"
+	// 	"ItemShopTags"					"experience;level;shard"
+	// 	"ItemQuality"					"rare"
+
+	// 	"ItemStackable"					"1"
+	// 	"ItemPermanent"					"0"
+	// 	"ItemInitialCharges"			"1"
+
+	// 	"AbilitySpecial"
+	// 	{
+	// 		"01"
+	// 		{
+	// 			"var_type"							"FIELD_INTEGER"
+	// 			"levels"							"10"
+	// 		}
+	// 	}
+	// }
 }

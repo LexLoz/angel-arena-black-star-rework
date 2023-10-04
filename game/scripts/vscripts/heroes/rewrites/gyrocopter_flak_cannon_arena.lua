@@ -24,10 +24,11 @@ if IsServer() then
 		local caster = self:GetCaster()
 		if caster:IsIllusion() then return end
 
+		self.NoDamageAmp = true
 		ApplyDamage({
 			attacker = caster,
 			victim = hTarget,
-			damage = caster:GetAverageTrueAttackDamage(target),
+			damage = caster:GetAverageTrueAttackDamage(hTarget),
 			damage_type = self:GetAbilityDamageType(),
 			damage_flags = DOTA_DAMAGE_FLAG_NO_DAMAGE_MULTIPLIERS,
 			ability = self

@@ -1,0 +1,1 @@
+ModuleLinkLuaModifier(..., "modifier_hero_selection_transformation")

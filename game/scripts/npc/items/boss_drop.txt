@@ -18,7 +18,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"armor_reduction"		"-15"
+				"armor_reduction"		"-10"
 			}
 			"02"
 			{
@@ -110,7 +110,7 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"bonus_armor"		"30"
+				"bonus_armor"		"20"
 			}
 			"02"
 			{
@@ -316,11 +316,6 @@
 				"Passive"			"1"
 				"IsHidden"			"1"
 				"Attributes" 		"MODIFIER_ATTRIBUTE_MULTIPLE"
-
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE"	"%all_damage_bonus_pct"
-				}
 			}
 
 			"modifier_item_demons_paw_unique"
@@ -333,6 +328,24 @@
 					"MODIFIER_PROPERTY_ATTACK_RANGE_BONUS" "%bonus_attack_range"
 				}
 			}
+		}
+	}
+
+	"item_casket_of_greed"
+	{
+		"BaseClass"						"item_lua"
+		"ScriptFile"					"items/item_casket_of_greed.lua"
+		"AbilityTextureName"			"item_arena/casket_of_greed"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
+		"ItemCost"						"0"
+		"AbilityCooldown"				"0"
+		"IsTempestDoubleClonable"		"0"
+		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+		"ItemPurchasableFilter"			"0"
+
+		"AbilityValues"
+		{
+			"duration_min"			"10"
 		}
 	}
 }

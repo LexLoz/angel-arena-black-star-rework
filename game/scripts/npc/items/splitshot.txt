@@ -3,7 +3,7 @@
 	"item_recipe_nagascale_bow"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -50,7 +50,7 @@
 	"item_recipe_splitshot_ultimate"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1405"
 		"ItemShopTags"					""
@@ -94,7 +94,7 @@
 			"05"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_attack_speed"			"20"
+				"bonus_attack_speed"			"40"
 			}
 			"06"
 			{
@@ -109,52 +109,37 @@
 			"08"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"manacost_reduction_pct"		"16"
+				"split_damage_pct"				"60"
 			}
 			"09"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"maim_chance_pct"				"50"
+				"split_radius"					"375"
 			}
 			"10"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"maim_slow_movement_pct"		"-32"
+				"global_attack_chance_pct"		"5"
 			}
 			"11"
 			{
-				"var_type"						"FIELD_INTEGER"
-				"maim_slow_attack"				"-32"
+				"var_type"					"FIELD_INTEGER"
+				"bonus_heal_and_lifesteal"	"22"
 			}
 			"12"
 			{
-				"var_type"						"FIELD_INTEGER"
-				"maim_slow_movement_range_pct"	"-16"
+				"var_type"					"FIELD_INTEGER"
+				"bonus_status_resist"		"20"
 			}
 			"13"
 			{
-				"var_type"						"FIELD_INTEGER"
-				"maim_slow_attack_range"		"-16"
+				"var_type"					"FIELD_INTEGER"
+				"bonus_mana_regen_pct"		"50"
 			}
 			"14"
 			{
-				"var_type"						"FIELD_FLOAT"
-				"maim_duration"					"5"
-			}
-			"15"
-			{
 				"var_type"						"FIELD_INTEGER"
-				"split_damage_pct"				"60"
-			}
-			"16"
-			{
-				"var_type"						"FIELD_INTEGER"
-				"split_radius"					"375"
-			}
-			"17"
-			{
-				"var_type"						"FIELD_INTEGER"
-				"global_attack_chance_pct"		"5"
+				"bonus_spell_lifesteal_pct"		"36"
 			}
 		}
 	}

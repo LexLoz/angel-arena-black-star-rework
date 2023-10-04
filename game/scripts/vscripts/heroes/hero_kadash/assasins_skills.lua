@@ -6,7 +6,6 @@ modifier_kadash_assasins_skills = class({
 	IsHidden = function() return true end,
 	IsPurgable = function() return false end,
 	DeclareFunctions = function() return {
-		MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE,
 		MODIFIER_EVENT_ON_ATTACK_START,
 		MODIFIER_EVENT_ON_ATTACK_LANDED,
 		MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,
@@ -14,10 +13,6 @@ modifier_kadash_assasins_skills = class({
 })
 
 if IsServer() then
-	function modifier_kadash_assasins_skills:GetModifierDamageOutgoing_Percentage()
-		return self:GetAbility():GetSpecialValueFor("all_damage_bonus_pct")
-	end
-
 	function modifier_kadash_assasins_skills:OnAttackLanded(keys)
 		local attacker = keys.attacker
 		if attacker ~= self:GetCaster() or self.order_strike then return end

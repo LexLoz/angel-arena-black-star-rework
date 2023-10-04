@@ -4,6 +4,7 @@ LinkLuaModifier("modifier_item_scythe_of_the_ancients_stun", "items/item_scythe_
 item_scythe_of_the_ancients = class({
 	GetIntrinsicModifierName = function() return "modifier_item_scythe_of_the_ancients_passive" end,
 })
+function item_scythe_of_the_ancients:HasStaticCooldown() return true end
 
 if IsServer() then
 	function item_scythe_of_the_ancients:OnSpellStart()
@@ -21,6 +22,22 @@ if IsServer() then
 			caster:EmitSound("Hero_Necrolyte.ReapersScythe.Cast")
 			target:EmitSound("Hero_Necrolyte.ReapersScythe.Target")
 
+			local units = FindUnitsInRadius(
+				caster:GetTeam(),
+				target:GetAbsOrigin(),
+				nil,
+				self:GetSpecialValueFor("kill_creeps_radius"),
+				DOTA_UNIT_TARGET_TEAM_ENEMY,
+				DOTA_UNIT_TARGET_CREEP,
+				DOTA_UNIT_TARGET_FLAG_NONE,
+				FIND_ANY_ORDER,
+				false)
+	
+			for _,v in pairs(units) do
+				v:Kill(self, caster)
+			end
+
+			self.NoDamageAmp = true
 			ApplyDamage({
 				attacker = caster,
 				victim = target,
@@ -55,7 +72,6 @@ function modifier_item_scythe_of_the_ancients_passive:DeclareFunctions()
 		MODIFIER_PROPERTY_MANA_REGEN_CONSTANT,
 		MODIFIER_PROPERTY_CAST_RANGE_BONUS,
 		MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE,
-		MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE
 	}
 end
 
@@ -99,10 +115,6 @@ function modifier_item_scythe_of_the_ancients_passive:GetModifierCastRangeBonus(
 	return self:GetAbility():GetSpecialValueFor("cast_range_bonus")
 end
 
-function modifier_item_scythe_of_the_ancients_passive:GetModifierTotalDamageOutgoing_Percentage()
-	return self:GetAbility():GetSpecialValueFor("all_damage_bonus_pct")
-end
-
 if IsServer() then
 	function modifier_item_scythe_of_the_ancients_passive:OnCreated()
 		local parent = self:GetParent()
@@ -133,7 +145,7 @@ if IsServer() then
 	end
 
 	function modifier_item_scythe_of_the_ancients_passive:OnTakeDamage(keys)
-		local parent = self:GetParent()
+		--[[local parent = self:GetParent()
 		local damage = keys.original_damage
 		local ability = self:GetAbility()
 		if keys.attacker == parent and not keys.unit:IsMagicImmune() and keys.damage_type == 2 and not (keys.inflictor and keys.inflictor:GetAbilityName() == "batrider_sticky_napalm") then
@@ -141,12 +153,12 @@ if IsServer() then
 			ApplyDamage({
 				attacker = parent,
 				victim = keys.unit,
-				damage = keys.original_damage * ability:GetSpecialValueFor("magic_damage_to_pure_pct") * 0.01,
+				damage = 0, --keys.original_damage * ability:GetSpecialValueFor("magic_damage_to_pure_pct") * 0.01,
 				damage_type = ability:GetAbilityDamageType(),
 				damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 				ability = ability
 			})
-		end
+		end]]
 	end
 end
 
@@ -170,6 +182,10 @@ if IsServer() then
 		local team = caster:GetTeamNumber()
 		ParticleManager:DestroyParticle(self.particle, false)
 		local damage = (target:GetMaxHealth() - target:GetHealth()) * ability:GetSpecialValueFor("delayed_damage_per_health")
+
+		local missing_health_pct = 100 - target:GetHealth() / target:GetMaxHealth() * 100
+		target:InstaKill(ability, caster, true, missing_health_pct * ability:GetSpecialValueFor("delayed_damage_per_health"))
+		--[[ability.NoDamageAmp = true
 		ApplyDamage({
 			attacker = caster,
 			victim = target,
@@ -177,7 +193,7 @@ if IsServer() then
 			damage_type = ability:GetAbilityDamageType(),
 			damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 			ability = ability
-		})
+		})]]
 	end
 end
 

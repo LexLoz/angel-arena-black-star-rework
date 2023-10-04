@@ -1,5 +1,68 @@
+#base "override/neutral_items.txt"
+
 "DOTAAbilities"
 {
+	"item_blood_grenade"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_BLOOD"
+
+		"AbilityValues"
+		{
+
+			"speed"					"1100"
+			"radius"				"300"
+			"movespeed_slow"		"-15"
+			"bonus_health"			"50"
+			"damage_over_time"		"15"
+			"impact_damage"			"50"
+			"tick_rate"				"1"
+			"debuff_duration"		"5"
+		}
+	}
+	"item_phylactery"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
+
+		"AbilityValues"
+		{
+			"bonus_health"		"200"
+			"bonus_mana"		"200"			
+			"bonus_all_stats"	"7"
+			"bonus_mana_regen"	".7"	
+			"slow"						"50"
+			"bonus_spell_damage"		"150"
+			"slow_duration"				"1.5"
+		}
+	}
+	"item_yasha_and_kaya"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_kaya_and_sange"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_blitz_knuckles"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_fluffy_hat"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_voodoo_mask"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
 	"item_blink"
 	{
 		"SecretShop"					"0"
@@ -144,6 +207,11 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"AbilityValues"
+		{
+			"lifesteal_percent"		"18"
+			"creep_lifesteal_reduction_pct"	"0"
+		}
 	}
 	"item_ring_of_regen"
 	{
@@ -179,7 +247,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-
+		"ItemRequirements"
+		{
+			"01"						"item_magic_stick;item_branches;item_branches;"
+		}
 	}
 	"item_magic_wand"
 	{
@@ -217,7 +288,7 @@
 		"ItemStockMax"					"10"
 		"ItemStockInitial"				"3"
 		"ItemStockTime"					"50"
-		"ItemCost"						"70"
+		"ItemCost"						"0"
 
 		"AbilitySpecial"
 		{
@@ -261,6 +332,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_boots;"
+		}
 	}
 	"item_travel_boots"
 	{
@@ -273,6 +348,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_boots;item_chainmail;item_blades_of_attack;"
+		}
 	}
 	"item_phase_boots"
 	{
@@ -338,6 +417,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_boots;item_gloves;item_belt_of_strength;"
+		}
 	}
 	"item_power_treads"
 	{
@@ -350,11 +433,6 @@
 		"SideShop"						"0"
 	}
 	"item_oblivion_staff"
-	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
-	}
-	"item_recipe_pers"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
@@ -373,6 +451,16 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+
+		"AbilityValues"
+		{
+			"bonus_strength"		"5 10"
+			"bonus_agility"			"2 4"
+			"bonus_intellect"		"2 4"
+			"bonus_damage"			"2 4"
+			"bonus_health_regen"	"0.75 1.5"
+			"clock_time"			"5"
+		}
 	}
 	"item_recipe_wraith_band"
 	{
@@ -383,6 +471,16 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+
+		"AbilityValues"
+		{
+				"bonus_agility"			"5 10"
+				"bonus_strength"		"2 4"
+				"bonus_intellect"		"2 4"
+				"bonus_attack_speed"	"5 10"
+				"bonus_armor"			"2 4"
+				"clock_time"			"5"
+		}
 	}
 	"item_recipe_null_talisman"
 	{
@@ -393,6 +491,16 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+
+		"AbilityValues"
+		{
+			"bonus_intellect"		"5 10"
+			"bonus_strength"		"2 4"
+			"bonus_agility"			"2 4"
+			"bonus_max_mana_percentage"	"3 6"
+			"bonus_mana_regen"		"0.75 1.5"
+			"clock_time"			"5"
+		}
 	}
 	"item_recipe_vladmir"
 	{
@@ -403,6 +511,15 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"AbilityValues"
+		{
+				"armor_aura"		"3.0"
+				"mana_regen_aura"		"1.75"
+				"lifesteal_aura"			"20"
+				"creep_lifesteal_reduction_pct"	"0"
+				"damage_aura"			"18"
+				"aura_radius"	"1200"
+		}
 	}
 	"item_recipe_buckler"
 	{
@@ -428,6 +545,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_cloak;item_headdress;item_ring_of_health"
+		}
 	}
 	"item_pipe"
 	{
@@ -465,7 +586,7 @@
 			"06"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"magic_resistance_aura"		"10"
+				"magic_resistance_aura"	"10"
 			}
 			"07"
 			{
@@ -549,7 +670,7 @@
 			"05"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"sheep_duration"		"1.5"
+				"sheep_duration"		"3.5"
 			}
 		}
 	}
@@ -665,6 +786,7 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ICE"
 	}
 	"item_recipe_bloodstone"
 	{
@@ -769,7 +891,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"crit_chance"			"20"
+				"crit_chance"			"30"
 			}
 			"03"
 			{
@@ -818,6 +940,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_shadow_amulet;item_blitz_knuckles;item_broadsword;"
+		}
 	}
 	"item_invis_sword"
 	{
@@ -827,24 +953,56 @@
 	}
 	"item_recipe_satanic"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"ID"							"155"														// unique ID number for this item.  Do not change this once established or it will invalidate collected stats.
+		"Model"							"models/props_gameplay/recipe.vmdl"
+		
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"1500"	
+		"ItemShopTags"					""
+		
+		// Recipe
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemRecipe"					"1"
+		"ItemResult"					"item_satanic"
+		"ItemRequirements"
+		{
+			"01"						"item_lifesteal;item_claymore;item_reaver;item_reaver;item_reaver"
+		}
 	}
 	"item_satanic"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"AbilityCooldown"				"50.0"
+
+		"AbilityValues"
+		{
+				"bonus_strength"		"75"
+				"bonus_damage"			"50"
+				"lifesteal_percent"		"30"
+				"creep_lifesteal_reduction_pct"	"0"
+				"unholy_lifesteal_percent"	"175"
+				"unholy_lifesteal_total_tooltip"	"175"
+				"unholy_duration"		"10.0"
+		}
 	}
 	"item_recipe_mjollnir"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_maelstrom;item_hyperstone;"
+		}
 	}
 	"item_mjollnir"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHTING"
 	}
 	"item_recipe_helm_of_the_dominator"
 	{
@@ -865,7 +1023,7 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHTING"
 	}
 	"item_recipe_desolator"
 	{
@@ -888,40 +1046,33 @@
 		"SideShop"						"0"
 		"AbilityManaCost"				"0"
 		"AbilityCooldown"				"17"
-		"AbilitySpecial"
+
+		"AbilityValues"
 		{
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"lifesteal_percent"		"15"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
+				"bonus_damage"	"15"
+				"bonus_attack_speed"	"10"
+				"lifesteal_percent"		"25"
+				"creep_lifesteal_reduction_pct"	"0"
 				"berserk_bonus_attack_speed"	"110"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"berserk_bonus_movement_speed"	"17"
-			}
-			"07"
-			{
-				"var_type"				"FIELD_FLOAT"
+				"berserk_bonus_movement_speed"	"30"
+				"berserk_armor_reduction"	"6"	
 				"berserk_duration"		"9.0"
-			}
 		}
 	}
 	"item_recipe_ethereal_blade"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_kaya;item_ghost;"
+		}
 	}
 	"item_ethereal_blade"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_DARK"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_DEATH"
 		"AbilitySpecial"
 		{
 			"01"
@@ -1006,6 +1157,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_boots;item_energy_booster;"
+		}
 	}
 	"item_arcane_boots"
 	{
@@ -1173,23 +1328,13 @@
 			}
 		}
 	}
-	"item_recipe_ring_of_aquila"
-	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
-	}
-	"item_ring_of_aquila"
-	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
-	}
 	"item_recipe_tranquil_boots"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
 		"ItemRequirements"
 		{
-			"01"						"item_boots;item_ring_of_regen;item_ring_of_protection"
+			"01"						"item_boots;item_ring_of_regen;item_ring_of_protection;"
 		}
 	}
 	"item_tranquil_boots"
@@ -1249,6 +1394,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_travel_boots;"
+		}
 	}
 	"item_travel_boots_2"
 	{
@@ -1256,6 +1405,7 @@
 		"SideShop"						"0"
 		"AbilityCooldown"				"30.0"
 		"AbilityChannelTime"			"2.5"
+		
 	}
 	"item_recipe_lotus_orb"
 	{
@@ -1281,6 +1431,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_invis_sword;item_lesser_crit"
+		}
 	}
 	"item_silver_edge"
 	{
@@ -1292,6 +1446,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_medallion_of_courage;item_crown;item_wind_lace;"
+		}
 	}
 	"item_solar_crest"
 	{
@@ -1302,6 +1460,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_shadow_amulet;item_cloak;"
+		}
 	}
 	"item_glimmer_cape"
 	{
@@ -1327,6 +1489,10 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_orchid;item_mage_slayer;"
+		}
 	}
 	"item_bloodthorn"
 	{
@@ -1410,6 +1576,11 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_force_staff;item_dragon_lance;"
+		}
+		
 	}
 	"item_hurricane_pike"
 	{
@@ -1420,11 +1591,16 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_urn_of_shadows;item_vitality_booster;"
+		}
 	}
 	"item_spirit_vessel"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_DARK"
 	}
 	"item_recipe_aeon_disk"
 	{
@@ -1485,6 +1661,14 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"AbilityValues"
+		{
+				"bonus_intellect"			"16"
+				"spell_amp"			"8"
+				"mana_regen_multiplier"		"50"
+				"spell_lifesteal_amp"	"24"
+
+		}
 	}
 	"item_recipe_meteor_hammer"
 	{
@@ -1536,5 +1720,178 @@
 				"impact_damage_units"		"280"
 			}
 		}
+	}
+	"item_recipe_arcane_blink"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_blink;item_mystic_staff"
+		}
+	}	
+	"item_recipe_swift_blink"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_blink;item_eagle"
+		}
+	}
+	"item_recipe_overwhelming_blink"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_FIRE"
+		"ItemRequirements"
+		{
+			"01"						"item_blink;item_reaver"
+		}
+	}
+	"item_overwhelming_blink"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilitySharedCooldown" 		"blink"
+		"AbilityManaCost"				"100"
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blink_range"			"1200"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"blink_damage_cooldown"	"3.0"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blink_range_clamp"		"960"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_strength"		"25"
+			}
+			"05"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"radius"		"800"
+			}
+			"06"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"movement_slow"		"50"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"attack_slow"		"50"
+			}
+			"08"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"duration"			"6"
+			}
+			"09"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"damage_pct"			"75"
+			}
+		}
+	}
+	"item_swift_blink"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilitySharedCooldown" 		"blink"
+		"AbilityManaCost"				"100"
+	}
+	"item_arcane_blink"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilitySharedCooldown" 		"blink"
+		"AbilityManaCost"				"100"
+	}
+	"item_recipe_revenants_brooch"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_witch_blade;item_mystic_staff"
+		}
+	}
+	"item_revenants_brooch"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_DEATH"
+	}
+	"item_wind_waker"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_recipe_wind_waker"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_cyclone;item_mystic_staff"
+		}
+	}
+	"item_witch_blade"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
+	}
+	"item_recipe_witch_blade"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_blitz_knuckles;item_robe;item_chainmail"
+		}
+	}
+	"item_recipe_gungir"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemRequirements"
+		{
+			"01"						"item_maelstrom;item_rod_of_atos"
+		}
+	}
+	"item_gungir"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHTING"
+	}
+	"item_moon_shard"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemPermanent"					"1"
+		"ItemCost"						"4000"
+	}
+
+	"item_aghanims_shard"
+	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+		"ItemCost"						"6000"
+		"ItemInitialStockTime"			"360.0"
+		"ItemStockTime"					"1"
+		"ItemStockInitial"				"0"
 	}
 }

@@ -1,6 +1,7 @@
 LinkLuaModifier("modifier_item_unstable_quasar_passive", "items/item_unstable_quasar.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_item_unstable_quasar_slow", "items/item_unstable_quasar.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_item_unstable_quasar_aura", "items/item_unstable_quasar.lua", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_item_unstable_quasar_debuff", "items/item_unstable_quasar.lua", LUA_MODIFIER_MOTION_NONE)
 
 item_unstable_quasar = class({
 	GetIntrinsicModifierName = function() return "modifier_item_unstable_quasar_passive" end,
@@ -19,6 +20,7 @@ modifier_item_unstable_quasar_passive = class({
 	IsHidden   = function() return true end,
 	IsPurgable = function() return false end,
 	RemoveOnDeath = function() return false end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 })
 
 function modifier_item_unstable_quasar_passive:DeclareFunctions()
@@ -28,7 +30,6 @@ function modifier_item_unstable_quasar_passive:DeclareFunctions()
 		MODIFIER_PROPERTY_BONUS_NIGHT_VISION,
 		MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
 		MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE,
-		MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE,
 	}
 end
 
@@ -43,21 +44,33 @@ if IsServer() then
 		local radius = ability:GetSpecialValueFor("singularity_radius")
 
 		if (
-			usedAbility:GetCooldown(usedAbility:GetLevel()) >= ability:GetSpecialValueFor("min_ability_cooldown") and
+			(usedAbility:GetCooldown(usedAbility:GetLevel()) >= 0.1 or (usedAbility.GetAbilityChargeRestoreTime and usedAbility:GetAbilityChargeRestoreTime(usedAbility:GetLevel()) >= 0.1)) and
 			usedAbility:GetManaCost(usedAbility:GetLevel()) ~= 0 and
 			ability:PerformPrecastActions()
 		) then
 			for _,v in ipairs(FindUnitsInRadius(team, pos, nil, radius, ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)) do
+				if v:IsMagicImmune() or v:IsDebuffImmune() then return end
 				local enemyPos = v:GetAbsOrigin()
-				local damage = v:GetHealth() * ability:GetSpecialValueFor(caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT and "intelligence_damage_pct" or "damage_pct") * 0.01 + ability:GetSpecialValueFor("base_damage")
+				local damage = (v:GetHealth() * ability:GetSpecialValueFor((caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT or caster:GetNetworkableEntityInfo("BonusPrimaryAttribute2")) and "intelligence_damage_pct" or "damage_pct") * 0.01) --* (1 + caster:GetSpellAmplification(false))
 
+				--local spellamp = 1 + (caster:GetSpellAmplification(false) - (caster.DamageAmpPerAgility * 0.01))
+
+				--ability.NoDamageAmp = true
+				if not caster:FindModifierByName("sara_evolution_new") then ApplyDamage({
+					attacker = caster,
+					victim = v,
+					damage = (ability:GetManaCost() * ability:GetSpecialValueFor("manacost_in_damage_pct") * 0.01),
+					damage_type = ability:GetAbilityDamageType(),
+					damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+					ability = ability
+				}) end
 				ApplyDamage({
 					attacker = caster,
 					victim = v,
 					damage = damage,
 					damage_type = ability:GetAbilityDamageType(),
 					damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
-					ability = self:GetAbility()
+					ability = ability
 				})
 
 				local particle = ParticleManager:CreateParticle("particles/units/heroes/hero_zuus/zuus_arc_lightning.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
@@ -73,6 +86,15 @@ if IsServer() then
 				ParticleManager:SetParticleControl(particle, 1, enemyPos)
 
 				v:AddNewModifier(caster, ability, "modifier_item_unstable_quasar_slow", {duration = ability:GetSpecialValueFor("slow_duration")})
+
+				local debuff = v:AddNewModifier(caster, ability, "modifier_item_unstable_quasar_debuff", {duration = ability:GetSpecialValueFor("resist_decrease_duration")})
+				debuff:IncrementStackCount()
+				print(debuff)
+				Timers:CreateTimer(ability:GetSpecialValueFor("resist_decrease_duration"), function()
+					if IsValidEntity(v) and debuff then
+						debuff:DecrementStackCount()
+					end
+				end)
 
 				local direction = (pos - enemyPos):Normalized()
 				local distance = ability:GetSpecialValueFor("offset_range")
@@ -97,10 +119,6 @@ end
 
 function modifier_item_unstable_quasar_passive:GetModifierSpellAmplify_Percentage()
 	return self:GetAbility():GetSpecialValueFor("spell_amp_pct")
-end
-
-function modifier_item_unstable_quasar_passive:GetModifierTotalDamageOutgoing_Percentage()
-	return self:GetAbility():GetSpecialValueFor("increase_all_damage_pct")
 end
 
 function modifier_item_unstable_quasar_passive:GetModifierAura()
@@ -154,10 +172,50 @@ if IsServer() then
 		local owner = self:GetParent()
 		local caster = self:GetCaster()
 		local ability = self:GetAbility()
-		self.truesight = owner:AddNewModifier(caster, ability, "modifier_truesight", nil)
+		owner.truesight = owner:AddNewModifier(caster, ability, "modifier_truesight", nil)
+
+		if caster:IsRealHero() and owner:IsTrueHero() then
+			owner.GemOfPureSoulCooldownsWorldpanel = WorldPanels:CreateWorldPanelForTeam(caster:GetTeamNumber(), {
+				layout = "file://{resources}/layout/custom_game/worldpanels/abilitycooldowns.xml",
+				entity = owner,
+				entityHeight = 210,
+				data = {hasHealthBar = not owner:NoHealthBar()}
+			})
+		end
+
+		if owner:IsIllusion() and caster:IsRealHero() then
+			owner.GemOfClearMindIllusionParticle = ParticleManager:CreateParticleForTeam("particles/arena/items_fx/gem_of_clear_mind_illusion.vpcf", PATTACH_ABSORIGIN_FOLLOW, owner, caster:GetTeamNumber())
+		end
 	end
 
 	function modifier_item_unstable_quasar_aura:OnDestroy()
-		if not self.truesight:IsNull() then self.truesight:Destroy() end
+		local target = self:GetParent()
+		if not target.truesight:IsNull() then target.truesight:Destroy() end
+
+		if target.GemOfPureSoulCooldownsWorldpanel then
+			target.GemOfPureSoulCooldownsWorldpanel:Delete()
+			target.GemOfPureSoulCooldownsWorldpanel = nil
+		end
+
+		if target.GemOfClearMindIllusionParticle then
+			ParticleManager:DestroyParticle(target.GemOfClearMindIllusionParticle, false)
+			target.GemOfClearMindIllusionParticle = nil
+		end
 	end
+end
+
+modifier_item_unstable_quasar_debuff = class({
+	IsHidden   = function() return false end,
+	IsPurgable = function() return true end,
+	IsDebuff = function() return true end,
+	DeclareFunctions = function() return { MODIFIER_PROPERTY_MAGICAL_RESISTANCE_DIRECT_MODIFICATION,
+	MODIFIER_PROPERTY_TOOLTIP } end,
+})
+
+function modifier_item_unstable_quasar_debuff:GetModifierMagicalResistanceDirectModification()
+	return -self:GetStackCount() * self:GetAbility():GetSpecialValueFor("magic_resist_decrease_per_stack")
+end
+
+function modifier_item_unstable_quasar_debuff:OnTooltip()
+	return self:GetStackCount() * self:GetAbility():GetSpecialValueFor("magic_resist_decrease_per_stack")
 end

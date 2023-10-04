@@ -1,0 +1,531 @@
+@define MainPanelWidth: 310px;
+@define GuidesPanelWidth: 208px;
+
+@define FullPanelHeight: 840px;
+@define FullPanelWidth: @define MainPanelWidth + @define GuidesPanelWidth;
+
+.base {
+	width: 100%;
+	height: 100%;
+	align: right center; }
+	
+	.HUDFlipped #ShopBase {
+	align: left bottom;
+	flow-children: left;
+	transform: translateX(-518px); }
+	.HUDFlipped #ShopBase #ShopSearch {
+	flow-children: left; }
+	.HUDFlipped #ShopBase #ShopSearchEntry {
+	margin-left: 0px;
+	margin-right: 4px;
+	padding: 5px 3px 7px; }
+	.HUDFlipped #ShopBase #ShowHideItemguidesButton {
+	margin-left: 0px;
+	margin-right: 4px;
+	transform: scaleX(-1); }
+	
+	.HUDFlipped #QuickBuyPanel #QuickBuyPanelItems {
+	align: right center;
+	margin-left: 0px;
+	margin-right: 2px; }
+	
+	.HUDFlipped #QuickBuyPanel #QuickBuyStickyButtonPanel {
+	align: left top; }
+	
+	.HUDFlipped #QuickBuyPanel #QuickBuyClearButtonPanel {
+	align: left bottom; }
+	
+	#ShopBase {
+	margin-right: 0;
+	margin-bottom: 196px;
+	opacity: 0;
+	transform: translateX(518px);
+	transition-duration: .01s;
+	transition-property: transform, opacity;
+	transition-timing-function: ease-in;
+	align: right bottom;
+	flow-children: right;
+	overflow: squish scroll; }
+	#ShopBase.ShopBaseOpen {
+	opacity: 1;
+	transform: translateX(0); }
+	#ShopBase:not(.ShopBaseOpen) #ItembuildsPanel {
+	width: 0;
+	opacity: 0; }
+	
+	#ShopItemBasePanel {
+	width: 310px;
+	height: 840px; }
+	
+	#ItembuildsPanel {
+	width: 208px;
+	height: 840px;
+	background-image: url("s2r://panorama/images/hud/reborn/bg_shop_guide_psd.vtex");
+	background-position: bottom;
+	background-size: cover;
+	transition-duration: .2s;
+	transition-property: opacity, width;
+	transition-timing-function: ease-in-out;
+	flow-children: down; }
+	
+	.ItembuildsHidden #ItembuildsPanel {
+	width: 0;
+	opacity: 0; }
+	
+	.ItembuildsHidden #ShowHideItemguidesButton {
+	background-image: url("s2r://panorama/images/hud/reborn/bg_item_build_psd.vtex");
+	opacity: .8; }
+	.ItembuildsHidden #ShowHideItemguidesButton:hover {
+	opacity: 1; }
+	
+	.ItembuildsHidden #ShowHideItemguidesIcon {
+	transform: rotateZ(180deg); }
+	
+	#ItembuildHeader {
+	width: 100%;
+	height: 58px;
+	padding: 12px;
+	padding-top: 20px;
+	font-size: 13px;
+	font-weight: bold;
+	color: #616f7b;
+	text-transform: uppercase;
+	background-color: rgba(0, 0, 0, 0.93333);
+	transition-duration: .15s;
+	transition-property: color, text-decoration; }
+	#ItembuildHeader:hover {
+	color: #8da1b1;
+	text-decoration: underline; }
+	
+	#ItembuildTitleContainer {
+	width: 100%;
+	padding: 12px;
+	flow-children: down; }
+	
+	#ItembuildTitleTitleRow {
+	width: 100%;
+	flow-children: right; }
+	
+	#Itembuild_title {
+	width: 88%;
+	height: 20px;
+	font-size: 14px;
+	font-weight: semi-bold;
+	color: #616f7b;
+	text-overflow: shrink;
+	vertical-align: center; }
+	
+	#EditButton {
+	width: 22px;
+	height: 22px;
+	margin-right: -4px;
+	vertical-align: center;
+	background-image: url("s2r://panorama/images/control_icons/edit_pencil_psd.vtex");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 72%;
+	horizontal-align: right;
+	wash-color: #798b99;
+	tooltip-position: top; }
+	#EditButton:hover {
+	brightness: 2; }
+	#EditButton:active {
+	wash-color: #798b99; }
+	
+	.EditMode #EditButton {
+	background-color: rgba(87, 100, 109, 0.46667);
+	border-radius: 3px;
+	wash-color: white; }
+	
+	.EditMode #ItembuildPanelsContainer {
+	box-shadow: inset rgba(11, 147, 190, 0.2) 6px 6px 12px 12px; }
+	
+	.EditMode #ItembuildAddGroupButton {
+	visibility: visible; }
+	
+	.EditMode #ItembuildItemGroupItemRoot {
+	min-height: 37px; }
+	
+	#ItembuildTitleSubitleRow {
+	width: 100%;
+	height: 20px;
+	margin-top: -2px;
+	flow-children: right; }
+	
+	#Itembuild_author_player {
+	width: 80%; }
+	#Itembuild_author_player > Label {
+	font-size: 14px;
+	font-weight: semi-bold;
+	text-overflow: shrink; }
+	
+	#Itembuild_version {
+	width: 20%;
+	font-size: 14px;
+	font-weight: semi-bold;
+	color: #8b9eb0;
+	text-align: right;
+	text-overflow: shrink;
+	horizontal-align: right; }
+	
+	#ItembuildPanelsContainer {
+	width: 100%;
+	min-height: 100%;
+	overflow: squish scroll;
+	flow-children: down; }
+	
+	#ItembuildAddGroupButton {
+	width: 100%;
+	padding-left: 24px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	opacity: .6;
+	visibility: collapse;
+	transition-duration: .2s;
+	transition-property: opacity; }
+	#ItembuildAddGroupButton:hover {
+	opacity: .8; }
+	#ItembuildAddGroupButton:active {
+	margin-top: 1px;
+	opacity: 1;
+	transition-duration: .1s; }
+	
+	#ItembuildPanelsRoot {
+	width: 100%;
+	flow-children: down; }
+	
+	.ItembuildItemGroup {
+	width: 100%;
+	transition-duration: .1s;
+	transition-property: position;
+	flow-children: down; }
+	
+	#ItembuildItemGroupTitle {
+	width: 100%;
+	height: 26px;
+	margin-left: 4px;
+	font-size: 14px;
+	letter-spacing: 2px;
+	color: white;
+	text-overflow: shrink;
+	text-transform: uppercase; }
+	#ItembuildItemGroupTitle:disabled {
+	color: white;
+	background-color: transparent;
+	border-color: transparent; }
+	
+	#ItembuildItemGroupItemRoot {
+	width: 100%;
+	padding-top: 6px;
+	padding-left: 5px;
+	flow-children: right-wrap; }
+	
+	#ShopItemList {
+	width: 100%;
+	height: 86%;
+	background-image: url("s2r://panorama/images/hud/reborn/bg_mainshop_psd.vtex");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	horizontal-align: right;
+	flow-children: down; }
+	
+	#ItemRecipeBox {
+	width: 100%;
+	height: 14%;
+	background-image: url("s2r://panorama/images/hud/reborn/bg_item_breakdown_recessed_psd.vtex");
+	background-size: cover;
+	align: right bottom; }
+	
+	#ItemRecipeBoxRows {
+	width: 100%;
+	vertical-align: center;
+	flow-children: down; }
+	
+	.ItemRecipeBoxRow {
+	height: 36.715px;
+	horizontal-align: center;
+	flow-children: right; }
+	.ItemRecipeBoxRow.ItemRecipeBoxRowLength7 .SmallItemPanel {
+	margin: -1px; }
+	.ItemRecipeBoxRow.ItemRecipeBoxRowLength8 .SmallItemPanel {
+	width: 40px;
+	margin-left: -4px; }
+	.ItemRecipeBoxRow.ItemRecipeBoxRowLength9 .SmallItemPanel {
+	width: 39px;
+	margin-right: -3px;
+	margin-left: -3px; }
+	
+	#ShopTabs {
+	width: 100%;
+	height: 28px;
+	margin-right: 6px;
+	margin-left: 6px;
+	background-size: cover;
+	border: 1px solid rgba(91, 104, 114, 0.46667);
+	border-radius: 3px;
+	horizontal-align: center;
+	align: center top;
+	flow-children: right; }
+	
+	.ShopTabButton {
+	height: 100%;
+	padding-top: 2px;
+	padding-right: 1px;
+	padding-bottom: 2px;
+	padding-left: 1px;
+	background-color: black; }
+	.ShopTabButton .RadioBox {
+	visibility: collapse; }
+	.ShopTabButton Label {
+	margin: 4px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #5b6872;
+	align: center center; }
+	.ShopTabButton:selected {
+	background-color: rgba(87, 100, 109, 0.46667); }
+	.ShopTabButton:selected Label {
+	color: white; }
+	
+	#ShopSearch {
+	width: 100%;
+	height: 49px;
+	align: center top;
+	flow-children: right; }
+	
+	#ShopSearchEntry {
+	width: 100%;
+	height: 100%;
+	padding: 5px 7px 3px;
+	margin: 10px;
+	margin-bottom: 6px;
+	margin-left: 4px;
+	font-family: 'Radiance', 'FZLanTingHei-R-GBK', 'TH Sarabun New', 'YDYGO 540', 'Gulim', 'MingLiU';
+	font-size: 20px;
+	color: #fff;
+	text-overflow: clip;
+	white-space: nowrap;
+	background-color: black;
+	border: 1px solid #3d464c;
+	border-radius: 3px; }
+	#ShopSearchEntry #PlaceholderText {
+	margin-top: -2px;
+	font-size: 18px;
+	color: #57646d;
+	opacity: 1;
+	transition-duration: .2s;
+	transition-property: opacity; }
+	#ShopSearchEntry:focus #PlaceholderText {
+	opacity: 0; }
+	#ShopSearchEntry.HasInput #PlaceholderText {
+	opacity: 0; }
+	
+	#ShowHideItemguidesButton {
+	width: 34px;
+	height: 34px;
+	margin-top: 10px;
+	margin-bottom: 6px;
+	margin-left: 4px;
+	background-image: url("s2r://panorama/images/hud/reborn/bg_item_build_psd.vtex");
+	opacity: .8;
+	transition-duration: .24s;
+	transition-property: brightness, opacity; }
+	#ShowHideItemguidesButton:hover {
+	brightness: 2; }
+	#ShowHideItemguidesButton:active {
+	wash-color: #999999; }
+	
+	#ShowHideItemguidesIcon {
+	width: 100%;
+	height: 100%;
+	background-image: url("s2r://panorama/images/hud/reborn/close_guide_btn_psd.vtex");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 80%;
+	transition-duration: .24s;
+	transition-property: transform; }
+	
+	#ShopItems {
+	width: 100%;
+	height: 100%; }
+	
+	#ShopItemsBase {
+	width: 100%;
+	height: 100%;
+	margin-top: 9px;
+	visibility: visible; }
+	
+	#ShopSearchOverlay {
+	width: 100%;
+	height: 100%;
+	margin-top: 1px;
+	margin-left: 2px;
+	overflow: squish scroll;
+	visibility: collapse;
+	flow-children: right-wrap; }
+	
+	.InSearchMode #ShopItemsBase {
+	visibility: collapse; }
+	
+	.InSearchMode #ShopSearchOverlay {
+	visibility: visible; }
+	
+	.ShopItemGroup {
+	height: 100%;
+	flow-children: down; }
+	
+	.CanBuy {
+	border: 1px solid #cd9607; }
+	
+	.NotPurchasableItem {
+	border: 1px solid red; }
+	
+	.SmallItemPanel {
+	width: 45px;
+	height: width-percentage(72.7%);
+	margin: 2px;
+	border-radius: 3px;
+	transition-duration: .1s;
+	transition-property: position; }
+	.SmallItemPanel.CanBuy:hover #SmallItemImage {
+	brightness: 1.6; }
+	.SmallItemPanel.CanBuy #SmallItemButton:active #SmallItemImage {
+	brightness: .8; }
+	
+	#SmallItemButton {
+	width: 100%;
+	height: 100%;
+	align: center center; }
+	
+	#SmallItemImage {
+	width: 100%;
+	height: 100%;
+	transition-duration: .2s;
+	transition-property: brightness;
+	align: center center; }
+	
+	#SmallItemStock {
+	margin-right: .5px;
+	margin-bottom: -3px;
+	font-size: 15px;
+	font-weight: bold;
+	color: white;
+	text-shadow: 0 0 6px 3 #400040;
+	align: right bottom; }
+	
+	#QuickBuyClearButtonPanel {
+	width: 16px;
+	height: 20px;
+	margin: 2px;
+	background-image: url("file://{images}/control_icons/x_close.png");
+	background-position: 50% 50%;
+	background-size: cover;
+	transition-duration: .15s;
+	transition-property: brightness;
+	brightness: .4;
+	align: right bottom; }
+	#QuickBuyClearButtonPanel:hover {
+	brightness: 1; }
+	#QuickBuyClearButtonPanel:active {
+	brightness: .6; }
+	
+	#QuickBuyPanelItems {
+	width: 210px;
+	height: 100%;
+	margin-top: 2px;
+	margin-left: 2px;
+	align: left center;
+	flow-children: right-wrap;
+	overflow: squish clip; }
+	
+	.DropDownValidTarget {
+	width: 100%;
+	height: 100%; }
+	
+	#QuickBuyPanel {
+	width: 262px;
+	height: 65px;
+	margin-right: 0;
+	margin-bottom: 60px;
+	background-image: url("s2r://panorama/images/hud/reborn/quickbuy_bg_psd.vtex");
+	transition-delay: 0s;
+	transition-duration: 0s;
+	transition-property: transform;
+	transition-timing-function: ease-in-out;
+	align: right bottom; }
+	
+	#QuickBuyStickyButtonPanel {
+	margin: 2px;
+	margin-top: 4px;
+	align: right top; }
+	
+	.QuickBuyStickyItem {
+	width: 47px;
+	margin: 0;
+	border-width: 2px;
+	align: center center; }
+	
+	.QuickbuyItemPanel {
+	width: 40px;
+	margin: 1px;
+	border-radius: 1px; }
+	
+	#StockOverlay {
+	visibility: collapse;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.86667); }
+	
+	#StockTimer {
+	font-size: 20px;
+	color: white;
+	text-shadow: 0 0 6px 6 black;
+	vertical-align: center;
+	horizontal-align: center;
+	z-index: 1; }
+	
+	.UnitItemlikeRecipePanel {
+	width: 57.6px;
+	height: width-percentage(60.8%);
+	border-radius: 2px;
+	flow-children: down; }
+	.UnitItemlikeRecipePanel:disabled {
+	saturation: 0;
+	wash-color: #d9faf9;
+	blur: gaussian(1.1); }
+	
+	.UnitItemlikeRecipePanelChance {
+	margin-top: -2px;
+	margin-bottom: -7px;
+	font-size: 16px;
+	font-weight: bold;
+	color: white;
+	text-shadow: 0 0 6px 6 black;
+	horizontal-align: right; }
+	
+	#ItemRecipeBoxDrops {
+	width: 100%;
+	height: 100%;
+	visibility: collapse; }
+	
+	.ItemsPageInnerContainer {
+	height: 100%;
+	opacity: 0;
+	transition-duration: .15s;
+	transition-property: opacity;
+	horizontal-align: center;
+	flow-children: right-wrap; }
+	.ItemsPageInnerContainer.SelectedPage {
+	opacity: 1; }
+	
+	.DropDownMode .DropDownValidTarget {
+	box-shadow: inset rgba(11, 147, 190, 0.74902) 20px 20px 40px 40px; }
+	
+	DOTAHud.IsBeforeGameplay #QuickBuyPanel {
+	transform: translateY(230px);
+	transition-delay: 2s;
+	transition-duration: 1s; }
+	
+	.HUDFlipped #QuickBuyPanel {
+	horizontal-align: left; }

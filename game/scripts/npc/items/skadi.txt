@@ -35,7 +35,7 @@
 		"ItemResult"					"item_skadi_4"
 		"ItemRequirements"
 		{
-			"01"						"item_skadi_2;item_skadi_2"
+			"01"						"item_skadi_2;item_skadi_arena"
 		}
 	}
 
@@ -49,7 +49,7 @@
 		"ItemResult"					"item_skadi_8"
 		"ItemRequirements"
 		{
-			"01"						"item_skadi_4;item_skadi_4;item_moon_dust"
+			"01"						"item_skadi_4;item_skadi_arena;item_moon_dust"
 		}
 	}
 
@@ -71,17 +71,17 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"25 50 100 200"
+				"bonus_all_stats"		"20 40 60 80"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 1000 1500"
+				"bonus_health"			"250 500 750 1000"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1400 2800"
+				"bonus_mana"			"350 700 1050 1400"
 			}
 			"04"
 			{
@@ -91,12 +91,17 @@
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-45 -65 -90 -120"
+				"cold_attack_speed"		"-30 -40 -50 -60"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
 				"cold_duration"			"3.0"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"heal_decrease"			"-20 -30 -40 -50"
 			}
 		}
 	}
@@ -118,17 +123,17 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"25 50 100 200"
+				"bonus_all_stats"		"20 40 60 80"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 1000 1500"
+				"bonus_health"			"250 500 750 1000"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1400 2800"
+				"bonus_mana"			"350 700 1050 1400"
 			}
 			"04"
 			{
@@ -138,13 +143,19 @@
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-45 -65 -90 -120"
+				"cold_attack_speed"		"-30 -40 -50 -60"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
 				"cold_duration"			"3.0"
 			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"heal_decrease"			"-20 -30 -40 -50"
+			}
+			
 		}
 	}
 
@@ -165,17 +176,17 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"25 50 100 200"
+				"bonus_all_stats"		"20 40 60 80"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 1000 1500"
+				"bonus_health"			"250 500 750 1000"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1400 2800"
+				"bonus_mana"			"350 700 1050 1400"
 			}
 			"04"
 			{
@@ -185,12 +196,17 @@
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-45 -65 -90 -120"
+				"cold_attack_speed"		"-30 -40 -50 -60"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
 				"cold_duration"			"3.0"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"heal_decrease"			"-20 -30 -40 -50"
 			}
 		}
 	}
@@ -212,17 +228,17 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"25 50 100 200"
+				"bonus_all_stats"		"20 40 60 80"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 1000 1500"
+				"bonus_health"			"250 500 750 1000"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1400 2800"
+				"bonus_mana"			"350 700 1050 1400"
 			}
 			"04"
 			{
@@ -232,12 +248,17 @@
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-45 -65 -90 -120"
+				"cold_attack_speed"		"-30 -40 -50 -60"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
 				"cold_duration"			"3.0"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"heal_decrease"			"-20 -30 -40 -50"
 			}
 		}
 	}

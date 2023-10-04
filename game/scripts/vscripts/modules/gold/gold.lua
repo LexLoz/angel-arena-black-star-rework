@@ -14,7 +14,8 @@ function Gold:UpdatePlayerGold(unitvar)
 	local playerId = UnitVarToPlayerID(unitvar)
 	if playerId and playerId > -1 then
 		PlayerResource:SetGold(playerId, 0, false)
-		PlayerTables:SetTableValue("gold", playerId, PLAYER_DATA[playerId].SavedGold)
+		PlayerTables:SetTableValue("gold", playerId, math.min(2 ^ 30 - 1, PLAYER_DATA[playerId].SavedGold))
+		--2^30-1
 	end
 end
 
@@ -30,9 +31,9 @@ end
 
 function Gold:ModifyGold(unitvar, gold, bReliable, iReason)
 	if gold > 0 then
-		Gold:AddGold(unitvar, gold)
+		Gold:AddGold(unitvar, math.round(gold))
 	elseif gold < 0 then
-		Gold:RemoveGold(unitvar, -gold)
+		Gold:RemoveGold(unitvar, -math.round(gold))
 	end
 end
 
@@ -43,14 +44,20 @@ function Gold:RemoveGold(unitvar, gold)
 end
 
 function Gold:AddGold(unitvar, gold)
+	local hero
+	if type(unitvar) ~= "table" and PlayerResource:IsValidPlayer(unitvar) then
+		hero = PlayerResource:GetSelectedHeroEntity(unitvar)
+	end
+	gold = gold * GetGoldMultiplier(hero)
+	
 	local playerId = UnitVarToPlayerID(unitvar)
-	PLAYER_DATA[playerId].SavedGold = (PLAYER_DATA[playerId].SavedGold or 0) + math.floor(gold)
+	PLAYER_DATA[playerId].SavedGold = (PLAYER_DATA[playerId].SavedGold or 0) + gold
 	Gold:UpdatePlayerGold(playerId)
 end
 
 function Gold:AddGoldWithMessage(unit, gold, optPlayerID)
 	local player = optPlayerID and PlayerResource:GetPlayer(optPlayerID) or PlayerResource:GetPlayer(UnitVarToPlayerID(unit))
-	SendOverheadEventMessage(player, OVERHEAD_ALERT_GOLD, unit, math.floor(gold), player)
+	SendOverheadEventMessage(player, OVERHEAD_ALERT_GOLD, unit, math.floor(gold * GetGoldMultiplier(unit)), player)
 	Gold:AddGold(optPlayerID or unit, gold)
 end
 

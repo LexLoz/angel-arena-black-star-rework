@@ -27,7 +27,7 @@ function DarkWhale(keys)
 			damage_type = ability:GetAbilityDamageType(),
 			ability = ability
 		})
-		if not v:IsMagicImmune() then
+		if (not v:IsMagicImmune() and not v:IsDebuffImmune()) then
 			v:AddNewModifier(caster, ability, "modifier_stunned", {duration = stun})
 		end
 	end

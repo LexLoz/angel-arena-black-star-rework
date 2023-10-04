@@ -2,17 +2,24 @@ function OnAttackLanded(keys)
 	local caster = keys.caster
 	local target = keys.target
 	local ability = keys.ability
-	if not target:IsMagicImmune() and not target:IsInvulnerable() and not caster:IsIllusion() then
-		local manaburn = keys.feedback_mana_burn
+	if not target:IsMagicImmune() and not target:IsInvulnerable() and not target:IsDebuffImmune() then
+		local manaburn = keys.feedback_mana_burn + keys.mana_burn_pct * target:GetMana() * 0.01
 		local manadrain = manaburn * keys.feedback_mana_drain_pct * 0.01
+		if caster:IsIllusion() then
+			manaburn = manaburn * keys.illusion_mana_burn * 0.01
+			manadrain = 0
+		end
 		target:SpendMana(manaburn, ability)
 		caster:GiveMana(manadrain)
+
+		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = target,
 			attacker = caster,
 			damage = manaburn * keys.damage_per_burn_pct * 0.01,
 			damage_type = ability:GetAbilityDamageType(),
-			ability = ability
+			ability = ability,
+			damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION
 		})
 		ParticleManager:CreateParticle("particles/generic_gameplay/generic_manaburn.vpcf", PATTACH_ABSORIGIN_FOLLOW, target)
 		ParticleManager:CreateParticle("particles/arena/generic_gameplay/generic_manasteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
@@ -37,7 +44,7 @@ function Purge(keys)
 			target:TrueKill(ability, caster)
 		else
 			target:Purge(true, false, false, false, false)
-			if not target:IsMagicImmune() and not target:IsInvulnerable() then
+			if not target:IsMagicImmune() and not target:IsInvulnerable() and not target:IsDebuffImmune() then
 				ability:ApplyDataDrivenModifier(caster, target, keys.modifier_root, {})
 				ability:ApplyDataDrivenModifier(caster, target, keys.modifier_slow, {})
 			end

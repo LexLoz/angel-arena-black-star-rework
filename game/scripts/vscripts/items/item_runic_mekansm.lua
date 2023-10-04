@@ -22,7 +22,11 @@ if IsServer() then
 			ParticleManager:CreateParticle("particles/econ/events/ti6/mekanism_recipient_ti6.vpcf", PATTACH_ABSORIGIN_FOLLOW, v, caster)
 			v:EmitSound("DOTA_Item.Mekansm.Target")
 
-			SafeHeal(v, heal_amount, self)
+			SafeHeal(v, heal_amount, self, true, {
+				amplify = true,
+				strengthAMP = true,
+			})
+			
 			if self.RuneStorage then
 				CustomRunes:ActivateRune(v, self.RuneStorage, rune_multiplier)
 			end

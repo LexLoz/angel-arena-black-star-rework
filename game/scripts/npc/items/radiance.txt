@@ -5,6 +5,7 @@
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"ItemCost"						"1350"
+		"AbilityTextureName"			"item_recipe"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_radiance_arena"
 		"ItemRequirements"
@@ -17,6 +18,7 @@
 	{
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"4300"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_radiance_2"
@@ -30,6 +32,7 @@
 	{
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"15000"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_radiance_3"
@@ -73,11 +76,13 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"bonus_damage"				"65 120 200"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"02"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"aura_damage_per_second"	"60 120 225"
+				"aura_damage_per_second"	"60 100 150"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"03"
 			{
@@ -98,6 +103,16 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"aura_radius"				"700 725 750"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"aura_heal_reduce"			"0"
+			}
+			"99"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"1.5 3.0 4.5"
 			}
 		}
 	}
@@ -123,11 +138,13 @@
 			{
 				"var_type"					"FIELD_INTEGER"
 				"bonus_damage"				"65 120 200"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"02"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"aura_damage_per_second"	"60 120 225"
+				"aura_damage_per_second"	"60 100 150"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"03"
 			{
@@ -142,12 +159,22 @@
 			"05"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"attack_speed_slow"			"-20 -50 -80"
+				"attack_speed_slow"			"-20 -40 -60"
 			}
 			"06"
 			{
 				"var_type"					"FIELD_INTEGER"
 				"aura_radius"				"700 725 750"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"aura_heal_reduce"			"0"
+			}
+			"99"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"1.5 3.0 4.5"
 			}
 		}
 	}
@@ -177,12 +204,14 @@
 			"02"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"aura_damage_per_second"	"60 120 225"
+				"aura_damage_per_second"	"60 100 150"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"03"
 			{
 				"var_type"					"FIELD_INTEGER"
 				"blind_pct"					"17 19 21"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"04"
 			{
@@ -192,12 +221,22 @@
 			"05"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"attack_speed_slow"			"-20 -50 -80"
+				"attack_speed_slow"			"-20 -40 -60"
 			}
 			"06"
 			{
 				"var_type"					"FIELD_INTEGER"
 				"aura_radius"				"700 725 750"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"aura_heal_reduce"			"0"
+			}
+			"99"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"1.5 3.0 4.5"
 			}
 		}
 	}
@@ -211,7 +250,7 @@
 		"ItemShopTags"					"damage"
 		"ItemQuality"					"epic"
 		"ItemAliases"					"frozen radiance"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ICE"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
 		"AbilitySpecial"
@@ -219,27 +258,29 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"225"
+				"bonus_all_stats"		"80"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"2150"
+				"bonus_health"			"2000"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"2350"
+				"bonus_mana"			"2000"
 			}
 			"04"
 			{
 				"var_type"					"FIELD_INTEGER"
 				"bonus_damage"				"350"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"05"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"aura_damage_per_second"	"500"
+				"aura_damage_per_second"	"200"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"06"
 			{
@@ -259,12 +300,22 @@
 			"09"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"cold_attack_speed"			"-150"
+				"cold_attack_speed"			"-80"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_FLOAT"
 				"aura_duration"			"4"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"aura_heal_reduce"			"-60"
+			}
+			"99"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"6.0"
 			}
 		}
 	}

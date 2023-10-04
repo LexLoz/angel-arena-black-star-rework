@@ -85,9 +85,13 @@ function CDOTA_PlayerResource:IsDisableHelpSetForPlayerID(nPlayerID, nOtherPlaye
 	)
 end
 
-function CDOTA_PlayerResource:KickPlayer(playerId)
-	-- userid is always playerId + 1
-	SendToServerConsole("kickid " .. playerId + 1)
+function CDOTA_PlayerResource:KickPlayer(nPlayerID)
+	local usid = PLAYER_DATA[nPlayerID].UserID
+	if usid then
+		SendToServerConsole("kickid " .. usid)
+		return true
+	end
+	return false
 end
 
 function CDOTA_PlayerResource:IsPlayerAbandoned(playerId)
@@ -159,9 +163,18 @@ function CDOTA_PlayerResource:RemoveAllUnits(playerId)
 		end
 	end
 
+	for _,v in pairs(STONES_TABLE) do
+		local stone =  FindItemInInventoryByName(hero, v[1], nil, nil, nil, true)
+		if stone then
+			hero:DropItemAtPositionImmediate(stone, hero:GetAbsOrigin())
+		end
+	end
+
 	hero:InterruptMotionControllers(false)
 	hero:DestroyAllModifiers()
 	hero:AddNewModifier(hero, nil, "modifier_hero_out_of_game", nil)
+	--Attributes.Heroes[hero:GetEntityIndex()] = nil
+
 end
 
 function CDOTA_PlayerResource:GetRealSteamID(PlayerID)

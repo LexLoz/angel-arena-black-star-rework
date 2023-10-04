@@ -17,8 +17,7 @@ modifier_saitama_jogging = class({})
 
 function modifier_saitama_jogging:DeclareFunctions()
 	return {
-		MODIFIER_PROPERTY_TOOLTIP,
-		MODIFIER_EVENT_ON_UNIT_MOVED
+		MODIFIER_PROPERTY_TOOLTIP
 	}
 end
 
@@ -29,12 +28,21 @@ end
 if IsServer() then
 	function modifier_saitama_jogging:OnCreated()
 		self.range = 0
+
+		self.Pos = self:GetParent():GetAbsOrigin()
+		
+		self:StartIntervalThink(0.1)
 	end
 
-	function modifier_saitama_jogging:OnUnitMoved()
+	function modifier_saitama_jogging:OnIntervalThink()
 		local ability = self:GetAbility()
 		local parent = self:GetParent()
 		local position = parent:GetAbsOrigin()
+		if parent:FindModifierByName("modifier_fountain_aura_arena") then return end
+		if (position - self.Pos):Length2D() == 0 then return else
+			self.Pos = position
+		end
+
 		if self.position then
 			local range = (self.position - position):Length2D()
 			if range > 0 and range <= ability:GetSpecialValueFor("range_limit") then

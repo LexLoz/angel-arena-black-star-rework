@@ -6,14 +6,14 @@
 		"AbilityTextureName"			"arena/saber_mana_burst"
 		"ScriptFile"					"heroes/hero_saber/mana_burst.lua"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
-		"AbilityCooldown"				"2"
+		"AbilityCooldown"				"1"
 		"MaxLevel" 						"7"
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"mana_wasted_pct"	"30"
+				"mana_wasted_pct"	"6"
 			}
 			"02"
 			{
@@ -23,12 +23,12 @@
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"armor_per_mana"	"0.01 0.015 0.02 0.025 0.03 0.035 0.04"
+				"armor_per_mana"	"0.01 0.013 0.015 0.017 0.019 0.02 0.022"
 			}
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"5 6 7 8 9 10 11"
+				"duration"			"6.5"
 			}
 			"05"
 			{
@@ -48,7 +48,7 @@
 			"08"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"weakness_disarmor"	"-5 -8 -11 -14 -17 -20 -23"
+				"weakness_disarmor"	"-30"
 			}
 		}
 
@@ -107,7 +107,7 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"damage_per_second"	"15 20 25 30 35 40 50"
+				"damage_per_second"	"15 20 25 30 35 40 45"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"02"
@@ -131,6 +131,12 @@
 				"var_type"			"FIELD_INTEGER"
 				"forward_offset"	"100"
 			}
+			"99"
+			{
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"5.0"
+				"CalculateSpellDamageTooltip"		"0"
+			}
 		}
 
 		"precache"
@@ -145,27 +151,27 @@
 		"AbilityTextureName"			"arena/saber_avalon"
 		"ScriptFile"					"heroes/hero_saber/avalon.lua"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
-		"MaxLevel" 						"7"
+		"MaxLevel" 						"1"
 		"AbilityCastPoint"				"0.1"
-		"AbilityCooldown"				"30"
-		"AbilityChannelTime"			"2.0 2.5 3.0 3.5 4.0 4.5 5.0"
+		"AbilityCooldown"				"60"
+		"AbilityChannelTime"			"8.0"
 		"AbilityManaCost"				"50"
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"bonus_health_regen_max"	"6 10 14 20 26 34 48"
+				"bonus_health_regen_max"	"6"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"bonus_health_regen_min"	"3 5 8 12 16 18 22"
+				"bonus_health_regen_min"	"2"
 			}
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"2.0 2.5 3.0 3.5 4.0 4.5 5.0"
+				"duration"			"8.0"
 			}
 		}
 	}
@@ -192,29 +198,29 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"mana_pct"			"25"
+				"mana_pct"			"50"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_per_mana"	"2.0"
+				"damage_per_mana"	"1.3 1.6 1.9 2.2 2.5 2.8 3.1"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"03"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_per_mana_scepter"	"4.0"
+				"damage_per_mana_scepter"	"6.0"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"04"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"cast_range"		"700 750 800 850 900 950 1000"
+				"cast_range"		"1000 1100 1200 1300 1400 1500 1600"
 			}
 			"05"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"cast_range_scepter"	"2000"
+				"cast_range_scepter"	"3000"
 			}
 			"06"
 			{

@@ -1,71 +1,55 @@
-local sangeMaimModifier = {
-  IsDebuff = function() return true end,
-}
 
-function sangeMaimModifier:GetEffectName()
-  return "particles/items2_fx/sange_maim.vpcf"
-end
-
-function sangeMaimModifier:GetEffectAttachType()
-  return PATTACH_ABSORIGIN_FOLLOW
-end
-
-function sangeMaimModifier:DeclareFunctions()
-  return {
-    MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
-    MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
-  }
-end
-
-function sangeMaimModifier:OnCreated()
-  local isRanged = self:GetCaster():IsRangedAttacker()
-  local ability = self:GetAbility()
-
-  local movementSpeedSlowPctKey = isRanged and "maim_slow_movement_range_pct" or "maim_slow_movement_pct"
-  self.movementSpeedSlowPct = ability:GetSpecialValueFor(movementSpeedSlowPctKey)
-  local attackSpeedSlowKey = isRanged and "maim_slow_attack_range" or "maim_slow_attack"
-  self.attackSpeedSlow = ability:GetSpecialValueFor(attackSpeedSlowKey)
-end
-
-function sangeMaimModifier:GetModifierMoveSpeedBonus_Percentage()
-  return self.movementSpeedSlowPct
-end
-
-function sangeMaimModifier:GetModifierAttackSpeedBonus_Constant()
-  return self.attackSpeedSlow
-end
 
 return function(parts, funcs)
   funcs = funcs or {}
-  local sange_maim
   local storedSpecials = {}
   local modifier = {
     IsHidden = function() return true end,
     IsPurgable = function() return false end,
     DeclareFunctions = function() return funcs end,
-    GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+    GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMAMENT end,
   }
 
   function modifier:OnCreated()
     self:StoreAbilitySpecials(storedSpecials)
   end
+  function modifier:OnDestroy()
+    self:StoreAbilitySpecials(storedSpecials)
+  end
 
   if parts.sange then
-    sange_maim = sangeMaimModifier
-
-    table.insert(funcs, MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE)
-    table.insert(storedSpecials, "bonus_damage")
-    function modifier:GetModifierPreAttack_BonusDamage()
-      return self:GetSpecialValueFor("bonus_damage")
+    table.insert(funcs, MODIFIER_PROPERTY_STATUS_RESISTANCE)
+    table.insert(storedSpecials, "bonus_status_resist")
+    function modifier:GetModifierStatusResistance()
+      return self:GetSpecialValueFor("bonus_status_resist")
     end
-
+    --[[table.insert(funcs, MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE)
+    table.insert(storedSpecials, "bonus_heal_and_lifesteal")
+    function modifier:GetModifierHPRegenAmplify_Percentage()
+      return self:GetSpecialValueFor("bonus_heal_and_lifesteal")
+    end]]
+    table.insert(funcs, MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE)
+    table.insert(storedSpecials, "bonus_heal_and_lifesteal")
+    function modifier:GetModifierLifestealRegenAmplify_Percentage()
+      return self:GetSpecialValueFor("bonus_heal_and_lifesteal")
+    end
+    --[[table.insert(funcs,   HEAL_AMPLIFY_PERCENTAGE_TARGET)
+    table.insert(storedSpecials, "bonus_heal_and_lifesteal")
+    function modifier:GetModifierHealAmplify_PercentageTarget()
+      return self:GetSpecialValueFor("bonus_heal_and_lifesteal")
+    end]]
+    table.insert(funcs, MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE )
+    table.insert(storedSpecials, "bonus_heal_and_lifesteal")
+    function modifier:GetModifierHPRegenAmplify_Percentage()
+      return self:GetSpecialValueFor("bonus_heal_and_lifesteal")
+    end
     table.insert(funcs, MODIFIER_PROPERTY_STATS_STRENGTH_BONUS)
     table.insert(storedSpecials, "bonus_strength")
     function modifier:GetModifierBonusStats_Strength()
       return self:GetSpecialValueFor("bonus_strength")
     end
 
-    if IsServer() then
+    --[[if IsServer() then
       table.insert(funcs, MODIFIER_EVENT_ON_ATTACK_LANDED)
       table.insert(storedSpecials, "maim_chance_pct")
       table.insert(storedSpecials, "maim_duration")
@@ -83,7 +67,7 @@ return function(parts, funcs)
           )
         end
       end
-    end
+    end]]
   end
 
   if parts.yasha then
@@ -99,9 +83,9 @@ return function(parts, funcs)
       return self:GetSpecialValueFor("bonus_attack_speed")
     end
 
-    table.insert(funcs, MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE)
+    table.insert(funcs, MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE_UNIQUE)
     table.insert(storedSpecials, "bonus_movement_speed_pct")
-    function modifier:GetModifierMoveSpeedBonus_Percentage()
+    function modifier:GetModifierMoveSpeedBonus_Percentage_Unique()
       return self:GetSpecialValueFor("bonus_movement_speed_pct")
     end
   end
@@ -113,18 +97,24 @@ return function(parts, funcs)
       return self:GetSpecialValueFor("bonus_intellect")
     end
 
-    table.insert(funcs, MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE)
+    table.insert(funcs, MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE_UNIQUE )
     table.insert(storedSpecials, "spell_amp_pct")
-    function modifier:GetModifierSpellAmplify_Percentage()
+    function modifier:GetModifierSpellAmplify_PercentageUnique()
       return self:GetSpecialValueFor("spell_amp_pct")
     end
 
-    table.insert(funcs, MODIFIER_PROPERTY_MANACOST_PERCENTAGE)
-    table.insert(storedSpecials, "manacost_reduction_pct")
-    function modifier:GetModifierPercentageManacost()
-      return self:GetSpecialValueFor("manacost_reduction_pct")
+    table.insert(funcs, MODIFIER_PROPERTY_MP_REGEN_AMPLIFY_PERCENTAGE )
+    table.insert(storedSpecials, "bonus_mana_regen_pct")
+    function modifier:GetModifierMPRegenAmplify_Percentage()
+      return self:GetSpecialValueFor("bonus_mana_regen_pct")
+    end
+
+    table.insert(funcs, MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE)
+    table.insert(storedSpecials, "bonus_spell_lifesteal_pct")
+    function modifier:GetModifierSpellLifestealRegenAmplify_Percentage()
+      return self:GetSpecialValueFor("bonus_spell_lifesteal_pct")
     end
   end
 
-  return modifier, sange_maim
+  return modifier
 end

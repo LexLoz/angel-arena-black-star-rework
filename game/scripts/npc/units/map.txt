@@ -61,7 +61,7 @@
 		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_STRUCTURE"
 		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_BUILDING"
 
-		"VisionDaytimeRange"		"0"
-		"VisionNighttimeRange"		"0"
+		//"VisionDaytimeRange"		"250"
+		//"VisionNighttimeRange"		"250"
 	}
 }

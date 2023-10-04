@@ -1,5 +1,7 @@
-GameMode = GameMode or {}
+GameMode = GameMode or class({})
 ARENA_VERSION = LoadKeyValues("addoninfo.txt").version
+
+GAMEMODE_INITIALIZATION_STATUS = {}
 
 local requirements = {
 	"libraries/keyvalues",
@@ -9,7 +11,10 @@ local requirements = {
 	"libraries/animations",
 	"libraries/attachments",
 	"libraries/playertables",
+	"libraries/vector_target",
 	"libraries/containers",
+	-- "libraries/protoclasses",
+	-- "libraries/pathgraph",
 	"libraries/worldpanels",
 	"libraries/statcollection/init",
 	--------------------------------------------------
@@ -19,6 +24,10 @@ local requirements = {
 	"data/modifiers",
 	"data/abilities",
 	"data/ability_functions",
+	"data/ability_shop",
+	--------------------------------------------------
+	"internal/gamemode",
+	"internal/events",
 	--------------------------------------------------
 	"modules/index",
 
@@ -27,52 +36,36 @@ local requirements = {
 	"filters",
 }
 
-local modifiers = {
-	modifier_apocalypse_apocalypse = "heroes/hero_apocalypse/modifier_apocalypse_apocalypse",
-	modifier_saitama_limiter = "heroes/hero_saitama/modifier_saitama_limiter",
-	modifier_set_attack_range = "modifiers/modifier_set_attack_range",
-	modifier_charges = "modifiers/modifier_charges",
-	modifier_hero_selection_transformation = "modifiers/modifier_hero_selection_transformation",
-	modifier_max_attack_range = "modifiers/modifier_max_attack_range",
-	modifier_arena_hero = "modifiers/modifier_arena_hero",
-	modifier_item_demon_king_bar_curse = "items/modifier_item_demon_king_bar_curse",
-	modifier_hero_out_of_game = "modifiers/modifier_hero_out_of_game",
-	modifier_arena_event_proxy = "modifiers/modifier_arena_event_proxy",
-
-	modifier_item_shard_attackspeed_stack = "modifiers/modifier_item_shard_attackspeed_stack",
-}
-
-for k,v in pairs(modifiers) do
-	LinkLuaModifier(k, v, LUA_MODIFIER_MOTION_NONE)
-end
-
 AllPlayersInterval = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23}
 
-for _, requirement in ipairs(requirements) do
-	require(requirement)
+for i = 1, #requirements do
+	require(requirements[i])
 end
 
 Options:Preload()
 
-function GameMode:Activate()
-	math.randomseed(tonumber((string.gsub(string.gsub(GetSystemTime(), ':', ''), '^0+', ''))))
-
-	ListenToGameEvent('entity_killed', Dynamic_Wrap(GameMode, 'OnEntityKilled'), GameMode)
-	ListenToGameEvent('player_connect_full', Dynamic_Wrap(GameMode, 'OnConnectFull'), GameMode)
-	ListenToGameEvent('tree_cut', Dynamic_Wrap(GameMode, 'OnTreeCut'), GameMode)
-	ListenToGameEvent('dota_player_used_ability', Dynamic_Wrap(GameMode, 'OnAbilityUsed'), GameMode)
-	ListenToGameEvent('game_rules_state_change', Dynamic_Wrap(GameMode, 'OnGameRulesStateChange'), GameMode)
-	ListenToGameEvent('npc_spawned', Dynamic_Wrap(GameMode, 'OnNPCSpawned'), GameMode)
-	ListenToGameEvent('dota_team_kill_credit', Dynamic_Wrap(GameMode, 'OnTeamKillCredit'), GameMode)
-	ListenToGameEvent("dota_item_combined", Dynamic_Wrap(GameMode, 'OnItemCombined'), GameMode)
-
+function GameMode:InitGameMode()
 	GameMode:SetupRules()
+	GameMode = self
+
+	--print("init game mode")
+	if GAMEMODE_INITIALIZATION_STATUS[2] then
+		return
+	end
+	GAMEMODE_INITIALIZATION_STATUS[2] = true
 
 	Containers:SetItemLimit(50)
 	Containers:UsePanoramaInventory(false)
 	GameRules:GetGameModeEntity():SetFreeCourierModeEnabled(true)
+	--GameRules:GetGameModeEntity():SetUseTurboCouriers(true)
 	GameRules:GetGameModeEntity():SetPauseEnabled(IsInToolsMode())
+	--print("init game mode")
+	
+	if not Timers.started then Timers:start() end
+	if not Containers.containers then Containers:start() end
+	
 	Events:Emit("activate")
+
 
 	PlayerTables:CreateTable("arena", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("player_hero_indexes", {}, AllPlayersInterval)
@@ -81,8 +74,12 @@ function GameMode:Activate()
 	PlayerTables:CreateTable("weather", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("disable_help_data", {[0] = {}, [1] = {}, [2] = {}, [3] = {}, [4] = {}, [5] = {}, [6] = {}, [7] = {}, [8] = {}, [9] = {}, [10] = {}, [11] = {}, [12] = {}, [13] = {}, [14] = {}, [15] = {}, [16] = {}, [17] = {}, [18] = {}, [19] = {}, [20] = {}, [21] = {}, [22] = {}, [23] = {}}, AllPlayersInterval)
 
-	GLOBAL_DUMMY = CreateUnitByName("npc_dummy_unit", Vector(0, 0, 0), false, nil, nil, DOTA_TEAM_NEUTRALS)
-	GLOBAL_DUMMY:AddNewModifier(GLOBAL_DUMMY, nil, "modifier_arena_event_proxy", nil)
+	--Timers:start()
+	--Containers:start()
+
+	Timers:NextTick(function()
+		GLOBAL_DUMMY = GLOBAL_DUMMY or CreateUnitByName("npc_dummy_unit", Vector(0, 0, 0), false, nil, nil, DOTA_TEAM_NEUTRALS)
+	end)
 end
 
 function GameMode:OnFirstPlayerLoaded()
@@ -92,8 +89,16 @@ function GameMode:OnFirstPlayerLoaded()
 	end
 end
 
+function GameMode:OnAllPlayersLoaded()
+	if GAMEMODE_INITIALIZATION_STATUS[4] then
+		return
+	end
+	GAMEMODE_INITIALIZATION_STATUS[4] = true
+	Events:Emit("AllPlayersLoaded")
+end
+
 function GameMode:OnHeroSelectionStart()
-	StatsClient:CalculateAverageRating()
+	--StatsClient:CalculateAverageRating()
 	Teams:PostInitialize()
 	Options:CalculateVotes()
 	DynamicMinimap:Init()
@@ -104,23 +109,34 @@ function GameMode:OnHeroSelectionStart()
 	Timers:CreateTimer(0.1, function()
 		for playerId, data in pairs(PLAYER_DATA) do
 			if PlayerResource:IsPlayerAbandoned(playerId) then
-				PlayerResource:RemoveAllUnits(playerId)
+				--PlayerResource:RemoveAllUnits(playerId)
 			end
 			if PlayerResource:IsBanned(playerId) then
 				PlayerResource:KickPlayer(playerId)
 			end
 		end
 	end)
+
+	if Options:GetValue("DamageSubtypes") then
+		InitDamageSubtypes()
+	end
 end
 
 function GameMode:OnHeroSelectionEnd()
-	Timers:CreateTimer(CUSTOM_GOLD_TICK_TIME, Dynamic_Wrap(GameMode, "GameModeThink"))
+	--Timers:CreateTimer(CUSTOM_GOLD_TICK_TIME, Dynamic_Wrap(GameMode, "GameModeThink"))
+	GameRules:GetGameModeEntity():SetThink( "GameModeThink", GameMode, "GameModeThink", CUSTOM_GOLD_TICK_TIME)
+	Timers:CreateTimer(1, Dynamic_Wrap(InfinityStones, "Think"))
+	--GameRules:GetGameModeEntity():SetThink( "Think", InfinityStones, "InfinityStones", 0.1)
+	Timers:CreateTimer(1, Dynamic_Wrap(GameMode, 'KillWeightIncrease'))
 	PanoramaShop:StartItemStocks()
 	Duel:CreateGlobalTimer()
 	Weather:Init()
 	GameRules:GetGameModeEntity():SetPauseEnabled(Options:IsEquals("EnablePauses"))
+	-- SendToServerConsole('dota_hud_healthbars 1')
+	-- SendToConsole('dota_hud_healthbars 1')
 
 	Timers:CreateTimer(10, function()
+		--print("timer")
 		for playerId = 0, DOTA_MAX_TEAM_PLAYERS - 1 do
 			if PlayerResource:IsValidPlayerID(playerId) and not PlayerResource:IsFakeClient(playerId) and GetConnectionState(playerId) == DOTA_CONNECTION_STATE_CONNECTED then
 				local heroName = HeroSelection:GetSelectedHeroName(playerId) or ""
@@ -130,6 +146,26 @@ function GameMode:OnHeroSelectionEnd()
 				end
 			end
 		end
+	end)
+end
+
+function GameMode:OnHeroInGame(hero)
+	Timers:NextTick(function()
+		if IsValidEntity(hero) and hero:IsTrueHero() then
+			Teams:RecalculateKillWeight(hero:GetTeam())
+		end
+	end)
+end
+
+function GameMode:OnGameInProgress()
+	if GAMEMODE_INITIALIZATION_STATUS[3] then
+		return
+	end
+	GAMEMODE_INITIALIZATION_STATUS[3] = true
+	Spawner:RegisterTimers()
+	Timers:CreateTimer(function()
+		CustomRunes:SpawnRunes()
+		return CUSTOM_RUNE_SPAWN_TIME
 	end)
 end
 
@@ -149,15 +185,12 @@ function GameMode:PrecacheUnitQueueed(name)
 	end
 end
 
-local mapMin = Vector(-MAP_LENGTH, -MAP_LENGTH)
-local mapClampMin = ExpandVector(mapMin, -MAP_BORDER)
-local mapMax = Vector(MAP_LENGTH, MAP_LENGTH)
-local mapClampMax = ExpandVector(mapMax, -MAP_BORDER)
 function GameMode:GameModeThink()
-	for i = 0, 23 do
+	--[[for i = 0, 23 do
 		if PlayerResource:IsValidPlayerID(i) then
 			local hero = PlayerResource:GetSelectedHeroEntity(i)
 			if hero then
+				hero:SetNetworkableEntityInfo("unit_name", hero:GetFullName())
 				MeepoFixes:ShareItems(hero)
 				for _, v in ipairs(hero:GetFullName() == "npc_dota_hero_meepo" and MeepoFixes:FindMeepos(hero, true) or { hero }) do
 					local position = v:GetAbsOrigin()
@@ -187,7 +220,19 @@ function GameMode:GameModeThink()
 			end
 			AntiAFK:Think(i)
 		end
+	end]]
+	--kill weight increase
+	local dota_time = GetDOTATimeInMinutesFull()
+	--[[dif dota_time >= math.floor(KILL_WEIGHT_START_INCREASE_MINUTE / 2) and not GameMode.bonus_gold_per_kill_activated then
+		GameMode.bonus_gold_per_kill_activated = true
+		Notifications:TopToAll({text="#arena_bonus_gold_per_kill_activated", duration = 6})
+	end]]
+	if not Duel.kill_weight_increase and dota_time >= KILL_WEIGHT_START_INCREASE_MINUTE then
+		GameMode.kill_weight_per_minute = dota_time - KILL_WEIGHT_START_INCREASE_MINUTE
+		Duel.kill_weight_increase = true
 	end
+
+	--InfinityStones:Think()
 	return CUSTOM_GOLD_TICK_TIME
 end
 
@@ -203,8 +248,17 @@ function GameMode:SetupRules()
 	gameMode:SetTopBarTeamValuesOverride(true)
 	gameMode:SetUseCustomHeroLevels(true)
 	gameMode:SetCustomXPRequiredToReachNextLevel(XP_PER_LEVEL_TABLE)
-	gameMode:SetMaximumAttackSpeed(750)
-	gameMode:SetMinimumAttackSpeed(60)
+	gameMode:SetMaximumAttackSpeed(700)
+	gameMode:SetMinimumAttackSpeed(20)
+	gameMode:SetNeutralStashEnabled(false)
+
+	gameMode:SetCustomBackpackSwapCooldown(0)
+	gameMode:SetCustomBackpackCooldownPercent(1)
+	gameMode:SetXPRuneSpawnInterval(99999)
+	gameMode:SetAllowNeutralItemDrops(false)
+	gameMode:SetNeutralItemHideUndiscoveredEnabled(false)
+	--dota_hud_healthbars
+	SendToServerConsole("tv_delay 0")
 end
 
 function GameMode:BreakGame(message)

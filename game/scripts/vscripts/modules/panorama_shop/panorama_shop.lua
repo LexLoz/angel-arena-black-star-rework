@@ -271,7 +271,7 @@ function PanoramaShop:SellItem(playerId, unit, item)
 		PanoramaShop:AddItemStock(team, itemName, charges)
 	end
 	UTIL_Remove(item)
-	Gold:AddGoldWithMessage(unit, cost, playerId)
+	Gold:AddGoldWithMessage(unit, cost / GetGoldMultiplier(unit), playerId)
 	GameMode:TrackInventory(unit)
 end
 
@@ -308,9 +308,9 @@ function PanoramaShop:PushItem(playerId, unit, itemName, bOnlyStash)
 		end
 		-- Stackable item abuse fix, not very good, but that's all I can do without smth like SetStackable
 		local hasSameStackableItem = item:IsStackable() and unit:HasItemInInventory(itemName)
-		if hasSameStackableItem then
-			Notifications:Bottom(playerId, {text="panorama_shop_stackable_purchase", style = {color = "red"}, duration = 4.5})
-		else
+		--if hasSameStackableItem then
+			--Notifications:Bottom(playerId, {text="panorama_shop_stackable_purchase", style = {color = "red"}, duration = 4.5})
+		--else
 			if not isInShop then SetAllItemSlotsLocked(unit, true, true) end
 			FillSlotsWithDummy(unit, false)
 			for i = DOTA_STASH_SLOT_1 , DOTA_STASH_SLOT_6 do
@@ -324,7 +324,7 @@ function PanoramaShop:PushItem(playerId, unit, itemName, bOnlyStash)
 			end
 			ClearSlotsFromDummy(unit, false)
 			if not isInShop then SetAllItemSlotsLocked(unit, false, true) end
-		end
+		--end
 	end
 
 	if itemPushed then
@@ -370,10 +370,11 @@ SHOP_LIST_STATUS_IN_STASH = 1
 SHOP_LIST_STATUS_TO_BUY = 2
 SHOP_LIST_STATUS_NO_STOCK = 3
 SHOP_LIST_STATUS_NO_BOSS = 4
+SHOP_LIST_STATUS_NEUTRAL_ITEM = 5
 
 function PanoramaShop:GetAllItemsByNameInInventory(unit, itemname, bBackpack)
 	local items = {}
-	for slot = 0, bBackpack and DOTA_STASH_SLOT_6 or DOTA_ITEM_SLOT_10 do
+	for slot = 0, bBackpack and DOTA_STASH_SLOT_6 or DOTA_ITEM_SLOT_9 do
 		local item = unit:GetItemInSlot(slot)
 		if item and item:GetAbilityName() == itemname and item:GetPurchaser() == unit then
 			table.insert(items, item)
@@ -465,6 +466,8 @@ function PanoramaShop:BuyItem(playerId, unit, itemName)
 				ProbablyPurchasable[name .. "_index_" .. itemCounter[name]] = SHOP_LIST_STATUS_NO_BOSS
 			elseif stocks and stocks < 1 then
 				ProbablyPurchasable[name .. "_index_" .. itemCounter[name]] = SHOP_LIST_STATUS_NO_STOCK
+			elseif GetKeyValue(name, "ItemIsNeutralDrop") == 1 then
+				ProbablyPurchasable[name .. "_index_" .. itemCounter[name]] = SHOP_LIST_STATUS_NEUTRAL_ITEM
 			else
 				ProbablyPurchasable[name .. "_index_" .. itemCounter[name]] = SHOP_LIST_STATUS_TO_BUY
 			end
@@ -494,6 +497,9 @@ function PanoramaShop:BuyItem(playerId, unit, itemName)
 		if status == SHOP_LIST_STATUS_NO_BOSS then
 			Containers:DisplayError(playerId, "dota_hud_error_item_from_bosses")
 			return
+		elseif status == SHOP_LIST_STATUS_NEUTRAL_ITEM then
+			Containers:DisplayError(playerId, "dota_hud_error_item_neutral_item")
+			return
 		elseif status == SHOP_LIST_STATUS_NO_STOCK then
 			Containers:DisplayError(playerId, "dota_hud_error_item_out_of_stock")
 			return
@@ -522,11 +528,11 @@ function PanoramaShop:BuyItem(playerId, unit, itemName)
 				if not removedItem then removedItem = FindItemInInventoryByName(unit, v, true, true) end
 				unit:RemoveItem(removedItem)
 			end
-			for _,v in ipairs(ItemsToBuy) do
+			--[[for _,v in ipairs(ItemsToBuy) do
 				if PanoramaShop.StocksTable[team][v] then
 					PanoramaShop:DecreaseItemStock(team, v)
 				end
-			end
+			end]]
 			PanoramaShop:PushItem(playerId, unit, itemName)
 			if PanoramaShop.StocksTable[team][itemName] then
 				PanoramaShop:DecreaseItemStock(team, itemName)

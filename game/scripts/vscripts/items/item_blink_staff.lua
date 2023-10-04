@@ -62,7 +62,7 @@ function Blink(ability, caster, Target, Point, MaxBlink)
 	Target:EmitSound("DOTA_Item.BlinkDagger.Activate")
 	local Diff = Point - Origin
 	if Diff:Length2D() > MaxBlink then
-		Point = Origin + (Point - Origin):Normalized() * MaxBlink
+		Point = Origin + Diff:Normalized() * MaxBlink
 	end
 	Target:SetAbsOrigin(Point)
 	FindClearSpaceForUnit(Target, Point, true)

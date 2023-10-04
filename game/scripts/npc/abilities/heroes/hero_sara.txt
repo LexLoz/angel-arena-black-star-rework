@@ -1,5 +1,402 @@
 "DOTAAbilities"
 {
+	
+	"sara_dark_blink"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"heroes/hero_sara/dark_blink.lua"
+		"AbilityTextureName"			"arena/sara_dark_blink"
+		"MaxLevel" 						"7"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+		"AbilityCooldown"				"20"
+		"AbilityCastPoint"				"0.5"
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blink_range"			"600 700 800 900 1000 1100 1200"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"energy_to_blink_range"	"0.3"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"range_energy_step"		"250"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"max_energy_per_step_pct"	"1.8 1.6 1.4 1.2 1.0 0.8 0.6"
+			}
+			"05"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"min_cost_pct"			"5"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile"		"soundevents/game_sounds_heroes/game_sounds_antimage.vsndevts"
+			"particle"		"particles/arena/units/heroes/hero_sara/dark_blink_start.vpcf"
+			"particle"		"particles/arena/units/heroes/hero_sara/dark_blink_end.vpcf"
+		}
+	}
+
+	"sara_regeneration"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"heroes/hero_sara/regeneration.lua"
+		"AbilityTextureName"			"arena/sara_fragment_of_logic"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel" 						"7"
+		"LevelsBetweenUpgrades"			"8"
+		"AbilityCooldown"				"25"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"delay"				"4.0 3.5 3.0 2.5 2.0 1.5 1.0"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"energy_cost_pct"	"200 180 160 140 120 100 80"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"health_in_second"	"10 50 90 130 170 210 250"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"energy_in_regen"	"5"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"max_regen_pct"		"100"
+			}
+			"06"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"energy_in_health"	"7"
+			}
+			"07"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"duration"			"60"
+			}
+			"08"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"cooldown"			"30"
+			}
+		}
+
+		"precache"
+		{
+			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_chen.vsndevts"
+			"particle"  "particles/arena/units/heroes/hero_sara/fragment_of_logic.vpcf"
+		}
+	}
+
+	"sara_fragment_of_hate"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"heroes/hero_sara/fragment_of_hate.lua"
+		"AbilityTextureName"			"arena/sara_fragment_of_hate"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel" 						"7"
+		"LevelsBetweenUpgrades"			"4"
+		"HasScepterUpgrade"				"0"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"crit_chance_pct"	"12"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cost" 				"2.0"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"cost_to_damage" 	"10 12.5 15 17.5 20 22.5 25"
+			}
+			"06"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"cost_to_crit_pct" "0.25"
+			}
+			"98"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"stamina_drain_reduction"	"75"
+			}
+		}
+	}
+
+	"sara_evolution_new"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"heroes/hero_sara/evolution.lua"
+		"AbilityTextureName"			"arena/sara_evolution"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel" 						"4"
+		"HasInnateModifiers"			"1"
+		"LevelsBetweenUpgrades"			"200"
+		"AbilityCooldown"				"60"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"energy_limit"				"1000 20000 50000"
+			}
+			"02"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"energy_limit_per_lvl"		"250"
+			}
+			"03"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"energy_growth_sec"			"5 10 20 40"
+			}
+			"04"
+			{
+				"var_type"					"FIELD_FLOAT"
+				"energy_growth_sec_per_lvl"	"0.1"
+			}
+			"05"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"int_in_growth_mult_pct"		"5"
+			}
+			"06"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"creeps_max_health_in_energy_pct"	"5"
+			}
+			"07"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"bosses_max_health_in_energy_pct"	"10"
+			}
+			"08"
+			{
+				"var_type"						"FIELD_INTEGER"
+				"heroes_max_health_in_energy_pct"	"25"
+			}
+			"09"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"health_for_strength"	"10"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"armor_per_agility"		"14"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_health"			"200 5000 15000 30000"
+			}
+			"12"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_base_armor"		"2 10 20 30"
+			}
+			"13"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"energy_increase_radius"	"1500"
+			}
+			"14"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"energy_gain_in_radius"	"10"
+			}
+			"15"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"level_for_active"		"3"
+			}
+			"16"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"active_duration"		"4"
+			}
+			"17"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"thresould"				"1000000"
+			}
+		}
+	}
+
+	"sara_conceptual_reflection"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"heroes/hero_sara/conceptual_reflection.lua"
+		"AbilityTextureName"			"arena/sara_fragment_of_armor"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
+		"AbilityUnitTargetFlags" 		"DOTA_UNIT_TARGET_FLAG_NOT_MAGIC_IMMUNE_ALLIES"
+		"MaxLevel" 						"1"
+		"AbilityCooldown"				"5"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_PURE"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"max_charges"		"3"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"energy_cost"		"25000"
+			}
+			"03"
+			{
+				"var_type"						"FIELD_INTEGER"
+				"max_health_damage_proc"		"10"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"damage_decrease"	"30"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"reflected_damage"	"125"
+			}
+			"06"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"reflect_radius"	"800"
+			}
+			"07"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"reflection_damage_decrease" "90"
+			}
+			"08"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"cost_percent"		"10"
+			}
+			"09"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"absorbed_damage_in_cost"	"100"
+			}
+		}
+		"precache"
+		{
+			"particle"			"particles/arena/units/heroes/hero_sara/fragment_of_armor.vpcf"
+			"particle"			"particles/arena/units/heroes/hero_sara/fragment_of_armor_impact.vpcf"
+			"particle"			"particles/arena/units/heroes/hero_sara/energy_burst.vpcf"
+		}
+	}
+
+	"sara_exhaustion"
+	{
+		"BaseClass"						"ability_lua"
+		"ScriptFile"					"heroes/hero_sara/exhaustion.lua"
+		"AbilityTextureName"			"arena/sara_space_dissection"
+		"MaxLevel" 						"7"
+		// "LevelsBetweenUpgrades"			"4"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_ATTACK"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_HERO"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_HP_REMOVAL"
+		"AbilityType"					"DOTA_ABILITY_TYPE_ULTIMATE"
+		"AbilityCooldown"				"9 8 7 6 5 4 3"
+		"AbilityCastRange"				"500"
+
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"health_decrease"	"10 15 20 25 30 35 40"
+			}
+			"02"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"movement_speed_reduce" "-10 -15 -20 -25 -30 -35 -40"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"attack_speed_reduce" "-15 -30 -45 -60 -75 -90 -105"
+			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"armor_reduce"		"-3 -5 -7 -9 -11 -13 -15"
+			}
+			"05"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"duration"			"4"
+			}
+			"06"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"effect_delay"		"5 10 15 20 25 30 40"
+			}
+			"07"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"health_decrease_pct" "3"
+			}
+			"08"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"health_in_energy_pct"	"80 100 120 140 160 180 200"
+			}
+			"09"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"distance"			"500"
+			}
+			"10"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"evolution_lvl3_cooldown" "0.5"
+			}
+			"11"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"effect_delay_target"	"5"
+			}
+		}
+		"precache"
+		{
+			"particle"  "particles/arena/units/heroes/hero_sara/space_dissection.vpcf"
+			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_centaur.vsndevts"
+			"particle"	"particles/arena/units/heroes/hero_sai/divine_flesh.vpcf"
+		}
+	}
+
 	"sara_evolution"
 	{
 		"BaseClass"						"ability_lua"
@@ -21,7 +418,7 @@
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"max_per_minute_pct" "1"
+				"max_per_minute_pct" "3"
 			}
 			"03"
 			{
@@ -51,7 +448,7 @@
 			"08"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"health_reduction_pct"	"60"
+				"health_reduction_pct"	"40"
 			}
 			"09"
 			{
@@ -125,91 +522,6 @@
 		}
 	}
 
-	"sara_dark_blink"
-	{
-		"BaseClass"						"ability_lua"
-		"ScriptFile"					"heroes/hero_sara/dark_blink.lua"
-		"AbilityTextureName"			"arena/sara_dark_blink"
-		"MaxLevel" 						"7"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
-		"AbilityCooldown"				"24 22 20 18 16 14 12"
-		"AbilityCastPoint"				"0.2 0.2 0.2 0.2 0.2 0.15 0.1"
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"blink_range"			"600"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"energy_to_blink_range"	"6 7 8 9 10 11 12"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"range_energy_step"		"50"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"max_energy_per_step_pct"	"0.5"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"min_cost_pct"			"5"
-			}
-		}
-
-		"precache"
-		{
-			"soundfile"		"soundevents/game_sounds_heroes/game_sounds_antimage.vsndevts"
-			"particle"		"particles/arena/units/heroes/hero_sara/dark_blink_start.vpcf"
-			"particle"		"particles/arena/units/heroes/hero_sara/dark_blink_end.vpcf"
-		}
-	}
-
-	"sara_fragment_of_hate"
-	{
-		"BaseClass"						"ability_lua"
-		"ScriptFile"					"heroes/hero_sara/fragment_of_hate.lua"
-		"AbilityTextureName"			"arena/sara_fragment_of_hate"
-		"MaxLevel" 						"7"
-		"AbilityCooldown"				"40"
-		"HasScepterUpgrade"				"1"
-
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"			"FIELD_INTEGER"
-				"crit_chance_pct"	"15"
-			}
-			"02"
-			{
-				"var_type"			"FIELD_INTEGER"
-				"energy_to_crit_pct" "2"
-			}
-			"03"
-			{
-				"var_type"			"FIELD_INTEGER"
-				"energy_to_damage_pct" "5 6 7 8 9 10 11"
-			}
-			"04"
-			{
-				"var_type"			"FIELD_INTEGER"
-				"damage_pct_scepter" "200"
-			}
-			"05"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"buff_duration_scepter" "3.0 3.5 4.0 4.5 5.0 5.5 6.0"
-			}
-		}
-	}
-
 	"sara_fragment_of_armor"
 	{
 		"BaseClass"						"ability_lua"
@@ -225,7 +537,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"damage_per_energy"		"0.5"
+				"damage_per_energy"		"2.5"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"02"

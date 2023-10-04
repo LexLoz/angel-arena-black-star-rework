@@ -3,10 +3,10 @@ Console = Console or {}
 Events:Register("activate", function ()
 	CustomGameEventManager:RegisterListener("console-evaluate", Dynamic_Wrap(Console, "ConsoleEvaluate"))
 
-	Convars:RegisterCommand("arena_console", function()
+	--[[Convars:RegisterCommand("arena_console", function()
 		local player = Convars:GetCommandClient()
 		Console:SetVisible(player)
-	end, "Toggle Angel Arena Black Star debug console", FCVAR_NOTIFY)
+	end, "Toggle Angel Arena Black Star debug console", FCVAR_NOTIFY)]]
 end)
 
 function Console:SetVisible(player, value)
@@ -80,9 +80,9 @@ function Console:ConsoleEvaluate(event)
 	local playerId = event.PlayerID
 	local player = PlayerResource:GetPlayer(playerId)
 
-	if not Console:CanEvaluate(playerId) then
-		return Console:SetStack(playerId, "PermissionError: you should be a developer to be able to use debug console outside of tools")
-	end
+	-- if not Console:CanEvaluate(playerId) then
+	-- 	return Console:SetStack(playerId, "PermissionError: you should be a developer to be able to use debug console outside of tools")
+	-- end
 
 	local evalType = event.type
 	local target = event.target

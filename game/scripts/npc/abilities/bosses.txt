@@ -12,12 +12,17 @@
 			"01"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"attack_range_limit"	"900"
+				"attack_range_limit"	"600"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
 				"bonus_attack_speed"	"150"
+			}
+			"03"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"status_resist"		"75"
 			}
 		}
 
@@ -39,12 +44,13 @@
 				"States"
 				{
 					"MODIFIER_STATE_FLYING_FOR_PATHING_PURPOSES_ONLY"		"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_CANNOT_MISS"							"MODIFIER_STATE_VALUE_ENABLED"
+					//"MODIFIER_STATE_CANNOT_MISS"							"MODIFIER_STATE_VALUE_ENABLED"
 				}
 
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"			"%bonus_attack_speed"
+					"MODIFIER_PROPERTY_STATUS_RESISTANCE"					"%status_resist"
 				}
 
 				"ThinkInterval"  "0.1"
@@ -53,7 +59,7 @@
 					"RunScript"
 					{
 						"ScriptFile"	"heroes/bosses/boss_armor.lua"
-						"Function"		"ClearDebuffs"
+						"Think"		"ClearDebuffs"
 					}
 				}
 

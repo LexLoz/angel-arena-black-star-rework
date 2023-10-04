@@ -5,6 +5,7 @@
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"						"item_datadriven"
 		"ItemCost"						"1000"
+		"AbilityTextureName"			"item_recipe"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_desolator2"
@@ -36,7 +37,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-15"
+				"corruption_armor"		"-12"
 			}
 			"03"
 			{
@@ -104,13 +105,14 @@
 	{
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"                     "item_datadriven"
-		"ItemCost"						"500"
+		"AbilityTextureName"			"item_recipe"
+		"ItemCost"						"5000"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_desolator3"
 		"ItemRequirements"
 		{
-			"01"						"item_desolator2;item_dark_flow"
+			"01"						"item_desolator2;item_relic"
 		}
 	}
 
@@ -136,7 +138,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-24"
+				"corruption_armor"		"-18"
 			}
 			"03"
 			{
@@ -204,6 +206,7 @@
 	{
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"                     "item_datadriven"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"10250"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
@@ -237,7 +240,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-40"
+				"corruption_armor"		"-24"
 			}
 			"03"
 			{
@@ -331,13 +334,14 @@
 	{
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"                     "item_datadriven"
-		"ItemCost"						"1250"
+		"AbilityTextureName"			"item_recipe"
+		"ItemCost"						"7500"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_desolator5"
 		"ItemRequirements"
 		{
-			"01"						"item_desolator4;item_soul_of_titan;item_skadi_8"
+			"01"						"item_desolator4;item_soul_of_titan;item_moon_dust"
 		}
 	}
 
@@ -359,27 +363,12 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"400"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"250"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"2500"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"2500"
+				"bonus_damage"			"600"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-55"
+				"corruption_armor"		"-25"
 			}
 			"06"
 			{
@@ -389,12 +378,12 @@
 			"07"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed"	"-40"
+				"cold_movement_speed"	"-20"
 			}
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-200"
+				"cold_attack_speed"		"-100"
 			}
 			"09"
 			{
@@ -405,6 +394,11 @@
 			{
 				"var_type"							"FIELD_FLOAT"
 				"poison_damage_interval"			"1.0"
+			}
+			"11"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"heal_reduce"						"-0"
 			}
 		}
 
@@ -436,11 +430,11 @@
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE"		"%bonus_damage"
-					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%bonus_all_stats"
-					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_all_stats"
-					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_all_stats"
-					"MODIFIER_PROPERTY_HEALTH_BONUS"				"%bonus_health"
-					"MODIFIER_PROPERTY_MANA_BONUS"					"%bonus_mana"
+					//"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%bonus_all_stats"
+					//"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_all_stats"
+					//"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_all_stats"
+					//"MODIFIER_PROPERTY_HEALTH_BONUS"				"%bonus_health"
+					//"MODIFIER_PROPERTY_MANA_BONUS"					"%bonus_mana"
 				}
 
 				"OnAttackLanded"
@@ -473,6 +467,10 @@
 					"MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS"		"%corruption_armor"
 					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%cold_attack_speed"
 					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%cold_movement_speed"
+					//"MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET"	"%heal_reduce"
+  					//"MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE"		"%heal_reduce"
+ 					//"MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
+					//"MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
 				}
 
 				"ThinkInterval" 		"%poison_damage_interval"
@@ -493,6 +491,7 @@
 	"item_recipe_desolator6"
 	{
 		"Model"							"models/props_gameplay/recipe.vmdl"
+		"AbilityTextureName"			"item_recipe"
 		"BaseClass"                     "item_datadriven"
 		"ItemCost"						"20000"
 		"ItemShopTags"					""
@@ -514,6 +513,7 @@
 		"ItemAliases"					"ultimate desolator 6"
 		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHT"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+		"AbilityCooldown"				"3"
 
 		// Special
 		//-------------------------------------------------------------------------------------------------------------
@@ -522,22 +522,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"700"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"250"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"2800"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"3000"
+				"bonus_damage"			"1000"
 			}
 			"05"
 			{
@@ -547,12 +532,12 @@
 			"06"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"all_damage_bonus_pct"		"10"
+				"all_damage_bonus_pct"		"5"
 			}
 			"07"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-90"
+				"corruption_armor"		"-50"
 			}
 			"08"
 			{
@@ -562,12 +547,12 @@
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed"	"-45"
+				"cold_movement_speed"	"-30"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-400"
+				"cold_attack_speed"		"-200"
 			}
 			"11"
 			{
@@ -578,6 +563,11 @@
 			{
 				"var_type"							"FIELD_FLOAT"
 				"poison_damage_interval"			"1.0"
+			}
+			"13"
+			{
+				"var_type"							"FIELD_FLOAT"
+				"ignore_base_armor_chance"			"10"
 			}
 		}
 
@@ -604,28 +594,66 @@
 						"ScriptFile"	"kv.lua"
 						"Function"		"UpdateAttackProjectile"
 					}
+
+					"RemoveModifier"
+					{
+						"ModifierName" 	"modifier_item_desolator6_arena_cutting"
+						"Target" 		"CASTER"
+					}
 				}
+
+				"OnAttackStart"
+				{
+					"RemoveModifier"
+					{
+						"ModifierName" 	"modifier_item_desolator6_arena_cutting"
+						"Target" 		"CASTER"
+					}
+
+					"RunScript"
+					{
+						"ScriptFile"	"kv.lua"
+						"Function"		"CheckPhysicalCritReady"
+					}
+
+					"Random"
+					{
+						"Chance" "%ignore_base_armor_chance"
+						"OnSuccess"
+						{
+							"ApplyModifier"
+							{
+								"ModifierName" 	"modifier_item_desolator6_arena_cutting"
+								"Target"    	"CASTER"
+							}
+						}
+					}
+				}
+
+				"OnAttackCanceled"
+				{
+					"RemoveModifier"
+					{
+						"ModifierName"  "modifier_item_desolator6_arena_cutting"
+						"Target"   		"CASTER"
+					}
+				}
+				
 
 				"Properties"
 				{
-					"MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE"	"%all_damage_bonus_pct"
 					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE"		"%bonus_damage"
-					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%bonus_all_stats"
-					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_all_stats"
-					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_all_stats"
-					"MODIFIER_PROPERTY_HEALTH_BONUS"				"%bonus_health"
-					"MODIFIER_PROPERTY_MANA_BONUS"					"%bonus_mana"
 				}
 
-				"OnAttackLanded"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"items/item_desolator.lua"
-						"Function"		"ApplyArmorReduction"
-						"modifier"		"modifier_item_desolator6_arena_corruption"
-					}
-				}
+				// "OnAttackLanded"
+				// {
+				// 	"RunScript"
+				// 	{
+				// 		"ScriptFile"	"items/item_desolator.lua"
+				// 		"Function"		"ApplyArmorReduction"
+				// 		"modifier"		"modifier_item_desolator6_arena_corruption"
+				// 	}
+				// }
 			}
 			"modifier_item_demons_paw_unique"
 			{
@@ -635,6 +663,24 @@
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_ATTACK_RANGE_BONUS" "%bonus_attack_range"
+				}
+			}
+
+			"modifier_item_desolator6_arena_cutting"
+			{
+				"Passive"				"0"
+				"IsHidden"				"1"
+				"IsBuff"				"1"
+				"IsPurgable"			"0"
+
+				"OnAttackLanded"
+				{
+					"FireEffect"
+					{
+						"EffectName" 		"particles/arena/units/heroes/hero_queenofblades/darkness_aura_critical.vpcf"
+						"EffectAttachType"  "follow_origin"
+						"Target"    		"TARGET"
+					}
 				}
 			}
 			"modifier_item_desolator6_arena_corruption"

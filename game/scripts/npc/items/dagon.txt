@@ -3,7 +3,7 @@
 	"item_recipe_dagon_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1250"
 		"ItemShopTags"					""
@@ -18,7 +18,7 @@
 	"item_recipe_dagon_2_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -33,7 +33,7 @@
 	"item_recipe_dagon_3_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -48,7 +48,7 @@
 	"item_recipe_dagon_4_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -63,7 +63,7 @@
 	"item_recipe_dagon_5_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -78,7 +78,7 @@
 	"item_recipe_enchanted_dagon_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"2250"
 		"ItemShopTags"					""
@@ -93,7 +93,7 @@
 	"item_recipe_enchanted_dagon_2_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -108,7 +108,7 @@
 	"item_recipe_enchanted_dagon_3_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -123,7 +123,7 @@
 	"item_recipe_enchanted_dagon_4_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -138,7 +138,7 @@
 	"item_recipe_enchanted_dagon_5_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -153,7 +153,7 @@
 	"item_recipe_sunray_dagon_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"3000"
 		"ItemShopTags"					""
@@ -168,7 +168,7 @@
 	"item_recipe_sunray_dagon_2_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -183,7 +183,7 @@
 	"item_recipe_sunray_dagon_3_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -198,7 +198,7 @@
 	"item_recipe_sunray_dagon_4_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -213,7 +213,7 @@
 	"item_recipe_sunray_dagon_5_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"0"
 		"ItemShopTags"					""
@@ -1220,11 +1220,13 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"damage"				"1100 1150 1200 1250 1300"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"damage_percent"		"0.5"
+				"damage_percent"		"5"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"07"
 			{
@@ -1346,11 +1348,13 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"damage"				"1100 1150 1200 1250 1300"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"damage_percent"		"0.5"
+				"damage_percent"		"5"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"07"
 			{
@@ -1472,11 +1476,13 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"damage"				"1100 1150 1200 1250 1300"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"damage_percent"		"0.5"
+				"damage_percent"		"5"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"07"
 			{
@@ -1598,11 +1604,13 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"damage"				"1100 1150 1200 1250 1300"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"damage_percent"		"0.5"
+				"damage_percent"		"5"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"07"
 			{
@@ -1721,11 +1729,13 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"damage"				"1100 1150 1200 1250 1300"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"damage_percent"		"0.5"
+				"damage_percent"		"5"
+				"CalculateSpellDamageTooltip" "0"
 			}
 			"07"
 			{

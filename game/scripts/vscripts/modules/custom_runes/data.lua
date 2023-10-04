@@ -78,9 +78,12 @@ RUNE_SETTINGS = {
 		particle = "particles/generic_gameplay/rune_bounty.vpcf",
 		sound = "Rune.Bounty",
 		GetValues = function(unit)
-			local m = GetDOTATimeInMinutesFull()
-			local gold = 50 + (m * 2)^2 / 2.5
-			local xp = 50 + m^2.2
+			local minute = GetDOTATimeInMinutesFull()
+			local networth = Gold:GetGold(unit:GetPlayerID())
+			local MAP_MULTIPLIER = GameMode.Map_Gold_Multiplier or 1
+			local PLAYERS_COUNT_MULTIPLIER = GetPlayersCountMultiplier()
+			local gold = (125 + minute ^ 2.4) * MAP_MULTIPLIER * PLAYERS_COUNT_MULTIPLIER
+			local xp = 50 + minute ^ 3
 			local gold_multiplier = 1
 			local xp_multiplier = 1
 

@@ -3,7 +3,7 @@
 	"item_recipe_book_of_the_guardian"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"1950"
 		"ItemRecipe"					"1"
@@ -17,7 +17,7 @@
 	"item_recipe_book_of_the_guardian_2"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"5000"
 		"ItemRecipe"					"1"
@@ -55,7 +55,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"15 60"
+				"bonus_armor"			"15 35"
 			}
 			"03"
 			{
@@ -90,7 +90,7 @@
 			"09"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"blast_damage_int_mult"	"2 3"
+				"blast_damage_int_mult"	"2 4"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"10"
@@ -117,6 +117,17 @@
 			{
 				"var_type"				"FIELD_FLOAT"
 				"blast_vision_duration"	"3.5"
+			}
+			"15"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"aura_heal_reduce"		"-30 -50"
+			}
+			"99"
+			{
+				"var_type" "FIELD_FLOAT"
+				"jungle_bears_damage_multiplier" "1.5 3"
+				"CalculateSpellDamageTooltip" "0"
 			}
 		}
 	}
@@ -148,7 +159,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"15 60"
+				"bonus_armor"			"15 35"
 			}
 			"03"
 			{
@@ -183,7 +194,7 @@
 			"09"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"blast_damage_int_mult"	"2 3"
+				"blast_damage_int_mult"	"2 4"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"10"
@@ -210,6 +221,17 @@
 			{
 				"var_type"				"FIELD_FLOAT"
 				"blast_vision_duration"	"3.5"
+			}
+			"15"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"aura_heal_reduce"		"-30 -50"
+			}
+			"99"
+			{
+				"var_type" "FIELD_FLOAT"
+				"jungle_bears_damage_multiplier" "1.5 3"
+				"CalculateSpellDamageTooltip" "0"
 			}
 		}
 	}

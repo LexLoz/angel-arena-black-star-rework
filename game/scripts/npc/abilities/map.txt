@@ -131,4 +131,18 @@
 			}
 		}
 	}
+
+	"tower_power"
+	{
+		"MaxLevel" 						"1"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityTextureName"			"spirit_bear_demolish"
+
+		"AbilityValues"
+		{
+			"bonus_damage_pct"			"4"
+			"damage_per_min"			"15"
+			"health_per_min"			"10"
+		}
+	}
 }

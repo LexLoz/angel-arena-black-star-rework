@@ -30,7 +30,7 @@ if IsServer() then
 					end
 					Timers:CreateTimer(self:GetSpecialValueFor("delay"), function()
 						if IsValidEntity(self) and IsValidEntity(caster) then
-							local pfx = ParticleManager:CreateParticle("particles/arena/units/heroes/hero_saber/excalibur.vpcf", PATTACH_CUSTOMORIGIN, caster)
+							local pfx = ParticleManager:CreateParticle("particles/arena/units/heroes/hero_saber/excalibur.vpcf", PATTACH_POINT, caster)
 							ParticleManager:SetParticleControl(pfx, 0, startpoint)
 							ParticleManager:SetParticleControl(pfx, 1, endpoint)
 							ParticleManager:SetParticleControl(pfx, 4, Vector(width))
@@ -49,13 +49,15 @@ if IsServer() then
 								self:CreateVisibilityNode(pos, visionAoE, 2)
 							end
 							local enemies = FindUnitsInLine(caster:GetTeam(), startpoint, endpoint, nil, width, self:GetAbilityTargetTeam(), self:GetAbilityTargetType(), self:GetAbilityTargetFlags())
+
+							--self.NoDamageAmp = true
 							for _,v in ipairs(enemies) do
 								ApplyDamage({
 									victim = v,
 									attacker = caster,
 									damage = damage,
 									damage_type = self:GetAbilityDamageType(),
-									damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+									--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 									ability = self
 								})
 							end

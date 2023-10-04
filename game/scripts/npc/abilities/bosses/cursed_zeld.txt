@@ -25,6 +25,11 @@
 				"var_type"			"FIELD_FLOAT"
 				"clone_model_scale_reduction"	"0.5"
 			}
+			"04"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"max_clones_count"	"20"
+			}
 		}
 	}
 

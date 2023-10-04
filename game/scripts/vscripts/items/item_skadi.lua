@@ -15,7 +15,7 @@ item_skadi_8 = class(item_skadi_baseclass)
 
 modifier_item_skadi_arena = class({
 	IsHidden      = function() return true end,
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMAMENT end,
 	IsPurgable    = function() return false end,
 })
 
@@ -26,7 +26,7 @@ function modifier_item_skadi_arena:DeclareFunctions()
 		MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
 		MODIFIER_PROPERTY_HEALTH_BONUS,
 		MODIFIER_PROPERTY_MANA_BONUS,
-		MODIFIER_EVENT_ON_ATTACK_LANDED
+		MODIFIER_EVENT_ON_ATTACK_LANDED,
 	}
 end
 
@@ -64,9 +64,9 @@ if IsServer() then
 		local attacker = keys.attacker
 		if attacker == self:GetParent() and not attacker:IsIllusion() then
 			local ability = self:GetAbility()
-			if not (target.IsBoss and target:IsBoss()) then
+			--if not (target.IsBoss and target:IsBoss()) then
 				target:AddNewModifier(attacker, ability, "modifier_item_skadi_arena_cold_attack", {duration = ability:GetSpecialValueFor("cold_duration")})
-			end
+			--end
 		end
 	end
 end
@@ -79,8 +79,28 @@ modifier_item_skadi_arena_cold_attack = class({
 function modifier_item_skadi_arena_cold_attack:DeclareFunctions()
 	return {
 		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
-		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE
+		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
+		MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET,
+  		MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE,
+ 		MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE,
+		MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE,
 	}
+end
+
+function modifier_item_skadi_arena_cold_attack:GetModifierSpellLifestealRegenAmplify_Percentage()
+	return self:GetAbility():GetSpecialValueFor("heal_decrease")
+end
+
+function modifier_item_skadi_arena_cold_attack:GetModifierHealAmplify_PercentageTarget()
+	return self:GetAbility():GetSpecialValueFor("heal_decrease")
+end
+
+function modifier_item_skadi_arena_cold_attack:GetModifierLifestealRegenAmplify_Percentage()
+	return self:GetAbility():GetSpecialValueFor("heal_decrease")
+end
+
+function modifier_item_skadi_arena_cold_attack:GetModifierHPRegenAmplify_Percentage()
+	return self:GetAbility():GetSpecialValueFor("heal_decrease")
 end
 
 function modifier_item_skadi_arena_cold_attack:GetModifierAttackSpeedBonus_Constant()

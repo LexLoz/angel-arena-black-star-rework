@@ -8,6 +8,9 @@ function CheckDust(keys)
 	if pctMissing <= 0 then
 		if modifier then
 			modifier:Destroy()
+			Timers:NextTick(function()
+				Attributes:UpdateManaRegen(caster)
+			end)
 		end
 	else
 		if not modifier then
@@ -15,6 +18,9 @@ function CheckDust(keys)
 		end
 		if modifier then
 			modifier:SetStackCount(pctMissing)
+			Timers:NextTick(function()
+				Attributes:UpdateManaRegen(caster)
+			end)
 		end
 	end
 end

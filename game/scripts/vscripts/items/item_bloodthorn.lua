@@ -90,7 +90,13 @@ if IsServer() then
 	function modifier_item_bloodthorn_arena_silence:OnTakeDamage(keys)
 		local parent = self:GetParent()
 		if parent == keys.unit then
-			ParticleManager:SetParticleControl(ParticleManager:CreateParticle("particles/items2_fx/orchid_pop.vpcf", PATTACH_ABSORIGIN_FOLLOW, keys.unit), 1, Vector(keys.damage))
+			if not self.particle_cooldown then
+				ParticleManager:SetParticleControl(ParticleManager:CreateParticle("particles/items2_fx/orchid_pop.vpcf", PATTACH_ABSORIGIN_FOLLOW, keys.unit), 1, Vector(keys.damage))
+				self.particle_cooldown = true
+				Timers:CreateTimer(1, function()
+					self.particle_cooldown = nil
+				end)
+			end
 			self.damage = (self.damage or 0) + keys.damage
 		end
 	end
@@ -109,6 +115,8 @@ if IsServer() then
 		local damage = (self.damage or 0) * ability:GetSpecialValueFor("silence_damage_pct") * 0.01
 		ParticleManager:SetParticleControl(ParticleManager:CreateParticle("particles/items2_fx/orchid_pop.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent), 1, Vector(damage))
 		if damage > 0 then
+
+			ability.NoDamageAmp = true
 			ApplyDamage({
 				attacker = self:GetCaster(),
 				victim = parent,

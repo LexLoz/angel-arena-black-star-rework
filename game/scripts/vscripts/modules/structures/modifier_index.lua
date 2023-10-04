@@ -1,0 +1,7 @@
+ModuleLinkLuaModifier(..., "modifier_arena_healer")
+ModuleLinkLuaModifier(..., "modifier_arena_tower")
+ModuleLinkLuaModifier(..., "modifier_arena_tower_disable_healing", "modifier_arena_tower")
+ModuleLinkLuaModifier(..., "modifier_arena_courier")
+ModuleLinkLuaModifier(..., "modifier_fountain_aura_arena")
+ModuleLinkLuaModifier(..., "modifier_fountain_aura_invulnerability", "modifier_fountain_aura_arena")
+ModuleLinkLuaModifier(..., "modifier_fountain_aura_enemy")

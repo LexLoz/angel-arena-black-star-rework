@@ -1,0 +1,157 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vrfunknown:version{4f75132e-4f5d-493c-958e-3bb4328089ba} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_bShouldHitboxesFallbackToRenderBounds = false
+	m_nMaxParticles = 22
+	m_BoundingBoxMin = 
+	[
+		-40.000000,
+		-150.000000,
+		-10.000000,
+	]
+	m_BoundingBoxMax = 
+	[
+		150.000000,
+		20.000000,
+		180.000000,
+	]
+	m_flConstantLifespan = 20.000000
+	m_ConstantColor = 
+	[
+		0,
+		69,
+		59,
+		255,
+	]
+	m_flConstantRadius = 60.000000
+	m_nBehaviorVersion = 5
+	m_nFirstMultipleOverride_BackwardCompat = 1
+	m_controlPointConfigurations = 
+	[
+		
+		{
+			m_name = "preview"
+			m_drivers = 
+			[
+				
+				{
+					m_iAttachType = "PATTACH_WORLDORIGIN"
+					m_entityName = "self"
+				},
+			]
+		},
+	]
+	m_Emitters = 
+	[
+		
+		{
+			_class = "C_OP_InstantaneousEmitter"
+			m_nParticlesToEmit = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 22.000000
+			}
+		},
+	]
+	m_Initializers = 
+	[
+		
+		{
+			_class = "C_INIT_RingWave"
+			m_bEvenDistribution = true
+			m_flParticlesPerOrbit = 18.000000
+			m_flInitialRadius = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 50.000000
+			}
+			m_flInitialSpeedMin = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 2000.000000
+			}
+			m_flInitialSpeedMax = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 4000.000000
+			}
+		},
+		
+		{
+			_class = "C_INIT_PositionOffset"
+			m_OffsetMax = 
+			[
+				0.000000,
+				0.000000,
+				15.000000,
+			]
+			m_OffsetMin = 
+			[
+				0.000000,
+				0.000000,
+				15.000000,
+			]
+		},
+		
+		{
+			_class = "C_INIT_RemapParticleCountToScalar"
+			m_nFieldOutput = 7
+			m_nInputMax = 5
+			m_nSetMethod = "PARTICLE_SET_SCALE_INITIAL_VALUE"
+		},
+		
+		{
+			_class = "C_INIT_RemapParticleCountToScalar"
+			m_nFieldOutput = 7
+			m_nInputMin = 18
+			m_nInputMax = 20
+			m_flOutputMin = 1.000000
+			m_flOutputMax = 0.000000
+			m_nSetMethod = "PARTICLE_SET_SCALE_INITIAL_VALUE"
+		},
+	]
+	m_Operators = 
+	[
+		
+		{
+			_class = "C_OP_Decay"
+		},
+		
+		{
+			_class = "C_OP_PositionLock"
+		},
+		
+		{
+			_class = "C_OP_InterpolateRadius"
+			m_flEndScale = 0.500000
+			m_flStartScale = 0.500000
+			m_flBias = 0.750000
+		},
+		
+		{
+			_class = "C_OP_FadeOutSimple"
+		},
+	]
+	m_Renderers = 
+	[
+		
+		{
+			_class = "C_OP_RenderRopes"
+			m_nOrientationType = "PARTICLE_ORIENTATION_WORLD_Z_ALIGNED"
+			m_flRadiusScale = 0.500000
+			m_flTextureVWorldSize = 700.000000
+			m_nMaxTesselation = 3
+			m_nMinTesselation = 3
+			m_flAddSelfAmount = 1.000000
+			m_flOverbrightFactor = 5.000000
+			m_flTextureVScrollRate = -250.000000
+			m_vecTexturesInput = 
+			[
+				
+				{
+					m_hTexture = resource:"materials/particle/beam_edge_01b.vtex"
+				},
+			]
+		},
+	]
+}

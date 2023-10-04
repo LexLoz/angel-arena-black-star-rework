@@ -26,6 +26,10 @@ end
 
 if IsServer() then
 	function modifier_saber_avalon:OnCreated()
+		local ability = self:GetAbility()
+		if ability:GetLevel() == 0 then
+			ability:SetLevel(1)
+		end
 		self:StartIntervalThink(0.1)
 	end
 	function modifier_saber_avalon:OnIntervalThink()
@@ -46,6 +50,8 @@ function modifier_saber_avalon_invulnerability:CheckState()
 	return {
 		[MODIFIER_STATE_ATTACK_IMMUNE] = true,
 		[MODIFIER_STATE_MAGIC_IMMUNE] = true,
+		[MODIFIER_STATE_INVULNERABLE] = true,
+        [MODIFIER_STATE_NO_UNIT_COLLISION] = true,
 	}
 end
 

@@ -36,7 +36,7 @@ if IsServer() then
 			unit.GetEnergy and
 			ability:GetToggleState() and
 			unit:GetEnergy() >= (keys.damage * ability:GetAbilitySpecial("blocked_damage_pct") * 0.01) / ability:GetAbilitySpecial("damage_per_energy") then
-			SimpleDamageReflect(unit, keys.attacker, keys.damage * ability:GetSpecialValueFor("reflected_damage_pct_scepter") * 0.01, keys.damage_flags, self, keys.damage_type)
+			SimpleDamageReflect(unit, keys.attacker, keys.damage * ability:GetSpecialValueFor("reflected_damage_pct_scepter") * 0.01, keys.damage_flags, self, DAMAGE_TYPE_PURE)
 		end
 	end
 end

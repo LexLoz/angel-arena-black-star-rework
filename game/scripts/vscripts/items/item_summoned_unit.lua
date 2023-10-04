@@ -8,14 +8,17 @@ function DoSummon(keys)
 		return
 	end
 	local unit
-	if caster.custom_summoned_unit_ability_item_summoned_unit then
-		unit = caster.custom_summoned_unit_ability_item_summoned_unit
+	local player = caster:GetPlayerOwner()
+	if player.custom_summoned_unit_ability_item_summoned_unit then
+		unit = player.custom_summoned_unit_ability_item_summoned_unit
+		--print(unit)
 		unit:RespawnUnit()
 		unit:SetMana(unit:GetMaxMana())
+		unit:SetOwner(caster)
 		FindClearSpaceForUnit(unit, caster:GetAbsOrigin(), true)
 	else
 		unit = CreateUnitByName("npc_arena_item_summoned_unit", caster:GetAbsOrigin(), true, caster, nil, caster:GetTeamNumber())
-		caster.custom_summoned_unit_ability_item_summoned_unit = unit
+		player.custom_summoned_unit_ability_item_summoned_unit = unit
 		unit:SetControllableByPlayer(caster:GetPlayerID(), true)
 		unit:SetOwner(caster)
 		for i = 1, 6 - keys.item_slots do
@@ -64,7 +67,8 @@ end
 function KillSummon(keys)
 	local caster = keys.caster
 	local ability = keys.ability
-	local unit = caster.custom_summoned_unit_ability_item_summoned_unit
+	local player = caster:GetPlayerOwner()
+	local unit = player.custom_summoned_unit_ability_item_summoned_unit
 	if not IsValidEntity(unit) or not unit:IsAlive() then return end
 	unit:ForceKill(false)
 end

@@ -1,0 +1,359 @@
+"DOTAAbilities"
+    {
+	"item_trusty_shovel"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_arcane_ring"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_mysterious_hat"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_unstable_wand"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_pogo_stick"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}						
+	"item_seeds_of_serenity"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_lance_of_pursuit"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_occult_bracelet"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_duelist_gloves"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_broom_handle"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_faded_broach"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_spark_of_courage"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+    "item_ring_of_aquila"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_dragon_scale"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_pupils_gift"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_vambrace"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_grove_bow"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_philosophers_stone"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_bullwhip"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_orb_of_destruction"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_specialists_array"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_eye_of_the_vizier"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_vampire_fangs"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_gossamer_cape"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+    "item_quickening_charm"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_defiant_shell"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_paladin_sword"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_vindicators_axe"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_dandelion_amulet"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_titan_sliver"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_enchanted_quiver"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_elven_tunic"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_cloak_of_flames"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_ceremonial_robe"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_psychic_headband"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_ogre_seal_totem"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+    "item_timeless_relic"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_spell_prism"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_ascetic_cap"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_heavy_blade"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_flicker"		{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_ninja_gear"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_illusionsts_cape"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_fortitude_ring"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_the_leveller"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_minotaur_horn"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_spy_gadget"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_trickster_cloak"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_stormcrafter"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_penta_edged_sword"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_havoc_hammer"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+			
+	"item_princes_knife"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_harpoon"		{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_barricade"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+			
+	"item_horizons_equilibrium"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_mind_breaker"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_martyrs_plate"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+    "item_force_boots"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_seer_stone"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_mirror_shield"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_apex"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_ballista"	{
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_demonicon"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_fallen_sky"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_force_field"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_pirate_hat"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_ex_machina"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_giants_ring"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_vengeances_shadow"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_book_of_shadows"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_manacles_of_power"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_bottomless_chalice"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+	"item_wand_of_sanctitude"
+    {
+		"SecretShop"					"0"
+		"SideShop"						"0"
+	}
+}

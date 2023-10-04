@@ -1,5 +1,4 @@
 ModuleRequire(..., "data")
-ModuleLinkLuaModifier(..., "modifier_arena_wearable")
 
 DynamicWearables = DynamicWearables or {}
 

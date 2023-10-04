@@ -5,11 +5,14 @@ function modifier_neutral_champion:IsPurgable()
 end
 
 function modifier_neutral_champion:DeclareFunctions()
-	return {MODIFIER_PROPERTY_TOOLTIP}
+	return {
+		MODIFIER_PROPERTY_TOOLTIP,
+		--MODIFIER_EVENT_ON_DEATH
+	}
 end
 
 function modifier_neutral_champion:OnTooltip()
-	return self:GetStackCount()
+	return self:GetStackCount() + 1
 end
 
 function modifier_neutral_champion:GetTexture()

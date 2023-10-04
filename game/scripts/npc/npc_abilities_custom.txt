@@ -1,5 +1,6 @@
 #base "abilities/map.txt"
 #base "abilities/bosses.txt"
+#base "abilities/creeps.txt"
 #base "abilities/rewrites.txt"
 #base "abilities/thinkers.txt"
 
@@ -26,8 +27,13 @@
 #base "abilities/heroes/hero_sai.txt"
 #base "abilities/heroes/hero_saitama.txt"
 #base "abilities/heroes/hero_doppelganger.txt"
+#base "abilities/heroes/hero_sans.txt"
+#base "abilities/heroes/hero_fymryn.txt"
+
+#base "abilities/units/waves.txt"
 
 #base "abilities/heroes/hero_pudge.txt"
+#base "abilities/heroes/hero_medusa.txt"
 
 "DOTAAbilities"
 {
@@ -272,6 +278,7 @@
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
 		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_FIRE"
 		"AbilityCastRange"				"400"
 		"MaxLevel"						"7"
 
@@ -280,7 +287,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"health_cost_pct"		"15"
+				"health_cost_pct"		"4"
 			}
 			"02"
 			{
@@ -321,12 +328,19 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"damage"				"5 10 15 20 25 30 35"
+				"CalculateSpellDamageTooltip" "1"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"missing_hp_damage_pct"	"0.5"
-				"CalculateSpellDamageTooltip" "1"
+				"missing_hp_damage_pct"	"0.75"
+				"CalculateSpellDamageTooltip" "0"
+			}
+			"99"
+			{
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"3"
+				"CalculateSpellDamageTooltip"		"0"
 			}
 		}
 

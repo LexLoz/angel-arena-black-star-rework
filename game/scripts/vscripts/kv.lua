@@ -24,6 +24,7 @@ end
 function DropItem(keys)
 	local caster = keys.caster
 	if not caster:IsIllusion() and not caster:IsTempestDouble() then
+		--print(keys.ability)
 		caster:DropItemAtPositionImmediate(keys.ability, caster:GetAbsOrigin())
 	end
 end
@@ -95,7 +96,7 @@ function UpgradeChargeBasedAbility(keys)
 		caster:AddNewModifier(caster, ability, "modifier_charges", {
 			max_count = max_charges,
 			start_count = max_charges,
-			replenish_time = keys.charge_replenish_time
+			replenish_time = keys.charge_replenish_time * caster:GetCooldownReduction()
 		})
 	else
 		for _,v in ipairs(modifiers) do
@@ -115,7 +116,7 @@ function SummonUnit(keys)
 	for i = 1, keys.amount or 1 do
 		local pos = (keys.position or caster):GetAbsOrigin()
 		if keys.summon_random_radius then
-			pos = pos + RandomVector(RandomInt(0, keys.summon_random_radius))
+			pos = RandomPositionAroundPoint(pos, keys.summon_random_radius)
 		end
 		local unit = CreateUnitByName(keys.summoned, pos, true, caster, caster:GetPlayerOwner(), team)
 		if not unit then
@@ -210,8 +211,11 @@ function ApplyModifierWithoutRefresh(keys)
 		if keys.lua == 1 then
 			target:AddNewModifier(keys.caster, keys.ability, keys.modifier, {duration = keys.duration})
 		else
-			keys.ability:ApplyDataDrivenModifier(keys.caster, target, keys.modifier, {duration = keys.duration})
+			keys.ability:ApplyDataDrivenModifier(keys.caster, target, keys.modifier, {duration = keys.duration + (keys.duration - CalculateStatusResistDuration(target, keys.duration))})
 		end
+	end
+	if keys.HasStaticCooldown then
+		keys.ability:StartCooldown(keys.HasStaticCooldown)
 	end
 end
 
@@ -230,16 +234,29 @@ function PercentDamage(keys)
 	local ability = keys.ability
 	local target = keys.target
 	local damage = keys.Damage or 0
+
+	if keys.TriggerSpellAbsorb and target:TriggerSpellAbsorb(ability) then return end
+
 	if ability then
 		if keys.MaxHealthPercent then damage = damage + (keys.MaxHealthPercent*0.01*target:GetMaxHealth()) end
 		if keys.CurrnetHealthPercent then damage = damage + (keys.CurrnetHealthPercent*0.01*target:GetHealth()) end
 		if keys.multiplier then damage = damage * keys.multiplier end
+		
+		local CalculateSpellDamageTooltip = keys.CalculateSpellDamageTooltip == 0 and DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION or DOTA_DAMAGE_FLAG_NONE
+
+		if CalculateSpellDamageTooltip == DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION then
+			CalculateSpellDamageTooltip = DOTA_DAMAGE_FLAG_NONE
+			ability.NoDamageAmp = true
+		else
+			ability.NoDamageAmp = false
+		end
+		
 		ApplyDamage({
 			victim = target,
 			attacker = keys.caster,
 			damage = damage,
 			damage_type = ability:GetAbilityDamageType(),
-			damage_flags = keys.CalculateSpellDamageTooltip == 0 and DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION or DOTA_DAMAGE_FLAG_NONE,
+			damage_flags = CalculateSpellDamageTooltip,
 			ability = ability
 		})
 	end
@@ -265,6 +282,7 @@ function ModifyCreepDamage(keys)
 			(keys.damage * (damage_bonus * 0.01 - 1)) or
 			damage_bonus
 
+		ability.NoDamageAmp = true
 		ApplyDamage({
 			attacker = caster,
 			victim = target,
@@ -273,5 +291,32 @@ function ModifyCreepDamage(keys)
 			damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 			ability = keys.ability
 		})
+	end
+end
+
+function CalculateStatusResistDuration(target, duration)
+	return duration * (1 - target:GetStatusResistance())
+end
+
+function TriggerSpellAbsorb(keys)
+	local caster = keys.caster
+	local target = keys.target
+	local ability = keys.ability
+
+	local modifier = keys.ModifierName
+	local duration = keys.Duration
+
+	if target:TriggerSpellAbsorb(ability) then return end
+
+	if modifier then
+		ability:ApplyDataDrivenModifier(caster, target, modifier, {duration = keys.IgnoreStatusResist and duration or CalculateStatusResistDuration(target, duration)})
+	end
+end
+
+function CheckPhysicalCritReady(keys)
+	local strength_crit = keys.caster:FindModifierByName("modifier_strength_crit")
+	if strength_crit and strength_crit.ready then
+		print('desolator6')
+		keys.ability:ApplyDataDrivenModifier(keys.caster, keys.caster, "modifier_item_desolator6_arena_cutting", nil)
 	end
 end

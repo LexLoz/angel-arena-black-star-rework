@@ -15,8 +15,10 @@ Weather = Weather or class({
 })
 
 function Weather:Init()
-	Weather:Start(Weather:SelectRandomRecipient())
-	Timers:CreateTimer(1/30, Dynamic_Wrap(Weather, "Think"))
+	Weather:Start(Weather:GetCurrentWeather() or Weather:SelectRandomRecipient())
+	if not Weather:GetCurrentWeather() then
+		Timers:CreateTimer(1/30, Dynamic_Wrap(Weather, "Think"))
+	end
 end
 
 function Weather:GetWeatherInfo(new)
@@ -25,12 +27,17 @@ function Weather:GetWeatherInfo(new)
 	end
 end
 
+function Weather:GetCurrentWeather()
+	return Weather.current
+end
+
 function Weather:Start(new)
 	local newWeatherInfo = Weather:GetWeatherInfo(new)
 	if not newWeatherInfo then error("Invalid weather type.") end
 	-- Cleanup
 	local currentWeatherInfo = Weather:GetWeatherInfo(Weather.current)
 	if currentWeatherInfo and currentWeatherInfo.dummyModifier then
+		print(GLOBAL_DUMMY:HasModifier(currentWeatherInfo.dummyModifier))
 		GLOBAL_DUMMY:RemoveModifierByName(currentWeatherInfo.dummyModifier)
 	end
 
@@ -40,7 +47,7 @@ function Weather:Start(new)
 	if newWeatherInfo.OnStart then
 		newWeatherInfo.OnStart()
 	end
-	if newWeatherInfo.dummyModifier then
+	if Options:GetValue("WeatherEffects") and newWeatherInfo.dummyModifier then
 		GLOBAL_DUMMY:AddNewModifier(GLOBAL_DUMMY, nil, newWeatherInfo.dummyModifier, nil)
 	end
 

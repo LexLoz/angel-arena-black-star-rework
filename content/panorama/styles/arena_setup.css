@@ -1,0 +1,473 @@
+.TeamSelect {
+	width: 100%;
+	height: 100%; }
+	.TeamSelect > Panel {
+	width: 100%;
+	height: 100%; }
+	
+	#GCColumn {
+	width: 35%;
+	height: 100%; }
+	
+	#SettingsColumn {
+	width: 21%;
+	height: 100%;
+	margin-left: 14%;
+	horizontal-align: right; }
+	
+	#TeamList {
+	margin-top: 4%;
+	horizontal-align: center;
+	align: center top;
+	flow-children: down; }
+	
+	#StartGameCountdownTimer {
+	width: 96px;
+	margin: 16px;
+	align: right top; }
+	#StartGameCountdownTimer.countdown_inactive #TeamSelectTimer,
+	#StartGameCountdownTimer.countdown_inactive #TimerLabelAutoStart,
+	#StartGameCountdownTimer.countdown_inactive #TimerLabelGameStart {
+	opacity: 0; }
+	#StartGameCountdownTimer.auto_start #TimerLabelAutoStart {
+	visibility: visible; }
+	#StartGameCountdownTimer.forced_start #TimerLabelGameStart {
+	visibility: visible; }
+	
+	#TeamSelectTimer {
+	font-size: 32px;
+	font-weight: bold;
+	color: #fff;
+	horizontal-align: center; }
+	
+	#TimerLabelBox {
+	width: 100%;
+	height: 20px;
+	margin-top: 32px; }
+	
+	#TimerLabelGameStart {
+	font-size: 16px;
+	color: #d6d6d6;
+	text-transform: uppercase;
+	visibility: collapse;
+	transition-duration: .2s;
+	transition-property: opacity;
+	horizontal-align: center; }
+	
+	#TimerLabelAutoStart {
+	font-size: 16px;
+	color: #d6d6d6;
+	text-transform: uppercase;
+	visibility: collapse;
+	transition-duration: .2s;
+	transition-property: opacity;
+	horizontal-align: center; }
+	
+	.TeamSelectTeam {
+	padding-bottom: 12px;
+	background-size: 100% 100%;
+	transition-duration: .1s;
+	transition-property: brightness, saturation;
+	transition-timing-function: linear;
+	horizontal-align: center; }
+	.TeamSelectTeam.Team_2 {
+	width: 675px;
+	padding: 6px 105.5px 16px;
+	background-image: url("file://{images}/custom_game/loading_screen/team_2.png"); }
+	.TeamSelectTeam.Team_3 {
+	width: 675px;
+	padding: 6px 105.5px 16px;
+	background-image: url("file://{images}/custom_game/loading_screen/team_3.png"); }
+	.TeamSelectTeam.Team_6 {
+	width: 480px;
+	padding: 6px 8px 16px;
+	background-color: rgba(201, 123, 191, 0.1);
+	border-radius: 5px; }
+	.TeamSelectTeam.Team_7 {
+	width: 480px;
+	padding: 6px 8px 16px;
+	background-color: rgba(242, 177, 177, 0.1);
+	border-radius: 5px; }
+	.TeamSelectTeam.potential_drop_target {
+	brightness: 2;
+	saturation: 1.1; }
+	.TeamSelectTeam.team_is_full #JoinTeamLabel, .TeamSelectTeam.local_player_on_this_team #JoinTeamLabel, .TeamSelectTeam.local_player_is_ready #JoinTeamLabel {
+	opacity: 0; }
+	
+	#TeamGroup {
+	width: 100%;
+	padding: 4px;
+	background-color: transparent;
+	flow-children: down; }
+	
+	#TeamHeader {
+	width: 100%;
+	flow-children: right; }
+	
+	#TeamNameLabel {
+	margin-top: 1px;
+	margin-left: 1px;
+	font-size: 20px;
+	color: #fff;
+	text-shadow: 2px 2px 2px #000;
+	text-transform: uppercase;
+	white-space: nowrap;
+	vertical-align: top; }
+	
+	#JoinTeamLabel {
+	margin-top: 4px;
+	font-size: 20px;
+	letter-spacing: 2px;
+	color: #444;
+	text-transform: uppercase;
+	vertical-align: center;
+	transition-duration: .2s;
+	transition-property: color;
+	horizontal-align: right; }
+	
+	#TeamPlayerDivider {
+	width: 100%;
+	height: 1px;
+	margin: 2px;
+	background-color: rgba(73, 82, 85, 0.33333); }
+	
+	#PlayerList {
+	width: 100%;
+	flow-children: down; }
+	
+	.player_slot {
+	width: 100%;
+	height: 32px;
+	margin-top: 2px;
+	flow-children: right; }
+	
+	.PlayerSlot {
+	width: 100%;
+	height: 32px;
+	transition-duration: .2s;
+	transition-property: brightness, saturation, background-color;
+	transition-timing-function: linear;
+	flow-children: right; }
+	.PlayerSlot:hover {
+	background-color: rgba(0, 0, 0, 0.15); }
+	.PlayerSlot.player_dragged {
+	background-color: rgba(0, 0, 0, 0.45);
+	brightness: .3; }
+	.PlayerSlot.potential_drop_target {
+	background-color: rgba(255, 255, 255, 0.05);
+	saturation: 1.5; }
+	.PlayerSlot.player_has_host_privileges #PlayerIsHostPanel {
+	visibility: visible; }
+	
+	DOTAAvatarImage {
+	width: 32px;
+	height: 32px;
+	vertical-align: middle;
+	background-color: #000; }
+	
+	#PlayerIsHostPanel {
+	width: 24px;
+	height: 24px;
+	margin-top: 2px;
+	margin-right: 4px;
+	margin-left: 4px;
+	overflow: noclip;
+	background-image: url("s2r://panorama/images/icon_star_png.vtex");
+	background-repeat: no-repeat;
+	background-size: contain;
+	visibility: collapse; }
+	
+	#PlayerName {
+	width: fill-parent-flow(1);
+	margin: 3px;
+	color: #fff;
+	text-shadow: 2px 2px 2px #000;
+	white-space: nowrap;
+	vertical-align: middle; }
+	
+	#PlayerLeaveTeamButton {
+	width: 24px;
+	height: 24px;
+	margin: 4px;
+	background-image: url("s2r://panorama/images/control_icons/x_close_png.vtex");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 24px 24px;
+	visibility: collapse;
+	wash-color: rgba(170, 0, 0, 0.93333); }
+	#PlayerLeaveTeamButton:hover {
+	wash-color: #f00; }
+	
+	#UnassignedPlayerPanel {
+	width: 100%;
+	margin: 2px;
+	flow-children: down; }
+	
+	#UnassignedPlayersButton {
+	width: 100%;
+	min-height: 50%;
+	padding: 2px 17px;
+	background-image: url("s2r://panorama/images/custom_game/loading_screen/unassigned_png.vtex");
+	background-size: 100% 100%;
+	border-bottom: 1px solid rgba(64, 75, 74, 0.06667);
+	transition-duration: .1s;
+	transition-property: brightness, saturation;
+	transition-timing-function: linear;
+	flow-children: down; }
+	#UnassignedPlayersButton.potential_drop_target {
+	brightness: 2;
+	saturation: 1.1; }
+	#UnassignedPlayersButton:hover #UnassignedPlayersHeader Label {
+	font-size: 20px;
+	letter-spacing: 1px;
+	color: #fff; }
+	
+	#UnassignedPlayersHeader {
+	margin-top: 16px;
+	margin-left: 16px;
+	horizontal-align: left; }
+	#UnassignedPlayersHeader Label {
+	font-size: 20px;
+	letter-spacing: 1px;
+	color: #c8c8c8;
+	text-transform: uppercase;
+	transition-duration: .2s;
+	transition-property: color; }
+	
+	#UnassignedPlayersDivider {
+	width: 100%;
+	height: 2px;
+	margin-right: 4px;
+	margin-left: 2px;
+	background-color: rgba(73, 82, 85, 0.33333); }
+	
+	#UnassignedPlayersContainer {
+	width: 100%;
+	margin: 16px;
+	overflow: clip scroll;
+	flow-children: down; }
+	
+	#AutoAssignButton {
+	height: 32px;
+	margin-top: 8px;
+	margin-right: 8px;
+	vertical-align: top;
+	visibility: collapse;
+	horizontal-align: left;
+	flow-children: right; }
+	.player_has_host_privileges #AutoAssignButton {
+	visibility: visible; }
+	#AutoAssignButton Label {
+	margin-top: 2px;
+	margin-left: 5px;
+	font-size: 24px;
+	color: #6e6f6f;
+	text-transform: uppercase;
+	vertical-align: center; }
+	#AutoAssignButton Image {
+	width: 24px;
+	height: 24px;
+	vertical-align: center;
+	wash-color: #888; }
+	
+	.unassigned_players #AutoAssignButton:hover Label {
+	color: #fff; }
+	
+	.unassigned_players #AutoAssignButton:hover Image {
+	wash-color: #fff; }
+	
+	.unassigned_players #AutoAssignButton:active {
+	sound: 'ui_team_select_auto_assign'; }
+	
+	.unassigned_players #LockAndStartButton {
+	background-color: gradient(linear, 0 0, 0 100%, from(#14161a), to(#23262b));
+	border-top: 1px solid rgba(255, 255, 255, 0.01176);
+	border-left: 1px solid rgba(255, 255, 255, 0.01176);
+	box-shadow: fill rgba(0, 0, 0, 0) 0 0 0 0; }
+	.unassigned_players #LockAndStartButton Label {
+	opacity: .1; }
+	
+	#ShuffleTeamAssignmentButton {
+	height: 32px;
+	margin-top: 8px;
+	margin-left: 6px;
+	visibility: collapse;
+	flow-children: right;
+	horizontal-align: left; }
+	.player_has_host_privileges #ShuffleTeamAssignmentButton {
+	visibility: visible; }
+	#ShuffleTeamAssignmentButton Label {
+	margin-top: 2px;
+	margin-right: 5px;
+	font-size: 24px;
+	color: #6e6f6f;
+	text-transform: uppercase;
+	vertical-align: center; }
+	#ShuffleTeamAssignmentButton:hover Label {
+	color: #fff; }
+	#ShuffleTeamAssignmentButton:hover Image {
+	wash-color: #fff; }
+	#ShuffleTeamAssignmentButton:active {
+	sound: 'ui_team_select_shuffle'; }
+	#ShuffleTeamAssignmentButton Image {
+	width: 24px;
+	height: 24px;
+	vertical-align: center;
+	wash-color: #888; }
+	
+	#LockAndStartButton {
+	width: 100%;
+	margin: 0;
+	margin-top: 2px;
+	background-color: gradient(linear, 0 0, 0 100%, from(rgba(45, 72, 129, 0.8)), to(rgba(72, 108, 169, 0.8)));
+	border-top: 1px solid rgba(255, 255, 255, 0.01176);
+	border-left: 1px solid rgba(255, 255, 255, 0.01176);
+	visibility: collapse;
+	box-shadow: fill rgba(72, 108, 169, 0.13333) -4px -4px 8px 8px;
+	horizontal-align: right; }
+	.player_has_host_privileges #LockAndStartButton {
+	visibility: visible; }
+	#LockAndStartButton Label {
+	transition-duration: .2s;
+	transition-property: opacity; }
+	
+	#CancelAndUnlockButton {
+	width: 100%;
+	margin: 0;
+	margin-top: 2px;
+	background-color: gradient(linear, 0 0, 0 100%, from(#2c1b1b), to(#482e2f));
+	border-top: 1px solid #3d2929;
+	border-right: 1px solid #372121;
+	border-bottom: 1px solid #2e1f21;
+	border-left: 1px solid #372121;
+	visibility: collapse;
+	box-shadow: fill rgba(85, 46, 47, 0) -4px -4px 8px 9px;
+	horizontal-align: right; }
+	.player_has_host_privileges.teams_locked #CancelAndUnlockButton {
+	visibility: visible; }
+	#CancelAndUnlockButton:hover {
+	background-color: gradient(linear, 0 0, 0 100%, from(#492121), to(#9d4c4f));
+	border-top: 1px solid #7d4141;
+	border-right: 1px solid #7a3535;
+	border-bottom: 1px solid #2e1f21;
+	border-left: 1px solid #7a3535;
+	box-shadow: fill rgba(85, 46, 47, 0.4) -4px -4px 8px 9px; }
+	#CancelAndUnlockButton:active {
+	sound: 'ui_team_select_cancel_and_lock'; }
+	
+	.teams_unlocked .TeamSelectTeam:hover #TeamBackgroundGradient {
+	visibility: collapse; }
+	
+	.teams_unlocked .TeamSelectTeam:hover #TeamBackgroundGradientHighlight {
+	visibility: visible; }
+	
+	.teams_unlocked .TeamSelectTeam:hover #JoinTeamLabel {
+	color: #fff; }
+	
+	.teams_unlocked .TeamSelectTeam .player_is_local #PlayerLeaveTeamButton {
+	visibility: visible; }
+	
+	.slot_empty DOTAAvatarImage {
+	background-image: url("s2r://panorama/images/custom_game/empty_slot_avatar_png.vtex");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: 32px 32px;
+	opacity: 1; }
+	
+	.teams_locked #LockAndStartButton {
+	visibility: collapse; }
+	
+	.no_unassigned_players #LockAndStartButton:hover {
+	background-color: gradient(linear, 0 0, 0 100%, from(rgba(45, 72, 129, 0.8)), to(#84acff));
+	box-shadow: fill rgba(72, 108, 169, 0.4) -4px -4px 18px 8px; }
+	
+	.no_unassigned_players #LockAndStartButton:active {
+	sound: "ui_team_select_lock_and_start"; }
+	
+	#PartyWarningPanel {
+	align: center top;
+	text-align: center;
+	margin-top: 50px;
+	font-size: 24px;
+	font-weight: bold;
+	background-color: rgba(34, 34, 34, 0.8);
+	padding: 8px; }
+	
+	#LoadingPanel {
+	width: 100%;
+	margin-top: -125px;
+	align: center center;
+	flow-children: down; }
+	#LoadingPanel .Spinner {
+	width: 80px;
+	height: 80px;
+	horizontal-align: center; }
+	#LoadingPanel #LoadingMessage {
+	width: 100%;
+	text-align: center;
+	margin-top: 8px;
+	font-size: 30px; }
+	
+	#ErrorPanel {
+	width: 100%;
+	margin-top: -110px;
+	visibility: collapse;
+	align: center center;
+	flow-children: down; }
+	#ErrorPanel > Label {
+	width: 100%;
+	text-align: center;
+	font-size: 30px;
+	color: #fff;
+	text-overflow: shrink; }
+	#ErrorPanel #ErrorIcon {
+	width: 70px;
+	height: 70px;
+	margin-bottom: 10px;
+	background-image: url("s2r://panorama/images/status_icons/exclamation_psd.vtex");
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	background-size: contain;
+	horizontal-align: center;
+	wash-color: #f99; }
+	#ErrorPanel #ErrorMessage {
+	max-height: 300px; }
+	
+	.PlayButton {
+	width: 330px;
+	max-height: 49px;
+	margin-bottom: 21px;
+	margin-right: 58px;
+	padding: 4px 12px 4px 12px;
+	background-color: gradient(linear, 0% 0%, 0% 100%, from(#5a615e), to(#879695));
+	background-image: url("s2r://panorama/images/backgrounds/background_play_button_2x_png.vtex");
+	background-size: 328px 50px;
+	box-shadow: fill #002a66 -4px -4px 8px 9px;
+	border-top: 1px solid white;
+	border-right: 1px solid black;
+	border-left: 1px solid white;
+	border-bottom: 1px solid black;
+	opacity: 1;
+	transition-property: box-shadow, background-color, opacity, transform;
+	transition-delay: 0.0s;
+	transition-duration: 0.2s;
+	transition-timing-function: ease-in-out; }
+	.PlayButton:hover {
+	background-color: gradient(linear, 0% 0%, 0% 100%, from(#5A615E), to(#b7c6c5));
+	box-shadow: fill #414f4d -4px -4px 8px 8px; }
+	.PlayButton:active {
+	background-color: gradient(linear, 0% 0%, 0% 100%, from(#5A615E), to(#ffffff)); }
+	.PlayButton Label {
+	margin-top: 2px;
+	horizontal-align: center;
+	font-size: 28px;
+	font-weight: bold;
+	color: white;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	text-align: center;
+	height: 40px;
+	text-overflow: shrink;
+	transition-property: color;
+	transition-delay: 0.0s;
+	transition-duration: 0.2s; }

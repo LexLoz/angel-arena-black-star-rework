@@ -17,14 +17,14 @@
 		"AbilityCastRange"				"1000"
 		"AbilityCastPoint"				"0.3 0.3 0.3 0.3 0.3 0.2 0.1"
 
-		"AbilityCooldown"				"20"
+		"AbilityCooldown"				"12"
 
 		"AbilityDamage"					"600 1000 1400 1800 2200 2600 3000"
 
 		"AbilityManaCost"				"100 150 200 250 300 350 400"
 		"AOERadius"						"%radius"
 
-		"AbilityUnitDamageSubType"	"DAMAGE_SUBTYPE_ICE"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ICE"
 
 		"AbilitySpecial"
 		{
@@ -36,7 +36,7 @@
 			"02"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"magic_missile_stun"	"2.5"
+				"magic_missile_stun"	"3.0"
 			}
 			"03"
 			{
@@ -48,6 +48,7 @@
 		"precache"
 		{
 			"particle"			"particles/arena/units/heroes/hero_freya/strike_the_ice.vpcf"
+			"soundfile"			""
 		}
 
 		"OnSpellStart"
@@ -92,22 +93,21 @@
 				"Target" 		"TARGET"
 			}
 
-			"ApplyModifier"
-			{
+			"RunScript"
+            {
+                "ScriptFile"    "kv.lua"
+                "Function"      "TriggerSpellAbsorb"
 				"ModifierName"	"modifier_freya_strike_the_ice"
-				"Target"
-				{
-					"Center" "TARGET"
-					"Flags" "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
-				}
 				"Duration"		"%magic_missile_stun"
-			}
+            }
 
-			"Damage"
+			"RunScript"
 			{
-				"Target"		"TARGET"
-				"Type"			"DAMAGE_TYPE_MAGICAL"
+				"ScriptFile"	"kv.lua"
+				"Function"		"PercentDamage"
 				"Damage"		"%AbilityDamage"
+				"CalculateSpellDamageTooltip"	"0"
+				"TriggerSpellAbsorb" "1"
 			}
 		}
 
@@ -156,9 +156,10 @@
 		"AbilityCastRange"				"600"
 		"AbilityCastPoint"				"0.3 0.3 0.3 0.3 0.3 0.2 0.1"
 
-		"AbilityCooldown"				"22"
+		"AbilityCooldown"				"12"
 
 		"AbilityManaCost"				"115 125 140 150 160 170 180"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ICE"
 
 
 		// Special
@@ -168,12 +169,12 @@
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"duration"			"1"
+				"duration"			"3"
 			}
 			"02"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_per_second_pct"		"5"
+				"damage_per_second_pct"		"3"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"03"
@@ -199,21 +200,14 @@
 
 		"OnSpellStart"
 		{
-			"Stun"
-			{
-				"Target"			"TARGET"
-				"Duration"			"%stun_duration"
-			}
 
-			"ApplyModifier"
-			{
+			"RunScript"
+            {
+                "ScriptFile"    "kv.lua"
+                "Function"      "TriggerSpellAbsorb"
 				"ModifierName"	"modifier_freya_ice_cage"
-				"Target"
-				{
-				"Center" "TARGET"
-				"Flags" "DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES"
-				}
-			}
+				"Duration"		"%duration"
+            }
 
 			"FireSound"
 			{
@@ -292,7 +286,7 @@
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_PURE"
 		"AbilityCastPoint"				"0.2 0.2 0.2 0.2 0.2 0.15 0.1"
 		"AbilityCastAnimation"			"ACT_DOTA_CAST_ABILITY_3"
-		"AbilityCooldown"				"30.0"
+		"AbilityCooldown"				"15.0"
 		"AbilityManaCost"				"150"
 
 		"AbilitySpecial"
@@ -311,7 +305,7 @@
 			"03"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"duration"			"2"
+				"duration"			"5"
 			}
 		}
 	}
@@ -331,7 +325,7 @@
 		"MaxLevel"						"7"
 		"AbilityCastPoint"				"0.6 0.5 0.4 0.3 0.2 0.1 0.0"
 		"AbilityCastAnimation"			"ACT_DOTA_CAST_ABILITY_4"
-		"AbilityCooldown"				"90.0 80.0 70.0 60.0 50.0 40.0 30.0"
+		"AbilityCooldown"				"30.0"
 		"AbilityManaCost"				"80 100 120 140 160 180 200"
 
 		"AbilitySpecial"

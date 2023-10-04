@@ -8,7 +8,6 @@ if CustomAbilities == nil then
 	}
 end
 
-ModuleRequire(..., "data")
 ModuleRequire(..., "ability_shop")
 ModuleRequire(..., "random_omg")
 

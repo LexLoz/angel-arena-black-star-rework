@@ -5,30 +5,6 @@ if not CustomTalents then
 	CustomTalents.ModifierApplier = CreateItem("item_talent_modifier_applier", nil, nil)
 end
 
-local modifiers = {
-	"damage",
-	"evasion",
-	"movespeed_pct",
-	"lifesteal",
-	"creep_gold",
-	"health",
-	"health_regen",
-	"armor",
-	"magic_resistance_pct",
-	"vision_day",
-	"vision_night",
-	"cooldown_reduction_pct",
-	"true_strike",
-	"mana",
-	"mana_regen",
-	"lifesteal",
-	--rune multiplier
-}
-
-for _,v in pairs(modifiers) do
-	ModuleLinkLuaModifier(..., "modifier_talent_" .. v, "modifiers/modifier_talent_" .. v)
-end
-
 function CustomTalents:Init()
 	CustomGameEventManager:RegisterListener("custom_talents_upgrade", function(_, keys)
 		local hero = PlayerResource:GetSelectedHeroEntity(keys.PlayerID)
@@ -40,13 +16,23 @@ function CustomTalents:Init()
 		if not talentList[t.group] then talentList[t.group] = {} end
 		t.name = k
 		t.effect = nil
-		if t.special_values then
-			for key, values in pairs(t.special_values) do
-				t.special_values[key] = {}
-				for _,value in ipairs(values) do
-					table.insert(t.special_values[key], tostring(value))
+		if t.special_values and type(t.special_values) == "table" then
+			for key,value in pairs(t.special_values) do
+				if type(value) == "table" then
+					t.special_values[key] = {}
+					for _,value2 in ipairs(value) do
+						table.insert(t.special_values[key], tostring(value2))
+					end
+				else
+					t.special_values[key] = tostring(value)
+				--[[elseif type(value) == "string" then
+					t.special_values[key] = value
+				else
+					t.special_values[key] = 0]]
 				end
 			end
+		--elseif t.special_values then
+			--t.special_values = {value = t.special_values}
 		end
 		table.insert(talentList[t.group], t)
 	end
@@ -68,7 +54,7 @@ function CustomTalents:Talent_GetCost(name)
 	return CUSTOM_TALENTS_DATA[name].cost
 end
 
-function CustomTalents:Talent_GetSpecialValues(name, property)
+function CustomTalents:Talent_GetSpecialValue(name, property)
 	return CUSTOM_TALENTS_DATA[name].special_values[property]
 end
 
@@ -118,8 +104,10 @@ end
 
 function CDOTA_BaseNPC:GetTalentSpecial(name, property)
 	if CustomTalents:Talent_Verify(name) and self:HasTalent(name) then
-		local values = CustomTalents:Talent_GetSpecialValues(name, property)
-		local t = values[self.talents[name].level] or values[#values]
+		local t = CustomTalents:Talent_GetSpecialValue(name, property)
+		if type(t) == "table" then
+			t = t[self.talents[name].level] or t[#t]
+		end
 		local effect = CUSTOM_TALENTS_DATA[name].effect
 		if effect and effect.special_values_multiplier then
 			t = t * effect.special_values_multiplier
@@ -207,6 +195,7 @@ function CDOTA_BaseNPC:ApplyTalentEffects(name)
 			if type(k) == "string" then
 				if type(v) == "string" then
 					v = self:GetTalentSpecial(name, v)
+					--print(v)
 				end
 				if effect.use_modifier_applier then
 					CustomTalents.ModifierApplier:ApplyDataDrivenModifier(self, self, k, nil)
@@ -257,6 +246,7 @@ function CDOTA_BaseNPC:ApplyTalentEffects(name)
 		end
 	end
 	if effect.calculate_stat_bonus and self.CalculateStatBonus then
-		self:CalculateStatBonus()
+		self:CalculateStatBonus(true)
 	end
+	Attributes:UpdateAll(self)
 end

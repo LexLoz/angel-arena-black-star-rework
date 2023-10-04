@@ -10,11 +10,12 @@ function StartAbility(keys)
 end
 
 function StopAbility(keys)
+	--print("stop cast")
 	local caster = keys.caster
-	local ability = keys.ability
+	local ability = caster:FindAbilityByName("zen_gehraz_mystic_twister")
 	ParticleManager:DestroyParticle(ability.thinker_dummy.particle, false)
 	ability.thinker_dummy:StopSound("Arena.Hero_ZenGehraz.MysticTwister")
 	ability.thinker_dummy:ForceKill(false)
-	UTIL_Remove(ability.thinker_dummy)
+	UTIL_RemoveImmediate(ability.thinker_dummy)
 	ability.thinker_dummy = nil
 end

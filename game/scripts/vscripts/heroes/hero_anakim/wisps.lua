@@ -28,6 +28,7 @@ if IsServer() then
 		local target = keys.target
 		local damage = keys.original_damage
 
+		ability.NoDamageAmp = true
 		local dt = {
 			victim = target,
 			attacker = attacker,

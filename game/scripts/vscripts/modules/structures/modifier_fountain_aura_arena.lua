@@ -16,20 +16,41 @@ function modifier_fountain_aura_arena:DeclareFunctions()
 end
 
 if IsServer() then
-	function modifier_fountain_aura_arena:OnCreated()
+	function modifier_fountain_aura_arena:OnCreated(keys)
+		if keys.not_on_fountain then self.not_on_fountain = true end
+		local parent = self:GetParent()
 		self:StartIntervalThink(0.25)
 		self:OnIntervalThink()
+		if self:GetParent():IsHero() then
+			--Attributes:UpdateAll(parent)
+
+			local stamina = parent:FindModifierByName("modifier_stamina")
+
+			if stamina then
+				stamina.stamina_regen_fountain_bonus = stamina.stamina_regen * 3
+			end
+		end
 	end
 
 	function modifier_fountain_aura_arena:OnDestroy()
+		local parent = self:GetParent()
 		self:GetParent():RemoveModifierByName("modifier_fountain_aura_invulnerability")
+		if parent:IsHero() then
+			--Attributes:UpdateAll(parent, 1)
+
+			local stamina = parent:FindModifierByName("modifier_stamina")
+
+			if stamina then
+				stamina.stamina_regen_fountain_bonus = 0
+			end
+		end
 	end
 
 	function modifier_fountain_aura_arena:OnIntervalThink()
 		local parent = self:GetParent()
-		while parent:HasModifier("modifier_saber_mana_burst_active") do
-			parent:RemoveModifierByName("modifier_saber_mana_burst_active")
-		end
+		--while parent:HasModifier("modifier_saber_mana_burst_active") do
+			--parent:RemoveModifierByName("modifier_saber_mana_burst_active")
+		--end
 
 		local isBossAlive = Bosses:IsAlive("cursed_zeld")
 		local hasMod = parent:HasModifier("modifier_fountain_aura_invulnerability")
@@ -42,7 +63,7 @@ if IsServer() then
 		if parent:IsCourier() then return end
 		for i = 0, 11 do
 			local item = parent:GetItemInSlot(i)
-			if item and item:GetAbilityName() == "item_bottle_arena" then
+			if item and item:GetAbilityName() == "item_bottle_arena" and not self.not_on_fountain then
 				item:SetCurrentCharges(3)
 			end
 		end
@@ -56,6 +77,12 @@ modifier_fountain_aura_invulnerability = class({
 	GetAbsoluteNoDamagePure =     function() return 1 end,
 	GetTexture =                  function() return "modifier_invulnerable" end,
 })
+
+function modifier_fountain_aura_invulnerability:CheckState()
+	return {
+        --[MODIFIER_STATE_INVULNERABLE] = true
+	}
+end
 
 function modifier_fountain_aura_invulnerability:DeclareFunctions()
 	return {

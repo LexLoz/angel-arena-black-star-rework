@@ -8,7 +8,7 @@ if IsServer() then
 		local crit =
 			self:GetSpecialValueFor("base_crit_pct") +
 			(self:GetSpecialValueFor("stat_to_crit_pct") * caster:GetPrimaryStatValue() * 0.01)
-		modifier:SetStackCount(crit)
+		modifier:SetStackCount(math.min(1200, crit))
 		caster:EmitSound("Arena.Hero_Freya.FrozenStrike.Charge")
 	end
 end
@@ -66,7 +66,7 @@ if IsServer() then
 	end
 
 	function modifier_freya_frozen_strike_crit:GetModifierPreAttack_CriticalStrike()
-		return self:GetStackCount()
+		return (self:GetStackCount())
 	end
 
 	function modifier_freya_frozen_strike_crit:CheckState()

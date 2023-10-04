@@ -21,7 +21,7 @@ if IsServer() then
 	function modifier_arena_rune_spikes:OnTakeDamage(keys)
 		local unit = self:GetParent()
 		if unit == keys.unit and unit:IsAlive() then
-			SimpleDamageReflect(unit, keys.attacker, keys.original_damage * self:GetStackCount() * 0.01, keys.damage_flags, self:GetAbility(), keys.damage_type)
+			SimpleDamageReflect(unit, keys.attacker, keys.damage * self:GetStackCount() * 0.01, keys.damage_flags, self:GetAbility(), DAMAGE_TYPE_PURE)
 		end
 	end
 else

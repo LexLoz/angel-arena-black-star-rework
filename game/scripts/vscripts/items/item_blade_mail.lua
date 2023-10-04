@@ -42,6 +42,7 @@ end
 
 
 modifier_item_blade_mail_arena_active = class({
+	IsPurgable    = 		function() return false end,
 	GetEffectName = function() return "particles/items_fx/blademail.vpcf" end,
 	GetEffectAttachType = function() return PATTACH_ABSORIGIN end,
 	GetStatusEffectName = function() return "particles/status_fx/status_effect_blademail.vpcf" end,
@@ -55,7 +56,7 @@ if IsServer() then
 	function modifier_item_blade_mail_arena_active:OnTakeDamage(keys)
 		local unit = self:GetParent()
 		local ability = self:GetAbility()
-		if unit == keys.unit and SimpleDamageReflect(unit, keys.attacker, keys.original_damage * ability:GetSpecialValueFor("reflected_damage_pct") * 0.01, keys.damage_flags, ability, keys.damage_type) then
+		if unit == keys.unit and SimpleDamageReflect(unit, keys.attacker, keys.damage * ability:GetSpecialValueFor("reflected_damage_pct") * 0.01, DAMAGE_TYPE_PURE, ability, keys.damage_type) then
 			keys.attacker:EmitSound("DOTA_Item.BladeMail.Damage")
 		end
 	end

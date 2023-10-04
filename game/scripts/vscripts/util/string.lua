@@ -9,3 +9,7 @@ function string.split(inputstr, sep)
 	end
 	return t
 end
+
+function string.endswith(string, ending)
+    return ending == "" or string.sub(string, -#ending) == ending
+end

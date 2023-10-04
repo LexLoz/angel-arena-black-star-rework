@@ -12,9 +12,11 @@ function AddStacks(ability, caster, unit, modifier, stack_amount, refresh)
 			ability:ApplyDataDrivenModifier(caster, unit, modifier, {})
 		end
 		unit:SetModifierStackCount(modifier, ability, unit:GetModifierStackCount(modifier, ability) + stack_amount)
+		--return unit:GetModifierStackCount(modifier, ability)
 	else
 		ability:ApplyDataDrivenModifier(caster, unit, modifier, {})
 		unit:SetModifierStackCount(modifier, ability, stack_amount)
+		--return unit:GetModifierStackCount(modifier, ability)
 	end
 	return unit:FindModifierByNameAndCaster(modifier, caster)
 end

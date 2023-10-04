@@ -53,10 +53,7 @@
 				"ModifierName"	"modifier_zen_gehraz_divine_intervention"
 				"Target" 		"TARGET"
 			}
-		}
 
-		"OnChannelInterrupted"
-		{
 			"RunScript"
 			{
 				"ScriptFile"	"heroes/hero_zen_gehraz/superposition.lua"
@@ -167,6 +164,12 @@
 				"var_type"			"FIELD_FLOAT"
 				"damage_interval"	"0.1"
 			}
+			"99"
+			{
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"3.0"
+				"CalculateSpellDamageTooltip"		"0"
+			}
 		}
 
 		"precache"
@@ -198,10 +201,7 @@
 				"ScriptFile"	"heroes/hero_zen_gehraz/mystic_twister.lua"
 				"Function"		"StopAbility"
 			}
-		}
 
-		"OnChannelInterrupted"
-		{
 			"RunScript"
 			{
 				"ScriptFile"	"heroes/hero_zen_gehraz/superposition.lua"
@@ -313,10 +313,7 @@
 				"ModifierName"	"modifier_zen_gehraz_vow_of_silence"
 				"Target" 		"CASTER"
 			}
-		}
 
-		"OnChannelInterrupted"
-		{
 			"RunScript"
 			{
 				"ScriptFile"	"heroes/hero_zen_gehraz/superposition.lua"
@@ -393,8 +390,11 @@
 		"AbilityType"					"DOTA_ABILITY_TYPE_ULTIMATE"
 		"AbilityCastPoint"				"0"
 		"AbilityManaCost"				"125"
-		"HasScepterUpgrade"				"1"
+		"HasScepterUpgrade"				"0"
 		"LevelsBetweenUpgrades"			"14"
+		"AbilityCharges"				"1 2 3"
+		"AbilityChargeRestoreTime"		"10.0"
+		
 
 		"AbilitySpecial"
 		{
@@ -445,26 +445,26 @@
 			}
 		}
 
-		"Modifiers"
-		{
-			"modifier_zen_gehraz_superposition"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
+		//"Modifiers"
+		//{
+		//	"modifier_zen_gehraz_superposition"
+		//	{
+		//		"Passive"			"1"
+		//		"IsHidden"			"1"
 
-				"ThinkInterval"  "0.2"
-				"OnIntervalThink"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"kv.lua"
-						"Function"		"UpgradeChargeBasedAbility"
-						"max_charges"	"%max_charges"
-						"max_charges_scepter"	"%max_charges_scepter"
-						"charge_replenish_time"	"%charge_replenish_time"
-					}
-				}
-			}
-		}
+		//		"ThinkInterval"  "0.2"
+		//		"OnIntervalThink"
+		//		{
+		//			"RunScript"
+		//			{
+		//				"ScriptFile"	"kv.lua"
+		//				"Function"		"UpgradeChargeBasedAbility"
+		//				"max_charges"	"%max_charges"
+		//				"max_charges_scepter"	"%max_charges_scepter"
+		//				"charge_replenish_time"	"%charge_replenish_time"
+		//			}
+		//		}
+		//	}
+		//}
 	}
 }

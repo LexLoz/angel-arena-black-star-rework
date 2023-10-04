@@ -37,17 +37,16 @@ function CustomAbilities:OnAbilityBuy(PlayerID, abilityname)
 			hero:SetAbilityPoints(hero:GetAbilityPoints() - cost)
 			hero:RemoveAbility("ability_empty")
 			GameMode:PrecacheUnitQueueed(abilityInfo.hero)
-
-			local a = self:AddNewAbility(abilityname)
+			local a, linked = hero:AddNewAbility(abilityname)
 			a:SetLevel(1)
-			for _,link in ipairs(LINKED_ABILITIES[abilityname] or {}) do
-				local linkedAbility = self:AddNewAbility(link)
-				if linkedAbility:GetAbilityName() == "phoenix_launch_fire_spirit" then
-					linkedAbility:SetLevel(1)
+			if linked then
+				for _,v in ipairs(linked) do
+					if v:GetAbilityName() == "phoenix_launch_fire_spirit" then
+						v:SetLevel(1)
+					end
 				end
 			end
-
-			hero:CalculateStatBonus()
+			hero:CalculateStatBonus(true)
 			CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(PlayerID), "dota_ability_changed", {})
 		end
 	end
@@ -69,8 +68,11 @@ function CustomAbilities:OnAbilitySell(data)
 			Gold:RemoveGold(data.PlayerID, gold)
 			hero:SetAbilityPoints(hero:GetAbilityPoints() + cost*abilityh:GetLevel())
 			RemoveAbilityWithModifiers(hero, abilityh)
-			for _,link in ipairs(LINKED_ABILITIES[data.ability] or {}) do
-				hero:RemoveAbility(link)
+			local link = LINKED_ABILITIES[data.ability]
+			if link then
+				for _,v in ipairs(link) do
+					hero:RemoveAbility(v)
+				end
 			end
 			if data.ability == "puck_illusory_orb" then
 				local etherealJaunt = hero:FindAbilityByName("puck_ethereal_jaunt")

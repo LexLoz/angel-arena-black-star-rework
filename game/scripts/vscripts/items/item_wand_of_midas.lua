@@ -19,7 +19,10 @@ if IsServer() then
 		local restore = charges * self:GetSpecialValueFor("restore_per_charge")
 
 		Gold:AddGoldWithMessage(caster, charges * self:GetSpecialValueFor("gold"))
-		SafeHeal(caster, restore, self, true)
+		SafeHeal(caster, restore, self, true, {
+			amplify = true,
+			strengthAMP = true,
+		})
 		caster:GiveMana(restore)
 
 		ParticleManager:SetParticleControl(ParticleManager:CreateParticle("particles/arena/items_fx/wand_of_midas.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster), 1, Vector(charges))

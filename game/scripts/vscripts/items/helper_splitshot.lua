@@ -8,6 +8,7 @@ return function(lockModifierName, radiusSpecialName, projectileSpeedSpecialName)
 			attacker[lockName] = true
 			Timers:NextTick(function() attacker[lockName] = false end)
 		end
+		--print(attacker["_lock_" .. lockModifierName])
 
 		local radius = ability:GetSpecialValueFor(radiusSpecialName)
 		local targets = FindUnitsInRadius(

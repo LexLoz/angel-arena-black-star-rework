@@ -11,7 +11,9 @@ function DamageThink(keys)
 		damage_type = ability:GetAbilityDamageType(),
 		ability = ability
 	})
-	SafeHeal(caster, damage, caster)
+	SafeHeal(caster, damage, ability, false, {
+		amplify = true,
+	})
 	SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, caster, damage, nil)
 	if caster:HasScepter() then
 		local targets = FindUnitsInRadius(caster:GetTeamNumber(), target:GetAbsOrigin(), nil, ability:GetAbilitySpecial("damage_aoe_scepter"), ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)
@@ -24,7 +26,9 @@ function DamageThink(keys)
 					damage_type = ability:GetAbilityDamageType(),
 					ability = ability
 				})
-				SafeHeal(caster, damage, caster)
+				SafeHeal(caster, damage, ability, true, {
+					amplify = true,
+				})
 				SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, caster, damage, nil)
 			end
 		end

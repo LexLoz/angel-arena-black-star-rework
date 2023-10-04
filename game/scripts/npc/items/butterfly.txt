@@ -3,7 +3,7 @@
 	"item_recipe_butterfly_arena"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						""
 		"ItemRecipe"					"1"
@@ -38,7 +38,7 @@
 			"02"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_damage"					"30"
+				"bonus_damage"					"10"
 			}
 			"03"
 			{
@@ -105,14 +105,14 @@
 	"item_recipe_butterfly_of_wind"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"500"
+		"ItemCost"						"3500"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_butterfly_of_wind"
 		"ItemRequirements"
 		{
-			"01"						"item_butterfly_arena;item_butterfly_arena;item_wind_lace"
+			"01"						"item_butterfly_arena;item_talisman_of_evasion;item_wind_lace"
 		}
 	}
 
@@ -133,22 +133,22 @@
 			"01"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility"					"70"
+				"bonus_agility"					"35"
 			}
 			"02"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_damage"					"60"
+				"bonus_damage"					"10"
 			}
 			"03"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_evasion"					"35"
+				"bonus_evasion"					"50"
 			}
 			"04"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_attack_speed"			"60"
+				"bonus_attack_speed"			"30"
 			}
 			"05"
 			{
@@ -163,7 +163,7 @@
 			"07"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility_active"			"60"
+				"bonus_agility_active"			"35"
 			}
 			"08"
 			{
@@ -228,26 +228,27 @@
 	"item_recipe_timelords_butterfly"
 	{
 		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.mdl"
+		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"200"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_timelords_butterfly"
 		"ItemRequirements"
 		{
-			"01"						"item_butterfly_of_wind;item_butterfly_arena;item_moon_dust"
+			"01"						"item_butterfly_of_wind;item_moon_dust"
 		}
 	}
 
 	"item_timelords_butterfly"
 	{
 		"BaseClass"						"item_datadriven"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
 		"AbilityTextureName"			"item_arena/timelords_butterfly"
 		"AbilityCooldown"				"25"
 		"ItemQuality"					"timelords"
 		"ItemAliases"					"bfly;butterfly;timelords;damage"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+		"AbilityManaCost"				"1000"
 
 		// Special
 		//-------------------------------------------------------------------------------------------------------------
@@ -256,23 +257,23 @@
 			"01"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility"					"150"
+				"bonus_agility"					"50"
 			}
 			"02"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_damage"					"150"
+				"bonus_damage"					"30"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"03"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_evasion"					"40"
+				"bonus_evasion"					"60"
 			}
 			"04"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_attack_speed"			"150"
+				"bonus_attack_speed"			"50"
 			}
 			"05"
 			{
@@ -282,17 +283,17 @@
 			"06"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"dodge_chance_pct"				"20"
+				"dodge_chance_pct"				"15"
 			}
 			"07"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_evasion_active_pct"		"60"
+				"bonus_evasion_active_pct"		"100"
 			}
 			"08"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility_active"			"120"
+				"bonus_agility_active"			"75"
 			}
 			"09"
 			{
@@ -343,12 +344,31 @@
 				"Duration"			"%duration"
 				"Passive"			"0"
 				"IsHidden"			"0"
+				"IsPurgable"		"1"
+
+				"OnCreated"
+				{
+					"RunScript"
+					{
+						"ScriptFile"		"items/item_timelords_butterfly.lua"
+						"Function"			"OnCreated"
+						"BonusAgility"		"%bonus_agility_active"
+					}
+				}
+
+				"OnDestroy"
+				{
+					"RunScript"
+					{
+						"ScriptFile"		"items/item_timelords_butterfly.lua"
+						"Function"			"OnDestroy"
+					}
+				}
 
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_EVASION_CONSTANT"				"%bonus_evasion_active_pct"
-					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"				"%bonus_agility_active"
-					"MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE"				"1000"
+					"MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE"				"800"
 				}
 			}
 		}

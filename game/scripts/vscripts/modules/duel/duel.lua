@@ -1,3 +1,5 @@
+require("modifiers/attributes/modifier_stamina")
+
 DOTA_DUEL_STATUS_NONE = 0
 DOTA_DUEL_STATUS_WATING = 1
 DOTA_DUEL_STATUS_IN_PROGRESS = 2
@@ -5,12 +7,13 @@ ModuleRequire(..., "data")
 if Duel == nil then
 	_G.Duel = class({})
 	Duel.TimeUntilDuel = 0
-	Duel.DuelTimerEndTime = 0
+	Duel.DuelTimerEndTime = false
 	Duel.DuelStatus = DOTA_DUEL_STATUS_NONE
 	Duel.TimesTeamWins = {}
 	Duel.AnnouncerCountdownCooldowns = {}
 	Duel.DuelCounter = 0
 	Duel.Boxes = {}
+	Duel.kill_weight_increase = false
 end
 
 Events:Register("activate", function()
@@ -41,9 +44,15 @@ function Duel:SetDuelTimer(duration)
 	PlayerTables:SetTableValue("arena", "duel_end_time", Duel.DuelTimerEndTime)
 end
 
+function Duel:GetDuelTimer()
+	return Duel.DuelTimerEndTime and Duel.DuelTimerEndTime - GameRules:GetGameTime() or false
+end
+
 function Duel:CreateGlobalTimer()
 	Duel.DuelStatus = DOTA_DUEL_STATUS_WATING
-	Duel:SetDuelTimer(-GameRules:GetDOTATime(false, true))
+	-- print('actual timer: '..Duel:GetDuelTimer())
+	-- print('setting timer: '..(Duel:GetDuelTimer() or -GameRules:GetDOTATime(false, true)))
+	Duel:SetDuelTimer(Duel:GetDuelTimer() or -GameRules:GetDOTATime(false, true))
 	Timers:CreateTimer(Dynamic_Wrap(Duel, 'GlobalThink'))
 end
 
@@ -115,8 +124,12 @@ function Duel:StartDuel()
 						if not unit.DuelChecked and unit:IsAlive() and PlayerResource:IsValidPlayerID(playerId) then
 							unit.OnDuel = true
 							Duel:FillPreduelUnitData(unit)
-							unit:SetHealth(unit:GetMaxHealth())
 							unit:SetMana(unit:GetMaxMana())
+							unit:SetHealth(unit:GetMaxHealth())
+							if unit.GetMaxStamina then
+								unit:ModifyStamina(unit:GetMaxStamina())
+							end
+							--unit:ModifyStamina(unit:GetMaxStamina())
 							count = count + 1
 						end
 						unit.DuelChecked = true
@@ -253,20 +266,22 @@ end
 
 function Duel:EndDuelForUnit(unit)
 	unit:RemoveModifierByName("modifier_hero_out_of_game")
+	--unit:RemoveModifierByName("modifier_arena_duel_vision")
 	Timers:CreateTimer(0.1, function()
 		if IsValidEntity(unit) and unit:IsAlive() and unit.StatusBeforeArena then
 			if unit.StatusBeforeArena.Health then unit:SetHealth(unit.StatusBeforeArena.Health) end
 			if unit.StatusBeforeArena.Mana then unit:SetMana(unit.StatusBeforeArena.Mana) end
+			if unit.StatusBeforeArena.Stamina then unit:ModifyStamina(-(unit:GetMaxStamina() - unit.StatusBeforeArena.Stamina)) end
 			for ability,v in pairs(unit.StatusBeforeArena.AbilityCooldowns or {}) do
-				if IsValidEntity(ability) and unit:HasAbility(ability:GetAbilityName()) then
-					ability:EndCooldown()
-					ability:StartCooldown(v)
+				if IsValidEntity(ability) and unit:HasAbility(ability:GetAbilityName()) and not DUEL_NOT_REFRESHABLE[ability:GetAbilityName()] then
+					--ability:EndCooldown()
+					--ability:StartCooldown(v)
 				end
 			end
 			for item,v in pairs(unit.StatusBeforeArena.ItemCooldowns or {}) do
-				if IsValidEntity(item) then
-					item:EndCooldown()
-					item:StartCooldown(v)
+				if IsValidEntity(item) and not DUEL_NOT_REFRESHABLE[item:GetAbilityName()] then
+					--item:EndCooldown()
+					--item:StartCooldown(v)
 				end
 			end
 			unit.StatusBeforeArena = nil
@@ -290,6 +305,7 @@ function Duel:FillPreduelUnitData(unit)
 	unit.StatusBeforeArena = {
 		Health = unit:GetHealth(),
 		Mana = unit:GetMana(),
+		Stamina = unit:GetStamina(),
 		AbilityCooldowns = {},
 		ItemCooldowns = {},
 	}
@@ -297,14 +313,18 @@ function Duel:FillPreduelUnitData(unit)
 		local ability = unit:GetAbilityByIndex(i)
 		if ability and ability:GetCooldown(ability:GetLevel()) > 0 then
 			unit.StatusBeforeArena.AbilityCooldowns[ability] = ability:GetCooldownTimeRemaining()
-			ability:EndCooldown()
+			if (not DUEL_NOT_REFRESHABLE[ability:GetAbilityName()]) then
+				--ability:EndCooldown()
+			end
 		end
 	end
-	for i = 0, 5 do
+	for i = 0, 8 do
 		local item = unit:GetItemInSlot(i)
 		if item then
 			unit.StatusBeforeArena.ItemCooldowns[item] = item:GetCooldownTimeRemaining()
-			item:EndCooldown()
+			if not DUEL_NOT_REFRESHABLE[item:GetAbilityName()] then
+				--item:EndCooldown()
+			end
 		end
 	end
 end
@@ -315,6 +335,8 @@ end
 
 function Duel:EndIfFinished()
 	if Duel:IsDuelOngoing() and Duel:GetWinner() ~= nil then
-		Duel:EndDuel()
+		Timers:CreateTimer(0.5, function()
+			Duel:EndDuel()
+		end)
 	end
 end

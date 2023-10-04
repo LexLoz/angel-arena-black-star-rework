@@ -10,6 +10,7 @@
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
 		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
 		"AbilityTextureName"			"arena/arthas_rage_of_arthas"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_DARK"
 
 		// Precache
 		//-------------------------------------------------------------------------------------------------------------
@@ -59,9 +60,9 @@
 			}
 			"99"
 			{
-				"var_type"				"FIELD_FLOAT"
-				"damage_from_current_health_pct"	"5"
-				"CalculateSpellDamageTooltip"	"0"
+				"var_type"	"FIELD_FLOAT"
+				"jungle_bears_damage_multiplier"	"6.0"
+				"CalculateSpellDamageTooltip"		"0"
 			}
 		}
 
@@ -344,6 +345,7 @@
 		"AbilityType"					"DOTA_ABILITY_TYPE_ULTIMATE"
 		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_YES"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_HP_REMOVAL"
 
 		// Special
 		//-------------------------------------------------------------------------------------------------------------

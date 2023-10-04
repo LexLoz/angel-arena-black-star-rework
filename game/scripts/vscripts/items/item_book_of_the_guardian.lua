@@ -31,12 +31,14 @@ if IsServer() then
 			for _,v in ipairs(FindUnitsInRadius(caster:GetTeamNumber(), abs, nil, elapsed * blast_speed, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_BASIC + DOTA_UNIT_TARGET_HERO, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false)) do
 				if not affectedUnits[v] then
 					affectedUnits[v] = true
+
+					--self.NoDamageAmp = true
 					ApplyDamage({
 						attacker = caster,
 						victim = v,
 						damage = caster:GetIntellect() * blast_damage_int_mult,
 						damage_type = self:GetAbilityDamageType(),
-						damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+						--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 						ability = self
 					})
 
@@ -60,8 +62,8 @@ item_book_of_the_guardian_2.pfx = "particles/arena/items_fx/book_of_the_guardian
 modifier_item_book_of_the_guardian = class({
 	IsHidden      = function() return true end,
 	IsAura        = function() return true end,
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
 	IsPurgable    = function() return false end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 })
 
 function modifier_item_book_of_the_guardian:DeclareFunctions()
@@ -114,13 +116,43 @@ function modifier_item_book_of_the_guardian:GetAuraSearchType()
 	return DOTA_UNIT_TARGET_ALL
 end
 
+function modifier_item_book_of_the_guardian:GetAuraSearchFlags()
+	return DOTA_UNIT_TARGET_FLAG_NONE
+end
+
+function modifier_item_book_of_the_guardian:GetAuraEntityReject(hEntity)
+    return hEntity:IsMagicImmune() or hEntity:IsDebuffImmune()
+end
+
 
 modifier_item_book_of_the_guardian_aura = class({
 	IsPurgable = function() return false end,
 })
 
 function modifier_item_book_of_the_guardian_aura:DeclareFunctions()
-	return {MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT}
+	return {
+		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
+		MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET,
+  		MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE,
+ 		MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE,
+		MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE,
+	}
+end
+
+function modifier_item_book_of_the_guardian_aura:GetModifierSpellLifestealRegenAmplify_Percentage()
+	return self:GetAbility():GetSpecialValueFor("aura_heal_reduce")
+end
+
+function modifier_item_book_of_the_guardian_aura:GetModifierHealAmplify_PercentageTarget()
+	return self:GetAbility():GetSpecialValueFor("aura_heal_reduce")
+end
+
+function modifier_item_book_of_the_guardian_aura:GetModifierLifestealRegenAmplify_Percentage()
+	return self:GetAbility():GetSpecialValueFor("aura_heal_reduce")
+end
+
+function modifier_item_book_of_the_guardian_aura:GetModifierHPRegenAmplify_Percentage()
+	return self:GetAbility():GetSpecialValueFor("aura_heal_reduce")
 end
 
 function modifier_item_book_of_the_guardian_aura:GetModifierAttackSpeedBonus_Constant()
@@ -131,10 +163,14 @@ end
 modifier_item_book_of_the_guardian_blast = class({
 	GetEffectName = function() return "particles/econ/events/ti7/shivas_guard_slow.vpcf" end,
 	GetEffectAttachType = function() return PATTACH_ABSORIGIN_FOLLOW end,
+	GetDisableHealing = function() return 1 end,
 })
 
 function modifier_item_book_of_the_guardian_blast:DeclareFunctions()
-	return {MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE}
+	return {
+		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
+		MODIFIER_PROPERTY_DISABLE_HEALING
+	}
 end
 
 function modifier_item_book_of_the_guardian_blast:GetModifierMoveSpeedBonus_Percentage()

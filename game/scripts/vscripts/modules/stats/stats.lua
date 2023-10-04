@@ -10,7 +10,7 @@ end)
 
 function StatsClient:FetchPreGameData()
 	local data = {
-		matchid = tostring(GameRules:GetMatchID()),
+		matchid = tostring(GameRules:Script_GetMatchID()),
 		players = {},
 	}
 	for i = 0, DOTA_MAX_TEAM_PLAYERS-1 do
@@ -26,7 +26,7 @@ function StatsClient:FetchPreGameData()
 			PLAYER_DATA[playerId].serverData = data
 			PLAYER_DATA[playerId].Inventory = data.inventory or {}
 			local isBanned = Options:IsEquals("EnableBans") and data.isBanned == true
-			PLAYER_DATA[playerId].isBanned = isBanned
+			PLAYER_DATA[z].isBanned = isBanned
 
 			local clientData = table.deepcopy(data)
 			clientData.TBDRating = nil
@@ -72,7 +72,8 @@ function StatsClient:AssignTeams(callback)
 end
 
 function StatsClient:OnGameEnd(winner)
-	local status, nextCall = xpcall(function()
+	--local status, nextCall = xpcall(function()
+	GameRules:SetSafeToLeave(true)
 		if GameMode.Broken then
 			PlayerTables:CreateTable("stats_game_result", {error = GameMode.Broken}, AllPlayersInterval)
 			return
@@ -80,12 +81,11 @@ function StatsClient:OnGameEnd(winner)
 		if not IsInToolsMode() and StatsClient.GameEndScheduled then return end
 		StatsClient.GameEndScheduled = true
 		local time = GameRules:GetDOTATime(false, true)
-		local matchID = tostring(GameRules:GetMatchID())
+		local matchID = tostring(GameRules:Script_GetMatchID())
 		if (GameRules:IsCheatMode() and not StatsClient.Debug) or time < 0 then
 			return
 		end
 		local data = {
-			version = ARENA_VERSION,
 			matchID = matchID,
 			mapName = GetMapName(),
 			players = {},
@@ -160,13 +160,19 @@ function StatsClient:OnGameEnd(winner)
 
 		local clientData = {players = {}}
 
-		StatsClient:Send("endMatch", data, function(response)
-			if not response.players then
+		--StatsClient:Send("endMatch", data, function(response)
+			--[[if not response.players then
 				local err = response.error and ("Server error: " .. response.error) or "Unknown server error"
 				PlayerTables:CreateTable("stats_game_result", { error = err }, AllPlayersInterval)
-			else
-				for playerId, receivedData in pairs(response.players) do
-					playerId = tonumber(playerId)
+			else]]
+				--for playerId, receivedData in pairs(response.players) do
+				for i,_ in pairs(data.players) do
+					local playerId = i
+					--[[if PlayerResource:IsValidPlayerID(i) then
+						playerId = i
+					else
+						return print("error load screen")
+					end]]
 					local sentData = data.players[playerId]
 					clientData.players[playerId] = {
 						hero = sentData.heroName,
@@ -180,22 +186,22 @@ function StatsClient:OnGameEnd(winner)
 						bonus_int = sentData.bonus_int,
 						items = sentData.items,
 
-						ratingNew = receivedData.ratingNew,
-						ratingOld = receivedData.ratingOld,
-						ratingGamesRemaining = receivedData.ratingGamesRemaining or 10,
-						experienceNew = receivedData.experienceNew or 0,
-						experienceOld = receivedData.experienceOld or 0,
+						--ratingNew = receivedData.ratingNew,
+						--ratingOld = receivedData.ratingOld,
+						--ratingGamesRemaining = receivedData.ratingGamesRemaining or 10,
+						--experienceNew = receivedData.experienceNew or 0,
+						--experienceOld = receivedData.experienceOld or 0,
 					}
 				end
 				PlayerTables:CreateTable("stats_game_result", clientData, AllPlayersInterval)
-			end
-		end, math.huge, nil, true)
-	end, function(msg)
-		return msg..'\n'..debug.traceback()..'\n'
-	end)
-	if not status then
-		PlayerTables:CreateTable("stats_game_result", {error = nextCall}, AllPlayersInterval)
-	end
+			--end
+		--end, math.huge, nil, true)
+	--end, function(msg)
+		--return msg..'\n'..debug.traceback()..'\n'
+	--end)
+	--if not status then
+		--PlayerTables:CreateTable("stats_game_result", {error = nextCall}, AllPlayersInterval)
+	--end
 end
 
 function StatsClient:HandleError(err)
@@ -209,10 +215,147 @@ end
 
 --Guides
 function StatsClient:AddGuide(data)
+	data = {
+
+	PlayerID = 0,
+	description = "",
+	items = {
+			[3] = {
+					content = {
+							[0] = "item_wand_of_midas",
+							[1] = "item_chest_of_midas",
+							[2] = "item_blood_of_midas",
+							[3] = "item_bottle_arena",
+							[4] = "item_hand_of_midas_2_arena",
+							[5] = "item_refresher_arena"},
+					title = "for gang"},
+			[0] = {
+					content = {
+							[0] = "item_skull_of_midas",
+							[1] = "item_splitshot_ultimate",
+							[2] = "item_thunder_musket",
+							[3] = "item_golden_eagle_relic",
+							[4] = "item_butterfly_of_wind",
+							[5] = "item_skadi_4",
+							[6] = "item_piercing_blade",
+							[7] = "item_monkey_king_bar"},
+					title = "range"},
+			[10] = {
+					content = {
+							[0] = "item_ultimate_splash",
+							[1] = "item_elemental_fury",
+							[10] = "item_bloodthorn_2",
+							[11] = "item_fallhammer",
+							[12] = "item_radiance_frozen",
+							[13] = "item_book_of_the_guardian_2",
+							[14] = "item_unstable_quasar",
+							[15] = "item_refresher_core",
+							[16] = "item_essential_orb_fire_6",
+							[17] = "item_essential_orb_fire_5",
+							[2] = "item_splitshot_ultimate",
+							[3] = "item_thunder_musket",
+							[4] = "item_summoned_unit",
+							[5] = "item_assault",
+							[6] = "item_phantom_cuirass",
+							[7] = "item_golden_eagle_relic",
+							[8] = "item_soulcutter",
+							[9] = "item_demonic_cuirass",},
+					title = "for farm bears",},
+			[1] = {
+					content = {
+							[0] = "item_skull_of_midas",
+							[1] = "item_elemental_fury",
+							[2] = "item_fallhammer",
+							[3] = "item_golden_eagle_relic",
+							[4] = "item_butterfly_of_wind",
+							[5] = "item_skadi_4",
+							[6] = "item_piercing_blade",
+							[7] = "item_monkey_king_bar",},
+					title = "meele"},
+			[2] = {
+					content = {
+							[0] = "item_skull_of_midas",
+							[1] = "item_essential_orb_fire_6",
+							[10] = "item_sange_and_yasha_and_kaya",
+							[11] = "item_refresher_arena",
+							[2] = "item_essential_orb_fire_5",
+							[3] = "item_radiance_3",
+							[4] = "item_octarine_core_arena",
+							[5] = "item_book_of_the_guardian",
+							[6] = "item_bloodstone",
+							[7] = "item_ultimate_scepter_arena",
+							[8] = "item_blade_of_discord",
+							[9] = "item_book_of_the_keeper",},
+					title = "mage"},
+			[4] = {
+					content = {
+							[0] = "item_summoned_unit",
+							[1] = "item_assault",
+							[2] = "item_phantom_cuirass",
+							[3] = "item_vladmir",
+							[4] = "item_dark_flow",
+							[5] = "item_desolator3",
+							[6] = "item_thunder_musket",
+							-- [7]	= "item_shard_level10"
+						},
+					title = "for boss"},
+			[5] = {
+					content = {
+							[0] = "item_ultimate_splash",
+							[1] = "item_desolator6",
+							[2] = "item_soulcutter",
+							[3] = "item_demonic_cuirass",
+							[4] = "item_diffusal_style",
+							[5] = "item_radiance_frozen",
+							[6] = "item_demon_king_bar",
+							[7] = "item_timelords_butterfly",
+							[8] = "item_shard_str_extreme",
+							[9] = "item_shard_agi_extreme"},
+					title = "LATE FOR CARRY",},
+			[6] = {
+					content = {
+							[0] = "item_ultimate_splash",
+							[1] = "item_scythe_of_the_ancients",
+							[2] = "item_unstable_quasar",
+							[3] = "item_book_of_the_guardian_2",
+							[4] = "item_radiance_frozen",
+							[5] = "item_titanium_bar",
+							[6] = "item_scythe_of_sun",
+							[7] = "item_sunray_dagon_5_arena",
+							[8] = "item_shard_int_extreme",
+							[9] = "item_shard_agi_extreme"},
+					title = "LATE FOR MAGE",},
+			[7] = {
+					content = {
+							[0] = "item_behelit",
+							[1] = "item_coffee_bean",
+							[2] = "item_octarine_core_arena",
+							[3] = "item_refresher_arena",},
+					title = "FOR summoners"},
+			[8] = {
+					content = {
+							[0] = "item_flesh_potion",
+							[1] = "item_titanium_fruit",
+							[2] = "item_eye_of_the_prophet",
+							[3] = "item_lightning_rod",},
+					title = "optional"},
+			[9] = {
+					content = {
+							[0] = "item_pipe_of_enlightenment",
+							[1] = "item_sacred_blade_mail",
+							[2] = "item_lotus_sphere",
+							[3] = "item_vermillion_robe",},
+					title = "against mages",},
+	},
+	steamID = "-1",
+	title = "",
+    youtube = "",
+	}
+	
 	local playerId = data.PlayerID
 	local hero = HeroSelection:GetSelectedHeroName(playerId)
 	local steamID = PlayerResource:GetRealSteamID(playerId)
-	if #data.title < 4 or #data.description < 4 then
+	--[[if #data.title < 4 or #data.description < 4 then
 		return
 	end
 	if #data.title > 60 or #data.description > 250 or table.count(data.items) == 0 then
@@ -230,13 +373,13 @@ function StatsClient:AddGuide(data)
 				error("Invalid item", item)
 			end
 		end
-	end
+	end]]
 
-	if data.youtube ~= nil and (type(data.youtube) ~= "string" or #data.youtube == 0) then
+	--[[if data.youtube ~= nil and (type(data.youtube) ~= "string" or #data.youtube == 0) then
 		data.youtube = nil
-	end
+	end]]
 
-	StatsClient:Send("AddGuide", {
+	CustomGameEventManager:Send_ServerToAllClients("stats_client_add_guide_success", {
 		title = data.title,
 		description = data.description,
 		steamID = steamID,
@@ -244,13 +387,24 @@ function StatsClient:AddGuide(data)
 		items = data.items,
 		youtube = data.youtube,
 		version = ARENA_VERSION,
-	}, function(response)
+	})
+	--print('send guide')
+
+	--[[StatsClient:Send("AddGuide", {
+		title = data.title,
+		description = data.description,
+		steamID = steamID,
+		hero = hero,
+		items = data.items,
+		youtube = data.youtube,
+		version = ARENA_VERSION,
+	} function(response)
 		if response.insertedId then
 			CustomGameEventManager:Send_ServerToPlayer(PlayerResource:GetPlayer(playerId), "stats_client_add_guide_success", {insertedId = response.insertedId})
 		else
 			Containers:DisplayError(playerId, response.error)
 		end
-	end)
+	end)]]
 end
 
 function StatsClient:VoteGuide(data)
@@ -263,17 +417,16 @@ end
 
 local AUTH_KEY = GetDedicatedServerKey("1")
 function StatsClient:Send(path, data, callback, retryCount, protocol, onerror, _currentRetry)
-	if type(retryCount) == "boolean" then
+	--[[if type(retryCount) == "boolean" then
 		retryCount = retryCount and math.huge or 0
 	elseif not retryCount then
 		retryCount = 0
-	end
-
-	local request = CreateHTTPRequestScriptVM(protocol or "POST", self.ServerAddress .. path .. (protocol == "GET" and StatsClient:EncodeParams(data) or ""))
-	request:SetHTTPRequestHeaderValue("Auth-Key", AUTH_KEY)
-	request:SetHTTPRequestGetOrPostParameter("data", json.encode(data))
-	request:Send(function(response)
-		if response.StatusCode ~= 200 or not response.Body then
+	end]]
+	--local request = CreateHTTPRequestScriptVM(protocol or "POST", self.ServerAddress .. path .. (protocol == "GET" and StatsClient:EncodeParams(data) or ""))
+	--request:SetHTTPRequestHeaderValue("Auth-Key", AUTH_KEY)
+	--request:SetHTTPRequestGetOrPostParameter("data", json.encode(data))
+	--request:Send(function(response)
+		--[[if response.StatusCode ~= 200 or not response.Body then
 			local currentRetry = (_currentRetry or 0) + 1
 			if not StatsClient.Debug and currentRetry < retryCount then
 				Timers:CreateTimer(self.RetryDelay, function()
@@ -292,7 +445,7 @@ function StatsClient:Send(path, data, callback, retryCount, protocol, onerror, _
 				callback(obj)
 			end
 		end
-	end)
+	end)]]
 end
 
 function StatsClient:EncodeParams(params)

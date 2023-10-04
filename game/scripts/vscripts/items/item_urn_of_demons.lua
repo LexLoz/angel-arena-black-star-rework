@@ -28,6 +28,8 @@ function modifier_item_urn_of_demons_damage_on_interval_think(keys)
 	local target = keys.target
 	local damage_to_deal = keys.TotalHealthPct * 0.01 * target:GetMaxHealth() / keys.TotalDuration * keys.Interval
 	local mana_to_burn = keys.TotalManaPct * 0.01 * target:GetMaxMana() / keys.TotalDuration * keys.Interval
+	
+	ability.NoDamageAmp = true
 	ApplyDamage({
 		victim = target,
 		attacker = keys.caster,
@@ -43,7 +45,10 @@ function modifier_item_urn_of_demons_heal_on_interval_think(keys)
 	local target = keys.target
 	local amount_to_heal = keys.TotalHealthPct * 0.01 * target:GetMaxHealth() / keys.TotalDuration * keys.Interval
 	local mana_to_heal = keys.TotalManaPct * 0.01 * target:GetMaxMana() / keys.TotalDuration * keys.Interval
-	SafeHeal(target, mana_to_heal)
+	SafeHeal(target, mana_to_heal, keys.ability, false, {
+		amplify = true,
+		strengthAMP = true,
+	})
 	target:GiveMana(mana_to_heal)
 end
 

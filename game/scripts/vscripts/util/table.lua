@@ -191,3 +191,14 @@ function table.filterValues(t, predicate)
 	end
 	return new
 end
+
+function table.summation(t)
+	local sum = 0
+	for k, v in pairs(t) do
+		if type(v) == "number" then
+			sum = sum + v
+		end
+	end
+
+	return sum
+end

@@ -61,10 +61,14 @@ function Precache(context)
 		"particles/econ/events/ti7/shivas_guard_slow.vpcf",
 		"particles/arena/items_fx/scythe_of_the_ancients_start.vpcf",
 		"particles/econ/events/ti4/dagon_beam_black_ti4.vpcf",
+		"particles/arena/items_fx/pipe_of_enlightenment_v2.vpcf",
+		"particles/arena/items_fx/pipe_of_enlightenment_launch.vpcf",
+
 		-- Heroes
 		"particles/units/heroes/hero_legion_commander/legion_commander_press.vpcf",
 		"particles/econ/items/legion/legion_fallen/legion_fallen_press_a.vpcf",
 		"particles/econ/items/legion/legion_fallen/legion_fallen_press.vpcf",
+		"particles/units/heroes/hero_slardar/slardar_amp_damage_flash.vpcf",
 		-- Runes
 		"particles/arena/generic_gameplay/rune_tripledamage.vpcf",
 		"particles/arena/generic_gameplay/rune_tripledamage_owner.vpcf",
@@ -79,6 +83,8 @@ function Precache(context)
 		"particles/econ/items/antimage/antimage_weapon_basher_ti5_gold/am_basher_manaburn_impact_lightning_gold.vpcf",
 		"particles/econ/items/crystal_maiden/ti7_immortal_shoulder/cm_ti7_immortal_frostbite.vpcf",
 		"particles/econ/items/crystal_maiden/crystal_maiden_cowl_of_ice/maiden_crystal_nova_cowlofice.vpcf",
+		-- Vector Target
+		"particles/ui_mouseactions/range_finder_cone.vpcf"
 	}
 	local models = {
 		"models/items/meepo/diggers_divining_rod/diggers_divining_rod_gem_saphire.vmdl",
@@ -113,6 +119,7 @@ function Precache(context)
 		"soundevents/game_sounds_heroes/game_sounds_zuus.vsndevts",
 		"soundevents/game_sounds_arena.vsndevts",
 		"soundevents/game_sounds_heroes/game_sounds_necrolyte.vsndevts",
+		"soundevents/game_sounds_heroes/game_sounds_tinker.vsndevts",
 	}
 
 	for _, handle in pairs(CUSTOM_WEARABLES) do
@@ -170,5 +177,7 @@ function Precache(context)
 end
 
 function Activate()
-	GameMode:Activate()
+	require("libraries/filters")
+	GameRules.GameMode = GameMode()
+	GameRules.GameMode:_InitGameMode()
 end

@@ -2,6 +2,8 @@ function MidasCreep(keys)
 	local caster = keys.caster
 	local target = keys.target
 	local ability = keys.ability
+
+	if not target:IsCreep() then return end
 	Gold:AddGoldWithMessage(caster, keys.BonusGold)
 	if caster.AddExperience then
 		caster:AddExperience(target:GetDeathXP() * keys.XPMultiplier, false, false)
@@ -33,14 +35,14 @@ function GiveOnAttackedGold(keys)
 		local particle = ParticleManager:CreateParticleForPlayer("particles/units/heroes/hero_alchemist/alchemist_lasthit_msg_gold.vpcf", PATTACH_ABSORIGIN, caster, caster:GetPlayerOwner())
 
 		if attacker:IsBoss() then
-			gold = -gold
-			presymbol = POPUP_SYMBOL_PRE_MINUS
+			gold = 0
 			xp = 0
-		end
-
-		ParticleManager:SetParticleControl(particle, 1, Vector(presymbol, math.abs(gold), 0))
+			-- presymbol = POPUP_SYMBOL_PRE_MINUS
+		else
+			ParticleManager:SetParticleControl(particle, 1, Vector(presymbol, math.round(math.abs(gold * GetGoldMultiplier(caster))), 0))
 		ParticleManager:SetParticleControl(particle, 2, Vector(2, string.len(math.abs(gold)) + 1, 0))
 		ParticleManager:SetParticleControl(particle, 3, Vector(255, 200, 33))
+		end
 
 		if caster.AddExperience then
 			caster:AddExperience(xp, false, false)

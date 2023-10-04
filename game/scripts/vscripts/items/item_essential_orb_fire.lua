@@ -13,8 +13,8 @@ function CreateProjectile(keys)
 		vSpawnOrigin = caster:GetAbsOrigin() + Vector(0,0,80),
 		fDistance = range,
 		fExpireTime = range/speed,
-		fStartRadius = 80,
-		fEndRadius = 80,
+		fStartRadius = 120,
+		fEndRadius = 120,
 		Source = caster,
 		vVelocity = vVelocity,
 		UnitBehavior = PROJECTILES_FOLLOW,
@@ -29,7 +29,7 @@ function CreateProjectile(keys)
 		iVisionRadius = 350,
 		fVisionLingerDuration = 1,
 		UnitTest = function(self, unit)
-			return not unit:IsMagicImmune() and not unit:IsInvulnerable() and UnitFilter(unit, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, caster:GetTeam()) == UF_SUCCESS
+			return not unit:IsMagicImmune() and not unit:IsDebuffImmune() and not unit:IsInvulnerable() and UnitFilter(unit, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, caster:GetTeam()) == UF_SUCCESS
 		end,
 		OnUnitHit = function(self, unit)
 			self.unitsHit = (self.unitsHit or 0) + 1

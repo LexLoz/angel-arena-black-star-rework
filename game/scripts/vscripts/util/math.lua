@@ -11,3 +11,7 @@ end
 function math.clamp(x, min, max)
 	return math.max(min, math.min(max, x))
 end
+
+function math.__random(min, max)
+	return
+end

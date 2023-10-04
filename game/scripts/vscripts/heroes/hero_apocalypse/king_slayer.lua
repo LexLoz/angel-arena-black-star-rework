@@ -13,7 +13,7 @@ function ApplyDisarmor(keys)
 		attacker = caster,
 		damage = ability:GetAbilitySpecial("damage_per_armor") * stacks,
 		damage_type = ability:GetAbilityDamageType(),
-		damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+		--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 		ability = ability
 	})
 end

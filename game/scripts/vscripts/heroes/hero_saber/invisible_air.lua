@@ -39,7 +39,6 @@ if IsServer() then
 				attacker = caster,
 				damage = damage,
 				damage_type = self:GetAbilityDamageType(),
-				damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 				ability = self
 			})
 		end
@@ -62,7 +61,8 @@ if IsServer() then
 
 	function modifier_saber_invisible_air:OnIntervalThink()
 		local ability = self:GetAbility()
-		self.stacks = math.min((self.stacks or 0) + ability:GetSpecialValueFor("damage_per_second") * 0.1, ability:GetSpecialValueFor("damage_max"))
+		local parent = self:GetParent()
+		self.stacks = math.min((self.stacks or 0) + (ability:GetSpecialValueFor("damage_per_second") * (1 + parent:GetSpellAmplification(false))) * 0.1, ability:GetSpecialValueFor("damage_max"))
 		self:SetStackCount(self.stacks)
 	end
 else
