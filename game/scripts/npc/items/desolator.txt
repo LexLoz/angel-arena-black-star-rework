@@ -567,7 +567,7 @@
 			"13"
 			{
 				"var_type"							"FIELD_FLOAT"
-				"ignore_base_armor_chance"			"10"
+				"ignore_base_armor_chance"			"25"
 			}
 		}
 
@@ -601,43 +601,6 @@
 						"Target" 		"CASTER"
 					}
 				}
-
-				"OnAttackStart"
-				{
-					"RemoveModifier"
-					{
-						"ModifierName" 	"modifier_item_desolator6_arena_cutting"
-						"Target" 		"CASTER"
-					}
-
-					"RunScript"
-					{
-						"ScriptFile"	"kv.lua"
-						"Function"		"CheckPhysicalCritReady"
-					}
-
-					"Random"
-					{
-						"Chance" "%ignore_base_armor_chance"
-						"OnSuccess"
-						{
-							"ApplyModifier"
-							{
-								"ModifierName" 	"modifier_item_desolator6_arena_cutting"
-								"Target"    	"CASTER"
-							}
-						}
-					}
-				}
-
-				"OnAttackCanceled"
-				{
-					"RemoveModifier"
-					{
-						"ModifierName"  "modifier_item_desolator6_arena_cutting"
-						"Target"   		"CASTER"
-					}
-				}
 				
 
 				"Properties"
@@ -645,15 +608,15 @@
 					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE"		"%bonus_damage"
 				}
 
-				// "OnAttackLanded"
-				// {
-				// 	"RunScript"
-				// 	{
-				// 		"ScriptFile"	"items/item_desolator.lua"
-				// 		"Function"		"ApplyArmorReduction"
-				// 		"modifier"		"modifier_item_desolator6_arena_corruption"
-				// 	}
-				// }
+				"OnAttackLanded"
+				{
+					"RunScript"
+					{
+						"ScriptFile"	"items/item_desolator.lua"
+						"Function"		"ApplyArmorReduction"
+						"modifier"		"modifier_item_desolator6_arena_corruption"
+					}
+				}
 			}
 			"modifier_item_demons_paw_unique"
 			{
@@ -663,24 +626,6 @@
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_ATTACK_RANGE_BONUS" "%bonus_attack_range"
-				}
-			}
-
-			"modifier_item_desolator6_arena_cutting"
-			{
-				"Passive"				"0"
-				"IsHidden"				"1"
-				"IsBuff"				"1"
-				"IsPurgable"			"0"
-
-				"OnAttackLanded"
-				{
-					"FireEffect"
-					{
-						"EffectName" 		"particles/arena/units/heroes/hero_queenofblades/darkness_aura_critical.vpcf"
-						"EffectAttachType"  "follow_origin"
-						"Target"    		"TARGET"
-					}
 				}
 			}
 			"modifier_item_desolator6_arena_corruption"

@@ -122,6 +122,23 @@ ON_DAMAGE_MODIFIER_PROCS = {
 			end
 		end
 	end,
+	modifier_shinobu_vampire_blood = function(attacker, _, inflictor, damage, damagetype_const)
+		if not IsValidEntity(inflictor) then
+			if damagetype_const == DAMAGE_TYPE_PHYSICAL then
+				local caster = attacker
+				local ability = caster:FindAbilityByName('shinobu_vampire_blood')
+				local pct = ability:GetAbilitySpecial("lifesteal_pct_lvl" .. ability.CurrentLevel)
+				if pct then
+					local amount = damage * pct * 0.01
+					caster:SetHealth(caster:GetHealth() + amount)
+					SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, caster, amount, nil)
+					ParticleManager:CreateParticle(
+						"particles/arena/units/heroes/hero_shinobu/lifesteal_lvl" .. ability.CurrentLevel .. ".vpcf",
+						PATTACH_ABSORIGIN_FOLLOW, caster)
+				end
+			end
+		end
+	end,
 }
 
 ON_DAMAGE_MODIFIER_PROCS_VICTIM = {
@@ -214,14 +231,60 @@ ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS = {
 	},
 
 	modifier_item_behelit_buff = {
-		addictive_multiplier = function(attacker, _)
+		addictive_multiplier = function(attacker)
 			local damage_bonus = attacker:GetNetworkableEntityInfo("behelit_damage_bonus")
 			return 1 + damage_bonus * 0.01
 		end
-	},
+	}
 }
 
 OUTGOING_DAMAGE_MODIFIERS = {
+	modifier_item_desolator6_arena = function(attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage)
+		if not IsValidEntity(inflictor) then
+			local mod_name = "modifier_item_desolator6_arena"
+			local mod = attacker:FindModifierByName(mod_name)
+			local ability = mod:GetAbility()
+			local strength_crit = attacker:FindModifierByName("modifier_strength_crit")
+			local chance = (strength_crit and strength_crit.ready) and 100 or
+				ability:GetSpecialValueFor('ignore_base_armor_chance')
+
+			if ability:IsCooldownReady() then
+				if RollPercentage(chance) then
+					ability:AutoStartCooldown()
+
+					local base_armor = victim:GetPhysicalArmorValue(false) -
+						(victim:GetPhysicalArmorValue(true) < 0 and math.abs(victim:GetPhysicalArmorValue(true)) or victim:GetPhysicalArmorValue(true))
+					local total_armor = victim:GetPhysicalArmorValue(false)
+					local ignored_armor = base_armor > total_armor and total_armor or base_armor
+					local ignored_armor_mult = CalculatePhysicalResist(victim, total_armor - ignored_armor)
+
+					local multiplier = 1
+					for k, v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
+						if k ~= mod_name and attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags))) then
+							if multiplier == 0 then break end
+							multiplier = multiplier * ExtractMultiplier(
+								damage,
+								ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const,
+									damage_flags, saved_damage))
+						end
+					end
+					-- print('damage: ' .. (damage * multiplier * (1 - ignored_armor_mult)))
+					ApplyDamage({
+						victim = victim,
+						attacker = attacker,
+						damage = damage * multiplier * (1 - ignored_armor_mult),
+						damage_type = DAMAGE_TYPE_PHYSICAL,
+						damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION + DOTA_DAMAGE_FLAG_IGNORES_PHYSICAL_ARMOR,
+						ability = ability
+					})
+					-- attacker:RemoveModifierByName(mod_name)
+					return 0
+				end
+			end
+			-- attacker:RemoveModifierByName(mod_name)
+			return 1
+		end
+	end,
 	modifier_sans_curse_passive = function(_, victim)
 		if victim:GetTeam() == DOTA_TEAM_NEUTRALS and victim:IsCreep() then
 			return 0.25
@@ -352,13 +415,13 @@ OUTGOING_DAMAGE_MODIFIERS = {
 				elseif (SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS[inflictor:GetAbilityName()] and
 						type(SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS[inflictor:GetAbilityName()]) == "string") then
 					local fixed_damage = inflictor:GetSpecialValueFor(SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS
-					[inflictor:GetAbilityName()])
+						[inflictor:GetAbilityName()])
 					mult = GetSpellCrit(mult)
 					local increased_damage = (fixed_damage * mult)
 					mult = (increased_damage + damage) / damage
 					proceed_crit()
-					print('для частично процентных абилок: ' .. mult)
-					print('абилка: ' .. inflictor:GetAbilityName())
+					-- print('для частично процентных абилок: ' .. mult)
+					-- print('абилка: ' .. inflictor:GetAbilityName())
 					return mult
 
 					--все остальные абилки
@@ -366,7 +429,7 @@ OUTGOING_DAMAGE_MODIFIERS = {
 					mult = GetSpellCrit(mult)
 					-- print('spell crit')
 					proceed_crit()
-					print('все остальные абилки: ' .. mult)
+					-- print('все остальные абилки: ' .. mult)
 					return mult
 				end
 			end
@@ -377,55 +440,13 @@ OUTGOING_DAMAGE_MODIFIERS = {
 				local increased_damage = parent:GetReliableDamage() * mult
 				mult = (increased_damage + damage) / damage
 				proceed_crit()
-				print('тычки: ' .. mult)
+				-- print('тычки: ' .. mult)
 				return mult
 			end
 		else
 			return 1
 		end
 	end,
-	modifier_item_desolator6_arena_cutting = function(attacker, victim, inflictor, damage)
-		if not IsValidEntity(inflictor) then
-			local base_armor_mult = CalculatePhysicalResist(victim, victim:GetPhysicalArmorBaseValue())
-			local total_armor_mult = CalculatePhysicalResist(victim, victim:GetPhysicalArmorValue(false))
-			local diff = (total_armor_mult - base_armor_mult)
-			local mod_name = "modifier_item_desolator6_arena_cutting"
-			local mod = attacker:FindModifierByName(mod_name)
-			local ability = mod:GetAbility()
-			if ability:IsCooldownReady() then
-				ability:AutoStartCooldown()
-				-- mult = CalculatePhysicalResist(unit, victim:GetPhysicalArmorBaseValue())
-				ApplyDamage({
-					victim = victim,
-					attacker = attacker,
-					damage = damage / (1 - diff),
-					damage_type = DAMAGE_TYPE_PHYSICAL,
-					damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION + DOTA_DAMAGE_FLAG_IGNORES_PHYSICAL_ARMOR,
-					ability = ability
-				})
-				attacker:RemoveModifierByName(mod_name)
-				return 1 * diff
-			end
-			attacker:RemoveModifierByName(mod_name)
-			return 1
-		end
-	end,
-
-	--[[modifier_arena_hero = {
-		multiplier = function(_, victim, inflictor)
-			if inflictor then
-				if inflictor.GetAbilityName and
-				(inflictor:GetAbilityName() == "leshrac_diabolic_edict" --or
-				--inflictor:GetAbilityName() == "bloodseeker_blood_mist"
-				) then
-					if victim:IsMagicImmune() then
-						return 0
-					end
-					return 1 - victim:Script_GetMagicalArmorValue(false, inflictor)
-				end
-			end
-		end
-	},]]
 }
 
 INCOMING_DAMAGE_MODIFIERS = {
