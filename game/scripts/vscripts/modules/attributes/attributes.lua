@@ -131,7 +131,8 @@ function Attributes:UpdateStrength(parent)
     self:CalculateRegen(parent)
 
     parent:SetNetworkableEntityInfo("ReliableStr", parent:GetReliableStrength())
-
+    parent:SetNetworkableEntityInfo("UnreliableStr", parent:GetUnreliableStrength())
+    parent:SetNetworkableEntityInfo("BonusStr", parent:GetBonusStrength())
 end
 
 function Attributes:UpdateAgility(parent)
@@ -223,6 +224,7 @@ function Attributes:UpdateAgility(parent)
     --print(level_agility)
     if custom_as > AGILITY_MAX_ATTACK_SPEED_COUNT then custom_as = AGILITY_MAX_ATTACK_SPEED_COUNT end
     --print(custom_as)
+    custom_as = math.min(700, custom_as + parent:GetUnreliableAgility() * (1 / 200))
     parent:SetNetworkableEntityInfo("ReturnedAttackSpeed", -parent:GetAgility() + custom_as)
     parent:SetNetworkableEntityInfo("AgilityAttackSpeed", custom_as)
 
@@ -235,7 +237,8 @@ function Attributes:UpdateAgility(parent)
     end
 
     parent:SetNetworkableEntityInfo("ReliableAgi", parent:GetReliableAgility())
-
+    parent:SetNetworkableEntityInfo("UnreliableAgi", parent:GetUnreliableAgility())
+    parent:SetNetworkableEntityInfo("BonusAgi", parent:GetBonusAgility())
 end
 
 function Attributes:UpdateIntelligence(parent)
@@ -248,13 +251,14 @@ function Attributes:UpdateIntelligence(parent)
     Attributes:UpdateManaRegen(parent)
 
     parent:SetNetworkableEntityInfo("ReliableInt", parent:GetReliableIntellect())
+    parent:SetNetworkableEntityInfo("UnreliableInt", parent:GetUnreliableIntellect())
+    parent:SetNetworkableEntityInfo("BonusInt", parent:GetBonusIntellect())
 end
 
 function Attributes:UpdateManaRegen(parent)
     local ManaRegenAmp = parent:GetIntellect() * parent.ManaRegAmpPerInt
 
     if not parent.GetEnergy and not parent:HasModifier("modifier_filler_heal") and not parent:HasModifier("modifier_fountain_aura_arena") then
-
         local custom_regen = parent:GetManaRegen()
 
         parent.custom_mana_regen = custom_regen * ManaRegenAmp
@@ -273,14 +277,17 @@ function Attributes:UpdateDamage(parent)
         unreliable_damage)
 
     local reliable_str = (parent:GetStrength() - parent:GetUnreliableStrength() -
-        CalculateStatForLevel(parent, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT) +
-        CalculateStatForLevel(parent, DOTA_ATTRIBUTE_STRENGTH, 600) + parent:GetUnreliableStrength() * DAMAGE_PER_UNRELIABLE_STAT) * parent.BaseDamagePerStrength
+            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT) +
+            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_STRENGTH, 600) + parent:GetUnreliableStrength() * DAMAGE_PER_UNRELIABLE_STAT) *
+        parent.BaseDamagePerStrength
     local reliable_agi = (parent:GetAgility() - parent:GetUnreliableAgility() -
-        CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT) +
-        CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, 600) + parent:GetUnreliableAgility() * DAMAGE_PER_UNRELIABLE_STAT) * parent.BaseDamagePerStrength
+            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT) +
+            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, 600) + parent:GetUnreliableAgility() * DAMAGE_PER_UNRELIABLE_STAT) *
+        parent.BaseDamagePerStrength
     local reliable_int = (parent:GetIntellect() - parent:GetUnreliableIntellect() -
-        CalculateStatForLevel(parent, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT) +
-        CalculateStatForLevel(parent, DOTA_ATTRIBUTE_INTELLECT, 600) + parent:GetUnreliableIntellect() * DAMAGE_PER_UNRELIABLE_STAT) * parent.BaseDamagePerStrength
+            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT) +
+            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_INTELLECT, 600) + parent:GetUnreliableIntellect() * DAMAGE_PER_UNRELIABLE_STAT) *
+        parent.BaseDamagePerStrength
     local reliable_uni = (reliable_str + reliable_agi + reliable_int) * DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
 
     local primary_attribute = parent:GetPrimaryAttribute()
@@ -296,7 +303,7 @@ function Attributes:UpdateDamage(parent)
         damage_max = damage_max + reliable_str
         --print('str')
         parent:SetNetworkableEntityInfo("BaseDamagePerStr", reliable_str)
-        parent.BaseDamagePerStr = reliable_str 
+        parent.BaseDamagePerStr = reliable_str
     else
         parent:SetNetworkableEntityInfo("BaseDamagePerStr", 0)
         parent.BaseDamagePerStr = 0
@@ -340,6 +347,19 @@ function Attributes:UpdateDamage(parent)
     parent:SetNetworkableEntityInfo("BaseDamageMax", parent:GetBaseDamageMax())
 end
 
+function Attributes:UpdateDamageMultipliers(parent)
+    local attacker = parent
+    local addictive_multiplier = 0
+    for k, v in pairs(ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS) do
+        if attacker:HasModifier(k) then
+            -- print(k)
+            addictive_multiplier = addictive_multiplier + (v.addictive_multiplier(attacker) - 1)
+        end
+    end
+    -- print('addictive_multiplier: '..addictive_multiplier)
+    attacker.addictive_multiplier = addictive_multiplier
+end
+
 function Attributes:UpdateAll(parent, timer)
     if parent and not parent._cooldown then
         parent._cooldown = true
@@ -349,6 +369,7 @@ function Attributes:UpdateAll(parent, timer)
             self:UpdateAgility(parent)
             self:UpdateIntelligence(parent)
             self:UpdateDamage(parent)
+            self:UpdateDamageMultipliers(parent)
 
             local stamina = parent:FindModifierByName('modifier_stamina')
             if stamina then
@@ -378,8 +399,22 @@ function Attributes:UpdateAll(parent, timer)
             parent:SetNetworkableEntityInfo('InstakillResistance', math.min(100, math.floor(parent:GetInstakillResist())))
             -- print(parent:GetReliableDamage())
 
-            
+
             parent:SetNetworkableEntityInfo('ReliableDamage', parent:GetReliableDamage())
         end)
     end
+end
+
+function Attributes:OnDeath(parent)
+    local add_str = parent.Additional_str or 0
+    local add_agi = parent.Additional_agi or 0
+    local add_int = parent.Additional_int or 0
+    parent:ModifyStrength(-add_str * 0.3)
+    parent:ModifyAgility(-add_agi * 0.3)
+    parent:ModifyIntellect(-add_int * 0.3)
+    parent.Additional_str = add_str - add_str * 0.3
+    parent.Additional_agi = add_agi - add_agi * 0.3
+    parent.Additional_int = add_int - add_int * 0.3
+
+    Attributes:UpdateAll(parent)
 end

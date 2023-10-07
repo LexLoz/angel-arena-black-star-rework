@@ -477,8 +477,8 @@ function HookPanoramaPanels() {
 			DOTAHUDDamageArmorTooltip.SetDialogVariable('intelligence_mana_regen', NumberReduction(1 + MANA_REGEN_AMPLIFY * INT, 2, 0.1));
 
 			//базовый урон
-			if (custom_entity_value.CustomBaseDamage != null) 
-			DOTAHUDDamageArmorTooltip.SetDialogVariable('custom_base_damage', NumberReduction(custom_entity_value.CustomBaseDamage));
+			if (custom_entity_value.CustomBaseDamage != null)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('custom_base_damage', NumberReduction(custom_entity_value.CustomBaseDamage));
 			//print(BASE_DAMAGE_PER_STRENGTH)\
 			//primary_attribute_damage
 
@@ -545,12 +545,50 @@ function HookPanoramaPanels() {
 			if (custom_entity_value.AttributeIntelligenceGain != null)
 				DOTAHUDDamageArmorTooltip.SetDialogVariable('intelligence_per_level', custom_entity_value.AttributeIntelligenceGain.toFixed(1));
 
-			if (custom_entity_value.ReliableStr != null)
-				DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_strength', NumberReduction(custom_entity_value.ReliableStr, 0));
-			if (custom_entity_value.ReliableAgi != null)
-				DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_agility', NumberReduction(custom_entity_value.ReliableAgi, 0));
-			if (custom_entity_value.ReliableInt != null)
-				DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_intellect', NumberReduction(custom_entity_value.ReliableInt, 0));
+			// if (custom_entity_value.ReliableStr != null)
+			// 	DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_strength', NumberReduction(custom_entity_value.ReliableStr, 0));
+			// if (custom_entity_value.ReliableAgi != null)
+			// 	DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_agility', NumberReduction(custom_entity_value.ReliableAgi, 0));
+			// if (custom_entity_value.ReliableInt != null)
+			// 	DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_intellect', NumberReduction(custom_entity_value.ReliableInt, 0));
+
+			if (custom_entity_value.UnreliableStr != null)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('unreliable_strength', NumberReduction(custom_entity_value.UnreliableStr, 0));
+			if (custom_entity_value.UnreliableAgi != null)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('unreliable_agility', NumberReduction(custom_entity_value.UnreliableAgi, 0));
+			if (custom_entity_value.UnreliableInt != null)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('unreliable_intellect', NumberReduction(custom_entity_value.UnreliableInt, 0));
+
+			let bonus_str
+			let bonus_agi
+			let bonus_int
+			if (custom_entity_value.BonusStr) {
+				bonus_str = Math.min(500, custom_entity_value.BonusStr)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('bonus_strength', '+ ' + NumberReduction(bonus_str, 0));
+			}
+			if (custom_entity_value.BonusAgi) {
+				bonus_agi = Math.min(500, custom_entity_value.BonusAgi)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('bonus_agility', '+ ' + NumberReduction(bonus_agi, 0));
+			}
+			if (custom_entity_value.BonusInt) {
+				bonus_int = Math.min(500, custom_entity_value.BonusInt)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('bonus_intelligence', '+ ' + NumberReduction(bonus_int, 0));
+			}
+
+			// print(custom_entity_value.ReliableStr)
+			if (custom_entity_value.ReliableStr && custom_entity_value.BonusStr) {
+				let base_str = (custom_entity_value.ReliableStr - bonus_str).toFixed(0)
+				print(base_str)
+				DOTAHUDDamageArmorTooltip.FindChildTraverse("BaseStrengthLabel").text = (base_str)
+			}
+			if (custom_entity_value.ReliableAgi && custom_entity_value.BonusAgi) {
+				let base_agi = (custom_entity_value.ReliableAgi - bonus_agi).toFixed(0)
+				DOTAHUDDamageArmorTooltip.FindChildTraverse("BaseAgilityLabel").text = (base_agi)
+			}
+			if (custom_entity_value.ReliableInt && custom_entity_value.BonusInt) {
+				let base_int = (custom_entity_value.ReliableInt - bonus_int).toFixed(0)
+				DOTAHUDDamageArmorTooltip.FindChildTraverse("BaseIntelligenceLabel").text = (base_int)
+			}
 
 			DOTAHUDDamageArmorTooltip.FindChildTraverse('StrengthDetails').text = $.Localize('#arena_hud_tooltip_details_strength', DOTAHUDDamageArmorTooltip);
 			DOTAHUDDamageArmorTooltip.FindChildTraverse('StrengthDetails').style.textOverflow = 'shrink'; textOverflow = 'shrink';
@@ -572,7 +610,7 @@ function HookPanoramaPanels() {
 	});
 	Game.MouseEvents.OnLeftPressed.push(function (ClickBehaviors, eventName, arg) {
 		if (ClickBehaviors === CLICK_BEHAVIORS.DOTA_CLICK_BEHAVIOR_NONE) {
-			//$.DispatchEvent('DOTAHUDHideDamageArmorTooltip');
+			// $.DispatchEvent('DOTAHUDHideDamageArmorTooltip');
 		}
 	});
 	stats_region.SetPanelEvent('onmouseout', function () {

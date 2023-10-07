@@ -402,35 +402,13 @@ function CDOTA_BaseNPC:GetInstakillResist()
 end
 
 function CDOTA_BaseNPC_Hero:GetBonusStrength()
-	return math.max(0, self:GetStrength() - self:GetBaseStrength() - (self:HasModifier("modifier_talent_bonus_all_stats") and
+	return math.min(RELIABLE_BONUS_STAT_LIMIT, math.max(0, self:GetStrength() - self:GetBaseStrength() - (self:HasModifier("modifier_talent_bonus_all_stats") and
 		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
-		or 0))
+		or 0)))
 end
 
 function CDOTA_BaseNPC_Hero:GetBonusAgility()
-	return math.max(0, self:GetAgility() - self:GetBaseAgility() - (self:HasModifier("modifier_talent_bonus_all_stats") and
-		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
-		or 0))
-end
-
-function CDOTA_BaseNPC_Hero:GetBonusIntellect()
-	return math.max(0, self:GetIntellect() - self:GetBaseIntellect() - (self:HasModifier("modifier_talent_bonus_all_stats") and
-		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
-		or 0))
-end
-
-function CDOTA_BaseNPC_Hero:GetUnreliableStrength()
-	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true)
-	local bonus_stat = self:GetBonusStrength() < RELIABLE_BONUS_STAT_LIMIT and
-		self:GetBonusStrength() or
-		RELIABLE_BONUS_STAT_LIMIT
-	return self:GetStrength() - stat_per_level - bonus_stat
-end
-
-function CDOTA_BaseNPC_Hero:GetUnreliableAgility()
-	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT, true)
-	local bonus_stat = self:GetBonusAgility()
-
+	local m_bonus = 0
 	local marksmanship = self:FindModifierByName("modifier_drow_ranger_marksmanship_aura_bonus")
 	if marksmanship then
 		local ability = marksmanship:GetAbility()
@@ -446,22 +424,36 @@ function CDOTA_BaseNPC_Hero:GetUnreliableAgility()
 		end
 
 
-		local m_bonus = owner:GetAgility() - (owner:GetAgility() / mult)
-
-		bonus_stat = bonus_stat - m_bonus < RELIABLE_BONUS_STAT_LIMIT and
-			bonus_stat - m_bonus or
-			RELIABLE_BONUS_STAT_LIMIT
+		m_bonus = owner:GetAgility() - (owner:GetAgility() / mult)
 
 		--print(m_bonus)
 	end
+	return math.min(RELIABLE_BONUS_STAT_LIMIT, math.max(0, self:GetAgility() - self:GetBaseAgility() - m_bonus - (self:HasModifier("modifier_talent_bonus_all_stats") and
+		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
+		or 0)))
+end
+
+function CDOTA_BaseNPC_Hero:GetBonusIntellect()
+	return math.min(RELIABLE_BONUS_STAT_LIMIT, math.max(0, self:GetIntellect() - self:GetBaseIntellect() - (self:HasModifier("modifier_talent_bonus_all_stats") and
+		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
+		or 0)))
+end
+
+function CDOTA_BaseNPC_Hero:GetUnreliableStrength()
+	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true)
+	local bonus_stat = self:GetBonusStrength()
+	return self:GetStrength() - stat_per_level - bonus_stat
+end
+
+function CDOTA_BaseNPC_Hero:GetUnreliableAgility()
+	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT, true)
+	local bonus_stat = self:GetBonusAgility()
 	return self:GetAgility() - stat_per_level - bonus_stat
 end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableIntellect()
 	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT, true)
-	local bonus_stat = self:GetBonusIntellect() < RELIABLE_BONUS_STAT_LIMIT and
-		self:GetBonusIntellect() or
-		RELIABLE_BONUS_STAT_LIMIT
+	local bonus_stat = self:GetBonusIntellect()
 	return self:GetIntellect() - stat_per_level - bonus_stat
 end
 
