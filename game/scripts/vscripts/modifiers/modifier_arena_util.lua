@@ -55,37 +55,33 @@ if IsServer() then
 				return IsValidEntity(inflictor) and inflictor.GetAbilityName
 			end
 			--print(ConditionHelper())
-			local condition = not (ConditionHelper() and not FilterDamageSpellAmpCondition(inflictor, inflictor:GetAbilityName(), attacker, keys.damage_flags)) or (ConditionHelper() and ATTACK_DAMAGE_ABILITIES[inflictor:GetAbilityName()])
+			local condition = not (ConditionHelper() and not FilterDamageSpellAmpCondition(inflictor, inflictor:GetAbilityName(), attacker, keys.damage_flags)) or
+			(ConditionHelper() and ATTACK_DAMAGE_ABILITIES[inflictor:GetAbilityName()])
 			--if condition then
-				if victim.HasModifier then
-					local multiplier = 1
-					for k,v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
-						if attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags))) then
-							multiplier = multiplier * ExtractMultiplier(
+			if victim.HasModifier then
+				local multiplier = 1
+				for k, v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
+					if attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags))) then
+						if multiplier == 0 then break end
+						multiplier = multiplier * ExtractMultiplier(
 							damage,
-							ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage))
-						end
+							ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags,
+								saved_damage))
 					end
-					for k,v in pairs(ON_DAMAGE_MODIFIER_PROCS) do
-						if attacker:HasModifier(k) then
-							multiplier = multiplier * ExtractMultiplier(
-							damage,
-							ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage))
-						end
-					end
-					local addictive_multiplier = 0
-					for k,v in pairs(ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS) do
-						if attacker:HasModifier(k) then
-							addictive_multiplier = addictive_multiplier + v.addictive_multiplier(attacker) - 1
-						end
-					end
-					--print(addictive_multiplier)
-					if addictive_multiplier > 1 then
-						multiplier = multiplier + addictive_multiplier
-					end
-
-					damage = damage * multiplier
 				end
+				if attacker.addictive_multiplier > 0 then
+					multiplier = multiplier + attacker.addictive_multiplier
+				end
+
+				damage = damage * multiplier
+
+				for k, v in pairs(ON_DAMAGE_MODIFIER_PROCS) do
+					if attacker:HasModifier(k) then
+						ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags,
+							saved_damage)
+					end
+				end
+			end
 		end
 		-- print('current damage: '..damage)
 		-- print('saved damage: '..saved_damage)
@@ -113,7 +109,6 @@ if IsServer() then
 		end
 
 		if IsValidEntity(attacker) then
-
 			-- if victim:IsBoss() and (attacker:GetAbsOrigin() - victim:GetAbsOrigin()):Length2D() > 950 then
 			-- 	damage = damage / 2
 			-- end
@@ -123,15 +118,17 @@ if IsServer() then
 			local BlockedDamage = 0
 
 			if victim.HasModifier then
-				for k,v in pairs(ON_DAMAGE_MODIFIER_PROCS_VICTIM) do
+				for k, v in pairs(ON_DAMAGE_MODIFIER_PROCS_VICTIM) do
 					if victim:HasModifier(k) then
-						damage = ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage)
+						damage = ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const,
+							damage_flags, saved_damage)
 					end
 					if damage == 0 then break end
 				end
-				for k,v in pairs(INCOMING_DAMAGE_MODIFIERS) do
+				for k, v in pairs(INCOMING_DAMAGE_MODIFIERS) do
 					if victim:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags))) then
-						damage = ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage)
+						damage = ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const,
+							damage_flags, saved_damage)
 						if damage == 0 then break end
 					end
 				end
@@ -140,7 +137,7 @@ if IsServer() then
 			if BlockedDamage > 0 then
 				-- SendOverheadEventMessage(victim:GetPlayerOwner(), OVERHEAD_ALERT_BLOCK, victim, BlockedDamage, attacker:GetPlayerOwner())
 				-- SendOverheadEventMessage(attacker:GetPlayerOwner(), OVERHEAD_ALERT_BLOCK, victim, BlockedDamage, victim:GetPlayerOwner())
-	
+
 				damage = damage - BlockedDamage
 			end
 		end
@@ -151,14 +148,14 @@ if IsServer() then
 		return -(saved_damage - damage)
 	end
 
-    function modifier_arena_util:OnCreated()
+	function modifier_arena_util:OnCreated()
 		self.tick = 1 / 20
-        self:StartIntervalThink(self.tick)
-    end
+		self:StartIntervalThink(self.tick)
+	end
 
-    function modifier_arena_util:OnIntervalThink()
-        local parent = self:GetParent()
-        if not self.evolution then
+	function modifier_arena_util:OnIntervalThink()
+		local parent = self:GetParent()
+		if not self.evolution then
 			if parent:GetMaxMana() >= 65536 and (parent:GetMana() ~= self._Mana or parent:GetMaxMana() ~= self._MaxMana) then
 				self._Mana = parent:GetMana()
 				self._MaxMana = parent:GetMaxMana()
@@ -167,7 +164,7 @@ if IsServer() then
 			end
 		end
 
-        --[[if self._Health ~= parent:GetHealth() or self._MaxHealth ~= parent:GetMaxHealth() then
+		--[[if self._Health ~= parent:GetHealth() or self._MaxHealth ~= parent:GetMaxHealth() then
 			self._Health = parent:GetHealth()
 			self._MaxHealth = parent:GetMaxHealth()
 			parent:SetNetworkableEntityInfo("CurrentHealth", parent:GetHealth())
@@ -178,7 +175,8 @@ if IsServer() then
 			self.health_regen = parent:GetHealthRegen() + (parent.custom_regen or 0)
 			--print('regen: '..parent:GetHealthRegen())
 			--print('custom regen: '..(parent.custom_regen or 0))
-			parent:SetNetworkableEntityInfo("HealthRegen", (__toFixed(math.max(0, (parent.custom_regen or 0)) + parent:GetHealthRegen(), 1)))
+			parent:SetNetworkableEntityInfo("HealthRegen",
+				(__toFixed(math.max(0, (parent.custom_regen or 0)) + parent:GetHealthRegen(), 1)))
 		end
 
 		if parent:IsHero() and parent:GetHealth() < parent:GetMaxHealth() then
@@ -191,5 +189,5 @@ if IsServer() then
 		if parent:IsHero() and parent:GetMana() < parent:GetMaxMana() then
 			parent:SetMana(parent:GetMana() + (parent.custom_mana_regen or 0) * self.tick)
 		end
-    end
+	end
 end

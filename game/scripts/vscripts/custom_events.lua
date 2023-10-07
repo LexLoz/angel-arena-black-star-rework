@@ -14,7 +14,7 @@ function GameMode:ChangePrimaryBonus(data)
 		local mod = ent:FindModifierByName(data.modifier)
 		if IsValidEntity(ent) and
 			ent:IsAlive() and
-			ent:GetPlayerOwner() == PlayerResource:GetPlayer(data.PlayerID) and
+			ent:GetPlayerOwnerID() == data.PlayerID and
 			table.includes(ONCLICK_PURGABLE_MODIFIERS, data.modifier) and
 			not ent:IsStunned() and
 			not ent:IsChanneling() and
@@ -72,7 +72,7 @@ function GameMode:ModifierClickedPurge(data)
 		local ent = EntIndexToHScript(data.unit)
 		if IsValidEntity(ent) and
 			ent:IsAlive() and
-			ent:GetPlayerOwner() == PlayerResource:GetPlayer(data.PlayerID) and
+			ent:GetPlayerOwnerID() == data.PlayerID and
 			table.includes(ONCLICK_PURGABLE_MODIFIERS, data.modifier) and
 			not ent:IsStunned() and
 			not ent:IsChanneling() then

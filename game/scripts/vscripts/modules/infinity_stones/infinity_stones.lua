@@ -76,7 +76,7 @@ if IsServer() then
 		--print(Entities:FindByName("item_infinity_gauntlet"))
 		local gauntlet = Entities:FindByName(nil, "item_infinity_gauntlet")
 		if gauntlet then
-			if gauntlet:GetItemSlot() == -1 and not gauntlet.vision then
+			if gauntlet:GetItemSlot() == -1 and not gauntlet.firstDrop and not gauntlet.vision then
 				local name = "icon_gauntlet"
 				gauntlet.vision = DynamicMinimap:CreateMinimapPoint(gauntlet:GetAbsOrigin(), name)
 				DynamicMinimap:SetVisibleGlobal(gauntlet.vision, true)
@@ -84,6 +84,8 @@ if IsServer() then
 				DynamicMinimap:SetAbsOrigin(gauntlet.vision, gauntlet:GetAbsOrigin())
 			elseif gauntlet:GetItemSlot() ~= -1 and gauntlet.vision then
 				DestroyMarks(gauntlet)
+			elseif gauntlet:GetItemSlot() ~= -1 and gauntlet.firstDrop then
+				gauntlet.firstDrop = false
 			end
 		end
 		for k, _ in pairs(STONES_LIST) do

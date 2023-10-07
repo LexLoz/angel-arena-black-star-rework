@@ -262,27 +262,32 @@ if IsServer() then
 
 	function modifier_arena_hero:OnDeath(k)
 		local parent = self:GetParent()
-		if k.unit == parent and not parent:IsIllusion() and parent:IsTrueHero() and not parent:IsTempestDouble() and not Duel:IsDuelOngoing() then
-			for _, v in pairs(STONES_TABLE) do
-				local stone = FindItemInInventoryByName(parent, v[1], false, false, false, true)
-				if stone then
-					parent:DropItemAtPositionImmediate(stone, parent:GetAbsOrigin() + RandomVector(RandomInt(90, 300)))
-				end
-			end
-
-			DropInfinityGauntlet(parent)
-
-			local courier = Structures:GetCourier(parent:GetPlayerID())
-			if courier:IsAlive() then
+		if k.unit == parent and not parent:IsIllusion() and parent:IsTrueHero() and not parent:IsTempestDouble() then
+			if not Duel:IsDuelOngoing() then
 				for _, v in pairs(STONES_TABLE) do
-					local stone = FindItemInInventoryByName(courier, v[1], _, _, _, true)
-					--print(stone)
+					local stone = FindItemInInventoryByName(parent, v[1], false, false, false, true)
 					if stone then
-						courier:DropItemAtPositionImmediate(stone,
-							parent:GetAbsOrigin() + RandomVector(RandomInt(90, 300)))
+						parent:DropItemAtPositionImmediate(stone, parent:GetAbsOrigin() + RandomVector(RandomInt(90, 300)))
+					end
+				end
+
+				DropInfinityGauntlet(parent)
+
+				local courier = Structures:GetCourier(parent:GetPlayerID())
+				if courier:IsAlive() then
+					for _, v in pairs(STONES_TABLE) do
+						local stone = FindItemInInventoryByName(courier, v[1], _, _, _, true)
+						--print(stone)
+						if stone then
+							courier:DropItemAtPositionImmediate(stone,
+								parent:GetAbsOrigin() + RandomVector(RandomInt(90, 300)))
+						end
 					end
 				end
 			end
+
+			--удаление ненадежных атрибутов при смерти
+			Attributes:OnDeath(parent)
 
 			--print(GetOneRemainingTeam())
 			if GetOneRemainingTeam() then
@@ -299,25 +304,6 @@ if IsServer() then
 				end
 			end
 		end
-
-		--bounty hunter track fix
-		--[[if k.unit == parent and parent:HasModififer("modifier_bounty_hunter_track") and parent.GetPlayerID ~= nil then
-			local ability = k.attacker:FindAbilityByName("bounty_hunter_jinada")
-			local bonus_allies = ability:GetAbilitySpecial("bonus_gold")
-			local bonus_self = ability:GetAbilitySpecial("bonus_gold_self")
-			local radius = ability:GetAbilitySpecial("bonus_gold_radius")
-			local allies = FindUnitsInRadius(
-					k.attacker:GetTeam(),
-					target:GetAbsOrigin(),
-					nil,
-					radius, --radius
-					DOTA_UNIT_TARGET_TEAM_ENEMY,
-					DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,
-					DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES,
-					FIND_CLOSEST,
-					false
-				)
-		end]]
 
 		if k.attacker == parent and k.unit:IsCreep() then
 			local gold = 0

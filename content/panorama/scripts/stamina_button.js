@@ -117,11 +117,11 @@ function ToggleOnStaminaBar() {
 	ManaProgress_Left.style["background-color"] = "gradient( linear, 0% 0%, 0% 100%, from( #2b8737 ), color-stop( 0.2, #4dce41 ), color-stop( .5, #57ea4a), to( #2b8737 ) )"
 	ManaProgress_Right.style["background-color"] = "gradient( linear, 0% 0%, 0% 100%, from( #103213 ), color-stop( 0.2, #194717 ), color-stop( .5, #164420), to( #10321a ) )"
 
-	agbut.visible = false
-	intbut.visible = true
-	ButtonSwap.Mana = false
-	ButtonSwap.Stamina = true
-	AutoUpdateStaminaBar()
+	agbut.visible = false;
+	intbut.visible = true;
+	ButtonSwap.Mana = false;
+	ButtonSwap.Stamina = true;
+	AutoUpdateStaminaBar();
 }
 
 function ToggleOnManaBar() {

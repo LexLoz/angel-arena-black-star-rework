@@ -1235,33 +1235,33 @@ function ReloadUnitModifiers(unit)
 end
 
 function CalculatePhysicalResist(unit, armor)
-	local total_armor = unit:GetPhysicalArmorValue(false)
-	local function formula(a)
-		return (0.06 * a) / (1 + 0.06 * math.abs(a))
-	end
-	armor = ((armor > 0 and armor > total_armor) or (armor < 0 and armor < total_armor)) and total_armor or armor
-	local total_armor_mult = formula(total_armor)
-	local diff = (armor / total_armor)
-	return total_armor_mult * diff
+	-- local total_armor = unit:GetPhysicalArmorValue(false)
+	-- local function formula(a)
+	return (0.06 * armor) / (1 + 0.06 * math.abs(armor))
+	-- end
+	-- armor = ((armor > 0 and armor > total_armor) or (armor < 0 and armor < total_armor)) and total_armor or armor
+	-- local total_armor_mult = formula(total_armor)
+	-- local diff = (armor / total_armor)
+	-- return total_armor_mult * diff
 end
 
 function GetSpellCrit(mult)
 	return math.min(STRENGTH_CRIT_SPELL_LIMIT * 0.01 - 1, 1 + mult / STRENGTH_CRIT_SPELL_CRIT_DECREASRE_MULT)
 end
 
-	function ReconnectFix(player)
-		if HeroSelection:GetState() == HERO_SELECTION_PHASE_END then
-			Convars:SetInt("host_timescale", 1)
-			StatsClient:AddGuide(nil)
-			Duel:CreateGlobalTimer()
-			Weather:Init()
-			PanoramaShop:StartItemStocks()
-			PlayerTables:start()
-			PanoramaShop:InitializeItemTable()
-			CustomGameEventManager:Send_ServerToPlayer(player, "reconnect-fix", {
-				removePickWindow = true
-			})
-			print(player)
-			print('reconnect fix')
-		end
+function ReconnectFix(player)
+	if HeroSelection:GetState() == HERO_SELECTION_PHASE_END then
+		Convars:SetInt("host_timescale", 1)
+		StatsClient:AddGuide(nil)
+		Duel:CreateGlobalTimer()
+		Weather:Init()
+		PanoramaShop:StartItemStocks()
+		PlayerTables:start()
+		PanoramaShop:InitializeItemTable()
+		CustomGameEventManager:Send_ServerToPlayer(player, "reconnect-fix", {
+			removePickWindow = true
+		})
+		print(player)
+		print('reconnect fix')
 	end
+end

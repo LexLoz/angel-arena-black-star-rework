@@ -180,9 +180,9 @@ REFRESH_LIST_IGNORE_REARM = {
 	item_edge_of_vyse = true,
 	item_abyssal_blade = true,
 	item_sheepstick = true,
-	
-	-- item_book_of_the_guardian = true,
-	-- item_book_of_the_guardian_2 = true,
+
+	item_book_of_the_guardian = true,
+	item_book_of_the_guardian_2 = true,
 
 	item_behelit = true,
 	item_ultimate_scepter_arena = true,

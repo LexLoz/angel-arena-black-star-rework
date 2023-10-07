@@ -129,15 +129,15 @@
 					}
 				}
 
-				"OnAttackLanded"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"heroes/hero_shinobu/vampire_blood.lua"
-						"Function"		"StealHealth"
-						"damage"		"%attack_damage"
-					}
-				}
+				// "OnAttackLanded"
+				// {
+				// 	"RunScript"
+				// 	{
+				// 		"ScriptFile"	"heroes/hero_shinobu/vampire_blood.lua"
+				// 		"Function"		"StealHealth"
+				// 		"damage"		"%attack_damage"
+				// 	}
+				// }
 
 				"ThinkInterval"  "0.1"
 				"OnIntervalThink"

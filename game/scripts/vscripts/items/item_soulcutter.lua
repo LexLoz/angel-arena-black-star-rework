@@ -1,6 +1,6 @@
 LinkLuaModifier("modifier_item_soulcutter", "items/item_soulcutter.lua", LUA_MODIFIER_MOTION_NONE)
-LinkLuaModifier("modifier_item_soulcutter_windwalk", "items/item_soulcutter.lua", LUA_MODIFIER_MOTION_NONE)
-LinkLuaModifier("modifier_item_soulcutter_hex", "items/item_soulcutter.lua", LUA_MODIFIER_MOTION_NONE)
+-- LinkLuaModifier("modifier_item_soulcutter_windwalk", "items/item_soulcutter.lua", LUA_MODIFIER_MOTION_NONE)
+-- LinkLuaModifier("modifier_item_soulcutter_hex", "items/item_soulcutter.lua", LUA_MODIFIER_MOTION_NONE)
 
 
 item_soulcutter = {
@@ -8,13 +8,12 @@ item_soulcutter = {
 	HasStaticCooldown  		 = function() return true end
 }
 
-if IsServer() then
-	function item_soulcutter:OnSpellStart()
-		-- print(self.ApplyDataDrivenModifier)
-		self:GetCaster():AddNewModifier(self:GetCaster(), self, "modifier_item_edge_of_vyse_active",
-			{ duration = self:GetSpecialValueFor("windwalk_duration") })
-	end
-end
+-- if IsServer() then
+-- 	function item_soulcutter:OnSpellStart()
+-- 		self:GetCaster():AddNewModifier(self:GetCaster(), self, "modifier_item_edge_of_vyse_active",
+-- 			{ duration = self:GetSpecialValueFor("windwalk_duration") })
+-- 	end
+-- end
 
 modifier_item_soulcutter = {
 	IsHidden          = function() return true end,
@@ -26,29 +25,20 @@ modifier_item_soulcutter = {
 	GetAuraRadius     = function(self) return self:GetAbility():GetSpecialValueFor("aura_radius") end,
 	GetAuraSearchTeam = function() return DOTA_UNIT_TARGET_TEAM_ENEMY end,
 	GetAuraSearchType = function() return DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC end,
+
+	DeclareFunctions = function()
+		return {
+			MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE,
+			MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
+			MODIFIER_EVENT_ON_ATTACK_LANDED,
+			MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
+		}
+	end,
+
+	GetModifierPreAttack_BonusDamage = function(self) return self:GetAbility():GetSpecialValueFor("bonus_damage") end,
+	GetModifierAttackSpeedBonus_Constant = function(self) return self:GetAbility():GetSpecialValueFor("bonus_attack_speed") end,
+	GetModifierAttackRangeBonus = function(self) return self:GetAbility():GetSpecialValueFor("bonus_attack_range") end,
 }
-
-function modifier_item_soulcutter:DeclareFunctions()
-	return {
-		MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE,
-		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
-		MODIFIER_EVENT_ON_ATTACK_LANDED,
-		MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
-
-	}
-end
-
-function modifier_item_soulcutter:GetModifierPreAttack_BonusDamage()
-	return self:GetAbility():GetSpecialValueFor("bonus_damage")
-end
-
-function modifier_item_soulcutter:GetModifierAttackSpeedBonus_Constant()
-	return self:GetAbility():GetSpecialValueFor("bonus_attack_speed")
-end
-
-function modifier_item_soulcutter:GetModifierAttackRangeBonus()
-	return self:GetAbility():GetSpecialValueFor("bonus_attack_range")
-end
 
 if IsServer() then
 	function modifier_item_soulcutter:OnAttackLanded(keys)
@@ -107,7 +97,7 @@ modifier_item_soulcutter_stack = {
 	IsDebuff = function() return true end,
 	DeclareFunctions = function()
 		return {
-			MODIFIER_PROPERTY_TOOLTIP,
+			-- MODIFIER_PROPERTY_TOOLTIP,
 			MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS,
 		}
 	end,

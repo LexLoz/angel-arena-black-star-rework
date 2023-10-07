@@ -109,6 +109,7 @@ function Bosses:RegisterKilledBoss(unit, team)
 	if unitname == "npc_arena_boss_cursed_zeld" and not GameMode.InfinityGauntletDropped then
 		GameMode.InfinityGauntletDropped = true
 		local gauntlet = CreateItem("item_infinity_gauntlet", nil, nil)
+		gauntlet.firstDrop = true
 		CreateItemOnPositionSync(unit:GetAbsOrigin(), gauntlet)
 		Notifications:TopToAll({ text = "#arena_infinity_gauntlet_dropped", duration = 6 })
 		EmitGlobalSound("Arena.Gauntlet_Dropped")

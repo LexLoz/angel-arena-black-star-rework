@@ -141,6 +141,10 @@ if IsServer() then
     function modifier_sans_curse:OnCreated(keys)
         --print(self:GetRemainingTime())
         local ability = self:GetAbility()
+        if not ability then
+            self:Destroy()
+            return
+        end
         self.curse_damage = keys.curse_damage
         self.curse_pct = keys.curse_pct
         self.total_damage = 0
@@ -159,15 +163,14 @@ if IsServer() then
     end
 
     function modifier_sans_curse:OnIntervalThink()
+        local ability = self:GetAbility()
         local parent = self:GetParent()
+        local caster = ability:GetCaster()
 
-        if self.curse_damage <= 0 or not parent:IsAlive() then
+        if self.curse_damage <= 0 or not parent:IsAlive() or not ability then
             self:Destroy()
             return
         end
-
-        local ability = self:GetAbility()
-        local caster = ability:GetCaster()
 
         -- local limit = parent:GetMaxHealth() - (self.curse_damage / (1 + self.curse_pct * 0.01))
         -- --print("health: "..parent:GetHealth())

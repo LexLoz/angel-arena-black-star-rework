@@ -78,6 +78,8 @@ if IsServer() then
 		-- print('finished')
 		if keys.attacker == self:GetParent() then
 			self:cancel(parent)
+			-- SendOverheadEventMessage(nil, OVERHEAD_ALERT_CRITICAL, keys.target,
+			-- 	keys.original_damage, nil)
 		end
 	end
 

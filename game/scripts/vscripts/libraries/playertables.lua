@@ -428,7 +428,7 @@ function PlayerTables:SetTableValues(tableName, changes)
 	if notempty then
 		for pid,v in pairs(pids) do
 			local player = PlayerResource:GetPlayer(pid)
-			if player then  
+			if player then
 				CustomGameEventManager:Send_ServerToPlayer(player, "pt_uk", {name=tableName, changes=changes} )
 			end
 		end
