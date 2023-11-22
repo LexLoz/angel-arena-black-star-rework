@@ -155,30 +155,32 @@
 		"Ability4"	"shinobu_yumewatari_lua"
 		"Ability5"	"generic_hidden"
 		"Ability6"	"shinobu_hide_in_shadows"
-		"AttackRate"	"1.4"
+		"AttackRate"	"1.6"
 		"AttackCapabilities"	"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttributePrimary"		"DOTA_ATTRIBUTE_AGILITY"
 		"AttackRange"			"150"
 		"ProjectileModel"		""
-		"AttributeBaseStrength"		"14"
+		"AttributeBaseStrength"		"16"
 		"AttributeBaseIntelligence"	"16"
-		"AttributeBaseAgility"		"24"
+		"AttributeBaseAgility"		"16"
 		"AttributeStrengthGain"		"1.7"
 		"AttributeIntelligenceGain"	"1.6"
-		"AttributeAgilityGain"		"2.7"
-		"AttackDamageMin"	"26"
-		"AttackDamageMax"	"30"
-		// "CustomSoundEvents"
-		// {
-		// 	"precache"
-		// 	{
-		// 		"soundevents0"	"soundevents/game_sounds_heroes/game_sounds_juggernaut.vsndevts"
-		// 	}
-		// 	"ActionMap"
-		// 	{
-		// 		"OnAttack"	"Hero_Juggernaut.Attack"
-		// 	}
-		// }
+		"AttributeAgilityGain"		"2.5"
+		"AttackDamageMin"	"34"
+		"AttackDamageMax"	"40"
+		"ArmorPhysical"		"1"
+
+		"CustomSoundEvents"
+		{
+			"precache"
+			{
+				"soundevents0"	"soundevents/game_sounds_heroes/game_sounds_juggernaut.vsndevts"
+			}
+			"ActionMap"
+			{
+				"OnAttack"	"Hero_Juggernaut.Attack"
+			}
+		}
 	}
 
 	"npc_arena_hero_zen_gehraz"
@@ -359,7 +361,7 @@
 		"AttributeBaseIntelligence"	"28"
 		"AttributeBaseAgility"	"20"
 		"AttributeStrengthGain"	"2.0"
-		"AttributeIntelligenceGain"	"2.0"
+		"AttributeIntelligenceGain"	"2.5"
 		"AttributeAgilityGain"	"2.0"
 		"MagicalResistance"		"45"
 		"AttackDamageMin"		"5"
@@ -375,7 +377,7 @@
 	{
 		"base_hero"	"npc_dota_hero_arena_base"
 		"Model"	"models/units/sara/sara.vmdl"
-		"ModelScale"	"0.9"
+		"ModelScale"	"1"
 		"Ability1"	"sara_dark_blink"
 		"Ability2"	"sara_regeneration"
 		"Ability3"	"sara_fragment_of_hate"
@@ -389,13 +391,13 @@
 		"AttackRate"			"1.7"
 		"AttributeBaseStrength"	"1"
 		"AttributeBaseIntelligence"	"18"
-		"AttributeBaseAgility"	"32"
+		"AttributeBaseAgility"	"18"
 		"AttributeStrengthGain"	"1.0"
 		"AttributeIntelligenceGain"	"2.1"
-		"AttributeAgilityGain"	"3.2"
+		"AttributeAgilityGain"	"2.0"
 		"AttackDamageMin"	"20"
 		"AttackDamageMax"	"24"
-		"ArmorPhysical"		"-4"
+		"ArmorPhysical"		"-2"
 	}
 
 	"npc_arena_hero_destroyer"

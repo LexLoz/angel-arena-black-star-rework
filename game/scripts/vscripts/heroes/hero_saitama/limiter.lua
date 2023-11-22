@@ -109,7 +109,7 @@ if IsServer() then
 		self:StartIntervalThink(0.1)
 	end
 	function modifier_saitama_limiter_uncontrollability:OnIntervalThink()
-		self:GetParent():Purge(false, true, false, true, false)
+		self:GetParent():Purge(false, true, false, true, true)
 		self.Speed = self:GetAbility():GetSpecialValueFor("uncontrollability_movement_speed")
 	end
 

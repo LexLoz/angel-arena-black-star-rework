@@ -1,9 +1,10 @@
-Events:Register("activate", function ()
+Events:Register("activate", function()
 	GameRules:GetGameModeEntity():SetExecuteOrderFilter(Dynamic_Wrap(GameMode, 'ExecuteOrderFilter'), GameRules)
 	GameRules:GetGameModeEntity():SetDamageFilter(Dynamic_Wrap(GameMode, 'DamageFilter'), GameRules)
 	GameRules:GetGameModeEntity():SetModifyGoldFilter(Dynamic_Wrap(GameMode, 'ModifyGoldFilter'), GameRules)
 	GameRules:GetGameModeEntity():SetModifyExperienceFilter(Dynamic_Wrap(GameMode, 'ModifyExperienceFilter'), GameRules)
-	GameRules:GetGameModeEntity():SetItemAddedToInventoryFilter(Dynamic_Wrap(GameMode, 'ItemAddedToInventoryFilter'), GameRules)
+	GameRules:GetGameModeEntity():SetItemAddedToInventoryFilter(Dynamic_Wrap(GameMode, 'ItemAddedToInventoryFilter'),
+		GameRules)
 	GameRules:GetGameModeEntity():SetHealingFilter(Dynamic_Wrap(GameMode, 'HealFilter'), GameRules)
 	GameRules:GetGameModeEntity():SetModifierGainedFilter(Dynamic_Wrap(GameMode, 'ModifiersFilter'), GameRules)
 end)
@@ -32,22 +33,40 @@ function GameMode:ModifiersFilter(filterTable)
 
 	--print(BAT_DECREASE_MODIFIERS[name])
 
-	if parent and name and ability and BAT_DECREASE_MODIFIERS[name] then
-		for k,v in pairs(parent.change_bat_modifiers) do
-			if v and parent:HasModifier(v.name) then
-				return true
+	if parent and name then
+		if ability and BAT_DECREASE_MODIFIERS[name] then
+			for k, v in pairs(parent.change_bat_modifiers) do
+				if v and parent:HasModifier(v.name) then
+					return true
+				end
 			end
+			local default_bat = parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")
+			local ability_bat = ability:GetSpecialValueFor("base_attack_time")
+			local difference = math.abs(default_bat - ability_bat)
+			parent.outside_change_bat = parent.outside_change_bat - difference
+			parent.change_bat_modifiers = parent.change_bat_modifiers or {}
+			table.insert(parent.change_bat_modifiers, { name = name, change = difference })
+			parent:SetNetworkableEntityInfo("BaseAttackTime", default_bat + parent.outside_change_bat)
 		end
-		local default_bat = parent:GetKeyValue("AttackRate")
-		local ability_bat = ability:GetSpecialValueFor("base_attack_time")
-		local difference = math.abs(default_bat - ability_bat)
-		parent.outside_change_bat = parent.outside_change_bat - difference
-		parent.change_bat_modifiers = parent.change_bat_modifiers or {}
-		table.insert(parent.change_bat_modifiers, {name = name, change = difference})
-		parent:SetNetworkableEntityInfo("BaseAttackTime", default_bat + parent.outside_change_bat)
-		--print(parent.outside_change_bat)
+
+		if ON_DAMAGE_MODIFIER_PROCS[name] then
+			parent.ON_DAMAGE_MODIFIER_PROCS = parent.ON_DAMAGE_MODIFIER_PROCS or {}
+			parent.ON_DAMAGE_MODIFIER_PROCS[name] = true
+		end
+		if ON_DAMAGE_MODIFIER_PROCS_VICTIM[name] then
+			parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM = parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM or {}
+			parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM[name] = true
+		end
+		if OUTGOING_DAMAGE_MODIFIERS[name] then
+			parent.OUTGOING_DAMAGE_MODIFIERS = parent.OUTGOING_DAMAGE_MODIFIERS or {}
+			parent.OUTGOING_DAMAGE_MODIFIERS[name] = true
+		end
+		if INCOMING_DAMAGE_MODIFIERS[name] then
+			parent.INCOMING_DAMAGE_MODIFIERS = parent.INCOMING_DAMAGE_MODIFIERS or {}
+			parent.INCOMING_DAMAGE_MODIFIERS[name] = true
+		end
 	end
-	
+
 	return true
 end
 
@@ -69,7 +88,7 @@ function GameMode:HealFilter(filterTable)
 
 	if IsValidEntity(target) and IsValidEntity(inflictor) then
 		local inflictorname = inflictor.GetAbilityName and inflictor:GetAbilityName() or nil
-		for _,v in pairs(REGEN_EXEPTIONS) do
+		for _, v in pairs(REGEN_EXEPTIONS) do
 			if target:HasModifier(v[1]) then
 				local ability = target:FindModifierByName(v[1]):GetAbility()
 				if ability == inflictor then
@@ -80,13 +99,19 @@ function GameMode:HealFilter(filterTable)
 		--print(healer.HPRegenAmplify)
 		local interval_mult = GetIntervalMult(inflictor, "_healInterval")
 		if inflictorname and (not NO_HEAL_AMPLIFY[inflictorname] and not inflictor.NoHealAmp) then
-			local heal_mult = (healer.HPRegenAmplify or 1) + (target.HPRegenAmplify or 1)
+			local heal_mult = (healer.HPRegenAmplify or 1) + ((target.HPRegenAmplify or 1) - 1)
 			filterTable.heal = math.min(5000, filterTable.heal)
 			if healer.HPRegenAmplify > SPEND_MANA_PER_HEAL_MULT_THRESHOLD then
-				SpendManaPerDamage(healer, inflictor, filterTable.heal * (heal_mult - SPEND_MANA_PER_HEAL_MULT_THRESHOLD), interval_mult, "ManaSpendCooldownHeal", SPEND_MANA_PER_HEAL)
+				SpendManaPerDamage(healer, inflictor, filterTable.heal * (heal_mult - SPEND_MANA_PER_HEAL_MULT_THRESHOLD),
+					interval_mult, "ManaSpendCooldownHeal", SPEND_MANA_PER_HEAL)
 			end
-			filterTable.heal = math.min(2000000000, filterTable.heal * heal_mult * GetLowManaMultiplier(healer.HPRegenAmplify, healer, SPEND_MANA_PER_HEAL_MULT_THRESHOLD, SPEND_MANA_PER_HEAL_MAX_REDUCE_THRESHOLD))
-			--print(filterTable.heal)
+			-- print('heal before amp: ' .. filterTable.heal)
+			-- print('debug: ' .. heal_mult)
+			filterTable.heal = math.min(2000000000,
+				filterTable.heal * heal_mult *
+				GetLowManaMultiplier(healer.HPRegenAmplify, healer, SPEND_MANA_PER_HEAL_MULT_THRESHOLD,
+					SPEND_MANA_PER_HEAL_MAX_REDUCE_THRESHOLD))
+			-- print('heal after amp: ' .. filterTable.heal)
 		end
 	end
 	-- print(filterTable.heal)
@@ -101,13 +126,13 @@ function GameMode:ExecuteOrderFilter(filterTable)
 	local target = filterTable.entindex_target ~= 0 and EntIndexToHScript(filterTable.entindex_target) or nil
 	local orderType = filterTable["order_type"]
 
-    -- if unit and unit:IsRealHero() then
-    --     if unit:HasModifier("modifier_fymryn_shadow_step_start") or unit:HasModifier("modifier_fymryn_shadow_step") or unit:HasModifier("modifier_fymryn_shadow_step_end") then
-    --         if orderType == DOTA_UNIT_ORDER_CAST_POSITION or orderType == DOTA_UNIT_ORDER_CAST_TARGET or orderType == DOTA_UNIT_ORDER_CAST_NO_TARGET then
-    --             return false
-    --         end
-    --     end
-    -- end
+	-- if unit and unit:IsRealHero() then
+	--     if unit:HasModifier("modifier_fymryn_shadow_step_start") or unit:HasModifier("modifier_fymryn_shadow_step") or unit:HasModifier("modifier_fymryn_shadow_step_end") then
+	--         if orderType == DOTA_UNIT_ORDER_CAST_POSITION or orderType == DOTA_UNIT_ORDER_CAST_TARGET or orderType == DOTA_UNIT_ORDER_CAST_NO_TARGET then
+	--             return false
+	--         end
+	--     end
+	-- end
 
 	local ability = EntIndexToHScript(filterTable.entindex_ability)
 	if not ability or not ability.GetBehaviorInt then return true end
@@ -150,12 +175,12 @@ function GameMode:ExecuteOrderFilter(filterTable)
 
 	if unit:IsCourier() then
 		if (
-			order_type == DOTA_UNIT_ORDER_CAST_POSITION or
-			order_type == DOTA_UNIT_ORDER_CAST_TARGET or
-			order_type == DOTA_UNIT_ORDER_CAST_TARGET_TREE or
-			order_type == DOTA_UNIT_ORDER_CAST_NO_TARGET or
-			order_type == DOTA_UNIT_ORDER_CAST_TOGGLE
-		) and ability and ability:IsItem() then
+				order_type == DOTA_UNIT_ORDER_CAST_POSITION or
+				order_type == DOTA_UNIT_ORDER_CAST_TARGET or
+				order_type == DOTA_UNIT_ORDER_CAST_TARGET_TREE or
+				order_type == DOTA_UNIT_ORDER_CAST_NO_TARGET or
+				order_type == DOTA_UNIT_ORDER_CAST_TOGGLE
+			) and ability and ability:IsItem() then
 			Containers:DisplayError(playerId, "dota_hud_error_courier_cant_use_item")
 			return false
 		end
@@ -176,9 +201,9 @@ function GameMode:ExecuteOrderFilter(filterTable)
 
 	if order_type == DOTA_UNIT_ORDER_CAST_POSITION then
 		if (
-			abilityname == "item_ward_sentry" or
-			(abilityname == "item_ward_dispenser" and not ability:GetToggleState())
-		) then
+				abilityname == "item_ward_sentry" or
+				(abilityname == "item_ward_dispenser" and not ability:GetToggleState())
+			) then
 			local team = PlayerResource:GetTeam(playerId)
 			local wards = {}
 			for _, ward in ipairs(Entities:FindAllByClassname("npc_dota_ward_base_truesight")) do
@@ -194,8 +219,10 @@ function GameMode:ExecuteOrderFilter(filterTable)
 		if not Duel:IsDuelOngoing() and ARENA_NOT_CASTABLE_ABILITIES[abilityname] then
 			local orderVector = Vector(filterTable.position_x, filterTable.position_y, 0)
 			if type(ARENA_NOT_CASTABLE_ABILITIES[abilityname]) == "number" then
-				local ent1len = (orderVector - Entities:FindByName(nil, "target_mark_arena_team2"):GetAbsOrigin()):Length2D()
-				local ent2len = (orderVector - Entities:FindByName(nil, "target_mark_arena_team3"):GetAbsOrigin()):Length2D()
+				local ent1len = (orderVector - Entities:FindByName(nil, "target_mark_arena_team2"):GetAbsOrigin())
+					:Length2D()
+				local ent2len = (orderVector - Entities:FindByName(nil, "target_mark_arena_team3"):GetAbsOrigin())
+					:Length2D()
 				if ent1len <= ARENA_NOT_CASTABLE_ABILITIES[abilityname] + 200 or ent2len <= ARENA_NOT_CASTABLE_ABILITIES[abilityname] + 200 then
 					Containers:DisplayError(playerId, "#arena_hud_error_cant_target_duel")
 					return false
@@ -274,31 +301,43 @@ function GameMode:DamageFilter(filterTable)
 	--print(filterTable.damage)
 
 	if IsValidEntity(attacker) then
-		if attacker:HasAbility("sans_curse") and (victim:GetTeam() ~= attacker:GetTeam() and victim:IsTrueHero() and victim:IsControllableByAnyPlayer()) then
-			local percent = victim:GetHealth() / victim:GetMaxHealth() * 100
-			if percent > 1 then
-				filterTable.damage = 0
-			else
-				filterTable.damage = victim:GetHealth()
-			end
-		end
-		-- elseif attacker:HasAbility("sans_curse") and victim:GetTeam() == DOTA_TEAM_NEUTRALS and victim:IsCreep() then
-		-- 	filterTable.damage = filterTable.damage * 0.25
+		-- if attacker:HasAbility("sans_curse") and (victim:GetTeam() ~= attacker:GetTeam() and victim:IsTrueHero() and victim:IsControllableByAnyPlayer()) then
+		-- 	local percent = victim:GetHealth() / victim:GetMaxHealth() * 100
+		-- 	if percent > 1 then
+		-- 		filterTable.damage = 0
+		-- 	else
+		-- 		filterTable.damage = victim:GetHealth()
+		-- 	end
 		-- end
-		if victim:HasModifier("modifier_sans_curse") then
-			local modifier = victim:FindModifierByName("modifier_sans_curse")
-			local caster = modifier:GetAbility():GetCaster()
-			local talent = caster:HasTalent("talent_hero_comic_sans_karma_aura")
+		-- if victim:HasModifier("modifier_sans_curse") then
+		-- 	local modifier = victim:FindModifierByName("modifier_sans_curse")
+		-- 	local caster = modifier:GetAbility():GetCaster()
+		-- 	local talent = caster:HasTalent("talent_hero_comic_sans_karma_aura")
 
-			if talent and attacker ~= caster and (victim:GetTeam() ~= caster:GetTeam() and victim:IsTrueHero() and victim:IsControllableByAnyPlayer()) then
-				filterTable.damage = filterTable.damage / 2
-			end
-		end
+		-- 	if talent and attacker ~= caster and (victim:GetTeam() ~= caster:GetTeam() and victim:IsTrueHero() and victim:IsControllableByAnyPlayer()) then
+		-- 		filterTable.damage = filterTable.damage / 2
+		-- 	end
+		-- end
 
 		if IsValidEntity(inflictor) and inflictor.GetAbilityName then
-			filterTable.damage = DamageSubtypesFilter(inflictor, attacker, victim, filterTable.damage) or filterTable.damage
+			filterTable.damage = DamageSubtypesFilter(inflictor, attacker, victim, filterTable.damage) or
+				filterTable.damage
 			--filterTable = DamageHasInflictor(inflictor, filterTable, attacker, victim, damagetype_const)
 		end
+
+		-- for k, v in pairs(ON_DAMAGE_MODIFIER_PROCS) do
+		-- 	if attacker:HasModifier(k) then
+		OnDamageModifierProcs(attacker, victim, inflictor, damage, damagetype_const, 0,
+			0)
+		-- end
+		-- end
+		-- for k, v in pairs(ON_DAMAGE_MODIFIER_PROCS_VICTIM) do
+		-- if victim:HasModifier(k) then
+		OnDamageModifierProcsVictim(attacker, victim, inflictor, damage, damagetype_const,
+			0, 0)
+		-- end
+		-- if damage == 0 then break end
+		-- end
 
 		if attacker.GetPlayerOwnerID then
 			local attackerPlayerId = attacker:GetPlayerOwnerID()
@@ -309,11 +348,11 @@ function GameMode:DamageFilter(filterTable)
 				if victim:IsBoss() then
 					PlayerResource:ModifyPlayerStat(attackerPlayerId, "bossDamage", filterTable.damage)
 					victim.DamageReceived = victim.DamageReceived or {}
-					victim.DamageReceived[attackerPlayerId] = (victim.DamageReceived[attackerPlayerId] or 0) + filterTable.damage
+					victim.DamageReceived[attackerPlayerId] = (victim.DamageReceived[attackerPlayerId] or 0) +
+						filterTable.damage
 				end
 			end
 		end
-
 	end
 	return true
 end
@@ -324,15 +363,16 @@ function GameMode:ModifyGoldFilter(filterTable)
 		filterTable.gold = 0
 		return false
 	end
-	print("[GameMode:ModifyGoldFilter]: Attempt to call default dota gold modify func... FIX IT - Reason: " .. filterTable.reason_const .."  --  Amount: " .. filterTable.gold)
+	print("[GameMode:ModifyGoldFilter]: Attempt to call default dota gold modify func... FIX IT - Reason: " ..
+		filterTable.reason_const .. "  --  Amount: " .. filterTable.gold)
 	filterTable.gold = 0
 	return false
 end
 
-
 function GameMode:ModifyExperienceFilter(filterTable)
 	local hero = PlayerResource:GetSelectedHeroEntity(filterTable.player_id_const)
 	if hero then
+		local killStreak = Kills:GetKillStreak(filterTable.player_id_const)
 		local item_chest_of_midas = FindItemInInventoryByName(hero, "item_chest_of_midas", false, false, true)
 		item_chest_of_midas = item_chest_of_midas and item_chest_of_midas:GetSpecialValueFor("bonus_exp_pct") * 0.01 or 0
 		-- print(item_chest_of_midas)
@@ -341,19 +381,19 @@ function GameMode:ModifyExperienceFilter(filterTable)
 		if hero.talent_keys and hero.talent_keys.bonus_experience_percentage then
 			talent = talent + hero.talent_keys.bonus_experience_percentage * 0.01
 		end
-		for _,v in ipairs(hero:FindAllModifiersByName("modifier_arena_rune_acceleration")) do
+		for _, v in ipairs(hero:FindAllModifiersByName("modifier_arena_rune_acceleration")) do
 			if v.xp_multiplier then
 				acceleration = acceleration + v.xp_multiplier
 			end
 		end
-		filterTable.experience = filterTable.experience * (1 + item_chest_of_midas + talent + acceleration)
+		filterTable.experience = filterTable.experience * (1 + item_chest_of_midas + talent + acceleration) * (1 + math.min(10, killStreak) * 0.05)
 		if hero:GetFullName() == "npc_arena_hero_comic_sans" then
 			filterTable.experience = filterTable.experience * 1.5
 		end
 	end
 	PLAYER_DATA[filterTable.player_id_const].AntiAFKLastXP = GameRules:GetGameTime() + PLAYER_ANTI_AFK_TIME
 	--if Duel.IsFirstDuel and Duel:IsDuelOngoing() then
-		--filterTable.experience = filterTable.experience * 0.1
+	--filterTable.experience = filterTable.experience * 0.1
 	--end
 	return true
 end

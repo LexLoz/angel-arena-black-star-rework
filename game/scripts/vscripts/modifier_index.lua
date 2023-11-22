@@ -10,7 +10,7 @@ local modifiers = {
 	modifier_arena_hero = "modifiers/modifier_arena_hero",
 	modifier_item_demon_king_bar_curse = "items/modifier_item_demon_king_bar_curse",
 	modifier_hero_out_of_game = "modifiers/modifier_hero_out_of_game",
-	modifier_arena_util = "modifiers/modifier_arena_util",
+	-- modifier_arena_util = "modifiers/modifier_arena_util",
 
 	modifier_splash_timer = "modifiers/modifier_splash_timer",
 

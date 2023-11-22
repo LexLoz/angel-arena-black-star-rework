@@ -92,11 +92,11 @@ if IsServer() then
 	function modifier_item_radiance_lua:OnIntervalThink()
 		local target = self:GetParent()
 		local ability = self:GetAbility()
-		if target:IsIllusion() then return end
+		-- if target:IsIllusion() then return end
 
 		if not ability.disabled then
 			for _,v in ipairs(FindUnitsInRadius(target:GetTeamNumber(), target:GetAbsOrigin(), nil, ability:GetSpecialValueFor("aura_radius"), DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false)) do
-				if not v:IsMagicImmune() and not v:IsDebuffImmune() then
+				if not v:IsMagicImmune() and not v:IsDebuffImmune() and target:IsAlive() then
 					local modifier = v:FindModifierByNameAndCaster("modifier_item_radiance_lua_effect", target)
 					if not modifier then
 						v:AddNewModifier(target, ability, "modifier_item_radiance_lua_effect", {duration = 0.3})
@@ -119,6 +119,7 @@ function modifier_item_radiance_lua_effect:DeclareFunctions()
 		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
 		MODIFIER_PROPERTY_MISS_PERCENTAGE,
 		MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET,
+		MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_SOURCE,
   		MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE,
  		MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE,
 		MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE

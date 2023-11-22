@@ -84,7 +84,7 @@
             "98"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"stamina_drain_reduction"	"90"
+				"stamina_drain_reduction"	"70"
 			}
         }
     }
@@ -162,7 +162,7 @@
             "01"
             {
                 "var_type"                      "FIELD_FLOAT"
-                "status_resist_per_primary"     "0.15"
+                "status_resist_per_primary"     "0.08"
             }
             "02"
             {

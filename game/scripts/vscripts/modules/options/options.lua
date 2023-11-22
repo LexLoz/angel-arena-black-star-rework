@@ -117,6 +117,7 @@ function Options:LoadDefaultValues()
 	Options:SetInitialValue("WeatherEffects", false)
 	Options:SetInitialValue("LegacyBears", false)
 	Options:SetInitialValue("DisableStamina", false)
+	Options:SetInitialValue("EnableBears", false)
 	--Options:SetInitialValue("MapLayout", "5v5")
 
 	Options:SetInitialValue("BanningPhaseBannedPercentage", 0)
@@ -215,25 +216,52 @@ function Options:LoadMapValues()
 	if landscape == "4v4v4v4" then
 		MAP_LENGTH = 9216
 		Options:SetValue("CustomTeamColors", true)
+		GameMode.Map_Gold_Multiplier = 2
+		Options:SetPreGameVoting("enable_bears", { "yes", "no" }, "no", {
+			calculationFunction = ">",
+			callback = function(value)
+				local result = (value == "yes")
+				Options:SetValue("EnableBears", result)
+			end
+		})
+	elseif landscape == "5v5" then
+		GameMode.Map_Gold_Multiplier = 2
+		Options:SetPreGameVoting("enable_bears", { "yes", "no" }, "no", {
+			calculationFunction = ">",
+			callback = function(value)
+				local result = (value == "yes")
+				Options:SetValue("EnableBears", result)
+			end
+		})
 	elseif landscape == "1v1" then
 		MAP_LENGTH = 3840
 		Options:SetValue("DynamicKillWeight", true)
 		Options:SetPreGameVoting("kill_limit", { 20, 30, 40, 50 }, 40)
 		-- Would be pretty annoying for enemy
 		Options:SetValue("EnableBans", false)
-		GameMode.Map_Gold_Multiplier = 2.5
-	elseif landscape == "war3" then
-		GameMode.Map_Gold_Multiplier = 2
-		GameMode.Jungle_Bears_Reward_Multiplier = 1.5
-		Options:SetPreGameVoting("enable_legacy_bears", { "yes", "no" }, "no", {
+		Options:SetPreGameVoting("enable_bears", { "yes", "no" }, "no", {
 			calculationFunction = ">",
 			callback = function(value)
 				local result = (value == "yes")
-				print('legacy bears enable: ')
-				print(result)
-				Options:SetValue("LegacyBears", result)
+				Options:SetValue("EnableBears", result)
 			end
 		})
+		GameMode.Map_Gold_Multiplier = 2.5
+		GameMode.Jungle_Bears_Reward_Multiplier = 2.5
+	elseif landscape == "war3" then
+		GameMode.MapName = landscape
+		GameMode.Map_Gold_Multiplier = 4
+		GameMode.Jungle_Bears_Reward_Multiplier = 4
+		Options:SetInitialValue("EnableBears", true)
+		-- Options:SetPreGameVoting("enable_legacy_bears", { "yes", "no" }, "no", {
+		-- 	calculationFunction = ">",
+		-- 	callback = function(value)
+		-- 		local result = (value == "yes")
+		-- 		print('legacy bears enable: ')
+		-- 		print(result)
+		-- 		Options:SetValue("LegacyBears", result)
+		-- 	end
+		-- })
 	end
 end
 

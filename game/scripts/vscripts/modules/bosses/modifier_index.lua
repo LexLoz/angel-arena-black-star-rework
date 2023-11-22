@@ -1,0 +1,1 @@
+ModuleLinkLuaModifier(..., "modifier_boss_upgrade")

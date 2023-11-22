@@ -153,7 +153,7 @@ if IsServer() then
             self.agility = agility
             parent.outside_change_bat = parent.outside_change_bat + self.value
             parent.outside_change_bat = parent.outside_change_bat - value
-            parent:SetNetworkableEntityInfo("BaseAttackTime", parent:GetKeyValue("AttackRate") + parent.outside_change_bat)
+            parent:SetNetworkableEntityInfo("BaseAttackTime", (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
             self.value = value
         end
     end
@@ -169,7 +169,7 @@ if IsServer() then
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute1", nil)
         Attributes:UpdateAgility(parent)
         parent.outside_change_bat = parent.outside_change_bat + self.value
-        parent:SetNetworkableEntityInfo("BaseAttackTime", parent:GetKeyValue("AttackRate") + parent.outside_change_bat)
+        parent:SetNetworkableEntityInfo("BaseAttackTime", (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
     end
 end
 

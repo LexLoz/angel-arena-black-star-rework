@@ -67,7 +67,7 @@
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"energy_cost_pct"	"200 180 160 140 120 100 80"
+				"energy_cost_pct"	"150"
 			}
 			"03"
 			{
@@ -82,7 +82,7 @@
 			"05"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"max_regen_pct"		"100"
+				"max_regen_pct"		"60"
 			}
 			"06"
 			{
@@ -169,17 +169,17 @@
 			"02"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"energy_limit_per_lvl"		"250"
+				"energy_limit_per_lvl"		"250 300 350"
 			}
 			"03"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"energy_growth_sec"			"5 10 20 40"
+				"energy_growth_sec"			"5 20 50 100"
 			}
 			"04"
 			{
 				"var_type"					"FIELD_FLOAT"
-				"energy_growth_sec_per_lvl"	"0.1"
+				"energy_growth_sec_per_lvl"	"0.1 0.15 0.2 0.25"
 			}
 			"05"
 			{
@@ -204,22 +204,22 @@
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"health_for_strength"	"10"
+				"health_for_strength"	"8"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"armor_per_agility"		"14"
+				"armor_per_agility"		"15"
 			}
 			"11"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"200 5000 15000 30000"
+				"bonus_health"			"400 5000 15000 50000"
 			}
 			"12"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_base_armor"		"2 10 20 30"
+				"bonus_base_armor"		"2 10 20 40"
 			}
 			"13"
 			{

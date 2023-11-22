@@ -90,6 +90,7 @@ REFRESH_LIST_IGNORE_REFRESHER = {
 	--sans_genocide_mod = true,
 
 	faceless_void_chronosphere = true,
+	destroyer_body_reconstruction = true,
 	-- enigma_black_hole = true,
 	-- tidehunter_ravage = true,
 	-- necrolyte_reapers_scythe = true,
@@ -195,6 +196,7 @@ COFFEE_BEAN_NOT_REFRESHABLE = {
 	zuus_cloud = true,
 	monkey_king_boundless_strike = true,
 	dazzle_shallow_grave = true,
+	destroyer_body_reconstruction = true,
 	--saitama_push_ups = true,
 	--saitama_squats = true,
 	--saitama_sit_ups = true,
@@ -270,12 +272,10 @@ ATTACK_DAMAGE_ABILITIES = {
 	luna_moon_glaive = true,
 	riki_tricks_of_the_trade = true,
 
-	item_battlefury_arena = true,
-	item_quelling_fury = true,
-	item_elemental_fury = true,
-	item_ultimate_splash = true,
-
-	item_revenants_brooch = true,
+	-- item_battlefury_arena = true,
+	-- item_quelling_fury = true,
+	-- item_elemental_fury = true,
+	-- item_ultimate_splash = true,
 }
 
 -- "CalculateSpellDamageTooltip"	"0"
@@ -323,6 +323,7 @@ SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS = table.deepmerge({
 	earth_spirit_rolling_boulder = "damage",
 	zuus_thundergods_wrath = "damage",
 
+	item_revenants_brooch = true,
 	item_lotus_sphere = true,
 	item_spirit_helix = true,
 	item_ethereal_blade = true,
@@ -334,6 +335,7 @@ SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS = table.deepmerge({
 	item_book_of_the_guardian = true,
 	item_book_of_the_guardian_2 = true,
 	item_unstable_quasar = "base_damage",
+	item_scythe_of_the_ancients = "cast_damage",
 
 	item_sunray_dagon_arena = "damage",
 	item_sunray_dagon_2_arena = "damage",
@@ -350,6 +352,7 @@ MANA_SPEND_SPELLS_EXEPTIONS = {
 	ogre_magi_unrefined_fireblast = true,
 	muerta_gunslinger = true,
 	muerta_pierce_the_veil = true,
+	poseidon_trident = true,
 
 	item_essential_orb_fire_1 = 80,
 	item_essential_orb_fire_2 = 80,
@@ -435,6 +438,7 @@ NO_HEAL_AMPLIFY = {
 	
 	life_stealer_open_wounds = true,
 	lone_druid_spirit_link = true,
+	shinobu_vampire_blood = true,
 
 	item_lifesteal = true,
 	item_mask_of_madness = true,

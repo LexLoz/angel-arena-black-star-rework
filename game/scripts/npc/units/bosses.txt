@@ -246,8 +246,8 @@
 		"Ability1"					"boss_freya_sharp_ice_shards"
 		"Ability5"					"boss_armor"
 
-		"ArmorPhysical"				"100"
-		"MagicalResistance"			"-50"
+		"ArmorPhysical"				"150"
+		"MagicalResistance"			"25"
 
 		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttackDamageMin"			"6000"
@@ -303,8 +303,8 @@
 		"Ability1"					""//"boss_zaken_"
 		"Ability5"					"boss_armor"
 
-		"ArmorPhysical"				"100"
-		"MagicalResistance"			"-50"
+		"ArmorPhysical"				"150"
+		"MagicalResistance"			"25"
 
 		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttackDamageMin"			"6000"
@@ -511,7 +511,7 @@
 		"Ability3"					"boss_cursed_zeld_three_cores"
 		"Ability4"					"boss_armor"
 
-		"ArmorPhysical"				"150"
+		"ArmorPhysical"				"100"
 		"MagicalResistance"			"0"
 
 		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"

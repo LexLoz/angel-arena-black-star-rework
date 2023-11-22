@@ -84,12 +84,18 @@ function Illusions:_copyLevel(unit, illusion)
 	print(unit:GetKeyValue("AttributeBaseStrength"))
 	print(level)
 	local parent = unit
-		illusion:SetBaseStrength(NPC_HEROES_CUSTOM[parent:GetFullName()].AttributeBaseStrength or parent:GetKeyValue("AttributeBaseStrength"))
-		illusion:SetBaseAgility(NPC_HEROES_CUSTOM[parent:GetFullName()].AttributeBaseAgility or parent:GetKeyValue("AttributeBaseAgility"))
-		illusion:SetBaseIntellect(NPC_HEROES_CUSTOM[parent:GetFullName()].AttributeBaseIntelligence or parent:GetKeyValue("AttributeBaseIntelligence"))
-		illusion:ModifyStrength((unit.CustomGain_Strength or unit:GetStrengthGain()) * level)
-		illusion:ModifyAgility((unit.CustomGain_Agility or unit:GetAgilityGain()) * level)
-		illusion:ModifyIntellect((unit.CustomGain_Intelligence or unit:GetIntellectGain()) * level)
+	illusion:SetBaseStrength(NPC_HEROES_CUSTOM[parent:GetFullName()].AttributeBaseStrength or
+	parent:GetKeyValue("AttributeBaseStrength"))
+	illusion:SetBaseAgility(NPC_HEROES_CUSTOM[parent:GetFullName()].AttributeBaseAgility or
+	parent:GetKeyValue("AttributeBaseAgility"))
+	illusion:SetBaseIntellect(NPC_HEROES_CUSTOM[parent:GetFullName()].AttributeBaseIntelligence or
+	parent:GetKeyValue("AttributeBaseIntelligence"))
+	illusion:ModifyStrength((unit.CustomGain_Strength or unit:GetStrengthGain()) * level)
+	illusion:ModifyAgility((unit.CustomGain_Agility or unit:GetAgilityGain()) * level)
+	illusion:ModifyIntellect((unit.CustomGain_Intelligence or unit:GetIntellectGain()) * level)
+	illusion.Additional_str = parent.Additional_str or 0
+	illusion.Additional_agi = parent.Additional_agi or 0
+	illusion.Additional_int = parent.Additional_int or 0
 	--end
 	illusion.GetLevel = function()
 		return level

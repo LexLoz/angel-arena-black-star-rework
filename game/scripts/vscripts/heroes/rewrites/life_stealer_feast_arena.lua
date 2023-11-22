@@ -27,7 +27,7 @@ if IsServer() then
 	function modifier_life_stealer_feast_arena:OnAttackStart(keys)
 		if keys.attacker == self:GetParent() then
 			if keys.target:IsBoss() then
-				self.BonusDamageTarget = nil
+				keys.attacker.FeastBonusDamage = self.BonusDamageTarget:GetHealth() * self:GetAbility():GetSpecialValueFor("hp_leech_percent") * 0.01 * self:GetAbility():GetSpecialValueFor("hp_leech_percent") * 0.01
 			else
 				self.BonusDamageTarget = keys.target
 				keys.attacker.FeastBonusDamage = self.BonusDamageTarget:GetHealth() * self:GetAbility():GetSpecialValueFor("hp_leech_percent") * 0.01

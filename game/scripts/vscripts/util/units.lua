@@ -84,7 +84,7 @@ function CDOTA_BaseNPC:TrueKill(ability, killer)
 	self:Kill(ability, killer)
 	if IsValidEntity(self) and self:IsAlive() then
 		self:RemoveDeathPreventingModifiers()
-		self:Kill(ability, killer)
+		self:FixedKill(ability, killer)
 	end
 	self.IsMarkedForTrueKill = false
 end
@@ -96,31 +96,31 @@ function CDOTA_BaseNPC:InstaKill(ability, killer, dealDamageIfFail, ignoreResist
 		self:GetSpellAmplification(false) * 100 * 0.05)
 	local c = 0
 
-	local victim_atsum = self:GetAttributesSum()
-	local killer_atsum = killer:GetAttributesSum()
-	local difference = 2
-	local max_bonus = 50
-	local diff
+	-- local victim_atsum = self:GetAttributesSum()
+	-- local killer_atsum = killer:GetAttributesSum()
+	-- local difference = 2
+	-- local max_bonus = 50
+	-- local diff
 
-	if killer_atsum <= victim_atsum then
-		diff = victim_atsum / killer_atsum
-		if diff >= difference then
-			chance = chance - max_bonus
-		else
-			diff = 1 - killer_atsum / victim_atsum
-			chance = chance - max_bonus * diff
-		end
-	end
+	-- if killer_atsum <= victim_atsum then
+	-- 	diff = victim_atsum / killer_atsum
+	-- 	if diff >= difference then
+	-- 		chance = chance - max_bonus
+	-- 	else
+	-- 		diff = 1 - killer_atsum / victim_atsum
+	-- 		chance = chance - max_bonus * diff
+	-- 	end
+	-- end
 
-	if killer_atsum > victim_atsum then
-		diff = killer_atsum / victim_atsum
-		if diff >= difference then
-			chance = chance + max_bonus
-		else
-			diff = 1 - victim_atsum / killer_atsum
-			chance = chance + max_bonus * diff
-		end
-	end
+	-- if killer_atsum > victim_atsum then
+	-- 	diff = killer_atsum / victim_atsum
+	-- 	if diff >= difference then
+	-- 		chance = chance + max_bonus
+	-- 	else
+	-- 		diff = 1 - victim_atsum / killer_atsum
+	-- 		chance = chance + max_bonus * diff
+	-- 	end
+	-- end
 
 	--print("victim_atsum: " .. victim_atsum)
 	--print("killer_atsum: " .. killer_atsum)
@@ -211,6 +211,7 @@ end
 
 function CDOTA_BaseNPC:AddNewAbility(ability_name, skipLinked)
 	local hAbility = self:AddAbility(ability_name)
+	hAbility:OnCreated()
 	hAbility:ClearFalseInnateModifiers()
 	local linked
 	local link = LINKED_ABILITIES[ability_name]
@@ -320,33 +321,6 @@ function CDOTA_BaseNPC_Hero:GetUniversalAttribute()
 	end
 end
 
-function CDOTA_BaseNPC_Hero:IsGenocideMode(ability, isDodgeCooldown)
-	if not ability and not isDodgeCooldown then
-		return self:HasModifier("modifier_sans_genocide_mod")
-	end
-	if self:HasModifier("modifier_sans_genocide_mod") and isDodgeCooldown then
-		return 1 +
-			self:FindModifierByName("modifier_sans_genocide_mod"):GetAbility():GetSpecialValueFor(
-				"charge_gain_increase_pct") *
-			0.01
-	elseif not self:HasModifier("modifier_sans_genocide_mod") and isDodgeCooldown then
-		return 1
-	end
-	if ability and self:HasModifier("modifier_sans_genocide_mod") then
-		return 1 + ((ability:GetSpecialValueFor("genocide_bonus_pct") * 0.01) or 0)
-	else
-		return 1
-	end
-end
-
-function CDOTA_BaseNPC_Hero:HasShard()
-	if self:HasModifier("modifier_item_aghanims_shard") then
-		return true
-	end
-
-	return false
-end
-
 function CDOTA_BaseNPC_Hero:GetNetWorth()
 	local att_cost = 200
 
@@ -384,8 +358,8 @@ function CDOTA_BaseNPC:GetElementalResist(element)
 end
 
 function CDOTA_BaseNPC:GetInstakillResist()
-	local magic_resist = (self:Script_GetMagicalArmorValue(false, nil) or 0) * 100 * 0.75
-	local status_resist = (self:GetStatusResistance() or 0) * 100 * 0.6
+	local magic_resist = (self:Script_GetMagicalArmorValue(false, nil) or 0) * 100 * 0.8
+	local status_resist = (self:GetStatusResistance() or 0) * 100 * 0.7
 
 	local death_resist
 	local unit = UNITS_LIST[self:GetFullName()]
@@ -403,7 +377,7 @@ end
 
 function CDOTA_BaseNPC_Hero:GetBonusStrength()
 	return math.min(RELIABLE_BONUS_STAT_LIMIT, math.max(0, self:GetStrength() - self:GetBaseStrength() - (self:HasModifier("modifier_talent_bonus_all_stats") and
-		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
+	math.floor(self:GetBaseStrength() * self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount() * 0.01)
 		or 0)))
 end
 
@@ -429,13 +403,13 @@ function CDOTA_BaseNPC_Hero:GetBonusAgility()
 		--print(m_bonus)
 	end
 	return math.min(RELIABLE_BONUS_STAT_LIMIT, math.max(0, self:GetAgility() - self:GetBaseAgility() - m_bonus - (self:HasModifier("modifier_talent_bonus_all_stats") and
-		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
+	math.floor(self:GetBaseAgility() * self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount() * 0.01)
 		or 0)))
 end
 
 function CDOTA_BaseNPC_Hero:GetBonusIntellect()
 	return math.min(RELIABLE_BONUS_STAT_LIMIT, math.max(0, self:GetIntellect() - self:GetBaseIntellect() - (self:HasModifier("modifier_talent_bonus_all_stats") and
-		self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount()
+		math.floor(self:GetBaseIntellect() * self:FindModifierByName("modifier_talent_bonus_all_stats"):GetStackCount() * 0.01)
 		or 0)))
 end
 
@@ -485,12 +459,16 @@ end
 function CDOTA_BaseNPC_Hero:GetUnreliableBaseDamage()
 	return math.max(0, (self:GetUnreliableStrength() +
 	CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true) -
-	CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, 600, true)) * 0.5 * self.BaseDamagePerStrength)
+	CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, 600, true)) * DAMAGE_PER_UNRELIABLE_STRENGTH * self.BaseDamagePerStrength)
+end
+
+function CDOTA_BaseNPC_Hero:GetUnreliableDamage()
+	return self:GetUnreliableBaseDamage() + self:GetUnreliableBonusDamage()
 end
 
 function CDOTA_BaseNPC_Hero:GetReliableDamage()
 	if not self:IsHero() then return 0 end
-	local unreliable_damage = self:GetUnreliableBaseDamage() + self:GetUnreliableBonusDamage()
+	local unreliable_damage = self:GetUnreliableDamage()
 	-- print(damage)
 	return self:GetAverageTrueAttackDamage(self) - unreliable_damage
 end

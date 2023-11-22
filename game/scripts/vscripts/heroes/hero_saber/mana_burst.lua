@@ -18,7 +18,7 @@ if IsServer() then
 		local pct = caster:GetHealthPercent()
 		if pct <= self:GetSpecialValueFor("purge_health_pct") then
 			local purgeStuns = pct <= self:GetSpecialValueFor("purge_stun_health_pct")
-			caster:Purge(false, true, false, purgeStuns, false)
+			caster:Purge(false, true, false, purgeStuns, purgeStuns)
 		end
 	end
 end

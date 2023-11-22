@@ -167,8 +167,13 @@ function CDOTA_BaseNPC:ApplyDelayedTalents()
 end
 
 function CDOTA_BaseNPC:ApplyTalentEffects(name)
-	local effect = CUSTOM_TALENTS_DATA[name].effect
+	local talent_data = CUSTOM_TALENTS_DATA[name]
+	local effect = talent_data.effect
 	if not effect then return end
+
+	if effect.callback and type(effect.callback) == "function" then
+		effect.callback(self, talent_data)
+	end
 
 	if effect.abilities then
 		if type(effect.abilities) == "string" then
@@ -184,7 +189,7 @@ function CDOTA_BaseNPC:ApplyTalentEffects(name)
 	end
 	if effect.modifiers then
 		for _,v in ipairs(self.talents[name].modifiers) do
-			v:Destroy()
+			if v then v:Destroy() end
 		end
 		self.talents[name].modifiers = {}
 		if type(effect.modifiers) == "string" then

@@ -14,7 +14,7 @@ function Gold:UpdatePlayerGold(unitvar)
 	local playerId = UnitVarToPlayerID(unitvar)
 	if playerId and playerId > -1 then
 		PlayerResource:SetGold(playerId, 0, false)
-		PlayerTables:SetTableValue("gold", playerId, math.min(2 ^ 30 - 1, PLAYER_DATA[playerId].SavedGold))
+		PlayerTables:SetTableValue("gold", playerId, PLAYER_DATA[playerId].SavedGold)
 		--2^30-1
 	end
 end
@@ -44,13 +44,14 @@ function Gold:RemoveGold(unitvar, gold)
 end
 
 function Gold:AddGold(unitvar, gold)
+	local playerId = UnitVarToPlayerID(unitvar)
 	local hero
-	if type(unitvar) ~= "table" and PlayerResource:IsValidPlayer(unitvar) then
-		hero = PlayerResource:GetSelectedHeroEntity(unitvar)
+	if type(unitvar) ~= "table" and PlayerResource:IsValidPlayer(playerId) then
+		-- print('playerId: ' .. playerId)
+		hero = PlayerResource:GetSelectedHeroEntity(playerId)
 	end
 	gold = gold * GetGoldMultiplier(hero)
 	
-	local playerId = UnitVarToPlayerID(unitvar)
 	PLAYER_DATA[playerId].SavedGold = (PLAYER_DATA[playerId].SavedGold or 0) + gold
 	Gold:UpdatePlayerGold(playerId)
 end

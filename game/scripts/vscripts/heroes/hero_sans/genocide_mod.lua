@@ -55,7 +55,7 @@ if IsServer() then
         local duration = self:GetSpecialValueFor("duration")
         local dodger = caster:FindAbilityByName("sans_dodger")
         dodger:RefreshCharges(true)
-        caster:Purge(false, true, false, true, false)
+        caster:Purge(false, true, false, true, true)
         caster:AddNewModifier(caster, self, "modifier_sans_genocide_mod", {
             duration = duration
         })

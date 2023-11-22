@@ -4,12 +4,12 @@ CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER = 2
 CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER = 3
 
 return {
-	['reconnectfix'] = {
-		level = CUSTOMCHAT_COMMAND_LEVEL_PUBLIC,
-		f = function(args, hero)
-			ReconnectFix(hero:GetPlayerOwner())
-		end
-	},
+	-- ['reconnectfix'] = {
+	-- 	level = CUSTOMCHAT_COMMAND_LEVEL_PUBLIC,
+	-- 	f = function(args, hero)
+	-- 		ReconnectFix(hero:GetPlayerID())
+	-- 	end
+	-- },
 	["someshit"] = {
 		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER,
 		f = function()

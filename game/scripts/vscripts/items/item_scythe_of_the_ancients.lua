@@ -37,7 +37,7 @@ if IsServer() then
 				v:Kill(self, caster)
 			end
 
-			self.NoDamageAmp = true
+			-- self.NoDamageAmp = true
 			ApplyDamage({
 				attacker = caster,
 				victim = target,
@@ -55,7 +55,7 @@ end
 modifier_item_scythe_of_the_ancients_passive = class({
 	RemoveOnDeath = function() return false end,
 	IsHidden      = function() return true end,
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsPurgable    = function() return false end,
 })
 

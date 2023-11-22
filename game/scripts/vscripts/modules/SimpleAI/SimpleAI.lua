@@ -132,7 +132,7 @@ end
 
 --Utils
 function SimpleAI:Agr(unit, boss)
-	if GetDOTATimeInMinutesFull() < 1 then
+	if GetDOTATimeInMinutesFull() < 1 or Duel:IsDuelOngoing() then
 		boss._waiting = true
 		return
 	end

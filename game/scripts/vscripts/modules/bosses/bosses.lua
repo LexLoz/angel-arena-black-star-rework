@@ -39,45 +39,16 @@ function Bosses:SpawnBossUnit(name, spawner)
 	
 	boss:AddNewModifier(boss, nil, "modifier_talent_true_strike", {}):SetStackCount(50)
 
-	--Bosses:UpgradeBoss(boss)
+	Bosses:UpgradeBoss(boss)
 
 	return boss
 end
 
 function Bosses:UpgradeBoss(unit)
-	local function Upgrade(mult, armor_abs, mag_resist)
-		unit:SetDeathXP(unit:GetDeathXP() * mult ^ 2)
-
-		unit:SetBaseDamageMin(unit:GetBaseDamageMin() * mult ^ 1.4)
-		unit:SetBaseDamageMax(unit:GetBaseDamageMax() * mult ^ 1.4)
-
-		unit:SetPhysicalArmorBaseValue(unit:GetPhysicalArmorValue(false) + mult * armor_abs)
-		unit:SetBaseMagicalResistanceValue(mag_resist)
-
-		unit:AddNewModifier(unit, nil, "modifier_neutral_upgrade_attackspeed", {})
-		local modifier = unit:FindModifierByNameAndCaster("modifier_neutral_upgrade_attackspeed", unit)
-		if modifier then
-			modifier:SetStackCount(math.round(mult * 15))
-		end
-	end
-	if GetDOTATimeInMinutesFull() > START_BOSS_UPGRADE_MIN and unit:GetUnitName() ~= "npc_arena_boss_cursed_zeld" then
-		local mult = 1 + GetDOTATimeInMinutesFull() - START_BOSS_UPGRADE_MIN
-
-		Upgrade(mult, 25, 0)
-
-		unit:SetMaxHealth(unit:GetMaxHealth() * mult ^ 1.4)
-		unit:SetBaseMaxHealth(unit:GetMaxHealth())
-		unit:SetHealth(unit:GetMaxHealth())
-
-		unit:SetBaseHealthRegen(unit:GetMaxHealth() * 2 * 0.01)
-	elseif GetDOTATimeInMinutesFull() > START_BOSS_UPGRADE_MIN and unit:GetUnitName() == "npc_arena_boss_cursed_zeld" then
-		local mult = 1 + GetDOTATimeInMinutesFull() - START_BOSS_UPGRADE_MIN
-
-		Upgrade(mult, 100, 95)
-
-		-- unit:SetMaxHealth(unit:GetMaxHealth() * mult * 100000)
-		-- unit:SetBaseMaxHealth(unit:GetMaxHealth())
-		-- unit:SetHealth(unit:GetMaxHealth())
+	if GetDOTATimeInMinutesFull() > START_BOSS_UPGRADE_MIN then
+		local stacks = math.max(1, math.floor(GetDOTATimeInMinutesFull() - START_BOSS_UPGRADE_MIN) / 3)
+		unit:AddNewModifier(unit, nil, "modifier_boss_upgrade", nil):SetStackCount(stacks)
+		-- unit:SetBaseAttackTime(math.max(0.2, unit:GetBaseAttackTime() - (0.95 + stacks * 0.05)))
 	end
 end
 
@@ -127,7 +98,7 @@ function Bosses:RegisterKilledBoss(unit, team)
 		gold = amount
 	})
 	for _, v in ipairs(GetPlayersInTeam(team)) do
-		Gold:ModifyGold(v, amount * math.min(1, math.min(1, GetDOTATimeInMinutesFull() - START_BOSS_UPGRADE_MIN) ^ 2))
+		Gold:ModifyGold(v, amount * math.min(1, math.max(1, GetDOTATimeInMinutesFull() - START_BOSS_UPGRADE_MIN) ^ 3))
 	end
 
 	Bosses.aliveStatus[bossname] = false

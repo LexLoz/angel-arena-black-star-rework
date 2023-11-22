@@ -426,6 +426,12 @@
 						"ModifierName"	"modifier_item_heart_cyclone_regen"
 						"Target" 		"CASTER"
 					}
+
+					"RemoveModifier"
+					{
+						"ModifierName"	"modifier_item_heart_cyclone_active_regen"
+						"Target" 		"CASTER"
+					}
 				}
 			}
 
@@ -512,6 +518,9 @@
 
 				"Properties"
 				{
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL" "1"
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL" "1"
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE"	"1"
 					"MODIFIER_PROPERTY_HEALTH_REGEN_PERCENTAGE"		"%active_health_regen_percent_per_second"
 				}
 
@@ -519,7 +528,9 @@
 				{
 					"MODIFIER_STATE_STUNNED"				"MODIFIER_STATE_VALUE_ENABLED"
 					//"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					// "MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_MAGIC_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_NO_HEALTH_BAR"			"MODIFIER_STATE_VALUE_ENABLED"
 				}
 			}
@@ -561,11 +572,20 @@
 					}
 				}
 
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL" "1"
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL" "1"
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE"	"1"
+				}
+
 				"States"
 				{
 					"MODIFIER_STATE_STUNNED"				"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					// "MODIFIER_STATE_UNSELECTABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					// "MODIFIER_STATE_INVULNERABLE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_ATTACK_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_MAGIC_IMMUNE"			"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_NO_HEALTH_BAR"			"MODIFIER_STATE_VALUE_ENABLED"
 				}
 			}
@@ -1649,7 +1669,7 @@
 			"25"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"mana_burn_pct"			"2.0"
+				"mana_burn_pct"			"6.0"
 			}
 			"26"
 			{
@@ -1951,7 +1971,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"AbilityCastRange"				"600 700 800"
 		"AbilityCastPoint"				"0.0"
-		"AbilityCooldown"				"90 85 80"
+		"AbilityCooldown"				"90 75 60"
 		"AbilityManaCost"				"0"
 		"AbilitySharedCooldown"			"midas"
 		"ItemShopTags"					"attack_speed;hard_to_tag"
@@ -1972,12 +1992,12 @@
 			"02"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"xp_multiplier"			"3.0 4.5 6.0"
+				"xp_multiplier"			"3.0 5.0 7.0"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_gold"			"250 600 1200"
+				"bonus_gold"			"200 400 600"
 			}
 		}
 
@@ -2117,18 +2137,13 @@
 			{
 				"Passive"			"1"
 				"IsHidden"			"1"
-				"Attributes" 		"MODIFIER_ATTRIBUTE_MULTIPLE"
+				// "Attributes" 		"MODIFIER_ATTRIBUTE_MULTIPLE"
 
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS"		"%bonus_armor"
 				}
-			}
 
-			"modifier_item_chest_of_midas_unique"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
 				"OnAttacked"
 				{
 					"RunScript"
@@ -2140,6 +2155,22 @@
 					}
 				}
 			}
+
+			// "modifier_item_chest_of_midas_unique"
+			// {
+			// 	"Passive"			"1"
+			// 	"IsHidden"			"1"
+			// 	"OnAttacked"
+			// 	{
+			// 		"RunScript"
+			// 		{
+			// 			"ScriptFile"			"items/items_midas.lua"
+			// 			"Function"				"GiveOnAttackedGold"
+			// 			"Gold"					"%gold"
+			// 			"Xp"					"%xp"
+			// 		}
+			// 	}
+			// }
 		}
 	}
 
@@ -2197,7 +2228,7 @@
 			{
 				"Passive"			"1"
 				"IsHidden"			"1"
-				"Attributes" 		"MODIFIER_ATTRIBUTE_MULTIPLE"
+				// "Attributes" 		"MODIFIER_ATTRIBUTE_MULTIPLE"
 
 				"Properties"
 				{
@@ -2322,7 +2353,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"AbilityCastRange"				"600 700 800"
 		"AbilityCastPoint"				"0.0"
-		"AbilityCooldown"				"90 85 80"
+		"AbilityCooldown"				"90 75 60"
 		"AbilityManaCost"				"0"
 		"ItemShopTags"					"attack_speed;hard_to_tag"
 		"ItemQuality"					"common"
@@ -2342,12 +2373,12 @@
 			"02"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"xp_multiplier"			"3.0 4.5 6.0"
+				"xp_multiplier"			"3.0 5.0 7.0"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_gold"			"250 600 1200"
+				"bonus_gold"			"200 400 600"
 			}
 		}
 
@@ -2406,7 +2437,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"AbilityCastRange"				"600 700 800"
 		"AbilityCastPoint"				"0.0"
-		"AbilityCooldown"				"90 85 80"
+		"AbilityCooldown"				"90 75 60"
 		"AbilityManaCost"				"0"
 		"ItemShopTags"					"attack_speed;hard_to_tag"
 		"ItemQuality"					"common"
@@ -2426,12 +2457,12 @@
 			"02"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"xp_multiplier"			"3.0 4.5 5.0"
+				"xp_multiplier"			"3.0 5.0 7.0"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_gold"			"250 600 1200"
+				"bonus_gold"			"200 400 600"
 			}
 		}
 
@@ -5747,7 +5778,7 @@
 			"02"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"max_health_damage"	"3"
+				"max_health_damage"	"2"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 		}
@@ -5776,7 +5807,7 @@
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_PHYSICAL"
 		"AbilityCastRange"				"800"
 		"FightRecapLevel"				"1"
-		"AbilityCooldown"				"0.3"
+		"AbilityCooldown"				"0.2"
 		// "AbilityManaCost"				"150"
 		"AbilityCastPoint"              "0"
 		// "AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
@@ -5794,13 +5825,13 @@
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"max_health_damage"		"5"
+				"max_health_damage"		"4"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"armor_per_hit"			"-3"
+				"armor_per_hit"			"-2"
 			}
 			"04"
 			{
@@ -5810,7 +5841,7 @@
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"aura_armor_reduction"	"-15"
+				"aura_armor_reduction"	"-10"
 			}
 			"06"
 			{
@@ -5840,7 +5871,7 @@
 			"11"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"cooldown"			"0.3"
+				"cooldown"			"0.2"
 			}
 		}
 	}
@@ -7574,7 +7605,7 @@
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cleave_damage_percent"	"20 30"
+				"cleave_damage_percent"	"20 40"
 			}
 			"06"
 			{
@@ -7595,6 +7626,11 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"	"350"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"creep_bonus_damage"	"10"
 			}
 		}
 	}
@@ -7639,7 +7675,7 @@
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cleave_damage_percent"	"20 30"
+				"cleave_damage_percent"	"20 40"
 			}
 			"06"
 			{
@@ -7660,6 +7696,11 @@
 			{
 				"var_type"				"FIELD_INTEGER"
 				"cast_range_tooltip"	"350"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"creep_bonus_damage"	"20"
 			}
 		}
 	}
@@ -7749,7 +7790,7 @@
 			"11"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cleave_damage_percent"	"40"
+				"cleave_damage_percent"	"60"
 			}
 			"13"
 			{
@@ -7785,6 +7826,11 @@
 			{
 				"var_type"						"FIELD_INTEGER"
 				"bonus_spell_lifesteal_pct"		"36"
+			}
+			"20"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"creep_bonus_damage"	"30"
 			}
 		}
 	}
@@ -7935,6 +7981,11 @@
 			{
 				"var_type"			"FIELD_INTEGER"
 				"bonus_attack_range"	"50"
+			}
+			"25"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"creep_bonus_damage"	"50"
 			}
 		}
 	}
@@ -8664,13 +8715,25 @@
 			"20"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"magic_resist_decrease_per_stack"	"3"
+				"magic_resist_decrease_for_cast"	"3"
 				"CalculateSpellDamageTooltip"		"0"
 			}
-			"99"
+			"21"
 			{
 				"var_type"						"FIELD_FLOAT"
-				"resist_decrease_duration" 		"12"
+				"resist_decrease_duration" 		"8"
+				"CalculateSpellDamageTooltip" 	"0"
+			}
+			"22"
+			{
+				"var_type"						"FIELD_FLOAT"
+				"magic_resist_decrease_for_damage"	"1"
+				"CalculateSpellDamageTooltip"		"0"
+			}
+			"23"
+			{
+				"var_type"						"FIELD_FLOAT"
+				"resist_decrease_cooldown" 		"0.5"
 				"CalculateSpellDamageTooltip" 	"0"
 			}
 		}
@@ -8785,7 +8848,7 @@
 
 	"item_lucky_coin"
 	{
-		"BaseClass"						"item_lua"
+		"BaseClass"						"item_datadriven"
 		"AbilityTextureName"			"item_arena/lucky_coin"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"Model"							"models/particle/midascoin/midascoin.vmdl"
@@ -8794,6 +8857,15 @@
 		"AbilityValues"
 		{
 			"bonus_gold_pct"		"5"
+		}
+
+		"Modifiers"
+		{
+			"modifier_item_lucky_coin"
+			{
+				"Passive"			"1"
+				"IsHidden"			"1"
+			}
 		}
 	}
 

@@ -4,10 +4,10 @@ function StealHealth(keys)
 	local ability = keys.ability
 	local pct = ability:GetAbilitySpecial("lifesteal_pct_lvl" .. ability.CurrentLevel)
 	if pct then
-		local amount = keys.damage * pct * 0.01
-		caster:SetHealth(caster:GetHealth() + amount)
-		SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, caster, amount, nil)
-		ParticleManager:CreateParticle("particles/arena/units/heroes/hero_shinobu/lifesteal_lvl" .. ability.CurrentLevel ..".vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
+		-- local amount = keys.damage * pct * 0.01
+		-- caster:SetHealth(caster:GetHealth() + amount)
+		-- SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, caster, amount, nil)
+		-- ParticleManager:CreateParticle("particles/arena/units/heroes/hero_shinobu/lifesteal_lvl" .. ability.CurrentLevel ..".vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
 	end
 end
 

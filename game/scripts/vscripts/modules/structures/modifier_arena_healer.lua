@@ -76,8 +76,8 @@ if IsServer() then
 		Notifications:TopToAll({ text = notification2, continue = true })
 		Notifications:TopToAll({ text = "ㅤ".." 1", continue = true })
 
-		if keys.attacker:GetTeamNumber() ~= team then
-            Gold:AddGoldWithMessage(keys.attacker, 1000 + Gold:GetGold(keys.attacker:GetPlayerID() * 0.25))
+		if keys.attacker:GetTeamNumber() ~= team and keys.attacker:IsTrueHero() then
+            Gold:AddGoldWithMessage(keys.attacker, 1000 + Gold:GetGold(keys.attacker:GetPlayerOwnerID() * 0.25))
         end
 	end
 end

@@ -15,12 +15,14 @@ function modifier_talent_bonus_all_stats:DeclareFunctions()
     }
 end
 
-function modifier_talent_bonus_all_stats:GetModifierBonusStats_Strength()
-    return self:GetStackCount()
-end
-function modifier_talent_bonus_all_stats:GetModifierBonusStats_Agility()
-    return self:GetStackCount()
-end
-function modifier_talent_bonus_all_stats:GetModifierBonusStats_Intellect()
-    return self:GetStackCount()
+if IsServer() then
+    function modifier_talent_bonus_all_stats:GetModifierBonusStats_Strength()
+        return math.floor(self:GetParent():GetBaseStrength() * self:GetStackCount() * 0.01)
+    end
+    function modifier_talent_bonus_all_stats:GetModifierBonusStats_Agility()
+        return math.floor(self:GetParent():GetBaseAgility() * self:GetStackCount() * 0.01)
+    end
+    function modifier_talent_bonus_all_stats:GetModifierBonusStats_Intellect()
+        return math.floor(self:GetParent():GetBaseIntellect() * self:GetStackCount() * 0.01)
+    end
 end

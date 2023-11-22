@@ -16,8 +16,8 @@ modifier_anakim_wisps = class({
 })
 
 if IsServer() then
-	function modifier_anakim_wisps:OnCreated()
-		local ability = self:GetAbility()
+	function anakim_wisps:OnCreated()
+		local ability = self
 		ability:SetLevel(ability:GetMaxLevel())
 	end
 

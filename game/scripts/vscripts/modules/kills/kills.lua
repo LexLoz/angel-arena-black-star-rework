@@ -10,26 +10,30 @@ function Kills:GetExpForKill(killerUnit, killedUnit)
 
 	local killerLvl = killerUnit:GetLevel()
 	local killedLvl = killedUnit:GetLevel()
-	local streak = math.min(10, Kills:GetKillStreak(killedUnit:GetPlayerID()))
+	local streak = Kills:GetKillStreak(killedUnit:GetPlayerID())
 
 	local difference = killerLvl - killedLvl
 	-- print(difference)
 
-	local exp_for_level = (XP_PER_LEVEL_TABLE[killerLvl + 1] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]
+	local exp_for_level = (XP_PER_LEVEL_TABLE[killerLvl + 1] or XP_PER_LEVEL_TABLE[killerLvl]) -
+	XP_PER_LEVEL_TABLE[killerLvl]
 
 	if difference > 0 then
 		local upped_levels = math.floor(killerLvl / 100)
 		local newLevel = math.min(killerLvl + upped_levels, #XP_PER_LEVEL_TABLE)
 		return exp_for_level * 0.25 +
-		(XP_PER_LEVEL_TABLE[newLevel] - XP_PER_LEVEL_TABLE[killerLvl]) +
-		((XP_PER_LEVEL_TABLE[killerLvl + streak] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]) * 0.5
+			(XP_PER_LEVEL_TABLE[newLevel] - XP_PER_LEVEL_TABLE[killerLvl]) +
+			((XP_PER_LEVEL_TABLE[killerLvl + streak] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]) *
+			0.5
 	elseif difference == 0 then
 		return exp_for_level * 0.75 +
-		((XP_PER_LEVEL_TABLE[killerLvl + streak] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]) * 0.5
+			((XP_PER_LEVEL_TABLE[killerLvl + streak] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]) *
+			0.5
 	elseif difference < 0 then
 		local newLevel = math.min(killerLvl - difference, #XP_PER_LEVEL_TABLE)
 		return (XP_PER_LEVEL_TABLE[newLevel] - XP_PER_LEVEL_TABLE[killerLvl]) * 0.5 +
-		((XP_PER_LEVEL_TABLE[killerLvl + streak] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]) * 0.5
+			((XP_PER_LEVEL_TABLE[killerLvl + streak] or XP_PER_LEVEL_TABLE[killerLvl]) - XP_PER_LEVEL_TABLE[killerLvl]) *
+			0.5
 	end
 	return 0
 end
@@ -38,24 +42,38 @@ function Kills:GetGoldForKill(killedUnit, killerPlayer)
 	local playerID = killedUnit:GetPlayerID()
 	local killStreak = Kills:GetKillStreakGold(playerID)
 	local victimLevel = killedUnit:GetLevel()
-	local attackerLevel = killerPlayer and killerPlayer:GetAssignedHero():GetLevel() or victimLevel
-	local networth = killedUnit:GetNetWorth()
+	local killerUnit = killerPlayer and killerPlayer:GetAssignedHero() or nil
+	local attackerLevel = killerUnit and killerUnit:GetLevel() or victimLevel
+	local victimNetworth = killedUnit:GetNetWorth()
+	local killerNetworth = killerUnit and killerUnit:GetNetWorth() or victimNetworth
+	-- print('killer networth: ' .. killerNetworth)
+	-- print('victim networth: ' .. victimNetworth)
+	-- print('mult: ' .. math.max(0.1, math.min(victimNetworth / killerNetworth, 10)))
 	local creepStat = PlayerResource:GetNearbyCreepDeaths(playerID)
 	local killWeight = Teams:GetTeamKillWeight(killedUnit:GetTeamNumber())
 	local minute = GetDOTATimeInMinutesFull()
 
-	local gold = math.floor((125 + killStreak + victimLevel * 20 + networth * 0.05) *
-	math.max(0.75, math.min(victimLevel / attackerLevel, 1.5)))                                                                                 --* (minute >= KILL_WEIGHT_START_INCREASE_MINUTE / 2 and killWeight or 1))
+	local gold = math.floor((125 + killStreak + victimLevel * 15 + victimNetworth * 0.1) *
+		math.max(0.5, math.min(victimNetworth / killerNetworth, 5))) --* (minute >= KILL_WEIGHT_START_INCREASE_MINUTE / 2 and killWeight or 1))
+	print('gold for kill: ' .. gold)
 
-	return (Duel.IsFirstDuel and Duel:IsDuelOngoing()) and 0 or gold
+	return --[[(Duel.IsFirstDuel and Duel:IsDuelOngoing()) and 0 or]] gold
 end
 
 function Kills:SetKillStreak(player, ks)
 	PLAYER_DATA[player].KillStreak = ks
 end
 
+function Kills:SetDeathStreak(player, ds)
+	PLAYER_DATA[player].DeathStreak = ds
+end
+
 function Kills:GetKillStreak(player)
-	return PLAYER_DATA[player].KillStreak or 0
+	return math.min(10, PLAYER_DATA[player].KillStreak or 0)
+end
+
+function Kills:GetDeathStreak(player)
+	return math.min(10, PLAYER_DATA[player].DeathStreak or 0)
 end
 
 function Kills:GetKillStreakGold(player)
@@ -64,6 +82,10 @@ end
 
 function Kills:IncreaseKillStreak(player)
 	Kills:SetKillStreak(player, Kills:GetKillStreak(player) + 1)
+end
+
+function Kills:IncreaseDeathStreak(player)
+	Kills:SetDeathStreak(player, Kills:GetDeathStreak(player) + 1)
 end
 
 function Kills:OnEntityKilled(killedPlayer, killerPlayer)
@@ -96,18 +118,31 @@ function Kills:OnEntityKilled(killedPlayer, killerPlayer)
 			else
 				local expChange = Kills:GetExpForKill(killerEntity, killedUnit)
 
-				if not Duel.IsFirstDuel or not Duel:IsDuelOngoing() then
-					Kills:IncreaseKillStreak(killerPlayerID)
-				end
-				local killerHero = killerEntity:GetPlayerOwner():GetAssignedHero()
-				if (killerHero and killerHero:HasModifier("modifier_item_golden_eagle_relic_enabled")) then
+				Kills:IncreaseDeathStreak(killedPlayerID)
+				local respawnTime = killedUnit:CalculateRespawnTime()
+				Timers:CreateTimer(respawnTime + 1, function()
+					killedUnit:AddNewModifier(killedUnit, nil, "modifier_death_streak", nil):SetStackCount(Kills:GetDeathStreak(killedPlayerID))
+				end)
+
+				Kills:IncreaseKillStreak(killerPlayerID)
+				killerEntity:AddNewModifier(killerEntity, nil, "modifier_kill_streak", nil):SetStackCount(Kills:GetKillStreak(killerPlayerID))
+				Kills:SetDeathStreak(killerPlayerID, 0)
+				killerEntity:RemoveModifierByName("modifier_death_streak")
+
+				-- if not Duel.IsFirstDuel or not Duel:IsDuelOngoing() then
+				-- 	Kills:IncreaseKillStreak(killerPlayerID)
+				-- end
+
+				if killerEntity:HasModifier("modifier_item_golden_eagle_relic_enabled") then
 					goldChange = 0
 					expChange = 0
 				end
 				--уменьшение золота жертвы
-				Gold:ModifyGold(killedUnit, -(Gold:GetGold(killedUnit:GetPlayerID()) * 0.25))
+				if killedUnit:GetNetWorth() > killerEntity:GetNetWorth() then
+					Gold:ModifyGold(killedUnit, -(Gold:GetGold(killedUnit:GetPlayerID()) * 0.5))
+				end
 
-				Kills:CreateKillTooltip(killerPlayerID, killedPlayerID, goldChange * GetGoldMultiplier(killerHero))
+				Kills:CreateKillTooltip(killerPlayerID, killedPlayerID, goldChange * GetGoldMultiplier(killerEntity))
 				Kills:_GiveKillGold(killerEntity, killedUnit, goldChange)
 				killerEntity:AddExperience(expChange, DOTA_ModifyXP_HeroKill, false, false)
 			end
@@ -132,7 +167,7 @@ function Kills:OnEntityKilled(killedPlayer, killerPlayer)
 			end
 		end
 	else
-		local assistGold = math.round(goldChange * 0.25)
+		local assistGold = math.round(goldChange * 0.5)
 		for playerId = 0, DOTA_MAX_TEAM_PLAYERS - 1 do
 			if PlayerResource:IsValidPlayerID(playerId) and PlayerResource:GetTeam(playerId) ~= killedUnit:GetTeamNumber() then
 				local player = PlayerResource:GetPlayer(playerId)
@@ -160,6 +195,7 @@ function Kills:OnEntityKilled(killedPlayer, killerPlayer)
 			})
 		end
 		Kills:SetKillStreak(killedPlayerID, 0)
+		killedUnit:RemoveModifierByName("modifier_kill_streak")
 	end
 end
 

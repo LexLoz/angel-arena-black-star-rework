@@ -5,6 +5,14 @@ sara_evolution_new = class({
 	GetIntrinsicModifierName = function() return "modifier_sara_evolution" end,
 })
 
+if IsServer() then
+	function sara_evolution_new:OnCreated()
+		if self:GetLevel() == 0 then
+			self:SetLevel(1)
+		end
+	end
+end
+
 function sara_evolution_new:GetBehavior()
 	return self:GetLevel() >= 3 and DOTA_ABILITY_BEHAVIOR_NO_TARGET or DOTA_ABILITY_BEHAVIOR_PASSIVE
 end
@@ -66,9 +74,6 @@ if IsServer() then
 
 
 		parent.ManaPerInt = 0
-		if ability:GetLevel() == 0 then
-			ability:SetLevel(1)
-		end
 
 		Timers:NextTick(function()
 			if not parent then return end

@@ -88,7 +88,7 @@ if IsServer() then
 	function modifier_sai_release_of_forge:OnCreated()
 		local caster = self:GetParent()
 		self.LostHealth = self:GetAbility():GetSpecialValueFor("self_damage_pct") * caster:GetHealth() * 0.01
-		caster:Purge(false, true, false, true, false)
+		caster:Purge(false, true, false, true, true)
 		caster:SetAttackCapability(DOTA_UNIT_CAP_RANGED_ATTACK)
 		caster:SetRangedProjectileName("particles/base_attacks/ranged_tower_bad.vpcf")
 		--caster:ChangeTrackingProjectileSpeed(self:GetAbilit(), 3000)

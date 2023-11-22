@@ -1,13 +1,3 @@
-STAMINA_HEROES_CONSUMPTION_EXEPTIONS = {
-	npc_arena_hero_saitama = 0,
-	npc_arena_hero_shinobu = 33,
-	npc_arena_hero_sans = 200,
-	--npc_dota_hero_life_stealer = true,
-	npc_dota_hero_tiny = 0,
-	npc_dota_hero_sniper = 40,
-	npc_dota_hero_gyrocopter = 30,
-}
-
 modifier_stamina = class({
 	IsPurgable      = function() return false end,
 	IsHidden        = function() return true end,
@@ -40,13 +30,12 @@ function modifier_stamina:OnTooltip()
 end
 
 if IsClient() then
-	function modifier_stamina:GetModifierDamageOutgoing_Percentage()
-		return (1 - self:GetStackCount() / 100) * -50
-	end
-
 	function modifier_stamina:GetModifierBaseAttackTimeConstant()
 		return (self:GetParent():GetNetworkableEntityInfo("BaseAttackTime")) +
 			(1 - self:GetStackCount() / 100) * 0.3
+	end
+	function modifier_stamina:GetModifierDamageOutgoing_Percentage()
+		return (1 - self:GetStackCount() / 100) * -70
 	end
 end
 
@@ -71,7 +60,7 @@ if IsServer() then
 		self.stamina_regen_fountain_bonus = 3
 		self.ret_ms = 0
 		self.attack_time_change = 0
-		self.bat = parent:GetBaseAttackTime() or parent:GetKeyValue("AttackRate")
+		self.bat = parent.Custom_AttackRate or parent:GetBaseAttackTime() or parent:GetKeyValue("AttackRate")
 		self.changed_bat = 0
 		self.saved_bat = 0
 		self._bonus_stamina_regen_pct = 1
@@ -149,59 +138,12 @@ if IsServer() then
 		self:StartIntervalThink(self.tick)
 	end
 
-	function modifier_stamina:CalculateCost(parent)
-		if Options:GetValue("DisableStamina") then return 0 end
-
-		local unreliable_damage = parent:GetAverageTrueAttackDamage(self) -
-		parent:GetReliableDamage() -
-		(parent:GetBonusDamage() > 1000 and
-			parent:GetBonusDamage() - 1000 or 0)
-
-		local bonus_damage = parent:GetBonusDamage()
-		for k, _ in pairs(RELIABLE_DAMAGE_MODIFIERS) do
-			if parent:HasItemInInventory(k) then
-				bonus_damage = bonus_damage - GetAbilitySpecial(k, "bonus_damage")
-			end
-		end
-		bonus_damage = bonus_damage - (parent.FeastBonusDamage or 0)
-		unreliable_damage = unreliable_damage +
-			(bonus_damage > 1000 and
-				bonus_damage - 1000 or 0)
-
-		local decrease_cost_multiplier = self:CheckExeptionsInModifiers(parent)
-
-		local exeptions = 1
-		local name = parent:GetFullName()
-		if STAMINA_HEROES_CONSUMPTION_EXEPTIONS[name] then
-			exeptions = STAMINA_HEROES_CONSUMPTION_EXEPTIONS[name] * 0.01
-			if type(exeptions) == "boolean" then exeptions = 0 end
-		end
-		return unreliable_damage * STAMINA_DAMAGE_PERCENT_IN_STAMINA_CONSUMPTION * 0.01 * decrease_cost_multiplier * exeptions
-	end
-
-	function modifier_stamina:CheckExeptionsInModifiers(parent)
-		--local parent = self:GetParent()
-		local returned_value = 1
-
-		for _, v in pairs(REDUCES_STAMINA_COST_MODIFIERS) do
-			if parent:HasModifier(v) then
-				local value = parent:FindModifierByName(v):GetAbility():GetSpecialValueFor("stamina_drain_reduction")
-				returned_value = returned_value * (1 - value * 0.01)
-			end
-		end
-
-		--print(returned_value)
-		return returned_value
-	end
-
 	function modifier_stamina:OnAttackStart(keys)
 		local parent = keys.attacker
 
 		if parent ~= self:GetParent() then return end
 
 		if keys.inflictor then return end
-
-		local cost = modifier_stamina:CalculateCost(parent)
 
 		if parent.bonus_attack then return end
 		local mod_str_crit = parent:FindModifierByName("modifier_strength_crit")
@@ -210,7 +152,7 @@ if IsServer() then
 		--if parent == self:GetParent() then
 		if self.stamina and self.current_stamina then
 			--Timers:NextTick(function()
-			parent:ModifyStamina(-cost)
+			parent:ModifyStamina(-(self.cost or 0))
 			--self:StartIntervalThink(self.tick)
 			--end)
 		end

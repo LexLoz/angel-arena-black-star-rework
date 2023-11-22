@@ -148,6 +148,11 @@
 				"var_type"					"FIELD_FLOAT"
 				"str_to_reflection_pct"		"0.2 0.3 0.4 0.5 0.6 0.7 0.8"
 			}
+			"03"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"damage_threshold" 			"2000"
+			}
 		}
 
 		"precache"
@@ -180,7 +185,7 @@
 		"BaseClass"             		"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"AbilityType"					"DOTA_ABILITY_TYPE_ULTIMATE"
-		"AbilityCooldown"				"90"
+		"AbilityCooldown"				"90 85 80 75 70 65 60"
 		"AbilityTextureName"			"arena/stargazer_cosmic_countdown"
 		"MaxLevel"						"7"
 
@@ -189,7 +194,7 @@
 			"01"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"stats_per_cycle"		"2 3 4 5 6 7 8"
+				"stats_per_cycle"		"4 5 6 7 8 9 10"
 			}
 		}
 

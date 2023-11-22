@@ -43,7 +43,7 @@ UNITS_LIST = {}
 function InitDamageSubtypes()
     for k, v in pairs(ABILITIES_LIST) do
         if v.AbilityUnitDamageSubType then
-            --print(k..", "..v.AbilityUnitDamageSubType)
+            print(k..", "..v.AbilityUnitDamageSubType)
             CustomNetTables:SetTableValue("ability_damage_subtypes", k, { _ = v.AbilityUnitDamageSubType })
         end
     end

@@ -106,7 +106,7 @@
 				"ScriptFile"	"kv.lua"
 				"Function"		"PercentDamage"
 				"Damage"		"%AbilityDamage"
-				"CalculateSpellDamageTooltip"	"0"
+				"CalculateSpellDamageTooltip"	"1"
 				"TriggerSpellAbsorb" "1"
 			}
 		}

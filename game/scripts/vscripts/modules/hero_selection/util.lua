@@ -1,7 +1,7 @@
 function HeroSelection:CheckEndHeroSelection()
 	local canEnd = HeroSelection:GetState() < HERO_SELECTION_PHASE_END --and GameRules:IsCheatMode()
-	for team,_v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
-		for plyId,v in pairs(_v) do
+	for team, _v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
+		for plyId, v in pairs(_v) do
 			if v.status ~= "picked" then
 				canEnd = false
 				break
@@ -14,8 +14,8 @@ function HeroSelection:CheckEndHeroSelection()
 end
 
 function HeroSelection:PreformRandomForNotPickedUnits()
-	for team,_v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
-		for plyId,v in pairs(_v) do
+	for team, _v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
+		for plyId, v in pairs(_v) do
 			if v.status ~= "picked" then
 				HeroSelection:PreformPlayerRandom(plyId)
 			end
@@ -31,8 +31,8 @@ function HeroSelection:GetSelectedHeroName(playerId)
 end
 
 function HeroSelection:IsHeroSelected(heroName)
-	for team,_v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
-		for plyId,v in pairs(_v) do
+	for team, _v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
+		for plyId, v in pairs(_v) do
 			if v.hero == heroName and v.status == "picked" then
 				return true
 			end
@@ -42,8 +42,8 @@ function HeroSelection:IsHeroSelected(heroName)
 end
 
 function HeroSelection:GetSelectedHeroPlayer(hero)
-	for team,_v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
-		for plyId,v in pairs(_v) do
+	for team, _v in pairs(PlayerTables:GetAllTableValuesForReadOnly("hero_selection")) do
+		for plyId, v in pairs(_v) do
 			if v.hero == hero and v.status == "picked" then
 				return plyId
 			end
@@ -55,7 +55,8 @@ function HeroSelection:ExtractHeroStats(heroTable)
 	local primary = _G[heroTable.AttributePrimary]
 	local primary_damage
 	if primary == DOTA_ATTRIBUTE_ALL then
-		primary_damage = (heroTable.AttributeBaseStrength + heroTable.AttributeBaseAgility + heroTable.AttributeBaseIntelligence) * DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
+		primary_damage = (heroTable.AttributeBaseStrength + heroTable.AttributeBaseAgility + heroTable.AttributeBaseIntelligence) *
+		DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
 	end
 	local attributes = {
 		attribute_primary = _G[heroTable.AttributePrimary],
@@ -72,8 +73,10 @@ function HeroSelection:ExtractHeroStats(heroTable)
 		armor = heroTable.ArmorPhysical,
 		team = heroTable.Team
 	}
-	attributes.damage_min = math.round(attributes.damage_min + (attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
-	attributes.damage_max = math.round(attributes.damage_max + (attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
+	attributes.damage_min = math.round(attributes.damage_min +
+	(attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
+	attributes.damage_max = math.round(attributes.damage_max +
+	(attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
 
 	local armorForFirstLevel = CalculateBaseArmor(heroTable.AttributeBaseAgility)
 	attributes.armor = attributes.armor + armorForFirstLevel
@@ -90,23 +93,23 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 			end
 		end
 		--if Options:IsEquals("EnableAbilityShop", false) and Options:IsEquals("EnableRandomAbilities", false) then
-			for i = 1, 24 do
-				if classTable["Ability" .. i] and classTable["Ability" .. i] ~= "" then
-					PrecacheItemByNameAsync(classTable["Ability" .. i], function() end)
-					ability = unit:AddNewAbility(classTable["Ability" .. i])
-					ability:SetAbilityIndex(i-1)
-				end
+		for i = 1, 24 do
+			if classTable["Ability" .. i] and classTable["Ability" .. i] ~= "" then
+				PrecacheItemByNameAsync(classTable["Ability" .. i], function() end)
+				ability = unit:AddNewAbility(classTable["Ability" .. i])
+				ability:SetAbilityIndex(i - 1)
 			end
+		end
 		--end
 	end
 
 	for key, value in pairs(classTable) do
 		if key == "RemoveItems" then
 			local children = unit:GetChildren()
-			for _,child in pairs(children) do
-   			if child:GetClassname() == "dota_item_wearable" then
-       			child:RemoveSelf()
-   				end
+			for _, child in pairs(children) do
+				if child:GetClassname() == "dota_item_wearable" then
+					child:RemoveSelf()
+				end
 			end
 		end
 		if key == "Level" then
@@ -132,6 +135,7 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 			unit.Custom_AttackDamageMax = value
 		elseif key == "AttackRate" then
 			unit:SetBaseAttackTime(value)
+			unit.Custom_AttackRate = value;
 			unit:SetNetworkableEntityInfo("BaseAttackTime", value)
 		elseif key == "AttackAcquisitionRange" then
 			unit:SetAcquisitionRange(value)
@@ -199,7 +203,7 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 			--TODO Check
 			unit:SetHasInventory(toboolean(value))
 		elseif key == "AttackRange" then
-			unit:AddNewModifier(unit, nil, "modifier_set_attack_range", {AttackRange = value})
+			unit:AddNewModifier(unit, nil, "modifier_set_attack_range", { AttackRange = value })
 		end
 	end
 end
@@ -207,13 +211,13 @@ end
 function HeroSelection:InitializeHeroClass(unit, classTable)
 	for key, value in pairs(classTable) do
 		if key == "Modifiers" then
-			for _,v in ipairs(string.split(value)) do
+			for _, v in ipairs(string.split(value)) do
 				unit:AddNewModifier(unit, nil, v, nil)
 			end
 		end
 		if key == "RenderColor" then
-			local r,g,b = unpack(string.split(value))
-			r,g,b = tonumber(r), tonumber(g), tonumber(b)
+			local r, g, b = unpack(string.split(value))
+			r, g, b = tonumber(r), tonumber(g), tonumber(b)
 			unit:SetRenderColor(r, g, b)
 			for _, child in ipairs(unit:GetChildren()) do
 				if child:GetClassname() == "dota_item_wearable" and child:GetModelName() ~= "" then
@@ -234,7 +238,7 @@ function HeroSelection:ForceChangePlayerHeroMenu(playerId)
 		Timers:CreateTimer(function()
 			local player = PlayerResource:GetPlayer(playerId)
 			if not PlayerResource:IsPlayerAbandoned(playerId) and player and IsValidEntity(hero) and not hero.ChangingHeroProcessRunning then
-				CustomGameEventManager:Send_ServerToPlayer(player, "metamorphosis_elixir_show_menu", {forced = true})
+				CustomGameEventManager:Send_ServerToPlayer(player, "metamorphosis_elixir_show_menu", { forced = true })
 				return 0.5
 			end
 		end)
@@ -265,7 +269,7 @@ end
 
 function HeroSelection:CollectPD()
 	PlayerTables:CreateTable("hero_selection", {}, AllPlayersInterval)
-	for i = 0, DOTA_MAX_TEAM_PLAYERS-1 do
+	for i = 0, DOTA_MAX_TEAM_PLAYERS - 1 do
 		if PlayerResource:IsValidPlayerID(i) and PlayerResource:IsValidTeamPlayer(i) then
 			local team = PlayerResource:GetTeam(i)
 			if team and team >= 2 then
@@ -365,10 +369,10 @@ function HeroSelection:GetLinkedHeroNames(hero)
 end
 
 function HeroSelection:NoHeroFix()
-	-- for i = 0, 23 do
-	-- 	local player = PlayerResource:GetPlayer(i)
-	-- 	if PlayerResource:IsValidPlayerID(i) and not player:GetAssignedHero() then
-	-- 		--player:SetSelectedHero(FORCE_PICKED_HERO)
-	-- 	end
-	-- end
+	for pId = 0,23 do
+		local player = PlayerResource:GetPlayer(pId)
+		if player and not PlayerResource:GetSelectedHeroEntity(0) then
+			player:SetSelectedHero("npc_dota_hero_target_dummy")
+		end
+	end
 end

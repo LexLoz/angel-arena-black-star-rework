@@ -1095,7 +1095,7 @@
 	"npc_dota_hero_antimage"
 	{
 		"override_hero"	"npc_dota_hero_antimage"
-		"AttackRate"	"1.2"
+		"AttackRate"	"1.4"
 		"AttributeBaseAgility"	"14"
 		"AttributeStrengthGain"	"2.2"
 		"AttributeAgilityGain"	"2.6"

@@ -32,7 +32,7 @@ if IsServer() then
 			parent,
 			ability,
 			damage,
-			true
+			false
 		)
 		if not parent:IsAlive() then
 			parent:EmitSound("Hero_VengefulSpirit.MagicMissileImpact")
@@ -41,5 +41,5 @@ if IsServer() then
 end
 
 function modifier_item_demon_king_bar_curse:OnTooltip()
-	return 1.15 ^ math.ceil(self:GetElapsedTime())/2
+	return math.min(self:GetParent():GetMaxHealth(), 1.15 ^ math.ceil(self:GetElapsedTime())/2)
 end

@@ -13,7 +13,7 @@ local function addTalent(talentName, heroName, group, value)
 	local newValues
 	if not value then
 		newValues = GetAbilitySpecial(talentName)
-		--PrintTable(newValues)
+		-- PrintTable(newValues)
 	else
 		newValues = {}
 		newValues[value.key] = value.value
@@ -43,16 +43,16 @@ for heroName, heroData in pairs(npc_heroes) do
 	local isChanged = GetKeyValue(heroName, "Changed") == 1 and not partiallyChanged
 	if type(heroData) == "table" and not isChanged then
 		local i = 1
-		-- print(heroName)
 		for _, talentName in pairs(heroData) do
 			if type(talentName) == "string" and (string.starts(talentName, "special_bonus_unique_")) then
-				if (not partiallyChanged or partiallyChanged[talentName] ~= true) and not talentsExeptions[talentName] and i < 8 then
+				if (not partiallyChanged or partiallyChanged[talentName] ~= true) and not talentsExeptions[talentName] then
+					-- print(talentName)
+					-- PrintTable(GetAbilitySpecial(talentName))
 					if not GetAbilitySpecial(talentName) then
 						for _, abilityName in pairs(heroData) do
 							local abilityValues
 							if type(abilityName) == "string" and not string.starts(abilityName, "special_bonus_unique_") then
-								abilityValues =
-									GetKeyValue(abilityName, "AbilityValues")
+								abilityValues = GetKeyValue(abilityName, "AbilityValues")
 							end
 							if type(abilityValues) == "table" then
 								for k, v in pairs(abilityValues) do
@@ -62,7 +62,7 @@ for heroName, heroData in pairs(npc_heroes) do
 										for k1, v1 in pairs(v) do
 											if type(k1) == "string" and string.starts(k1, "special_bonus_unique_") then
 												-- print(i)
-												i = i + 1
+												-- i = i + 1
 												addTalent(k1, heroName, math.random(9), { key = "value", value = v1 })
 											end
 										end
@@ -71,11 +71,11 @@ for heroName, heroData in pairs(npc_heroes) do
 							end
 						end
 					else
-						i = i + 1
+						-- i = i + 1
 						addTalent(talentName, heroName, math.random(5))
 					end
 				else
-					-- print('skipped talent: ' .. talentName)
+					print('skipped talent: ' .. talentName)
 				end
 			end
 		end

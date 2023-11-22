@@ -303,6 +303,7 @@ function HeroSelection:StartStateInGame(toPrecache)
 					for plyId, v in pairs(_v) do
 						if not PlayerResource:IsPlayerAbandoned(plyId) then
 							local Player = PlayerResource:GetPlayer(plyId)
+							ReconnectFix(plyId)
 							-- print(Player:GetAssignedHero())
 							if not Player:GetAssignedHero() then
 								--Player:SetSelectedHero(FORCE_PICKED_HERO)

@@ -3832,7 +3832,7 @@
 			"98"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"stamina_drain_reduction"	"60"
+				"stamina_drain_reduction"	"90"
 			}
 		}
 	}
@@ -22660,7 +22660,7 @@
 	"monkey_king_boundless_strike"
 	{
 		"MaxLevel"	"7"
-		"LevelsBetweenUpgrades"	"3"
+		// "LevelsBetweenUpgrades"	"3"
 		"AbilityCastPoint"	"0.4 0.4 0.4 0.4 0.4 0.3 0.2"
 		"AbilityCastRange"	"1200"
 		"AbilityCooldown"	"30"
@@ -25314,6 +25314,11 @@
 				{
 					"value"			"0"
 					"special_bonus_scepter"	"+1"
+				}
+				"stamina_drain_reduction"
+				{
+					"value"				"90"
+					"CalculateSpellDamageTooltip"	"0"
 				}
 		}
 	}

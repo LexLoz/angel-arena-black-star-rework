@@ -202,7 +202,8 @@
 		"AbilityManaCost"				"80 90 100 110 120 130 140"
 		"AbilityCastRange"				"900"
 		
-		"AbilityUnitDamageSubType"	"DAMAGE_SUBTYPE_WATER"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_WATER"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
 
 		"precache"
 		{
@@ -229,7 +230,7 @@
 			"04"
 			{
 				"var_type"			"FIELD_INTEGER"
-				"slow_min_pct"		"-20"
+				"slow_min_pct"		"-15"
 			}
 			"05"
 			{
@@ -244,7 +245,12 @@
 			"07"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"think_interval"	"0.03"
+				"think_interval"	"0.2"
+			}
+			"08"
+			{
+				"var_type"			"FIELD_INTEGER"
+				"damage_per_sec"		"140 150 160 170 180 190 200"
 			}
 		}
 
@@ -302,6 +308,7 @@
 						"ScriptFile"	"heroes/hero_poseidon/sea_hole.lua"
 						"Function"		"DummyThink"
 						"think_interval"	"%think_interval"
+						"duration"			"%duration"
 					}
 				}
 

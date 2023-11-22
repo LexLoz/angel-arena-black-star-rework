@@ -21,7 +21,7 @@ end
 
 modifier_item_golden_eagle_relic = class({
 	IsHidden      = function() return true end,
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsPurgable    = function() return false end,
 })
 

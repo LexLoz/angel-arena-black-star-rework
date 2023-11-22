@@ -17,7 +17,7 @@ item_soulcutter = {
 
 modifier_item_soulcutter = {
 	IsHidden          = function() return true end,
-	GetAttributes     = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes     = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsPurgable        = function() return false end,
 
 	IsAura            = function() return true end,
@@ -31,16 +31,35 @@ modifier_item_soulcutter = {
 			MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE,
 			MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
 			MODIFIER_EVENT_ON_ATTACK_LANDED,
+			MODIFIER_EVENT_ON_ATTACK_START,
 			MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
 		}
 	end,
 
-	GetModifierPreAttack_BonusDamage = function(self) return self:GetAbility():GetSpecialValueFor("bonus_damage") end,
+	-- GetModifierPreAttack_BonusDamage = function(self) return self:GetAbility():GetSpecialValueFor("bonus_damage") end,
 	GetModifierAttackSpeedBonus_Constant = function(self) return self:GetAbility():GetSpecialValueFor("bonus_attack_speed") end,
 	GetModifierAttackRangeBonus = function(self) return self:GetAbility():GetSpecialValueFor("bonus_attack_range") end,
 }
 
 if IsServer() then
+	function modifier_item_soulcutter:GetModifierPreAttack_BonusDamage()
+		if IsValidEntity(self.BonusDamageTarget) then
+			return self:GetAbility():GetSpecialValueFor("bonus_damage") + self:GetParent().SoulcutterBonusDamage
+		end
+	end
+	function modifier_item_soulcutter:OnAttackStart(keys)
+		if keys.attacker == self:GetParent() then
+			if IsModifierStrongest(keys.attacker, self:GetName(), MODIFIER_PROC_PRIORITY.pure_damage) then
+				if keys.target:IsBoss() then
+					self.BonusDamageTarget = keys.target
+					keys.attacker.SoulcutterBonusDamage = self.BonusDamageTarget:GetHealth() * self:GetAbility():GetSpecialValueFor("max_health_damage") * 0.01 * 0.05
+				else
+					self.BonusDamageTarget = keys.target
+					keys.attacker.SoulcutterBonusDamage = self.BonusDamageTarget:GetHealth() * self:GetAbility():GetSpecialValueFor("max_health_damage") * 0.01
+				end
+			end
+		end
+	end
 	function modifier_item_soulcutter:OnAttackLanded(keys)
 		--if self:GetParent().bonus_attack then return end
 		local attacker = keys.attacker
@@ -49,19 +68,6 @@ if IsServer() then
 		local target = keys.target
 
 		if attacker:FindAllModifiersByName(self:GetName())[1] ~= self then return end
-
-		local damage = target:GetHealth() * ability:GetSpecialValueFor("max_health_damage") * 0.01
-		if IsModifierStrongest(attacker, self:GetName(), MODIFIER_PROC_PRIORITY.pure_damage) then
-			ability.NoDamageAmp = true
-			ApplyDamage({
-				victim = target,
-				attacker = attacker,
-				damage = damage,
-				damage_type = ability:GetAbilityDamageType(),
-				damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
-				ability = ability
-			})
-		end
 
 		if attacker:IsIllusion() then return end
 
@@ -80,6 +86,10 @@ if IsServer() then
 			modifier:IncrementStackCount()
 			ability:StartCooldown(ability:GetSpecialValueFor("cooldown"))
 		end
+	end
+else
+	function modifier_item_soulcutter:GetModifierPreAttack_BonusDamage()
+		return self:GetAbility():GetSpecialValueFor("bonus_damage")
 	end
 end
 
@@ -104,5 +114,5 @@ modifier_item_soulcutter_stack = {
 }
 
 function modifier_item_soulcutter_stack:GetModifierPhysicalArmorBonus()
-	return self:GetAbility():GetSpecialValueFor("armor_per_hit") * self:GetStackCount()
+	return self:GetAbility():GetSpecialValueFor("armor_per_hit") * self:GetStackCount() -- self:GetParent():GetNetworkableEntityInfo('IdealArmor') * 0.02 * self:GetStackCount()
 end

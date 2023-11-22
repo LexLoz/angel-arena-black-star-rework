@@ -2,11 +2,24 @@ StatsClient = StatsClient or class({})
 ModuleRequire(..., "data")
 
 Events:Register("activate", function ()
+	GameRules:SetCustomGameAccountRecordSaveFunction( Dynamic_Wrap(StatsClient, "OnSaveAccountRecord" ), GameMode)
 	PlayerTables:CreateTable("stats_client", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("stats_team_rating", {}, AllPlayersInterval)
 	CustomGameEventManager:RegisterListener("stats_client_add_guide", Dynamic_Wrap(StatsClient, "AddGuide"))
 	CustomGameEventManager:RegisterListener("stats_client_vote_guide", Dynamic_Wrap(StatsClient, "VoteGuide"))
+	StatsClient:ReadSave()
 end)
+
+function StatsClient:OnSaveAccountRecord(plId)
+	print('OnSaveAccountRecord: '..plId)
+	return {}
+end
+
+function StatsClient:ReadSave()
+	print('GetPlayerCustomGameAccountRecord: ')
+	local table = GameRules:GetPlayerCustomGameAccountRecord(0)
+	print(PrintTable(table))
+end
 
 function StatsClient:FetchPreGameData()
 	local data = {
@@ -260,7 +273,7 @@ function StatsClient:AddGuide(data)
 							[7] = "item_golden_eagle_relic",
 							[8] = "item_soulcutter",
 							[9] = "item_demonic_cuirass",},
-					title = "for farm bears",},
+					title = "for farm jungle",},
 			[1] = {
 					content = {
 							[0] = "item_skull_of_midas",

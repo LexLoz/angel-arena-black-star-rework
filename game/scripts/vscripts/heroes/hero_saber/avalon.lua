@@ -5,6 +5,11 @@ saber_avalon = class({
 })
 
 if IsServer() then
+	function saber_avalon:OnCreated()
+		if self:GetLevel() == 0 then
+			self:SetLevel(1)
+		end
+	end
 	function saber_avalon:OnSpellStart()
 		local caster = self:GetCaster()
 		caster:AddNewModifier(caster, self, "modifier_saber_avalon_invulnerability", {duration = self:GetSpecialValueFor("duration")})
@@ -26,10 +31,6 @@ end
 
 if IsServer() then
 	function modifier_saber_avalon:OnCreated()
-		local ability = self:GetAbility()
-		if ability:GetLevel() == 0 then
-			ability:SetLevel(1)
-		end
 		self:StartIntervalThink(0.1)
 	end
 	function modifier_saber_avalon:OnIntervalThink()

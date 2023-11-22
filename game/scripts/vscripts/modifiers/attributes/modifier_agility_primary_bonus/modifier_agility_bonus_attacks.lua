@@ -6,7 +6,7 @@ modifier_agility_bonus_attacks = class({
 
 function modifier_agility_bonus_attacks:DeclareFunctions()
     return { 
-        --MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE,
+        MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE,
         MODIFIER_EVENT_ON_ATTACK_CANCELLED,
     }
 end
@@ -53,7 +53,7 @@ if IsServer() then
             local attack_damage = parent:GetAverageTrueAttackDamage(parent)
             local increased_damage = parent:GetReliableDamage() * (self.bonus_damage * 0.01)
             parent.bonus_attack = (AGILITY_BONUS_BASE_DAMAGE - 100) + ((increased_damage + attack_damage) / attack_damage * 100 - 100)
-            -- print('bonus attacks: '..(increased_damage))
+            -- print('bonus attacks: '..(parent.bonus_attack))
             PerformGlobalAttack(parent, target, true, true, true, false, false, false, false)
             parent.bonus_attack = nil
             --self.Damage = 0
@@ -67,7 +67,7 @@ if IsServer() then
             self:Destroy()
         end
     end
-    -- function modifier_agility_bonus_attacks:GetModifierDamageOutgoing_Percentage()
-    --     return self.damage --+ (self.Damage or 0)
-    -- end
+    function modifier_agility_bonus_attacks:GetModifierDamageOutgoing_Percentage()
+        return self:GetParent().bonus_attack --+ (self.Damage or 0)
+    end
 end

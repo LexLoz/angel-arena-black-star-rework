@@ -59,7 +59,7 @@
 					"RunScript"
 					{
 						"ScriptFile"	"heroes/bosses/boss_armor.lua"
-						"Think"		"ClearDebuffs"
+						"Function"		"Think"
 					}
 				}
 

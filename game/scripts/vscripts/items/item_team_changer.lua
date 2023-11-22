@@ -21,12 +21,13 @@ function ChangeTeam(keys)
 	local courier = Structures:GetCourier(playerId)
 	UTIL_Remove(courier)
 	caster:GetPlayerOwner():SpawnCourierAtPosition(FindFountain(newTeam):GetAbsOrigin())
+	Attributes:RemoveStats(caster, 100)
 	
 	Timers:CreateTimer(1, function()
 		ReloadUnitModifiers(caster)
 		-- ReloadUnitModifiers(courier)
 	end)
-
+	
 	ability:SpendCharge()
 end
 

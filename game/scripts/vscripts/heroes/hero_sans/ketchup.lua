@@ -58,7 +58,7 @@ if IsServer() then
                 FreezeAnimation(parent, duration - anim_duration)
             end)
             parent:EmitSound("Arena.Hero_Sans.Last_Breath")
-            parent:Purge(false, true, false, true, false)
+            parent:Purge(false, true, false, true, true)
             ability:SetActivated(false)
 
             local shard_duration = ability:GetSpecialValueFor("scepter_genocide_mod_duration")

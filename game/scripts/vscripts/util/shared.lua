@@ -5,15 +5,20 @@ function GetDirectoryFromPath(path)
 end
 
 function ModuleLinkLuaModifier(this, className, fileName, LuaModifierType)
-	return LinkLuaModifier(className, GetDirectoryFromPath(this) .. (fileName or className),
+	local path = GetDirectoryFromPath(this) .. (fileName or className)
+	if IsServer() then
+		print('register modifier for server: ' .. className .. ', ' .. path)
+	end
+	if IsClient() then
+		print('register modifier for client: ' .. className .. ', ' .. path)
+	end
+	return LinkLuaModifier(className, path,
 		LuaModifierType or LUA_MODIFIER_MOTION_NONE)
 end
 
 function ModuleRequire(this, fileName)
 	return require(GetDirectoryFromPath(this) .. fileName)
 end
-
-require("modifier_index")
 
 function CEntityInstance:GetNetworkableEntityInfo(key)
 	local t = CustomNetTables:GetTableValue("custom_entity_values", tostring(self:GetEntityIndex())) or {}
@@ -47,9 +52,41 @@ function DeclarePassiveAbility(name, modifier)
 	_G[name] = { GetIntrinsicModifierName = function() return modifier end }
 end
 
+function CEntityInstance:IsGenocideMode(ability, isDodgeCooldown)
+	if not ability and not isDodgeCooldown then
+		return self:HasModifier("modifier_sans_genocide_mod")
+	end
+	if self:HasModifier("modifier_sans_genocide_mod") and isDodgeCooldown then
+		return 1 +
+			self:FindModifierByName("modifier_sans_genocide_mod"):GetAbility():GetSpecialValueFor(
+				"charge_gain_increase_pct") *
+			0.01
+	elseif not self:HasModifier("modifier_sans_genocide_mod") and isDodgeCooldown then
+		return 1
+	end
+	if ability and self:HasModifier("modifier_sans_genocide_mod") then
+		return 1 + ((ability:GetSpecialValueFor("genocide_bonus_pct") * 0.01) or 0)
+	else
+		return 1
+	end
+end
+
+require("modifier_index")
+
+function CEntityInstance:HasShard()
+	if self:HasModifier("modifier_item_aghanims_shard") then
+		return true
+	end
+
+	return false
+end
+
 CDOTABaseAbility = IsServer() and CDOTABaseAbility or C_DOTABaseAbility
 CDOTA_Ability_Lua = IsServer() and CDOTA_Ability_Lua or C_DOTA_Ability_Lua
 CDOTA_Item_Lua = IsServer() and CDOTA_Item_Lua or C_DOTA_Item_Lua
+
+function CDOTABaseAbility:OnCreated()
+end
 
 CDOTABaseAbility.HasStaticCooldown = function(self)
     return false

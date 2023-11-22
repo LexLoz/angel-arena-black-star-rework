@@ -1,11 +1,11 @@
 CUSTOM_TALENTS_DATA = {
 	talent_stats_bonus = {
 		icon = "talents/bonus_all_stats",
-		cost = 20,
+		cost = 10,
 		group = 9,
 		max_level = 10,
 		special_values = {
-			bonus_all_stats = {50, 100, 150, 200, 250, 300, 350, 400, 450, 500}
+			bonus_all_stats = { 3, 6, 9, 12, 15, 18, 21, 24, 27, 30 }
 		},
 		effect = {
 			calculate_stat_bonus = true,
@@ -20,7 +20,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 1,
 		max_level = 1,
 		special_values = {
-			experience_pct = {10}
+			experience_pct = { 10 }
 		},
 		effect = {
 			unit_keys = {
@@ -34,7 +34,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 2,
 		max_level = 1,
 		special_values = {
-			experience_pct = {20}
+			experience_pct = { 20 }
 		},
 		effect = {
 			unit_keys = {
@@ -48,7 +48,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 3,
 		max_level = 1,
 		special_values = {
-			experience_pct = {30}
+			experience_pct = { 30 }
 		},
 		effect = {
 			unit_keys = {
@@ -62,7 +62,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 1,
 		max_level = 1,
 		special_values = {
-			gold_for_creep = {10}
+			gold_for_creep = { 10 }
 		},
 		effect = {
 			modifiers = {
@@ -76,7 +76,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 1,
 		max_level = 1,
 		special_values = {
-			xp_per_minute = {1000}
+			xp_per_minute = { 1000 }
 		},
 		effect = {
 			unit_keys = {
@@ -90,7 +90,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 2,
 		max_level = 1,
 		special_values = {
-			xp_per_minute = {2000}
+			xp_per_minute = { 2000 }
 		},
 		effect = {
 			unit_keys = {
@@ -104,7 +104,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 3,
 		max_level = 1,
 		special_values = {
-			xp_per_minute = {3000}
+			xp_per_minute = { 3000 }
 		},
 		effect = {
 			unit_keys = {
@@ -118,7 +118,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 1,
 		max_level = 1,
 		special_values = {
-			gold_per_minute = {100}
+			gold_per_minute = { 150 }
 		},
 		effect = {
 			unit_keys = {
@@ -132,7 +132,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 2,
 		max_level = 1,
 		special_values = {
-			gold_per_minute = {200}
+			gold_per_minute = { 300 }
 		},
 		effect = {
 			unit_keys = {
@@ -146,7 +146,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 3,
 		max_level = 1,
 		special_values = {
-			gold_per_minute = {300}
+			gold_per_minute = { 450 }
 		},
 		effect = {
 			unit_keys = {
@@ -160,7 +160,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 7,
 		max_level = 4,
 		special_values = {
-			spell_amplify = {7, 14, 21, 28}
+			spell_amplify = { 7, 14, 21, 28 }
 		},
 		effect = {
 			use_modifier_applier = true,
@@ -175,7 +175,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 8,
 		max_level = 6,
 		special_values = {
-			respawn_time_reduction = {-15, -30, -45, -60, -75, -90}
+			respawn_time_reduction = { -15, -30, -45, -60, -75, -90 }
 		},
 		effect = {
 			unit_keys = {
@@ -189,7 +189,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 7,
 		max_level = 4,
 		special_values = {
-			damage = {100, 200, 300, 400}
+			damage = { 100, 200, 300, 400 }
 		},
 		effect = {
 			modifiers = {
@@ -217,7 +217,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 8,
 		max_level = 3,
 		special_values = {
-			health = {10, 15, 20}
+			health = { 10, 15, 20 }
 		},
 		effect = {
 			calculate_stat_bonus = true,
@@ -232,7 +232,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 4,
 		max_level = 3,
 		special_values = {
-			mana = {10, 20, 30}
+			mana = { 10, 20, 30 }
 		},
 		effect = {
 			calculate_stat_bonus = true,
@@ -247,7 +247,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 5,
 		max_level = 3,
 		special_values = {
-			health_regen = {15, 30, 45}
+			health_regen = { 15, 30, 45 }
 		},
 		effect = {
 			modifiers = {
@@ -261,7 +261,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 5,
 		max_level = 3,
 		special_values = {
-			mana_regen = {4, 8, 12}
+			mana_regen = { 4, 8, 12 }
 		},
 		effect = {
 			modifiers = {
@@ -275,7 +275,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 8,
 		max_level = 1,
 		special_values = {
-			lifesteal = {2}
+			lifesteal = { 2 }
 		},
 		effect = {
 			modifiers = {
@@ -289,7 +289,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 6,
 		max_level = 3,
 		special_values = {
-			armor = {4, 8, 12}
+			armor = { 4, 8, 12 }
 		},
 		effect = {
 			modifiers = {
@@ -303,7 +303,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 6,
 		max_level = 3,
 		special_values = {
-			magic_resistance_pct = {10, 15, 20}
+			magic_resistance_pct = { 10, 15, 20 }
 		},
 		effect = {
 			modifiers = {
@@ -317,7 +317,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 4,
 		max_level = 3,
 		special_values = {
-			vision_day = {100, 200, 300}
+			vision_day = { 100, 200, 300 }
 		},
 		effect = {
 			modifiers = {
@@ -331,7 +331,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 4,
 		max_level = 3,
 		special_values = {
-			vision_night = {100, 200, 300}
+			vision_night = { 100, 200, 300 }
 		},
 		effect = {
 			modifiers = {
@@ -345,7 +345,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 5,
 		max_level = 3,
 		special_values = {
-			cooldown_reduction_pct = {5, 10, 15}
+			cooldown_reduction_pct = { 5, 10, 15 }
 		},
 		effect = {
 			modifiers = {
@@ -359,7 +359,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 4,
 		max_level = 3,
 		special_values = {
-			movespeed_pct = {10, 15, 20}
+			movespeed_pct = { 10, 15, 20 }
 		},
 		effect = {
 			modifiers = {
@@ -373,7 +373,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 7,
 		max_level = 4,
 		special_values = {
-			chance = {20, 30, 40, 50}
+			chance = { 20, 35, 50, 65 }
 		},
 		effect = {
 			modifiers = {
@@ -399,7 +399,7 @@ CUSTOM_TALENTS_DATA = {
 		max_level = 5,
 		requirement = "arthas_vsolyanova",
 		special_values = {
-			chance_multiplier = {1.1, 1.2, 1.3, 1.4, 1.5}
+			chance_multiplier = { 1.1, 1.2, 1.3, 1.4, 1.5 }
 		}
 	},
 	talent_hero_arc_warden_double_spark = {
@@ -435,10 +435,15 @@ CUSTOM_TALENTS_DATA = {
 	},
 	talent_hero_comic_sans_karma_aura = {
 		icon = "arena/sans_curse",
-		cost = 50,
+		cost = 20,
 		group = 10,
 		max_level = 1,
 		requirement = "sans_curse",
+		effect = {
+			callback = function(hero, data)
+				hero:SetNetworkableEntityInfo('HasKarmaTalent', 1)
+			end
+		}
 	},
 	--[[talent_hero_sai_release_of_forge_bonus_respawn_time_reduction = {
 		icon = "arena/sai_release_of_forge",
@@ -518,13 +523,13 @@ TALENT_GROUP_TO_LEVEL = {
 	[28] = 490,
 	[29] = 550,
 }
-	-- [1] = 10, exp;gold_creep;
-	-- [2] = 15, mana;regen;gold_min;exp_min;
-	-- [3] = 20, armor;mag_resist;
-	-- [4] = 25, movespeed;spell_amp;
-	-- [5] = 30, cd;evasion;
-	-- [6] = 35, ms_limit;
-	-- [7] = 40, day;night;
-	-- [8] = 45, respawn_time;
-	-- [9] = 50, damage;
-	-- [10] = 55, truestrike
+-- [1] = 10, exp;gold_creep;
+-- [2] = 15, mana;regen;gold_min;exp_min;
+-- [3] = 20, armor;mag_resist;
+-- [4] = 25, movespeed;spell_amp;
+-- [5] = 30, cd;evasion;
+-- [6] = 35, ms_limit;
+-- [7] = 40, day;night;
+-- [8] = 45, respawn_time;
+-- [9] = 50, damage;
+-- [10] = 55, truestrike

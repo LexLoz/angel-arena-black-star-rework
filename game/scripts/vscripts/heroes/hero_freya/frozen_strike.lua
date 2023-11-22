@@ -8,7 +8,7 @@ if IsServer() then
 		local crit =
 			self:GetSpecialValueFor("base_crit_pct") +
 			(self:GetSpecialValueFor("stat_to_crit_pct") * caster:GetPrimaryStatValue() * 0.01)
-		modifier:SetStackCount(math.min(1200, crit))
+		modifier:SetStackCount(crit)
 		caster:EmitSound("Arena.Hero_Freya.FrozenStrike.Charge")
 	end
 end
@@ -19,7 +19,7 @@ modifier_freya_frozen_strike_crit = class({
 	IsPurgable = function() return false end,
 	DeclareFunctions = function() return {
 		MODIFIER_EVENT_ON_ATTACK_LANDED,
-		MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,
+		-- MODIFIER_PROPERTY_PREATTACK_CRITICALSTRIKE,
 	} end
 })
 
@@ -60,9 +60,7 @@ if IsServer() then
 		})
 
 		local cleaveRadius = ability:GetSpecialValueFor("cleave_radius")
-		DoCleaveAttack(attacker, target, ability, keys.damage, 150, cleaveRadius, cleaveRadius, "particles/units/heroes/hero_sven/sven_spell_great_cleave.vpcf")
-
-		self:Destroy()
+		DoCleaveAttack(attacker, target, ability, keys.damage, cleaveRadius, cleaveRadius, 150, "particles/units/heroes/hero_sven/sven_spell_great_cleave.vpcf")
 	end
 
 	function modifier_freya_frozen_strike_crit:GetModifierPreAttack_CriticalStrike()

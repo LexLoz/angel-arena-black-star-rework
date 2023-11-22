@@ -230,7 +230,7 @@
 			"99"
 			{
 				"var_type" "FIELD_FLOAT"
-				"jungle_bears_damage_multiplier" "1.5 3"
+				"jungle_bears_damage_multiplier" "1.5 2"
 				"CalculateSpellDamageTooltip" "0"
 			}
 		}

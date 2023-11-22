@@ -63,6 +63,7 @@ end
 
 -- Load all the necessary key value files
 function LoadGameKeyValues()
+	-- LoadKeyValues("scripts/npc/heroes/" .. heroName .. ".txt")
 	local scriptPath = "scripts/npc/"
 	local override = LoadKeyValues(scriptPath .. "npc_abilities_override.txt")
 	local files = {
@@ -74,19 +75,37 @@ function LoadGameKeyValues()
 	if not override then
 		error("[KeyValues] Critical Error on " .. override .. ".txt")
 	end
+
 	-- Load and validate the files
 	for KVType, KVFilePaths in pairs(files) do
 		local file = LoadKeyValues(scriptPath .. KVFilePaths.base .. ".txt")
-		-- Replace main game keys by any match on the override file
-		for k, v in pairs(override) do
-			if file[k] then
-				if type(v) == "table" then
-					table.merge(file[k], v)
-				else
-					file[k] = v
+		-- Replace main game keys by any match on the override file (2)
+		if KVType == "AbilityKV" then
+			for k, v in pairs(override) do
+				if file[k] then
+					if type(v) == "table" then
+						table.merge(file[k], v)
+					else
+						file[k] = v
+					end
+				end
+			end
+			local heroesTable = LoadKeyValues(scriptPath .. "npc_heroes.txt")
+			for heroName, _ in pairs(heroesTable) do
+				local heroAbilities = LoadKeyValues(scriptPath .. "heroes/" .. heroName .. ".txt")
+				for k, v in pairs(override) do
+					if heroAbilities and heroAbilities[k] then
+						if type(v) == "table" then
+							table.merge(heroAbilities[k], v)
+						else
+							heroAbilities[k] = v
+						end
+						file[k] = heroAbilities[k]
+					end
 				end
 			end
 		end
+
 		local custom_file = LoadKeyValues(scriptPath .. KVFilePaths.custom .. ".txt")
 		if custom_file then
 			if KVType == "HeroKV" then
@@ -111,12 +130,15 @@ function LoadGameKeyValues()
 		file.Version = nil
 		KeyValues[KVType] = file
 	end
+	-- PrintTable(KeyValues.AbilityKV)
 
 	-- Merge All KVs
 	KeyValues.All = {}
-	for name, path in pairs(files) do
-		for key, value in pairs(KeyValues[name]) do
-			KeyValues.All[key] = value
+	for name, path in pairs(KeyValues) do
+		if name ~= "All" then
+			for key, value in pairs(KeyValues[name]) do
+				KeyValues.All[key] = value
+			end
 		end
 	end
 
@@ -146,9 +168,9 @@ end
 -- Dynamic version of CDOTABaseAbility:GetAbilityKeyValues()
 function CDOTABaseAbility:GetKeyValue(key, level)
 	if level then
-		return GetAbilityKV(self:GetAbilityName(), key, level)
+		return GetAbilityKV(self:GetAbilityName(), key, level, self:GetCaster():GetUnitName())
 	else
-		return GetAbilityKV(self:GetAbilityName(), key)
+		return GetAbilityKV(self:GetAbilityName(), key, nil, self:GetCaster():GetUnitName())
 	end
 end
 
@@ -162,7 +184,7 @@ function CDOTA_Item:GetKeyValue(key, level)
 end
 
 function CDOTABaseAbility:GetAbilitySpecial(key)
-	return GetAbilitySpecial(self:GetAbilityName(), key, self:GetLevel())
+	return GetAbilitySpecial(self:GetAbilityName(), key, self:GetLevel(), nil)
 end
 
 -- Global functions
@@ -302,7 +324,7 @@ function GenerateLocalization(table)
 	end
 end
 
-function PrintGeneratedKV(t, indent, done)
+function PrintGeneratedKV(t, indent, done, fix)
 	--print ( string.format ('PrintTable type %s', type(keys)) )
 	done = done or {}
 	done[t] = true
@@ -316,23 +338,55 @@ function PrintGeneratedKV(t, indent, done)
 		table.insert(l, k)
 	end
 
+	local function conditionHelper(v)
+		local table = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' }
+		for _, n in ipairs(table) do
+			if string.starts(v, n) then
+				return true
+			end
+		end
+		return false
+	end
+
 	table.sort(l)
 	for k, v in ipairs(l) do
 		-- Ignore FDesc
 		if v ~= 'FDesc' then
-			local value = t[v]
-			if type(value) == "table" and not done[value] then
-				done[value] = true
-				print('')
-				print(string.rep("\t", indent) .. '"' .. tostring(v) .. '"')
-				print(string.rep("\t", indent) .. '{')
-				PrintGeneratedKV(value, indent + 1, done)
-				print(string.rep("\t", indent) .. "}")
-			else
-				if t.FDesc and t.FDesc[v] then
-					print(string.rep("\t", indent) .. '"' .. tostring(t.FDesc[v]) .. '"')
+			if fix then
+				local value = t[v]
+				print(string.rep("\t", indent) .. '"' .. tostring(value.key) .. '" "' .. tostring(value.value) .. '"')
+			elseif conditionHelper(v) then
+				local value = t[v]
+				-- PrintTable(value)
+				if type(value) == "table" and not done[value] then
+					done[value] = true
+					print('')
+					print(string.rep("\t", indent) .. '"' .. tostring(v) .. '"')
+					print(string.rep("\t", indent) .. '{')
+					PrintGeneratedKV(value, indent + 1, done, true)
+					print(string.rep("\t", indent) .. "}")
 				else
-					print(string.rep("\t", indent) .. '"' .. tostring(v) .. '" "' .. tostring(value) .. '"')
+					if t.FDesc and t.FDesc[v] then
+						print(string.rep("\t", indent) .. '"' .. tostring(t.FDesc[v]) .. '"')
+					else
+						print(string.rep("\t", indent) .. '"' .. tostring(v) .. '" "' .. tostring(value) .. '"')
+					end
+				end
+			else
+				local value = t[v]
+				if type(value) == "table" and not done[value] then
+					done[value] = true
+					print('')
+					print(string.rep("\t", indent) .. '"' .. tostring(v) .. '"')
+					print(string.rep("\t", indent) .. '{')
+					PrintGeneratedKV(value, indent + 1, done)
+					print(string.rep("\t", indent) .. "}")
+				else
+					if t.FDesc and t.FDesc[v] then
+						print(string.rep("\t", indent) .. '"' .. tostring(t.FDesc[v]) .. '"')
+					else
+						print(string.rep("\t", indent) .. '"' .. tostring(v) .. '" "' .. tostring(value) .. '"')
+					end
 				end
 			end
 		end
@@ -345,7 +399,7 @@ function GenerateAbilitiesKVTable(parameters)
 
 	print('NEW KV TABLE')
 	local overrideKV = LoadKeyValues("scripts/npc/override/abilities.txt")
-	local oldKV = LoadKeyValues("scripts/npc/override/abilities.txt")
+	local oldKV = LoadKeyValues("scripts/npc/override/abilities_legacy.txt")
 	local newKV = {}
 	local localization_eng = {}
 	local localization_ru = {}
@@ -403,38 +457,43 @@ function GenerateAbilitiesKVTable(parameters)
 			'"')
 	end
 
-	local function createParameter(newAbilityKVTable, parameterName, parameterValues, parameterValue, abilityName)
-		--if valuesType == "AbilityValues" then
-		newAbilityKVTable["AbilityValues"][parameterName] = {
-			value = parameterValue,
-			CalculateSpellDamageTooltip = parameterValues.isCalculateSpellDamageTooltip and 1 or
-				0
-		}
+	local function createParameter(newAbilityKVTable, parameterName, parameterValues, parameterValue, abilityName,
+								   valuesType, index)
+		if valuesType == "AbilityValues" then
+			newAbilityKVTable["AbilityValues"][parameterName] = {
+				value = parameterValue,
+				CalculateSpellDamageTooltip = parameterValues.isCalculateSpellDamageTooltip and 1 or
+					0
+			}
 
-		if parameters.createLocalization then
-			createLoc(parameterName, abilityName, parameterValues)
+			if parameters.createLocalization then
+				createLoc(parameterName, abilityName, parameterValues)
+			end
+			return newAbilityKVTable
+		elseif valuesType == "AbilitySpecial" then
+			local NewAbilitySpecial = newAbilityKVTable["AbilitySpecial"]
+			NewAbilitySpecial[tostring(index)] = {
+				[1] = { key = "var_type", value = "FIELD_FLOAT" },
+				[2] = { key = parameterName, value = parameterValue },
+				[3] = { key = 'CalculateSpellDamageTooltip', value = 0 }
+			}
+			if parameters.createLocalization then
+				createLoc(parameterName, abilityName, parameterValues)
+			end
+
+			return newAbilityKVTable
 		end
-
-		return newAbilityKVTable
-		-- elseif valuesType == "AbilitySpecial" then
-		-- 	newAbilityKVTable[valuesType][tostring(i)] = {
-		-- 		var_type = "FIELD_FLOAT",
-		-- 		[parameterName] = parameterValue,
-		-- 		CalculateSpellDamageTooltip = parameterValues.isCalculateSpellDamageTooltip and 1 or
-		-- 			0
-		-- 	}
-		-- 	if parameters.createLocalization then
-		-- 		createLoc(parameterName, abilityName, parameterValues)
-		-- 	end
-
-		-- 	return newAbilityKVTable
 	end
 
 	for abilityName, oldAbilityKVTable in pairs(oldKV) do
 		local overrideAbilityKVTable = overrideKV[abilityName]
 		if overrideAbilityKVTable then
 			newKV[abilityName] = {
-				MaxLevel = oldAbilityKVTable["MaxLevel"]
+				MaxLevel = oldAbilityKVTable["MaxLevel"],
+				AbilityUnitDamageSubType = oldAbilityKVTable["AbilityUnitDamageSubType"] or nil,
+				LevelsBetweenUpgrades = oldAbilityKVTable["LevelsBetweenUpgrades"] and
+					tostring(oldAbilityKVTable["LevelsBetweenUpgrades"]) or nil
+
 			}
 			local newAbilityKVTable = newKV[abilityName]
 
@@ -445,39 +504,27 @@ function GenerateAbilitiesKVTable(parameters)
 
 				if valuesType == "AbilitySpecial" then
 					local AbilitySpecial = value
-					newAbilityKVTable["AbilityValues"] = {}
-					for _, parameterValues in pairs(AbilitySpecial) do
+					newAbilityKVTable["AbilitySpecial"] = AbilitySpecial
+					local NewAbilitySpecial = newAbilityKVTable["AbilitySpecial"]
+					for index, parameterValues in pairs(AbilitySpecial) do
+						NewAbilitySpecial[index] = {}
+						local i = 3
+						local t = {}
 						for parameterName, parameterValue in pairs(parameterValues) do
+							local val = tostring(foundParameter(
+								oldAbilityKVTable, parameterName) or parameterValue)
 							if conditionHelper(parameterName) then
-								newAbilityKVTable["AbilityValues"][parameterName] = {}
-								newAbilityKVTable["AbilityValues"][parameterName]["value"] = foundParameter(
-								oldAbilityKVTable, parameterName) or parameterValue
-								for k, v in pairs(parameterValues) do
-									if k == "LinkedSpecialBonuыs" then
-										newAbilityKVTable["AbilityValues"][parameterName]["LinkedSpecialBonus"] = v
-									elseif k == "CalculateSpellDamageTooltip" then
-										newAbilityKVTable["AbilityValues"][parameterName]["CalculateSpellDamageTooltip"] =
-										v
-									elseif k == "LinkedSpecialBonusOperation" then
-										-- table.insert(newAbilityKVTable["AbilityValues"][parameterName], "LinkedSpecialBonusOperation", v)
-										newAbilityKVTable["AbilityValues"][parameterName]["LinkedSpecialBonusOperation"] =
-										v
-									elseif k == "RequiresShard" then
-										newAbilityKVTable["AbilityValues"][parameterName]["RequiresShard"] =
-										v
-									elseif k == "DamageTypeTooltip" then
-										newAbilityKVTable["AbilityValues"][parameterName]["DamageTypeTooltip"] =
-										v
-									elseif k == "RequiresScepter" then
-										newAbilityKVTable["AbilityValues"][parameterName]["RequiresScepter"] =
-										v
-									elseif k == "ad_linked_abilities" then
-										newAbilityKVTable["AbilityValues"][parameterName]["ad_linked_abilities"] =
-										v
-									end
-								end
+								t[2] = { key = parameterName, value = val }
+							elseif parameterName == 'var_type' then
+								t[1] = { key = parameterName, value = val }
+							else
+								-- table.insert(NewAbilitySpecial, i,
+								t[i] = { key = parameterName, value = val }
+								i = i + 1
 							end
 						end
+						NewAbilitySpecial[index] = t
+						-- PrintTable(NewAbilitySpecial[index])
 					end
 					------------------------------------генерация параметров-------------------------------------
 					local i = 100
@@ -490,12 +537,12 @@ function GenerateAbilitiesKVTable(parameters)
 							if not parameterValues.table and parameterValue then
 								i = i - 1
 								newAbilityKVTable = createParameter(newAbilityKVTable, parameterName, parameterValues,
-									parameterValue, abilityName)
+									parameterValue, abilityName, valuesType, i)
 							elseif parameterValues.table and parameterValues.table[abilityName] then
 								parameterValue = parameterValues.table[abilityName]
 								i = i - 1
 								newAbilityKVTable = createParameter(newAbilityKVTable, parameterName, parameterValues,
-									parameterValue, abilityName)
+									parameterValue, abilityName, valuesType, i)
 							end
 						end
 					end
@@ -524,12 +571,12 @@ function GenerateAbilitiesKVTable(parameters)
 								parameterName)
 							if not parameterValues.table and parameterValue then
 								newAbilityKVTable = createParameter(newAbilityKVTable, parameterName, parameterValues,
-									parameterValue, abilityName)
+									parameterValue, abilityName, valuesType)
 							elseif parameterValues.table and parameterValues.table[abilityName] then
 								parameterValue = parameterValues.table[abilityName]
-								-- print(abilityName..', '..parameterValue)
+								print(abilityName .. ', ' .. parameterValue)
 								newAbilityKVTable = createParameter(newAbilityKVTable, parameterName, parameterValues,
-									parameterValue, abilityName)
+									parameterValue, abilityName, valuesType)
 							end
 						end
 					end
@@ -562,7 +609,7 @@ end
 
 -- PrintGeneratedKV(GenerateAbilitiesKVTable({}))
 
--- GenerateAbilitiesKVTable({
+-- PrintGeneratedKV(GenerateAbilitiesKVTable({
 -- 	createLocalization = true,
 -- 	stamina_drain_reduction = {
 -- 		isCalculateSpellDamageTooltip = false,
@@ -624,4 +671,4 @@ end
 -- 			item_witch_blade = 200,
 -- 		}
 -- 	}
--- })
+-- }))

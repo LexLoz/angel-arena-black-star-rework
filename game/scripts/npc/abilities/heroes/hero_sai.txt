@@ -237,6 +237,12 @@
 				"var_type"						"FIELD_INTEGER"
 				"rage_of_pain_multiplier_pct"	"10 20 30 40 50 60 70"
 			}
+			"99"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stamina_drain_reduction"	"90"
+				"CalculateSpellDamageTooltip"	"0"
+			}
 		}
 
 		"precache"

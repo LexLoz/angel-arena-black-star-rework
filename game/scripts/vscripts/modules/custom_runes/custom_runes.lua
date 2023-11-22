@@ -33,6 +33,7 @@ function CustomRunes:ActivateRune(unit, runeType, rune_multiplier)
 	elseif runeType == ARENA_RUNE_HASTE then
 		unit:AddNewModifier(unit, CustomRunes.ModifierApplier, "modifier_arena_rune_haste", {duration = settings.duration}):SetStackCount(settings.movespeed)
 	elseif runeType == ARENA_RUNE_ILLUSION then
+		unit:Purge(false, true, false, false, false)
 		for i = 1, settings.illusion_count do
 			Illusions:create({
 				unit = unit,
@@ -111,7 +112,8 @@ function CustomRunes:SpawnRunes()
 			v.RuneEntity:GetContainer():Destroy()
 			UTIL_RemoveImmediate(v.RuneEntity)
 		end
-		v.RuneEntity = CustomRunes:CreateRune(v:GetAbsOrigin(), k == bountySpawner and ARENA_RUNE_BOUNTY or RandomInt(ARENA_RUNE_FIRST, ARENA_RUNE_LAST))
+		local time = GetDOTATimeInMinutesFull()
+		v.RuneEntity = CustomRunes:CreateRune(v:GetAbsOrigin(), k == bountySpawner and ARENA_RUNE_BOUNTY or RandomInt(ARENA_RUNE_FIRST, time < 15 and ARENA_RUNE_SPIKES or ARENA_RUNE_LAST))
 		-- print(v.RuneEntity)
 	end
 end

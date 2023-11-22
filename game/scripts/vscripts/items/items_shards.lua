@@ -39,7 +39,7 @@ if IsServer() then
 			Containers:DisplayError(caster:GetPlayerID(), "#arena_hud_end_shard")
 			return
 		end
-		Attributes:UpdateAll(caster, 1)
+		-- Attributes:UpdateAll(caster, 1)
 		self:SpendCharge()
 	end
 end

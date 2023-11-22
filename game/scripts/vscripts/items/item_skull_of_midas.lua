@@ -6,7 +6,7 @@ item_skull_of_midas = class({
 
 modifier_item_skull_of_midas = class({
 	IsHidden      = function() return true end,
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsPurgable    = function() return false end,
 })
 

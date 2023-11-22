@@ -7,6 +7,7 @@ function DummyThink(keys)
 	local pull_speed = ability:GetLevelSpecialValueFor("pull_per_second", level) * think_interval
 	local slow_min_pct = ability:GetLevelSpecialValueFor("slow_min_pct", level)
 	local slow_max_pct = ability:GetLevelSpecialValueFor("slow_max_pct", level)
+	local damage = ability:GetLevelSpecialValueFor("damage_per_sec", level) * think_interval
 	local dummyPosition = dummy:GetAbsOrigin()
 	local radius = ability:GetLevelSpecialValueFor("aoe_radius", level)
 	for _,v in ipairs(FindUnitsInRadius(caster:GetTeam(), dummyPosition, nil, radius, ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)) do
@@ -18,6 +19,14 @@ function DummyThink(keys)
 			local slow = slow_min_pct + perMapUnit * (radius - len)
 			ability:ApplyDataDrivenModifier(caster, v, "modifier_poseidon_sea_hole_slow", nil)
 			v:SetModifierStackCount("modifier_poseidon_sea_hole_slow", caster, math.abs(slow))
+			-- print((1 - len / radius) * ability:GetLevelSpecialValueFor("total_damage", level))
+			ApplyDamage({
+				attacker = caster,
+				victim = v,
+				damage = damage * (1 - len / radius),
+				damage_type = ability:GetAbilityDamageType(),
+				ability = keys.ability
+			})
 		end
 	end
 end

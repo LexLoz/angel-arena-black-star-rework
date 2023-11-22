@@ -33,7 +33,7 @@ end
 
 
 modifier_item_wand_of_midas = class({
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsHidden      = function() return true end,
 	IsPurgable    = function() return false end,
 })

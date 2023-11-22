@@ -17,6 +17,7 @@ modifier_item_casket_of_greed_passive = class({
     IsDebuff      = function() return false end,
     IsHidden      = function() return true end,
 	IsPurgable    = function() return false end,
+    emoveOnDeath = function() return false end,
 	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
 })
 
@@ -59,7 +60,7 @@ if IsServer() then
     function modifier_item_casket_of_greed_passive:OnDeath(k)
         local parent = self:GetParent()
         local ability = self:GetAbility()
-        if k.unit == parent and not parent:IsIllusion() and parent:IsTrueHero() and not parent:IsTempestDouble() and not Duel:IsDuelOngoing() and not parent:HasModifier("modifier_item_demon_king_bar_curse") then
+        if k.unit == parent and not parent:IsIllusion() and parent:IsTrueHero() and not parent:IsTempestDouble() and not Duel:IsDuelOngoing() and not parent:HasModifier('modifier_item_demon_king_bar_curse') then
             ability.deaths_count = (ability.deaths_count or 0) + 1
             if ability.deaths_count == 2 then
                 parent:RemoveModifierByName("modifier_item_casket_of_greed")

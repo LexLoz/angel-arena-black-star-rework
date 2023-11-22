@@ -27,7 +27,7 @@ if IsServer() then
 			local pfx = ParticleManager:CreateParticle("particles/econ/items/lion/lion_ti8/lion_spell_finger_of_death_charge_ti8.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
 			ParticleManager:SetParticleControlEnt(pfx, 1, target, PATTACH_POINT_FOLLOW, "attach_hitloc", target:GetAbsOrigin(), false)
 			caster:EmitSound("Arena.Items.Elderberry_Wand.Cast")
-			Timers:CreateTimer(0.5, function()
+			Timers:CreateTimer(1, function()
 				target:InstaKill(self, caster, false, nil, true)
 			end)
 		end
@@ -37,7 +37,7 @@ end
 modifier_item_ultimate_scepter_arena = class({
 	RemoveOnDeath = function() return false end,
 	IsHidden      = function() return true end,
-	GetAttributes = function() return MODIFIER_ATTRIBUTE_MULTIPLE end,
+	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsPurgable    = function() return false end,
 })
 

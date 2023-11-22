@@ -58,7 +58,7 @@ if IsServer() then
         tower:SetMaxHealth(TOWER_HEALTH_BASE)
 
         Timers:CreateTimer(function()
-            tower:Purge(false, true, false, true, false)
+            tower:Purge(false, true, false, true, true)
             return 0.1
         end)
 
@@ -126,8 +126,8 @@ if IsServer() then
         Notifications:TopToAll({ text = notification2, continue = true })
         Notifications:TopToAll({ text = "ㅤ" .. " 2", continue = true })
 
-        if keys.attacker:GetTeamNumber() ~= team then
-            Gold:AddGoldWithMessage(keys.attacker, 10000 + Gold:GetGold(keys.attacker:GetPlayerID() * 0.5))
+        if keys.attacker:GetTeamNumber() ~= team and keys.attacker:IsTrueHero() then
+            Gold:AddGoldWithMessage(keys.attacker, 10000 + Gold:GetGold(keys.attacker:GetPlayerOwnerID() * 0.5))
         end
     end
 end

@@ -28,7 +28,10 @@ function modifier_arena_hero:DeclareFunctions()
 
 		MODIFIER_PROPERTY_STATUS_RESISTANCE_CASTER,
 
-		MODIFIER_PROPERTY_MAGICAL_RESISTANCE_DIRECT_MODIFICATION
+		MODIFIER_PROPERTY_MAGICAL_RESISTANCE_DIRECT_MODIFICATION,
+
+		MODIFIER_PROPERTY_TOTALDAMAGEOUTGOING_PERCENTAGE,
+		MODIFIER_PROPERTY_INCOMING_DAMAGE_CONSTANT,
 	}
 end
 
@@ -46,6 +49,138 @@ function modifier_arena_hero:GetModifierMagicalResistanceDirectModification()
 end
 
 if IsServer() then
+	function modifier_arena_hero:GetModifierTotalDamageOutgoing_Percentage(keys)
+		local damagetype_const = keys.damage_type
+		local damage_flags = keys.damage_flags
+		local damage = keys.original_damage
+		local saved_damage = keys.original_damage
+		local inflictor
+		if keys.inflictor then
+			inflictor = keys.inflictor
+		end
+		local attacker
+		if keys.attacker then
+			attacker = keys.attacker
+		end
+		local victim
+		if keys.target then
+			victim = keys.target
+		end
+
+		--print(damage)
+		if IsValidEntity(inflictor) and inflictor.GetAbilityName then
+			damage = DamageHasInflictor(inflictor, damage, attacker, victim, damagetype_const, damage_flags, saved_damage)
+		elseif not IsValidEntity(inflictor) and attacker and attacker.DamageMultiplier and damagetype_const == DAMAGE_TYPE_PHYSICAL then
+			--print('before amp: '..damage)
+			damage = damage + CalculateAttackDamage(attacker, victim)
+			--print('after amp: '..damage)
+		end
+		--print(damage)
+
+		if IsValidEntity(attacker) then
+			--local BlockedDamage = 0
+
+			if victim:IsBoss() then
+				if (attacker:GetAbsOrigin() - victim:GetAbsOrigin()):Length2D() > 950 then
+					damage = damage / 2
+				end
+				if victim._waiting then
+					damage = 0
+				end
+				local death_streak = Kills:GetDeathStreak(attacker:GetPlayerID())
+				if death_streak > 0 then
+					damage = damage * (1 + death_streak * 0.05)
+				end
+			end
+
+			-- local function ConditionHelper()
+			-- 	return IsValidEntity(inflictor) and inflictor.GetAbilityName
+			-- end
+			--print(ConditionHelper())
+			-- local condition = not (ConditionHelper() and not NeedSpellAmpCondition(inflictor, inflictor:GetAbilityName(), attacker, keys.damage_flags)) or
+			-- (ConditionHelper() and ATTACK_DAMAGE_ABILITIES[inflictor:GetAbilityName()])
+			--if condition then
+			if victim.HasModifier then
+				local multiplier = OutgoingDamageModifiers(attacker, victim, inflictor, damage, damagetype_const, damage_flags)
+				--for k, v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
+					-- if attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage))) then
+					-- 	if multiplier == 0 then break end
+					-- 	multiplier = multiplier * ExtractMultiplier(
+					-- 		damage,
+					-- 		ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const, damage_flags,
+					-- 			saved_damage))
+					-- end
+				--end
+				if attacker.addictive_multiplier > 0 then
+					multiplier = multiplier + attacker.addictive_multiplier
+				end
+
+				damage = damage * multiplier
+			end
+		end
+		-- print('current damage: '..damage)
+		-- print('saved damage: '..saved_damage)
+		-- print('damage increase/decrease percent: '..((damage / saved_damage * 100) - 100))
+		return (math.min(2000000000, damage) / saved_damage * 100) - 100
+	end
+
+	function modifier_arena_hero:GetModifierIncomingDamageConstant(keys)
+		local damagetype_const = keys.damage_type
+		local damage_flags = keys.damage_flags
+		local damage = keys.damage
+		local saved_damage = damage
+		--print("1: "..damage)
+		local inflictor
+		if keys.inflictor then
+			inflictor = keys.inflictor
+		end
+		local attacker
+		if keys.attacker then
+			attacker = keys.attacker
+		end
+		local victim
+		if keys.target then
+			victim = keys.target
+		end
+
+		if IsValidEntity(attacker) then
+			if attacker:IsBoss() then
+				local kill_streak = Kills:GetKillStreak(victim:GetPlayerOwnerID())
+				if kill_streak > 0 then
+					damage = damage * (1 - kill_streak * 0.07)
+				end
+			end
+			-- if victim:IsBoss() and (attacker:GetAbsOrigin() - victim:GetAbsOrigin()):Length2D() > 950 then
+			-- 	damage = damage / 2
+			-- end
+			-- if victim:IsBoss() and victim._waiting then
+			-- 	return damage
+			-- end
+			local BlockedDamage = 0
+
+			if victim.HasModifier then
+				-- for k, v in pairs(INCOMING_DAMAGE_MODIFIERS) do
+					-- if victim:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags))) then
+						damage = IncomingDamageModifiers(attacker, victim, inflictor, damage, damagetype_const, damage_flags)
+						-- if damage == 0 then break end
+					-- end
+				-- end
+			end
+
+			if BlockedDamage > 0 then
+				-- SendOverheadEventMessage(victim:GetPlayerOwner(), OVERHEAD_ALERT_BLOCK, victim, BlockedDamage, attacker:GetPlayerOwner())
+				-- SendOverheadEventMessage(attacker:GetPlayerOwner(), OVERHEAD_ALERT_BLOCK, victim, BlockedDamage, victim:GetPlayerOwner())
+
+				damage = damage - BlockedDamage
+			end
+		end
+		-- print('saved damage: '..saved_damage)
+		-- print("current damage: "..damage)
+		-- print("blocked damage: "..saved_damage - damage)
+		-- print('blocked damage pct: '..((damage / saved_damage * 100) - 100))
+		return -(saved_damage - damage)
+	end
+
 	function modifier_arena_hero:GetModifierConstantHealthRegen()
 		return (self:GetParent():GetStrength() - self:GetParent():GetUnreliableStrength()) * 0.1 -
 			self:GetParent():GetStrength() * 0.1 --+ (self:GetParent().custom_regen or 0)
@@ -73,7 +208,7 @@ end
 if IsServer() then
 	modifier_arena_hero.HeroLevel = 1
 	function modifier_arena_hero:OnCreated()
-		self.tick = .1
+		self.tick = 1 / 20
 		self._tick = 0
 		self.modifiers_number = 0
 		self:StartIntervalThink(self.tick)
@@ -82,10 +217,50 @@ if IsServer() then
 	function modifier_arena_hero:OnIntervalThink()
 		self._tick = self._tick + 1
 		local parent = self:GetParent()
+		local playerId = parent:GetPlayerID()
+
+		--reconnect fix
+		local player = PlayerResource:GetPlayer(playerId)
+		local playerState = PlayerResource:GetConnectionState(playerId)
+		if playerState == DOTA_CONNECTION_STATE_DISCONNECTED then
+			self.disconnected = true
+		elseif playerState == DOTA_CONNECTION_STATE_CONNECTED and self.disconnected then
+			self.disconnected = false
+			ReconnectFix(playerId)
+		end
+
+		--unlimited mana
+		if not self.evolution then
+			if parent:GetMaxMana() >= 65536 and (parent:GetMana() ~= self._Mana or parent:GetMaxMana() ~= self._MaxMana) then
+				self._Mana = parent:GetMana()
+				self._MaxMana = parent:GetMaxMana()
+				parent:SetNetworkableEntityInfo("CurrentMana", parent:GetMana())
+				parent:SetNetworkableEntityInfo("MaxMana", parent:GetMaxMana())
+			end
+		end
+
+		--health and mana regen
+		if parent:IsHero() and self.health_regen ~= parent:GetHealthRegen() + (parent.custom_regen or 0) then
+			self.health_regen = parent:GetHealthRegen() + (parent.custom_regen or 0)
+			--print('regen: '..parent:GetHealthRegen())
+			--print('custom regen: '..(parent.custom_regen or 0))
+			parent:SetNetworkableEntityInfo("HealthRegen",
+				(__toFixed(math.max(0, (parent.custom_regen or 0)) + parent:GetHealthRegen(), 1)))
+		end
+
+		if parent:IsHero() and parent:GetHealth() < parent:GetMaxHealth() then
+			SafeHeal(parent, math.max(0, (parent.custom_regen or 0) * self.tick), nil, false, {
+				amplify = true,
+				source = parent
+			})
+		end
+
+		if parent:IsHero() and parent:GetMana() < parent:GetMaxMana() then
+			parent:SetMana(parent:GetMana() + (parent.custom_mana_regen or 0) * self.tick)
+		end
 
 		--util
 		local hero = parent
-		local i = hero:GetPlayerID()
 		if hero and hero:IsTrueHero() then
 			if hero:GetFullName() == "npc_dota_hero_meepo" then
 				for _, v in ipairs(MeepoFixes:FindMeepos(hero, true)) do
@@ -113,7 +288,7 @@ if IsServer() then
 		if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 			local goldPerTick = 0
 
-			local courier = Structures:GetCourier(i)
+			local courier = Structures:GetCourier(playerId)
 			-- print(courier:IsAlive())
 			if courier and courier:IsAlive() then
 				goldPerTick = CUSTOM_GOLD_PER_TICK * self.tick
@@ -131,9 +306,9 @@ if IsServer() then
 			end
 
 			--print("goldPerTick: "..goldPerTick)
-			Gold:AddGold(i, goldPerTick)
+			Gold:AddGold(playerId, goldPerTick)
 		end
-		AntiAFK:Think(i)
+		AntiAFK:Think(playerId)
 		-------------------------------
 
 		--удаление неуязвимости от фонтана
@@ -171,17 +346,17 @@ if IsServer() then
 
 			parent.outside_change_bat = parent.outside_change_bat + self.inf_gaunt:GetSpecialValueFor("bat_increase")
 			parent:SetNetworkableEntityInfo("BaseAttackTime",
-				parent:GetKeyValue("AttackRate") + parent.outside_change_bat)
+				(parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
 		elseif not parent:HasModifier("modifier_item_infinity_gauntlet") and self.inf_gaunt then
 			parent.outside_change_bat = parent.outside_change_bat - self.inf_gaunt:GetSpecialValueFor(
 				"bat_increase")
 			parent:SetNetworkableEntityInfo("BaseAttackTime",
-				parent:GetKeyValue("AttackRate") + parent.outside_change_bat)
+				(parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
 			self.inf_gaunt = nil
 		end
 
 		--костыль для морфа
-		if parent:GetFullName() == "npc_dota_hero_morphling" then
+		if parent:GetFullName() == "npc_dota_hero_morphling" and self._tick % 20 == 0 then
 			if self.saved_str ~= parent:GetBaseStrength() or
 				self.saved_agi ~= parent:GetBaseAgility() then
 				self.saved_str = parent:GetBaseStrength()
@@ -201,11 +376,39 @@ if IsServer() then
 		end
 
 		--self.backpack = CheckBackpack(parent, self.backpack)
+		if self._strength ~= parent:GetStrength() then
+			self._strength = parent:GetStrength()
+			Timers:CreateTimer(1, function()
+				Attributes:UpdateStrength(parent)
+			end)
+		end
+		if self._agility ~= parent:GetAgility() then
+			self._agility = parent:GetAgility()
+			Timers:CreateTimer(1, function()
+				Attributes:UpdateAgility(parent)
+				Attributes:UpdateSpellDamage(parent)
+				Attributes:UpdateStaminaCost(parent)
+			end)
+		end
+		if self._intellect ~= parent:GetIntellect() then
+			self._intellect = parent:GetIntellect()
+			Timers:CreateTimer(1, function()
+				Attributes:UpdateIntelligence(parent)
+			end)
+		end
 
 		local allmodifiers = #parent:FindAllModifiers() -
 			#parent:FindAllModifiersByName("modifier_agility_bonus_attacks")
 		if self.modifiers_number ~= allmodifiers then
-			Attributes:UpdateAll(parent)
+			-- print('attributes update')
+			-- Attributes:UpdateAll(parent)
+			Attributes:CheckModifiers(parent)
+			Attributes:UpdateDamage(parent)
+			Attributes:UpdateSpellDamage(parent)
+			Attributes:UpdateDamageMultipliers(parent)
+			Attributes:UpdateStaminaCost(parent)
+			Attributes:CalculateRegen(parent)
+			Attributes:UpdateManaRegen(parent)
 
 			if self.modifiers_number > allmodifiers then
 				local index = 1
@@ -214,10 +417,12 @@ if IsServer() then
 						parent.outside_change_bat = parent.outside_change_bat + v.change
 						parent.change_bat_modifiers[index] = nil
 						parent:SetNetworkableEntityInfo("BaseAttackTime",
-							parent:GetKeyValue("AttackRate") + parent.outside_change_bat)
+							(parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
 					end
 					index = index + 1
 				end
+
+
 			end
 
 			self.modifiers_number = allmodifiers
@@ -234,8 +439,8 @@ if IsServer() then
 			parent.OnDuel and
 			Duel:GetDuelTimer() <= 20 and
 			not parent:HasModifier("modifier_arena_duel_vision") then
-			parent:AddNewModifier(nil, nil, "modifier_arena_duel_vision", nil)
-			parent:AddNewModifier(nil, nil, "modifier_truesight", nil)
+			parent:AddNewModifier(nil, nil, "modifier_arena_duel_vision", {duration = 99999})
+			parent:AddNewModifier(nil, nil, "modifier_truesight", {duration = 99999})
 		elseif (not parent:IsAlive() or
 				not parent.OnDuel) and
 			parent:HasModifier("modifier_arena_duel_vision") then
@@ -287,7 +492,13 @@ if IsServer() then
 			end
 
 			--удаление ненадежных атрибутов при смерти
-			Attributes:OnDeath(parent)
+			if k.attacker and k.attacker:IsHero() then
+				local attackerBuyingStatsSum = k.attacker.Additional_str + k.attacker.Additional_agi + k.attacker.Additional_int
+				local victimBuyingStatsSum = parent.Additional_str + parent.Additional_agi + parent.Additional_int
+				if attackerBuyingStatsSum < victimBuyingStatsSum then
+					Attributes:RemoveStats(parent, 30)
+				end
+			end
 
 			--print(GetOneRemainingTeam())
 			if GetOneRemainingTeam() then
@@ -449,14 +660,18 @@ function modifier_arena_hero:OnAttackLanded(keys)
 
 	if attacker ~= self:GetParent() then return end
 
+	local attack_damage = attacker:GetAverageTrueAttackDamage(attacker)
+	-- print('keys.original_damage, ' .. keys.original_damage)
+	-- print('keys.damage, ' .. keys.damage)
+
 	if attacker:FindModifierByName("modifier_splash_timer") then
 		return
 	end
+	local item = nil
 	if not attacker:IsRangedUnit() then
 		local distance = 400
 		local start = 100
 		local _end = 250
-		local item = nil
 		local cleave = 0
 		if attacker:HasModifier("modifier_item_ultimate_splash") then
 			item = attacker:FindModifierByName("modifier_item_ultimate_splash"):GetAbility()
@@ -484,15 +699,23 @@ function modifier_arena_hero:OnAttackLanded(keys)
 			cleave = item:GetSpecialValueFor("cleave_damage_percent")
 		end
 		if not self._splash_cooldown then
-			self._splash_cooldown = true
+			-- self._splash_cooldown = true
+			-- print('splash')
+			-- print(attacker)
+			-- print(target)
+			-- print(item)
+			-- print(keys.damage * ((cleave or 0) + 25) * 0.01)
+			-- print(distance)
+			-- print(start)
+			-- print(_end)
 			DoCleaveAttack(
 				attacker,
 				target,
 				item,
-				(keys.damage) * ((cleave or 0) + 25) * 0.01, -- + 0.15 * attacker:GetLevel()) * 0.01,
-				distance,
+				attack_damage * ((cleave or 0) + 25) * 0.01, -- + 0.15 * attacker:GetLevel()) * 0.01,
 				start,
 				_end,
+				distance,
 				"particles/items_fx/battlefury_cleave.vpcf"
 			)
 			Timers:CreateTimer(0.1, function()
@@ -503,21 +726,23 @@ function modifier_arena_hero:OnAttackLanded(keys)
 		local radius = 200
 		local splash = 0
 		if attacker:HasModifier("modifier_item_ultimate_splash") then
-			local item = attacker:FindModifierByName("modifier_item_ultimate_splash"):GetAbility()
+			item = attacker:FindModifierByName("modifier_item_ultimate_splash"):GetAbility()
 			radius = item:GetSpecialValueFor("split_radius")
 			splash = item:GetSpecialValueFor("split_damage_pct")
 		elseif attacker:HasModifier("modifier_item_splitshot_ultimate") then
-			local item = attacker:FindModifierByName("modifier_item_splitshot_ultimate"):GetAbility()
+			item = attacker:FindModifierByName("modifier_item_splitshot_ultimate"):GetAbility()
 			radius = item:GetSpecialValueFor("split_radius")
 			splash = item:GetSpecialValueFor("split_damage_pct")
 		elseif attacker:HasModifier("modifier_item_nagascale_bow") then
-			local item = attacker:FindModifierByName("modifier_item_nagascale_bow"):GetAbility()
+			item = attacker:FindModifierByName("modifier_item_nagascale_bow"):GetAbility()
 			radius = item:GetSpecialValueFor("split_radius")
 			splash = item:GetSpecialValueFor("split_damage_pct")
 		end
 
+		-- print(item and item:GetName() or nil)
+
 		if not self._splash_cooldown then
-			self._splash_cooldown = true
+			-- self._splash_cooldown = true
 			local targets = FindUnitsInRadius(
 				attacker:GetTeam(),
 				target:GetAbsOrigin(),
@@ -530,14 +755,14 @@ function modifier_arena_hero:OnAttackLanded(keys)
 				false
 			)
 			for _, v in pairs(targets) do
-				if v ~= target then
+				if target:IsAlive() and v ~= target  then
 					ApplyDamage({
 						attacker = attacker,
 						victim = v,
 						damage_type = DAMAGE_TYPE_PHYSICAL,
-						damage = (keys.damage) * ((splash or 0) + 25) * 0.01, -- + 0.15 * attacker:GetLevel()) * 0.01,
-						damage_flags = DOTA_DAMAGE_FLAG_NO_DAMAGE_MULTIPLIERS + DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
-						ability = item
+						damage = attack_damage * ((splash or 0) + 25) * 0.01, -- + 0.15 * attacker:GetLevel()) * 0.01,
+						damage_flags =  DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+						--ability = item
 					})
 				end
 			end

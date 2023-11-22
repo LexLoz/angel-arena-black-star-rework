@@ -4,10 +4,19 @@ MODIFIERS_DEATH_PREVENTING = {
 	"modifier_abaddon_aphotic_shield",
 	"modifier_abaddon_borrowed_time",
 	"modifier_nyx_assassin_spiked_carapace",
+	"modifier_troll_warlord_battle_trance",
+	"modifier_skeleton_king_reincarnation_scepter_active",
+	"modifier_monkey_king_transform",
+	"modifier_oracle_false_promise",
+	"modifier_templar_assassin_refraction_absorb",
+	"modifier_winter_wyvern_winters_curse_aura",
+	"modifier_winter_wyvern_winters_curse",
+
 	"modifier_item_titanium_bar_active",
 	"modifier_fountain_aura_arena",
 	"modifier_mana_shield_arena",
 	"modifier_saber_avalon_invulnerability",
+	"modifier_sans_ketchup",
 }
 
 DUEL_PURGED_MODIFIERS = {
@@ -37,7 +46,9 @@ UNDESTROYABLE_MODIFIERS = {
 
 COOLDOWN_REDUCTION_MODIFIERS = {
 	modifier_octarine_unique_cooldown_reduction = function(unit)
-		return GetAbilitySpecial(unit:HasModifier("modifier_item_refresher_core") and "item_refresher_core" or "item_octarine_core_arena", "bonus_cooldown_pct")
+		return GetAbilitySpecial(
+			unit:HasModifier("modifier_item_refresher_core") and "item_refresher_core" or "item_octarine_core_arena",
+			"bonus_cooldown_pct")
 	end,
 	--TODO Make it work without that table, rewrite modifier_octarine_unique_cooldown_reduction in modifier_lua
 	modifier_arena_rune_arcane = function(unit)
@@ -123,7 +134,8 @@ REGEN_EXEPTIONS = {
 	{ "modifier_arthas_vikared",                   "health_regen_percent" },
 	{ "modifier_huskar_berserkers_blood",          "maximum_health_regen" },
 	{ "modifier_juggernaut_healing_ward_heal",     "healing_ward_heal_amount" },
-	{ "modifier_filler_heal",                      "hp_heal_pct" }
+	{ "modifier_filler_heal",                      "hp_heal_pct" },
+	{ "modifier_wisp_overcharge",				   "hp_regen"}
 }
 
 DAMAGE_REFLECT_MODIFIERS = {
@@ -145,19 +157,6 @@ RELIABLE_DAMAGE_MODIFIERS = {
 	item_demonic_cuirass = true,
 	item_sacred_blade_mail = true,
 	item_titanium_bar = true,
-}
-
-REDUCES_STAMINA_COST_MODIFIERS = {
-	"modifier_sara_fragment_of_hate_damage",
-	"modifier_phantom_assassin_phantom_strike",
-	"modifier_alchemist_chemical_rage",
-	"modifier_troll_warlord_battle_trance",
-	"modifier_power_stone",
-	"modifier_ogre_magi_bloodlust",
-	"modifier_lycan_shapeshift",
-	"modifier_lycan_wolf_bite_attack_range",
-	"modifier_stegius_rage_of_desolus",
-	"modifier_sven_gods_strength",
 }
 
 BAT_DECREASE_MODIFIERS = {

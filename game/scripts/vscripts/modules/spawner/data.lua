@@ -214,12 +214,12 @@ SPAWNER_SETTINGS = {
 				{
 					[-1] = "npc_dota_neutral_jungle_variant1",
 					[0] = "models/heroes/lone_druid/spirit_bear.vmdl",
-					[200] = "models/items/lone_druid/bear/dark_wood_bear_brown/dark_wood_bear_brown.vmdl",
-					[400] = "models/items/lone_druid/bear/dark_wood_bear_white/dark_wood_bear_white.vmdl",
-					[600] = "models/items/lone_druid/bear/dark_wood_bear/dark_wood_bear.vmdl",
-					[800] = "models/items/lone_druid/bear/dark_wood_bear_white/dark_wood_bear_white.vmdl",
-					[1000] = "models/items/lone_druid/bear/spirit_of_anger/spirit_of_anger.vmdl",
-					[1200] = "models/items/lone_druid/bear/iron_claw_spirit_bear/iron_claw_spirit_bear.vmdl",
+					--[10] = "models/items/lone_druid/bear/dark_wood_bear_brown/dark_wood_bear_brown.vmdl",
+					--[20] = "models/items/lone_druid/bear/dark_wood_bear_white/dark_wood_bear_white.vmdl",
+					[20] = "models/items/lone_druid/bear/dark_wood_bear/dark_wood_bear.vmdl",
+					--[40] = "models/items/lone_druid/bear/dark_wood_bear_white/dark_wood_bear_white.vmdl",
+					[40] = "models/items/lone_druid/bear/spirit_of_anger/spirit_of_anger.vmdl",
+					[60] = "models/items/lone_druid/bear/iron_claw_spirit_bear/iron_claw_spirit_bear.vmdl",
 				}
 			},
 		},

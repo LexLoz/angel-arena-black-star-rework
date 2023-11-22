@@ -29,9 +29,6 @@ BOSS_DAMAGE_ABILITY_MODIFIERS = {
 	huskar_burning_spear_arena = 10,
 	phantom_assassin_fan_of_knives = 15,
 	item_unstable_quasar = 15,
-	bloodseeker_blood_mist = 200,
-	bloodseeker_bloodrage = 20,
-	bloodseeker_rupture = 50,
 	venomancer_poison_nova = 25,
 	venomancer_noxious_plague = 15,
 	phoenix_sun_ray = 10,
@@ -42,7 +39,7 @@ BOSS_DAMAGE_ABILITY_MODIFIERS = {
 	item_piercing_blade = 5,
 	item_soulcutter = 10,
 	item_revenants_brooch = 200,
-	item_witch_blade = 200,
+	item_witch_blade = 600,
 }
 
 local function OctarineLifesteal(attacker, victim, inflictor, damage, _, damage_flags, itemname, cooldownModifierName)
@@ -79,19 +76,19 @@ ON_DAMAGE_MODIFIER_PROCS = {
 		OctarineLifesteal(attacker, victim, inflictor, damage, damagetype_const, damage_flags, "item_refresher_core",
 			"modifier_octarine_bash_cooldown")
 	end,
-	modifier_sara_evolution = function(attacker, _, _, damage)
-		local ability = attacker:FindAbilityByName("sara_evolution")
-		if ability and attacker.ModifyEnergy then
-			attacker:ModifyEnergy(damage * ability:GetSpecialValueFor("damage_to_energy_pct") * 0.01, true)
-		end
-	end,
+	-- modifier_sara_evolution = function(attacker, _, _, damage)
+	-- 	local ability = attacker:FindAbilityByName("sara_evolution")
+	-- 	if ability and attacker.ModifyEnergy then
+	-- 		attacker:ModifyEnergy(damage * ability:GetSpecialValueFor("damage_to_energy_pct") * 0.01, true)
+	-- 	end
+	-- end,
 	modifier_item_golden_eagle_relic = function(attacker, victim, inflictor, damage, damagetype_const)
 		--print('golden eagle')
 		if not IsValidEntity(inflictor) then
 			if damagetype_const == DAMAGE_TYPE_PHYSICAL then
 				local LifestealPercentage = GetAbilitySpecial("item_golden_eagle_relic", "lifesteal_pct")
 				local armor = victim:GetPhysicalArmorValue(false)
-				local resist = 1 - CalculatePhysicalResist(victim, armor)
+				local resist = 1 -- CalculatePhysicalResist(victim, armor)
 				local lifesteal = math.min(victim:GetHealth(), damage * LifestealPercentage * 0.01 * resist)
 				--print("lifesteal: "..lifesteal)
 				SafeHeal(attacker, lifesteal,
@@ -122,15 +119,21 @@ ON_DAMAGE_MODIFIER_PROCS = {
 			end
 		end
 	end,
-	modifier_shinobu_vampire_blood = function(attacker, _, inflictor, damage, damagetype_const)
+	modifier_shinobu_vampire_blood = function(attacker, victim, inflictor, damage, damagetype_const)
 		if not IsValidEntity(inflictor) then
 			if damagetype_const == DAMAGE_TYPE_PHYSICAL then
 				local caster = attacker
 				local ability = caster:FindAbilityByName('shinobu_vampire_blood')
 				local pct = ability:GetAbilitySpecial("lifesteal_pct_lvl" .. ability.CurrentLevel)
 				if pct then
-					local amount = damage * pct * 0.01
-					caster:SetHealth(caster:GetHealth() + amount)
+					local armor = victim:GetPhysicalArmorValue(true)
+					local resist = 1 -- CalculatePhysicalResist(victim, armor)
+					local amount = damage * pct * 0.01 * resist
+					-- caster:SetHealth(caster:GetHealth() + amount)
+					SafeHeal(attacker, math.min(victim:GetHealth(), amount), inflictor, false, {
+						lifesteal = true,
+						source = attacker
+					})
 					SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, caster, amount, nil)
 					ParticleManager:CreateParticle(
 						"particles/arena/units/heroes/hero_shinobu/lifesteal_lvl" .. ability.CurrentLevel .. ".vpcf",
@@ -239,7 +242,8 @@ ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS = {
 }
 
 OUTGOING_DAMAGE_MODIFIERS = {
-	modifier_item_desolator6_arena = function(attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage)
+	modifier_item_desolator6_arena = function(attacker, victim, inflictor, damage, damagetype_const, damage_flags,
+											  saved_damage)
 		if not IsValidEntity(inflictor) then
 			local mod_name = "modifier_item_desolator6_arena"
 			local mod = attacker:FindModifierByName(mod_name)
@@ -252,22 +256,22 @@ OUTGOING_DAMAGE_MODIFIERS = {
 				if RollPercentage(chance) then
 					ability:AutoStartCooldown()
 
-					local base_armor = victim:GetPhysicalArmorValue(false) -
-						(victim:GetPhysicalArmorValue(true) < 0 and math.abs(victim:GetPhysicalArmorValue(true)) or victim:GetPhysicalArmorValue(true))
+					local base_armor = (victim:GetPhysicalArmorValue(false) -
+						(victim:GetPhysicalArmorValue(true) < 0 and math.abs(victim:GetPhysicalArmorValue(true)) or victim:GetPhysicalArmorValue(true))) * 0.75
 					local total_armor = victim:GetPhysicalArmorValue(false)
 					local ignored_armor = base_armor > total_armor and total_armor or base_armor
 					local ignored_armor_mult = CalculatePhysicalResist(victim, total_armor - ignored_armor)
 
-					local multiplier = 1
-					for k, v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
-						if k ~= mod_name and attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags))) then
-							if multiplier == 0 then break end
-							multiplier = multiplier * ExtractMultiplier(
-								damage,
-								ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const,
-									damage_flags, saved_damage))
-						end
-					end
+					local multiplier = OutgoingDamageModifiers(attacker, victim, inflictor, damage, damagetype_const, damage_flags)
+					-- for k, v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
+					-- 	if k ~= mod_name and attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage))) then
+					-- 		if multiplier == 0 then break end
+					-- 		multiplier = multiplier * ExtractMultiplier(
+					-- 			damage,
+					-- 			ProcessDamageModifier(v, attacker, victim, inflictor, damage, damagetype_const,
+					-- 				damage_flags, saved_damage))
+					-- 	end
+					-- end
 					-- print('damage: ' .. (damage * multiplier * (1 - ignored_armor_mult)))
 					ApplyDamage({
 						victim = victim,
@@ -286,7 +290,7 @@ OUTGOING_DAMAGE_MODIFIERS = {
 		end
 	end,
 	modifier_sans_curse_passive = function(_, victim)
-		if victim:GetTeam() == DOTA_TEAM_NEUTRALS and victim:IsCreep() then
+		if victim:GetTeam() == DOTA_TEAM_NEUTRALS and victim:IsCreep() and not victim:IsBoss() then
 			return 0.25
 		end
 	end,
@@ -327,7 +331,7 @@ OUTGOING_DAMAGE_MODIFIERS = {
 		local stacks = parent:FindModifierByName("modifier_stamina"):GetStackCount()
 
 		if not inflictor then
-			local mult = (1 - stacks / 100) * 50 * 0.01
+			local mult = (1 - stacks / 100) * 70 * 0.01
 			parent:CalculateStatBonus(true)
 			return 1 - mult
 		end
@@ -380,11 +384,57 @@ OUTGOING_DAMAGE_MODIFIERS = {
 		end
 	},
 
-	modifier_agility_primary_bonus = function(parent, _, inflictor, _, _, _)
-		-- print(parent.bonus_attack)
-		if not inflictor and parent.bonus_attack and not parent:PassivesDisabled() then
-			-- print('agility bonus attack mult: '..(1 + parent.bonus_attack * 0.01))
-			return 1 + parent.bonus_attack * 0.01
+	modifier_item_quelling_fury = {
+		multiplier = function(attacker, victim)
+			local mult = 1 + attacker:FindModifierByName("modifier_item_quelling_fury"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
+			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
+		end
+	},
+
+	modifier_item_battlefury_arena = {
+		multiplier = function(attacker, victim)
+			local mult = 1 + attacker:FindModifierByName("modifier_item_battlefury_arena"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
+			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
+		end
+	},
+
+	modifier_item_elemental_fury = {
+		multiplier = function(attacker, victim)
+			local mult = 1 + attacker:FindModifierByName("modifier_item_elemental_fury"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
+			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
+		end
+	},
+
+	modifier_item_ultimate_splash = {
+		multiplier = function(attacker, victim)
+			local mult = 1 + attacker:FindModifierByName("modifier_item_ultimate_splash"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
+			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
+		end
+	},
+
+	-- modifier_agility_primary_bonus = function(parent, _, inflictor, _, _, _)
+	-- 	-- print(parent.bonus_attack)
+	-- 	if not inflictor and parent.bonus_attack and not parent:PassivesDisabled() then
+	-- 		-- print('agility bonus attack mult: '..(1 + parent.bonus_attack * 0.01))
+	-- 		return 1 + parent.bonus_attack * 0.01
+	-- 	end
+	-- end,
+	modifier_freya_frozen_strike_crit = function(parent, victim, inflictor, damage, _, damage_flags)
+		local modifier = parent:FindModifierByName("modifier_freya_frozen_strike_crit")
+		local mult = 1 + modifier:GetStackCount() * 0.01
+		local proceed_crit = function()
+			SendOverheadEventMessage(nil, OVERHEAD_ALERT_CRITICAL, victim,
+				damage * mult, nil)
+			-- print('proceed crit')
+		end
+
+		if not inflictor then
+			--modifier.overhead_cooldown = true
+			mult = GenerateDamageMultiplier(parent:GetReliableDamage(), damage, mult)
+			proceed_crit()
+			-- print('тычки: ' .. mult)
+			modifier:Destroy()
+			return mult
 		end
 	end,
 
@@ -405,8 +455,7 @@ OUTGOING_DAMAGE_MODIFIERS = {
 				inflictor.GetAbilityName then
 				--для абилок с уроном от атак
 				if ATTACK_DAMAGE_ABILITIES[inflictor:GetAbilityName()] then
-					local increased_damage = parent:GetReliableDamage() * mult
-					mult = (increased_damage + damage) / damage
+					mult = GenerateDamageMultiplier(parent:GetReliableDamage(), damage, mult)
 					-- print('для абилок с уроном от атак: '..mult)
 					proceed_crit()
 					return mult
@@ -416,19 +465,19 @@ OUTGOING_DAMAGE_MODIFIERS = {
 						type(SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS[inflictor:GetAbilityName()]) == "string") then
 					local fixed_damage = inflictor:GetSpecialValueFor(SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS
 						[inflictor:GetAbilityName()])
-					mult = GetSpellCrit(mult)
-					local increased_damage = (fixed_damage * mult)
-					mult = (increased_damage + damage) / damage
+					mult = GenerateDamageMultiplier(fixed_damage, damage, GetSpellCrit(mult))
 					proceed_crit()
 					-- print('для частично процентных абилок: ' .. mult)
 					-- print('абилка: ' .. inflictor:GetAbilityName())
 					return mult
 
 					--все остальные абилки
-				elseif FilterDamageSpellAmpCondition(inflictor, inflictor:GetAbilityName(), parent, damage_flags) then
-					mult = GetSpellCrit(mult)
+				elseif NeedSpellAmpCondition(inflictor, inflictor:GetAbilityName(), parent, damage_flags) then
+					-- print('strength crit mult: ' .. mult)
+					mult = GenerateDamageMultiplier(damage / (parent.DamageMultiplier or 1), damage, GetSpellCrit(mult))
 					-- print('spell crit')
 					proceed_crit()
+					-- print('spell crit: ' .. GetSpellCrit(mult))
 					-- print('все остальные абилки: ' .. mult)
 					return mult
 				end
@@ -437,8 +486,7 @@ OUTGOING_DAMAGE_MODIFIERS = {
 			--тычки
 			if not inflictor then
 				--modifier.overhead_cooldown = true
-				local increased_damage = parent:GetReliableDamage() * mult
-				mult = (increased_damage + damage) / damage
+				mult = GenerateDamageMultiplier(parent:GetReliableDamage(), damage, mult)
 				proceed_crit()
 				-- print('тычки: ' .. mult)
 				return mult
@@ -610,14 +658,23 @@ INCOMING_DAMAGE_MODIFIERS = {
 			return 1 - -GetAbilitySpecial("item_titanium_bar", "active_damage_reduction_pct") * 0.01
 		end
 	},
-	modifier_item_blade_mail_arena_active = {
+	modifier_item_blade_mail_reflect = {
 		multiplier = function(_, victim)
-			local modifier = victim:FindModifierByNameAndCaster("modifier_item_blade_mail_arena_active", victim)
+			local modifier = victim:FindModifierByNameAndCaster("modifier_item_blade_mail_reflect", victim)
 			if modifier and IsValidEntity(modifier:GetAbility()) then
-				return 1 - modifier:GetAbility():GetAbilitySpecial("reduced_damage_pct") * 0.01
+				print(modifier:GetAbility():GetSpecialValueFor("reduced_damage_pct"))
+				return 1 - modifier:GetAbility():GetSpecialValueFor("reduced_damage_pct") * 0.01
 			end
 		end
 	},
+	-- modifier_item_blade_mail_arena_active = {
+	-- 	multiplier = function(_, victim)
+	-- 		local modifier = victim:FindModifierByNameAndCaster("modifier_item_blade_mail_arena_active", victim)
+	-- 		if modifier and IsValidEntity(modifier:GetAbility()) then
+	-- 			return 1 - modifier:GetAbility():GetAbilitySpecial("reduced_damage_pct") * 0.01
+	-- 		end
+	-- 	end
+	-- },
 	modifier_item_sacred_blade_mail_active = {
 		multiplier = function()
 			return 1 - GetAbilitySpecial("item_sacred_blade_mail", "reduced_damage_pct") * 0.01

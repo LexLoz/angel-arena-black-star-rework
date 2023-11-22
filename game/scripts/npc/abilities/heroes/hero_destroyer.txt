@@ -145,6 +145,12 @@
 				"var_type"			"FIELD_INTEGER"
 				"health_regen"		"10 15 20 25 30 35 40"
 			}
+			"99"
+			{
+				"var_type"			"FIELD_FLOAT"
+				"stamina_drain_reduction"	"70"
+				"CalculateSpellDamageTooltip"	"0"
+			}
 		}
 
 		"precache"

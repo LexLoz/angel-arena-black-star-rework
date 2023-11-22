@@ -15,10 +15,8 @@ Weather = Weather or class({
 })
 
 function Weather:Init()
-	Weather:Start(Weather:GetCurrentWeather() or Weather:SelectRandomRecipient())
-	if not Weather:GetCurrentWeather() then
-		Timers:CreateTimer(1/30, Dynamic_Wrap(Weather, "Think"))
-	end
+	Weather:Start(Weather:SelectRandomRecipient())
+	Timers:CreateTimer(1/30, Dynamic_Wrap(Weather, "Think"))
 end
 
 function Weather:GetWeatherInfo(new)

@@ -3,6 +3,7 @@
 -- The overall game state has changed
 function GameMode:OnGameRulesStateChange(keys)
 	local newState = GameRules:State_Get()
+	print('game state: ' .. newState)
 	if newState == DOTA_GAMERULES_STATE_PRE_GAME then
 		HeroSelection:CollectPD()
 		HeroSelection:HeroSelectionStart()
@@ -36,8 +37,8 @@ end
 
 function GameMode:OnReconnected(id)
 	print('reconnect')
-	Timers:CreateTimer(30, function()
-		ReconnectFix(PlayerResource:GetPlayer(id))
+	Timers:CreateTimer(5, function()
+		ReconnectFix(id)
 	end)
 end
 
@@ -135,7 +136,7 @@ function GameMode:OnNPCSpawned(keys)
 			InitHero(npc)
 			npc:AddNewModifier(npc, nil, "modifier_arena_hero", nil)
 			npc:AddNewModifier(npc, nil, "modifier_stamina", nil)
-			npc:AddNewModifier(npc, nil, "modifier_arena_util", nil)
+			-- npc:AddNewModifier(npc, nil, "modifier_arena_util", nil)
 
 			if npc.ArenaHero then
 				local parent = npc
@@ -286,6 +287,7 @@ end
 
 -- An entity died
 function GameMode:OnEntityKilled(keys)
+	-- print('death')
 	local killedUnit = EntIndexToHScript(keys.entindex_killed)
 	local killerEntity
 	if keys.entindex_attacker then
