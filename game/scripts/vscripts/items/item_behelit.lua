@@ -1,14 +1,16 @@
 LinkLuaModifier("modifier_item_behelit_buff", "items/item_behelit.lua", LUA_MODIFIER_MOTION_NONE)
 
 modifier_item_behelit_buff = class({
-    IsPurgable        = function() return false end,
-    IsHidden          = function() return false end,
-    GetTexture        = function() return "item_arena/behelit_active" end,
-    GetAttributes     = function() return MODIFIER_ATTRIBUTE_PERMAMENT end,
-    DeclareFunctions = function() return {
-        MODIFIER_PROPERTY_TOOLTIP,
-        MODIFIER_PROPERTY_TOOLTIP2,
-    } end,
+    IsPurgable       = function() return false end,
+    IsHidden         = function() return false end,
+    GetTexture       = function() return "item_arena/behelit_active" end,
+    GetAttributes    = function() return MODIFIER_ATTRIBUTE_PERMAMENT end,
+    DeclareFunctions = function()
+        return {
+            MODIFIER_PROPERTY_TOOLTIP,
+            MODIFIER_PROPERTY_TOOLTIP2,
+        }
+    end,
 })
 
 item_behelit = class({})
@@ -33,8 +35,8 @@ if IsServer() then
             nil,
             self:GetSpecialValueFor("radius"),
             self:GetAbilityTargetTeam(),
-            DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,
-            self:GetAbilityTargetFlags(),
+            self:GetAbilityTargetType(),
+            DOTA_UNIT_TARGET_FLAG_PLAYER_CONTROLLED,
             FIND_ANY_ORDER,
             false
         )
@@ -49,30 +51,51 @@ if IsServer() then
 
         local timer = 0
         local units_count = 0
-        --print(#units)
+        print(#units)
         if #units > 1 then
-            for _,v in pairs(units) do
-                if v:GetPlayerOwner() == caster:GetPlayerOwner() and v ~= caster then
+            for _, v in pairs(units) do
+                if v:GetPlayerOwner() == caster:GetPlayerOwner() and v ~= caster and not v:IsHero() then
+                    units_count = units_count + 1
+                end
+            end
+        else
+            Containers:DisplayError(caster:GetPlayerID(), "#arena_hud_no_units")
+            self:EndCooldown()
+            return
+        end
+        if units_count > 0 then
+            units_count = 0
+            for _, v in pairs(units) do
+                if v:GetPlayerOwner() == caster:GetPlayerOwner() and v ~= caster and not v:IsHero() then
                     units_count = units_count + 1
                     timer = timer + 0.5
                     Timers:CreateTimer(timer, function()
                         if not v:IsIllusion() then
                             local unit = v
-                            local hero_pfx = ParticleManager:CreateParticle("particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf", PATTACH_ABSORIGIN, caster)
+                            local hero_pfx = ParticleManager:CreateParticle(
+                                "particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf", PATTACH_ABSORIGIN,
+                                caster)
                             caster:EmitSound("Arena.Items.Behelit.Buff")
-                        
-                            local pfx = ParticleManager:CreateParticle("particles/arena/units/heroes/hero_sara/space_dissection.vpcf", PATTACH_ABSORIGIN_FOLLOW, unit)
-				            ParticleManager:SetParticleControlEnt(pfx, 0, caster, PATTACH_POINT_FOLLOW, "attach_hitloc", caster:GetOrigin(), true)
-				            ParticleManager:SetParticleControlEnt(pfx, 1, unit, PATTACH_POINT_FOLLOW, "attach_hitloc", unit:GetOrigin(), true)
-				            ParticleManager:SetParticleControlEnt(pfx, 5, unit, PATTACH_POINT_FOLLOW, "attach_hitloc", unit:GetOrigin(), true)
-				            v:EmitSound("Arena.Items.Behelit.Death")
+
+                            local pfx = ParticleManager:CreateParticle(
+                                "particles/arena/units/heroes/hero_sara/space_dissection.vpcf", PATTACH_ABSORIGIN_FOLLOW,
+                                unit)
+                            ParticleManager:SetParticleControlEnt(pfx, 0, caster, PATTACH_POINT_FOLLOW, "attach_hitloc",
+                                caster:GetOrigin(), true)
+                            ParticleManager:SetParticleControlEnt(pfx, 1, unit, PATTACH_POINT_FOLLOW, "attach_hitloc",
+                                unit:GetOrigin(), true)
+                            ParticleManager:SetParticleControlEnt(pfx, 5, unit, PATTACH_POINT_FOLLOW, "attach_hitloc",
+                                unit:GetOrigin(), true)
+                            v:EmitSound("Arena.Items.Behelit.Death")
 
                             local damage_bonus_per_unit = math.min(3 * units_count, 15)
-                            damage_bonus_per_unit_attack_damage = damage_bonus_per_unit_attack_damage + math.min(1000, v:GetAverageTrueAttackDamage(v)) * 0.02
+                            damage_bonus_per_unit_attack_damage = damage_bonus_per_unit_attack_damage +
+                                math.min(1000, v:GetAverageTrueAttackDamage(v)) * 0.04
                             damage_bonus = damage_bonus_per_unit + damage_bonus_per_unit_attack_damage
 
                             local damage_resist_per_unit = math.min(5 * units_count, 6)
-                            damage_resist_per_unit_health = damage_resist_per_unit_health + math.min(10000, v:GetMaxHealth()) * 0.0006
+                            damage_resist_per_unit_health = damage_resist_per_unit_health +
+                                math.min(10000, v:GetMaxHealth()) * 0.0006
 
                             damage_resist = math.min(15, damage_resist_per_unit + damage_resist_per_unit_health)
                             if v:IsAlive() then v:TrueKill(self, caster) end
@@ -93,6 +116,8 @@ if IsServer() then
             local buff = caster:AddNewModifier(caster, self, "modifier_item_behelit_buff", {
                 duration = self:GetSpecialValueFor("buff_duration")
             })
+            caster.behelit_bonus_damage = damage_bonus
+            caster.behelit_damage_resist = damage_resist
             caster:SetNetworkableEntityInfo("behelit_damage_bonus", damage_bonus)
             caster:SetNetworkableEntityInfo("behelit_damage_resist", damage_resist)
             self:SetNetworkableEntityInfo("behelit_activated", 0)
@@ -102,11 +127,24 @@ if IsServer() then
             self:SpendCharge()
         end)
     end
+
+    function modifier_item_behelit_buff:OnDestroy()
+        local parent = self:GetParent()
+
+        parent.behelit_bonus_damage = 0
+        parent.behelit_damage_resist = 0
+
+        parent:SetNetworkableEntityInfo("behelit_damage_bonus", nil)
+        parent:SetNetworkableEntityInfo("behelit_damage_resist", nil)
+    end
 end
 
-function modifier_item_behelit_buff:OnTooltip()
-    return self:GetParent():GetNetworkableEntityInfo("behelit_damage_bonus")
-end
-function modifier_item_behelit_buff:OnTooltip2()
-    return self:GetParent():GetNetworkableEntityInfo("behelit_damage_resist")
+if IsClient() then
+    function modifier_item_behelit_buff:OnTooltip()
+        return self:GetParent():GetNetworkableEntityInfo("behelit_damage_bonus")
+    end
+
+    function modifier_item_behelit_buff:OnTooltip2()
+        return self:GetParent():GetNetworkableEntityInfo("behelit_damage_resist")
+    end
 end

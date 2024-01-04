@@ -29,7 +29,6 @@ function modifier_item_urn_of_demons_damage_on_interval_think(keys)
 	local damage_to_deal = keys.TotalHealthPct * 0.01 * target:GetMaxHealth() / keys.TotalDuration * keys.Interval
 	local mana_to_burn = keys.TotalManaPct * 0.01 * target:GetMaxMana() / keys.TotalDuration * keys.Interval
 	
-	ability.NoDamageAmp = true
 	ApplyDamage({
 		victim = target,
 		attacker = keys.caster,

@@ -137,6 +137,8 @@ function CDOTA_PlayerResource:MakePlayerAbandoned(playerId)
 		end
 	end
 
+	-- PlayerResourse:KickPlayer(playerId)
+
 	Duel:EndIfFinished()
 end
 
@@ -151,6 +153,10 @@ function CDOTA_PlayerResource:RemoveAllUnits(playerId)
 
 	hero:ClearNetworkableEntityInfo()
 	hero:Stop()
+
+	if Options:GetValue("EnableAbilityShop") then
+		CustomAbilities:SellAllAbilities(hero)
+	end
 
 	for i = 0, hero:GetAbilityCount() - 1 do
 		local ability = hero:GetAbilityByIndex(i)
@@ -174,7 +180,6 @@ function CDOTA_PlayerResource:RemoveAllUnits(playerId)
 	hero:DestroyAllModifiers()
 	hero:AddNewModifier(hero, nil, "modifier_hero_out_of_game", nil)
 	--Attributes.Heroes[hero:GetEntityIndex()] = nil
-
 end
 
 function CDOTA_PlayerResource:GetRealSteamID(PlayerID)

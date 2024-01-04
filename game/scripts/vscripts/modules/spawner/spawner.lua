@@ -52,32 +52,58 @@ function Spawner:RegisterTimers()
 end
 
 function Spawner:SpawnStacks()
+	local cash = {
+		stats = {},
+		models = {}
+	}
 	for _, entity in ipairs(Spawner.SpawnerEntities) do
 		DynamicMinimap:SetVisibleGlobal(Spawner.MinimapPoints[entity], true)
 		local entname = entity:GetName()
 		local sName = string.gsub(string.gsub(entname, "target_mark_spawner_", ""), "_type%d+", "")
 		local SpawnerType = tonumber(string.sub(entname, string.find(entname, "_type") + 5))
+		if SpawnerType == 2 and sName == "hard" then return end
+
 		local entid = entity:GetEntityIndex()
 		local coords = entity:GetAbsOrigin()
-		if sName ~= "jungle" and Spawner:CanSpawnUnits(sName, entid) then
-			for i = 1, SPAWNER_SETTINGS[sName].SpawnedPerSpawn do
+		local minute = GetDOTATimeInMinutesFull()
+		local function getCreepsCount()
+			return math.min(SPAWNER_SETTINGS[sName].SpawnedPerSpawn,
+				math.max(CREEPS_IN_CAMP_MIN, SPAWNER_SETTINGS[sName].MaxUnits / (GameMode.MapName == "4v4v4v4" and 2 or 1) - Spawner:CalculateCreepReduction()))
+		end
+		if sName ~= "jungle" and Spawner:CanSpawnUnits(sName, entid, getCreepsCount()) then
+			if not cash.stats[sName] then
+				cash.stats[sName] = Spawner:CalculateCreepsStats(sName,
+					minute - 1)
+			end
+			if not cash.models[SpawnerType .. '' .. sName] then
+				cash.models[SpawnerType .. '' .. sName] = table.nearestOrLowerKey(SPAWNER_SETTINGS[sName].SpawnTypes[SpawnerType][1],
+					minute)
+			end
+			for i = 1, getCreepsCount() do
 				local unitRootTable = SPAWNER_SETTINGS[sName].SpawnTypes[SpawnerType]
 				local unitName = unitRootTable[1][-1]
 				local unit = CreateUnitByName(unitName, coords, true, nil, nil, DOTA_TEAM_NEUTRALS)
 				unit.SpawnerIndex = SpawnerType
 				unit.SpawnerType = sName
 				unit.SSpawner = entid
-				unit.SLevel = GetDOTATimeInMinutesFull()
+				unit.SLevel = minute
 				Spawner.Creeps[entid] = Spawner.Creeps[entid] + 1
-				Spawner:UpgradeCreep(unit, unit.SpawnerType, unit.SLevel, unit.SpawnerIndex)
+				Spawner:UpgradeCreep(unit, unit.SLevel, cash.stats[sName], cash.models[SpawnerType .. '' .. sName])
 			end
 		end
 	end
 end
 
-function Spawner:CanSpawnUnits(sName, id)
+function Spawner:CalculateCreepReduction()
+	local time = GetDOTATimeInMinutesFull()
+	return 0--math.max(0,
+		--math.floor(time / REDUCE_CAMPS_START) + math.floor((time - REDUCE_CAMPS_START) / REDUCE_CAMPS_PER_MIN))
+end
+
+function Spawner:CanSpawnUnits(sName, id, count)
 	Spawner:InitializeStack(id)
-	return Spawner.Creeps[id] + SPAWNER_SETTINGS[sName].SpawnedPerSpawn <= SPAWNER_SETTINGS[sName].MaxUnits
+	return Spawner.Creeps[id] + count <=
+		math.max(CREEPS_IN_CAMP_MIN, SPAWNER_SETTINGS[sName].MaxUnits / (GameMode.MapName == "4v4v4v4" and 2 or 1) - Spawner:CalculateCreepReduction())
 end
 
 function Spawner:InitializeStack(id)
@@ -86,12 +112,19 @@ function Spawner:InitializeStack(id)
 	end
 end
 
-function Spawner:RollChampion(minute)
+function Spawner:RollChampion(minute, unit)
 	local champLevel = 0
 	for level, info in pairs(SPAWNER_CHAMPION_LEVELS) do
 		if minute > info.minute and RollPercentage(info.chance) then
 			champLevel = math.max(champLevel, level)
 		end
+	end
+
+	if champLevel > 0 then
+		--print("Spawn champion with level " .. champLevel)
+		unit:SetRenderColor(RandomInt(0, 255), RandomInt(0, 255), RandomInt(0, 255))
+		unit:AddNewModifier(unit, nil, "modifier_neutral_champion", nil):SetStackCount(champLevel)
+		unit.IsChampionNeutral = true
 	end
 	return champLevel
 end
@@ -107,79 +140,76 @@ end
 CDOTA_BaseNPC_Creature.IsChampion = CDOTA_BaseNPC.IsChampion
 
 function Spawner:CalculateCreepsStats(type, minuteLevel)
-	local table = CREEP_UPGRADE_FUNCTIONS[type]
+	local _table = CREEP_UPGRADE_FUNCTIONS[type]
 	local goldbounty, hp, damage, attackspeed, movespeed, armor, xpbounty = 0, 0, 0, 0, 0, 0, 0
+	local maxCreepsInCurrentCamp = SPAWNER_SETTINGS[type].MaxUnits / (GameMode.MapName == "4v4v4v4" and 2 or 1)
+	local creepReduction = math.min(maxCreepsInCurrentCamp - CREEPS_IN_CAMP_MIN, Spawner:CalculateCreepReduction())
+	local mult = creepReduction / (maxCreepsInCurrentCamp - creepReduction)
 	--print(goldbounty)
 	local function Calc(t)
 		goldbounty, hp, damage, attackspeed, movespeed, armor, xpbounty =
-			goldbounty + t[1],
-			hp + t[2],
-			damage + t[3],
-			attackspeed + t[4],
-			movespeed + t[5],
-			armor + t[6],
-			xpbounty + t[7]
+			goldbounty + t[1] + t[1] * mult,
+			hp + t[2],-- + t[2] * mult,
+			damage + t[3],-- + t[3] * mult,
+			attackspeed + t[4],-- + t[4] * mult,
+			movespeed + t[5],-- + t[5] * mult,
+			armor + t[6],-- + t[6] * mult,
+			xpbounty + t[7] + t[7] * mult
 	end
 	local saved_index
 	for i = 0, minuteLevel do
-		local t = table[i]
+		local t = _table[i]
 		if t then
 			saved_index = i
 		end
-		Calc(table[saved_index])
+		Calc(_table[saved_index])
 	end
 
-	return goldbounty, hp, damage, attackspeed, movespeed, armor, xpbounty
+	return {
+		goldbounty = goldbounty,
+		hp = hp,
+		damage = damage,
+		attackspeed = attackspeed,
+		movespeed = movespeed,
+		armor = math.min(100, armor),
+		xpbounty = xpbounty
+	}
 end
 
---print(Spawner:CalculateCreepsStats('easy', 50))
-
-function Spawner:UpgradeCreep(unit, spawnerType, minutelevel, spawnerIndex)
+function Spawner:UpgradeCreep(unit, minutelevel, stat, model)
 	local modelScale = 1 + (0.004 * minutelevel)
 	if minutelevel > 1 then
 		unit:CreatureLevelUp(minutelevel)
 	end
-
-	local goldbounty, hp, damage, attackspeed, movespeed, armor, xpbounty = Spawner:CalculateCreepsStats(spawnerType,
-		minutelevel - 1)
-
-	--unpack(table.nearestOrLowerKey(CREEP_UPGRADE_FUNCTIONS[spawnerType], minutelevel))
-	-- if not customCalculate then
-	-- 	goldbounty, hp, damage, attackspeed, movespeed, armor, xpbounty = goldbounty * minutelevel, hp * minutelevel, damage * minutelevel, attackspeed * minutelevel, movespeed * minutelevel, armor * minutelevel, xpbounty * minutelevel
-	-- end
-	local champLevel = Spawner:RollChampion(minutelevel)
+	local champLevel = Spawner:RollChampion(minutelevel, unit)
 	if champLevel > 0 then
-		--print("Spawn champion with level " .. champLevel)
 		modelScale = modelScale + SPAWNER_CHAMPION_LEVELS[champLevel].model_scale
-		unit:SetRenderColor(RandomInt(0, 255), RandomInt(0, 255), RandomInt(0, 255))
-		unit:AddNewModifier(unit, nil, "modifier_neutral_champion", nil):SetStackCount(champLevel)
-		unit.IsChampionNeutral = true
 	end
 	local MAP_MULTIPLIER = GameMode.Map_Gold_Multiplier or 1
 	local PLAYERS_COUNT_MULTIPLIER = GetPlayersCountMultiplier()
 
-	unit:SetDeathXP((unit:GetDeathXP() + xpbounty) * (1 + champLevel * 5) * MAP_MULTIPLIER * PLAYERS_COUNT_MULTIPLIER)
-	unit:SetMinimumGoldBounty((unit:GetMinimumGoldBounty() + goldbounty) * (1 + champLevel * 1.5) * MAP_MULTIPLIER *
+	unit:SetDeathXP((unit:GetDeathXP() + stat.xpbounty) * (1 + champLevel) * MAP_MULTIPLIER *
 		PLAYERS_COUNT_MULTIPLIER)
-	unit:SetMaximumGoldBounty((unit:GetMaximumGoldBounty() + goldbounty) * (1 + champLevel * 1.5) * MAP_MULTIPLIER *
+	unit:SetMinimumGoldBounty((unit:GetMinimumGoldBounty() + stat.goldbounty) * (1 + champLevel) * MAP_MULTIPLIER *
 		PLAYERS_COUNT_MULTIPLIER)
-	unit:SetMaxHealth((unit:GetMaxHealth() + hp) * (1 + champLevel))
-	unit:SetBaseMaxHealth((unit:GetBaseMaxHealth() + hp) * (1 + champLevel))
-	unit:SetHealth((unit:GetMaxHealth() + hp) * (1 + champLevel))
-	unit:SetBaseDamageMin((unit:GetBaseDamageMin() + damage) * (1 + champLevel * 0.5))
-	unit:SetBaseDamageMax((unit:GetBaseDamageMax() + damage) * (1 + champLevel * 0.5))
-	unit:SetBaseMoveSpeed((unit:GetBaseMoveSpeed() + movespeed) * (1 + champLevel))
-	unit:SetPhysicalArmorBaseValue((unit:GetPhysicalArmorBaseValue() + armor) * (1 + champLevel * 0.5))
+	unit:SetMaximumGoldBounty((unit:GetMaximumGoldBounty() + stat.goldbounty) * (1 + champLevel) * MAP_MULTIPLIER *
+		PLAYERS_COUNT_MULTIPLIER)
+	unit:SetMaxHealth((unit:GetMaxHealth() + stat.hp) * (1 + champLevel))
+	unit:SetBaseMaxHealth((unit:GetBaseMaxHealth() + stat.hp) * (1 + champLevel))
+	unit:SetHealth((unit:GetMaxHealth() + stat.hp) * (1 + champLevel))
+	unit:SetBaseDamageMin((unit:GetBaseDamageMin() + stat.damage) * (1 + champLevel))
+	unit:SetBaseDamageMax((unit:GetBaseDamageMax() + stat.damage) * (1 + champLevel))
+	unit:SetBaseMoveSpeed((unit:GetBaseMoveSpeed() + stat.movespeed) * (1 + champLevel))
+	unit:SetPhysicalArmorBaseValue((unit:GetPhysicalArmorBaseValue() + stat.armor) * (1 + champLevel))
 	--unit:SetBaseHealthRegen(unit:GetMaxHealth() * 0.01)
 	unit:AddNewModifier(unit, nil, "modifier_neutral_upgrade_attackspeed", {})
 	local modifier = unit:FindModifierByNameAndCaster("modifier_neutral_upgrade_attackspeed", unit)
 	if modifier then
-		modifier:SetStackCount(attackspeed * (1 + champLevel))
+		modifier:SetStackCount(stat.attackspeed * (1 + champLevel))
 	end
 
 	unit:SetModelScale(modelScale)
 
-	local model = table.nearestOrLowerKey(SPAWNER_SETTINGS[spawnerType].SpawnTypes[spawnerIndex][1], minutelevel)
 	if model then
 		unit:SetModel(model)
 		unit:SetOriginalModel(model)
@@ -201,8 +231,13 @@ function Spawner:OnCreepDeath(unit)
 		end
 		Timers:CreateTimer(Options:GetValue("LegacyBears") and 0.2 + unit.SLevel * 0.0001 or 0,
 			function()
-				Spawner:SpawnJungleStacks(unit.SSpawner, unit.SpawnerIndex, unit.SpawnerType, golemUpgrade, unit.golem_stacks or 1,
-					spawnTime)
+				Spawner:SpawnJungleStacks(unit.SSpawner, unit.SpawnerIndex, unit.SpawnerType,
+					{
+						golemUpgrade = golemUpgrade,
+						golem_stacks = unit.golem_stacks or 1,
+						spawnTime = spawnTime,
+						gold_buff = unit.gold_buff or 1
+					})
 			end
 		)
 	end
@@ -218,20 +253,27 @@ function Spawner:MakeJungleStacks()
 			local entid = entity:GetEntityIndex()
 
 			Spawner:InitializeStack(entid)
-			Spawner:SpawnJungleStacks(entid, SpawnerType, sName)
+			Spawner:SpawnJungleStacks(entid, SpawnerType, sName, {})
 		end
 	end
 end
 
-function Spawner:SpawnJungleStacks(entid, SpawnerType, sName, golemUpgrade, golem_stacks, spawnTime)
-	golem_stacks = golem_stacks or 0
+function Spawner:SpawnJungleStacks(entid, SpawnerType, sName, deadTable)
+	local golem_stacks = deadTable.golem_stacks or 0
+	local gold_buff = deadTable.gold_buff or 1
+	local golemUpgrade = deadTable.golemUpgrade
+	local spawnTime = deadTable.spawnTime
+
 	local entity = EntIndexToHScript(entid)
 	if Options:GetValue("LegacyBears") then
 		entity.cycle = (entity.cycle or 0) + 1
 	elseif golemUpgrade then
 		entity.cycle = (entity.cycle or 1) + 1
+		gold_buff = gold_buff + entity.cycle ^ 1.05
 	end
+	gold_buff = gold_buff > 1 and gold_buff * 0.8 or 1
 	local cycle = entity.cycle
+
 	-- print('cycle: ' .. cycle)
 
 	DynamicMinimap:SetVisibleGlobal(Spawner.MinimapPoints[entity], true)
@@ -240,100 +282,72 @@ function Spawner:SpawnJungleStacks(entid, SpawnerType, sName, golemUpgrade, gole
 		local unitRootTable = SPAWNER_SETTINGS[sName].SpawnTypes[SpawnerType]
 		local unitName = unitRootTable[1][-1]
 		local unit = CreateUnitByName(unitName, coords, true, nil, nil, DOTA_TEAM_NEUTRALS)
+		local champLevel = 0
 
 		if not Options:GetValue("LegacyBears") then
-			local buffsCount = (golemUpgrade and (1 - math.min(1, spawnTime or 1)) * math.floor((0.8 + (cycle or 1) * 0.1) ^ 1.1) * 10 or 1) + math.floor((cycle or 1) / 15)
+			local buffsCount = (golemUpgrade and (1 - math.min(1, spawnTime or 1)) * math.floor((0.9 + (cycle or 1) * 0.1) ^ 1.05) * 6 or 1) +
+				math.floor((cycle or 1) / 15)
 			if golemUpgrade then
+				champLevel = Spawner:RollChampion(GetDOTATimeInMinutesFull(), unit)
 				ParticleManager:CreateParticle("particles/units/heroes/hero_ogre_magi/ogre_magi_bloodlust_buff.vpcf",
 					PATTACH_ABSORIGIN, unit)
 				unit:EmitSound("Arena.Items.Behelit.Buff")
 			end
 			local upgradeBuff = golemUpgrade and cycle or 0
-			unit.golem_stacks = (golem_stacks + buffsCount) + upgradeBuff
+			unit.golem_stacks = golem_stacks + buffsCount + upgradeBuff
+
 			unit:AddNewModifier(unit, nil, "modifier_jungle_golem",
-				{ duration = GameMode.MapName == "war3" and 60 or 180 }):SetStackCount(unit.golem_stacks)
+				{ duration = GameMode.MapName == "war3" and 60 or 180 }):SetStackCount(math.round(unit.golem_stacks *
+				(champLevel > 0 and 1.25 or 1)))
 			unit:AddNewModifier(unit, nil, "modifier_talent_true_strike",
 				{}):SetStackCount(25)
 		end
 
+		unit.gold_buff = gold_buff or 1
 		unit.SpawnerIndex = SpawnerType
 		unit.SpawnerType = sName
 		unit.SSpawner = entid
 		unit.SLevel = cycle
-		-- unit.cycle = cycle
+		unit.ChampLevel = champLevel
 		Spawner.Creeps[entid] = Spawner.Creeps[entid] + 1
-		Spawner:UpgradeJungleCreep(unit, unit.SLevel, unit.SpawnerIndex, golemUpgrade)
+		Spawner:UpgradeJungleCreep(unit, unit.SLevel, unit.SpawnerIndex)
 	end
 end
 
-function Spawner:UpgradeJungleCreep(unit, cycle, spawnerIndex, golemUpgrade)
+function Spawner:UpgradeJungleCreep(unit, cycle, spawnerIndex)
 	cycle = cycle or 1
 	if cycle > 1 then unit:CreatureLevelUp(cycle - 1) end
 	unit.spawntime = GameRules:GetGameTime()
 
 	local WAR3_MULTIPLIER = GameMode.Jungle_Bears_Reward_Multiplier or 1
+	local ChampLevel = unit.ChampLevel
 
 	if not Options:GetValue("LegacyBears") then
-		local golemUpgradeBuff = (golemUpgrade and cycle or 1)
-
-		unit:SetDeathXP((5 * cycle ^ 1.05 * golemUpgradeBuff ^ 1.3) * WAR3_MULTIPLIER)
-		unit:SetMinimumGoldBounty((15 * (cycle ^ 1.3) * golemUpgradeBuff ^ 1.3) * WAR3_MULTIPLIER)
-		unit:SetMaximumGoldBounty((15 * (cycle ^ 1.3) * golemUpgradeBuff ^ 1.3) * WAR3_MULTIPLIER)
-		local health = 300 * cycle ^ 2.2
+		unit:SetDeathXP((5 * cycle ^ 1.05 * unit.gold_buff) * WAR3_MULTIPLIER * (1 + ChampLevel * 4))
+		unit:SetMinimumGoldBounty((14 * cycle * unit.gold_buff) * WAR3_MULTIPLIER * (1 + ChampLevel * 2))
+		unit:SetMaximumGoldBounty((16 * cycle * unit.gold_buff) * WAR3_MULTIPLIER * (1 + ChampLevel * 2))
+		local health = 300 * (cycle ^ 1.6) * (1 + ChampLevel)
 		unit:SetMaxHealth(health)
 		unit:SetBaseMaxHealth(health)
 		unit:SetHealth(health)
-		unit:SetBaseDamageMin(9 * cycle ^ 1.6)
-		unit:SetBaseDamageMax(12 * cycle ^ 1.6)
+		unit:SetBaseDamageMin(9 * cycle ^ 1.4 * (1 + ChampLevel))
+		unit:SetBaseDamageMax(12 * cycle ^ 1.4 * (1 + ChampLevel))
 		unit:SetBaseMoveSpeed(300 + (cycle - 1))
-		unit:SetPhysicalArmorBaseValue(0.5 + cycle * 0.5)
+		unit:SetPhysicalArmorBaseValue((0.5 + cycle * 0.5))
 		unit:SetBaseMagicalResistanceValue(math.min(99, 25 + (0.3 + cycle * 0.7 - 1)))
 		-- unit:SetBaseAttackTime(math.max(0.1, 2 - (0.99 + cycle * 0.01)))
 		unit:AddNewModifier(unit, nil, "modifier_neutral_upgrade_attackspeed", {})
 		local modifier = unit:FindModifierByNameAndCaster("modifier_neutral_upgrade_attackspeed", unit)
 		if modifier then
-			modifier:SetStackCount(math.round(cycle * 10))
+			modifier:SetStackCount(math.round(cycle * 10) * (1 + ChampLevel))
 		end
 
-		local model = table.nearestOrLowerKey({
-			[0] = "models/creeps/neutral_creeps/n_creep_golem_b/n_creep_golem_b.vmdl",
-			[2] = "models/creeps/neutral_creeps/n_creep_golem_a/neutral_creep_golem_a.vmdl",
-			[3] = "models/heroes/warlock/warlock_demon.vmdl",
-			[4] = "models/items/warlock/archivist_golem/archivist_golem.vmdl",
-			[5] = "models/items/warlock/golem/ahmhedoq/ahmhedoq.vmdl",
-			[6] = "models/items/warlock/golem/doom_of_ithogoaki/doom_of_ithogoaki.vmdl",
-			[7] = "models/items/warlock/golem/greevil_master_greevil_golem/greevil_master_greevil_golem.vmdl",
-			[8] = "models/items/warlock/golem/grimoires_pitlord_ultimate/grimoires_pitlord_ultimate.vmdl",
-			[9] = "models/items/warlock/golem/hellsworn_golem/hellsworn_golem.vmdl",
-			[10] = "models/items/warlock/golem/mdl_warlock_golem/mdl_warlock_golem.vmdl",
-			[11] = "models/items/warlock/golem/mystery_of_the_lost_ores_golem/mystery_of_the_lost_ores_golem.vmdl",
-			[12] = "models/items/warlock/golem/obsidian_golem/obsidian_golem.vmdl",
-			[13] = "models/items/warlock/golem/puppet_summoner_golem/puppet_summoner_golem.vmdl",
-			[14] = "models/items/warlock/golem/tevent_2_gatekeeper_golem/tevent_2_gatekeeper_golem.vmdl",
-			[15] = "models/items/warlock/golem/the_torchbearer/the_torchbearer.vmdl",
-			[16] = "models/items/warlock/golem/ti9_cache_warlock_tribal_warlock_golem/ti9_cache_warlock_tribal_golem_alt.vmdl",
-			[17] = "models/items/warlock/golem/ti_8_warlock_darkness_apostate_golem/ti_8_warlock_darkness_apostate_golem.vmdl",
-			[18] = "models/items/warlock/golem/warlock_the_infernal_master_golem/warlock_the_infernal_master_golem.vmdl",
-			[19] = "models/heroes/undying/undying_flesh_golem.vmdl",
-			[20] = "models/heroes/undying/undying_flesh_golem_rubick.vmdl",
-			[21] = "models/items/undying/flesh_golem/corrupted_scourge_corpse_hive/corrupted_scourge_corpse_hive.vmdl",
-			[22] = "models/items/undying/flesh_golem/davy_jones_set_davy_jones_set_kraken/davy_jones_set_davy_jones_set_kraken.vmdl",
-			[23] = "models/items/undying/flesh_golem/deathmatch_dominator_golem/deathmatch_dominator_golem.vmdl",
-			[24] = "models/items/undying/flesh_golem/elegy_of_abyssal_samurai_golem/elegy_of_abyssal_samurai_golem.vmdl",
-			[25] = "models/items/undying/flesh_golem/frostivus_2018_undying_accursed_draugr_golem/frostivus_2018_undying_accursed_draugr_golem.vmdl",
-			[26] = "models/items/undying/flesh_golem/grim_harvest_golem/grim_harvest_golem.vmdl",
-			[27] = "models/items/undying/flesh_golem/incurable_pestilence_golem/incurable_pestilence_golem.vmdl",
-			[28] = "models/items/undying/flesh_golem/spring2021_bristleback_paganism_pope_golem/spring2021_bristleback_paganism_pope_golem.vmdl",
-			[29] = "models/items/undying/flesh_golem/ti8_undying_miner_flesh_golem/ti8_undying_miner_flesh_golem.vmdl",
-			[30] = "models/items/undying/flesh_golem/ti9_cache_undying_carnivorous_parasitism_golem/ti9_cache_undying_carnivorous_parasitism_golem.vmdl",
-			[31] = "models/items/undying/flesh_golem/undying_frankenstein_ability/undying_frankenstein_ability.vmdl",
-			[32] = "models/items/undying/flesh_golem/watchmen_of_wheat_field_scarecrow/watchmen_of_wheat_field_scarecrow.vmdl",
-		}, cycle)
+		local model = table.nearestOrLowerKey(SPAWNER_SETTINGS.jungle.SpawnTypes2, cycle)
 		if model then
 			unit:SetModel(model)
 			unit:SetOriginalModel(model)
 		end
-		unit:SetModelScale(1 + 0.02 * cycle)
+		unit:SetModelScale(1 + 0.002 * cycle * (0.9 + (1 + ChampLevel) * 0.1))
 	else
 		local multiplier = 0.5 + cycle * 0.5
 		unit:SetDeathXP(35 * (0.85 + cycle * 0.15))

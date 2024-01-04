@@ -108,6 +108,11 @@ if IsServer() then
                 --     end
                 -- end
 
+                if GetOneRemainingTeam() then
+                    GameMode:OnOneTeamLeft(GetOneRemainingTeam())
+                    return
+                end
+
                 local enemy_players = FindUnitsInRadius(
                     caster:GetTeamNumber(),
                     caster:GetAbsOrigin(),

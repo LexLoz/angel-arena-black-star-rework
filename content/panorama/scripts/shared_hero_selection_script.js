@@ -97,9 +97,10 @@ function FillHeroesTable(heroList, panel, big) {
 		var HeroCard = $.CreatePanel('Panel', StatPanel, 'HeroListPanel_element_' + heroName);
 		HeroCard.BLoadLayoutSnippet('HeroCard');
 		HeroCard.FindChildTraverse('HeroImage').SetImage(TransformTextureToPath(heroName, 'portrait'));
-		if (heroData.isChanged) {
-			//HeroCard.FindChildTraverse('HeroChangedBurstRoot').BCreateChildren('<DOTAScenePanel map="scenes/hud/levelupburst" hittest="false" />');
-			//HeroCard.AddClass('IsChanged');
+		if (!heroData.isChanged) {
+			// HeroCard.FindChildTraverse('HeroChangedBurstRoot').CreateChildren('<DOTAScenePanel map="scenes/hud/levelupburst" hittest="false" />');
+			// $.CreatePanel('DOTAScenePanel', HeroCard.FindChildTraverse('HeroChangedBurstRoot'), '', {map: "scenes/hud/levelupburst", hittest: 'false'})
+			HeroCard.RemoveClass('IsChanged');
 		}
 		if (heroData.linkedColorGroup) {
 			HeroCard.AddClass('HasLinkedColorGroup');

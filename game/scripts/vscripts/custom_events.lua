@@ -22,6 +22,7 @@ function GameMode:ChangePrimaryBonus(data)
 				--if not mod.OnCooldown then
 					ent:EmitSound("Hero_Tinker.RearmStart")
 					if not ent:GetNetworkableEntityInfo("BonusPrimaryAttribute"..tostring(mod.CurrentPrimaryBonus - 1)) then
+						ent["bonus_primary_attribute"..tostring(mod.CurrentPrimaryBonus - 1)] = nil
 						ent:SetNetworkableEntityInfo("BonusPrimaryAttribute"..tostring(mod.CurrentPrimaryBonus - 1), nil)
                 		ent:RemoveModifierByName(mod.PrimaryBonuses[mod.CurrentPrimaryBonus])
 					end
@@ -55,9 +56,6 @@ function GameMode:MetamorphosisElixirCast(data)
 		(hero.ForcedHeroChange or Options:IsEquals("EnableRatingAffection", false) or
 		PlayerResource:GetPlayerStat(data.PlayerID, "ChangedHeroAmount") == 0) then
 		if not Duel:IsDuelOngoing() then
-
-			--DropInfinityGauntlet(hero)
-
 			if HeroSelection:ChangeHero(data.PlayerID, newHeroName, true, elixirItem and elixirItem:GetSpecialValueFor("transformation_time") or 0, elixirItem) then
 				PlayerResource:ModifyPlayerStat(data.PlayerID, "ChangedHeroAmount", 1)
 			end

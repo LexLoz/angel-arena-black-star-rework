@@ -26,7 +26,7 @@ function Bosses:CreateBossLoot(unit, team)
 		rollableEntries = {},
 		team = team
 	}
-	local itemcount = RandomInt(math.min(5, #dropTables), math.min(6, #dropTables))
+	local itemcount = RandomInt(math.min(MIN_ITEMS_FROM_BOSS, #dropTables), math.min(MAX_ITEMS_FROM_BOSS, #dropTables))
 	if dropTables.hero and not Options:IsEquals("MainHeroList", "NoAbilities") and not HeroSelection:IsHeroSelected(dropTables.hero) then
 		table.insert(t.rollableEntries, {
 			hero = dropTables.hero,

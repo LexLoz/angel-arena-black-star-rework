@@ -8,17 +8,10 @@ modifier_kill_streak = class({
     DeclareFunctions = function()
         return {
             MODIFIER_PROPERTY_TOOLTIP,
-            MODIFIER_PROPERTY_TOOLTIP2,
-            MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE
+            MODIFIER_PROPERTY_TOOLTIP2
         }
     end,
 })
-
-if IsClient() then
-    function modifier_kill_streak:GetModifierPreAttack_BonusDamage()
-		return 99999999
-	end
-end
 
 -- if IsServer() then
 --     function modifier_kill_streak:OnCreated()

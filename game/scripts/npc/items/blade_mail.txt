@@ -19,7 +19,7 @@
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"4000"
+		"ItemCost"						"3250"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_blade_mail_2"
 		"ItemRequirements"
@@ -28,43 +28,43 @@
 		}
 	}
 
-	"item_recipe_blade_mail_3"
-	{
-		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.vmdl"
-		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"12000"
-		"ItemRecipe"					"1"
-		"ItemResult"					"item_blade_mail_3"
-		"ItemRequirements"
-		{
-			"01"						"item_blade_mail_2"
-		}
-	}
+	// "item_recipe_blade_mail_3"
+	// {
+	// 	"BaseClass"						"item_datadriven"
+	// 	"Model"							"models/props_gameplay/recipe.vmdl"
+	// 	"AbilityTextureName"			"item_recipe"
+	// 	"ItemCost"						"12000"
+	// 	"ItemRecipe"					"1"
+	// 	"ItemResult"					"item_blade_mail_3"
+	// 	"ItemRequirements"
+	// 	{
+	// 		"01"						"item_blade_mail_2"
+	// 	}
+	// }
 
 	"item_blade_mail"
 	{
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
 		"AbilityCooldown"				"25"
-		"AbilityManaCost"				"25 50 100"
+		"AbilityManaCost"				"25 75"
 		"ItemShopTags"					"damage;armor;int;hard_to_tag"
 		"ItemQuality"					"epic"
 		"ItemAliases"					"bm;blade mail;blademail"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS"
 		"ShouldBeSuggested"				"1"
 		"AbilitySharedCooldown"			"blademail"
-		"MaxUpgradeLevel"				"3"
+		"MaxUpgradeLevel"				"2"
 		"ItemBaseLevel"					"1"
 		
 		"AbilityValues"
 		{
-				"bonus_damage"			"20 40 60"
-				"bonus_armor"			"7 10 13"
-				"duration"				"4 4.5 5"
-				"passive_reflection_constant"			"20 40 60"
-				"passive_reflection_pct"			"10 15 20"
-				"active_reflection_pct"			"70 80 90"
-				"reduced_damage_pct"	"5 10 15"
+				"bonus_damage"			"20 40"
+				"bonus_armor"			"7 12"
+				"duration"				"4 5"
+				"passive_reflection_constant"			"20 40"
+				"passive_reflection_pct"			"10 20"
+				"active_reflection_pct"			"70 80"
+				"reduced_damage_pct"	"5 15"
 		}
 	}
 
@@ -82,50 +82,50 @@
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS"
 		"ShouldBeSuggested"				"1"
 		"AbilitySharedCooldown"			"blademail"
-		"MaxUpgradeLevel"				"3"
+		"MaxUpgradeLevel"				"2"
 		"ItemBaseLevel"					"2"
 
 		"AbilityValues"
 		{
-				"bonus_damage"			"20 40 60"
-				"bonus_armor"			"7 10 13"
-				"duration"				"4 4.5 5"
-				"passive_reflection_constant"			"20 40 60"
-				"passive_reflection_pct"			"10 15 20"
-				"active_reflection_pct"			"70 80 90"
-				"reduced_damage_pct"	"5 10 15"
+				"bonus_damage"			"20 40"
+				"bonus_armor"			"7 12"
+				"duration"				"4 5"
+				"passive_reflection_constant"			"20 40"
+				"passive_reflection_pct"			"10 20"
+				"active_reflection_pct"			"70 80"
+				"reduced_damage_pct"	"5 15"
 		}
 	}
 
-	"item_blade_mail_3"
-	{
-		"BaseClass"						"item_blade_mail"
-		// "ScriptFile"					"items/item_blade_mail.lua"
-		"AbilityTextureName"			"item_arena/blade_mail_3"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
-		"AbilityCooldown"				"25"
-		"AbilityManaCost"				"25 50 100"
-		"ItemShopTags"					"damage;armor;int;hard_to_tag"
-		"ItemQuality"					"epic"
-		"ItemAliases"					"bm;blade mail;blademail"
-		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS"
-		"ShouldBeSuggested"				"1"
-		"AbilitySharedCooldown"			"blademail"
+	// "item_blade_mail_3"
+	// {
+	// 	"BaseClass"						"item_blade_mail"
+	// 	// "ScriptFile"					"items/item_blade_mail.lua"
+	// 	"AbilityTextureName"			"item_arena/blade_mail_3"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
+	// 	"AbilityCooldown"				"25"
+	// 	"AbilityManaCost"				"25 50 100"
+	// 	"ItemShopTags"					"damage;armor;int;hard_to_tag"
+	// 	"ItemQuality"					"epic"
+	// 	"ItemAliases"					"bm;blade mail;blademail"
+	// 	"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS"
+	// 	"ShouldBeSuggested"				"1"
+	// 	"AbilitySharedCooldown"			"blademail"
 
-		"MaxUpgradeLevel"				"3"
-		"ItemBaseLevel"					"3"
+	// 	"MaxUpgradeLevel"				"3"
+	// 	"ItemBaseLevel"					"3"
 
-		"AbilityValues"
-		{
-				"bonus_damage"			"20 40 60"
-				"bonus_armor"			"7 10 13"
-				"duration"				"4 4.5 5"
-				"passive_reflection_constant"			"20 40 60"
-				"passive_reflection_pct"			"10 15 20"
-				"active_reflection_pct"			"70 80 90"
-				"reduced_damage_pct"	"5 10 15"
-		}
-	}
+	// 	"AbilityValues"
+	// 	{
+	// 			"bonus_damage"			"20 40 60"
+	// 			"bonus_armor"			"7 10 13"
+	// 			"duration"				"4 4.5 5"
+	// 			"passive_reflection_constant"			"20 40 60"
+	// 			"passive_reflection_pct"			"10 15 20"
+	// 			"active_reflection_pct"			"70 80 90"
+	// 			"reduced_damage_pct"	"5 10 15"
+	// 	}
+	// }
 
 	// "item_recipe_blade_mail_arena"
 	// {
@@ -335,7 +335,7 @@
 		"ItemResult"					"item_sacred_blade_mail"
 		"ItemRequirements"
 		{
-			"01"						"item_blade_mail_3;item_reaver;item_relic;item_phantom_bone"
+			"01"						"item_blade_mail_2;item_reaver;item_relic;item_phantom_bone"
 		}
 	}
 
@@ -353,6 +353,7 @@
 		"ItemAliases"					"sacred blade mail;sacred blademail"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS"
 		"AbilitySharedCooldown"			"blademail"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_PURE"
 
 		"AbilitySpecial"
 		{
@@ -369,12 +370,12 @@
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_strength"		"35"
+				"bonus_strength"		"30"
 			}
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_armor"			"35"
+				"bonus_armor"			"30"
 			}
 			"06"
 			{
@@ -389,12 +390,12 @@
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"reduced_damage_pct"	"20"
+				"reduced_damage_pct"	"30"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"duration"				"4"
+				"duration"				"6"
 			}
 		}
 	}

@@ -37,7 +37,6 @@ if IsServer() then
 				v:Kill(self, caster)
 			end
 
-			-- self.NoDamageAmp = true
 			ApplyDamage({
 				attacker = caster,
 				victim = target,
@@ -184,9 +183,10 @@ if IsServer() then
 		local damage = (target:GetMaxHealth() - target:GetHealth()) * ability:GetSpecialValueFor("delayed_damage_per_health")
 
 		local missing_health_pct = 100 - target:GetHealth() / target:GetMaxHealth() * 100
-		target:InstaKill(ability, caster, true, missing_health_pct * ability:GetSpecialValueFor("delayed_damage_per_health"))
-		--[[ability.NoDamageAmp = true
-		ApplyDamage({
+		Timers:CreateTimer(0.5, function()
+			target:InstaKill(ability, caster, true, missing_health_pct * ability:GetSpecialValueFor("delayed_damage_per_health"))
+		end)
+		--[[ApplyDamage({
 			attacker = caster,
 			victim = target,
 			damage = damage,

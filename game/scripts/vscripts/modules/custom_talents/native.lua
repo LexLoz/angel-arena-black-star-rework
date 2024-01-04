@@ -38,13 +38,15 @@ local function addTalent(talentName, heroName, group, value)
 	}
 end
 
+-- PrintTable(npc_heroes)
+
 for heroName, heroData in pairs(npc_heroes) do
 	local partiallyChanged = PARTIALLY_CHANGED_HEROES[heroName]
 	local isChanged = GetKeyValue(heroName, "Changed") == 1 and not partiallyChanged
 	if type(heroData) == "table" and not isChanged then
 		local i = 1
 		for _, talentName in pairs(heroData) do
-			if type(talentName) == "string" and (string.starts(talentName, "special_bonus_unique_")) then
+			if type(talentName) == "string" and string.starts(talentName, "special_bonus_unique_") then
 				if (not partiallyChanged or partiallyChanged[talentName] ~= true) and not talentsExeptions[talentName] then
 					-- print(talentName)
 					-- PrintTable(GetAbilitySpecial(talentName))
@@ -60,7 +62,7 @@ for heroName, heroData in pairs(npc_heroes) do
 										(not string.endswith(k, "tooltip")) and
 										type(v) == "table" then
 										for k1, v1 in pairs(v) do
-											if type(k1) == "string" and string.starts(k1, "special_bonus_unique_") then
+											if type(k1) == "string" and string.starts(k1, "special_bonus_unique_") and k1 == talentName then
 												-- print(i)
 												-- i = i + 1
 												addTalent(k1, heroName, math.random(9), { key = "value", value = v1 })
@@ -70,12 +72,13 @@ for heroName, heroData in pairs(npc_heroes) do
 								end
 							end
 						end
-					else
+					elseif GetAbilitySpecial(talentName) then
+						-- print(talentName)
 						-- i = i + 1
 						addTalent(talentName, heroName, math.random(5))
 					end
 				else
-					print('skipped talent: ' .. talentName)
+					-- print('skipped talent: ' .. talentName)
 				end
 			end
 		end

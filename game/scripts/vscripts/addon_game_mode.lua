@@ -120,6 +120,7 @@ function Precache(context)
 		"soundevents/game_sounds_arena.vsndevts",
 		"soundevents/game_sounds_heroes/game_sounds_necrolyte.vsndevts",
 		"soundevents/game_sounds_heroes/game_sounds_tinker.vsndevts",
+		"soundevents/fymryn.vsndevts",
 	}
 
 	for _, handle in pairs(CUSTOM_WEARABLES) do
@@ -174,6 +175,19 @@ function Precache(context)
 	for _,v in ipairs(soundevents) do
 		PrecacheResource("soundfile", v, context)
 	end
+
+	PrecacheResource( "soundfile", "soundevents/fymryn.vsndevts", context )
+
+	PrecacheUnitByNameSync( "npc_dota_unit_statue_aghs21_device", context, -1 )
+	PrecacheUnitByNameSync( "npc_dota_unit_statue_aghanim_mad", context, -1 )
+	PrecacheUnitByNameSync( "npc_dota_unit_statue_aghanim_bath", context, -1 )
+	PrecacheUnitByNameSync( "npc_dota_unit_statue_aghanim_mech", context, -1 )
+	PrecacheUnitByNameSync( "npc_dota_unit_statue_aghanim_smith", context, -1 )
+	PrecacheResource( "model", "models/props_gameplay/aghs21_device/aghs21_device.vmdl", context )
+	PrecacheResource( "model", "models/aghanim/aghanim_mad.vmdl", context )
+	PrecacheResource( "model", "models/aghanim/aghanim_bath.vmdl", context )
+	PrecacheResource( "model", "models/aghanim/aghanim_mech.vmdl", context )
+	PrecacheResource( "model", "models/aghanim/aghanim_smith.vmdl", context )
 end
 
 function Activate()

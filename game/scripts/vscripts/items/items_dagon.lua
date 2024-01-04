@@ -57,7 +57,6 @@ function SunrayDagon(keys)
 		ability:ApplyDataDrivenModifier(caster, target, keys.modifier, {})
 	end
 	local PctDmg = caster:GetMaxHealth() * keys.DamagePct * 0.01
-	--ability.NoDamageAmp = true
 	local agilityMult = caster.DamageMultiplier or 1
-	ApplyDamage({victim = target, attacker = caster, damage = Damage + PctDmg, damage_type = DAMAGE_TYPE_MAGICAL, ability = ability})
+	ApplyDamage({victim = target, attacker = caster, damage = Damage + PctDmg, damage_type = DAMAGE_TYPE_MAGICAL, ability = ability, damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION})
 end

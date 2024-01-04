@@ -2,7 +2,7 @@ modifier_strength_crit = class({
 	IsPurgable      = function() return false end,
 	IsHidden        = function() return false end,
 	RemoveOnDeath   = function() return false end,
-	IsDebuff 	    = function() return false end,
+	IsDebuff        = function() return false end,
 	DestroyOnExpire = function() return false end,
 	GetTexture      = function() return "attribute_abilities/strength_attribute_symbol" end,
 })
@@ -23,31 +23,56 @@ function modifier_strength_crit:DeclareFunctions()
 	}
 end
 
-function modifier_strength_crit:OnTooltip()
-	return self:GetParent():GetNetworkableEntityInfo("StrengthSpellCrit")
-end
+if IsClient() then
+	function modifier_strength_crit:HandleCustomTransmitterData(data)
+		self.cooldown = data.cooldown
+		self.spell_crit = data.spell_crit
+	end
 
-function modifier_strength_crit:OnTooltip2()
-	return self:GetParent():GetNetworkableEntityInfo("StrengthCritCooldown")
+	function modifier_strength_crit:OnTooltip()
+		return self.spell_crit
+	end
+
+	function modifier_strength_crit:OnTooltip2()
+		return self.cooldown
+	end
 end
 
 if IsServer() then
+	function modifier_strength_crit:AddCustomTransmitterData()
+		return {
+			cooldown = self.cooldown,
+			spell_crit = self.spell_crit,
+		}
+	end
+
+	function modifier_strength_crit:Transmitter()
+		self.cooldown = self:calculateCooldown()
+		self.spell_crit = self:GetSpellCrit()
+		self:SetHasCustomTransmitterData(false)
+		self:SetHasCustomTransmitterData(true)
+		self:SendBuffRefreshToClients()
+	end
+
 	function modifier_strength_crit:OnCreated()
 		local parent = self:GetParent()
-		parent:SetNetworkableEntityInfo("STRENGTH_CRIT_SPELL_CRIT_DECREASRE_MULT", STRENGTH_CRIT_SPELL_CRIT_DECREASRE_MULT)
+		-- parent:SetNetworkableEntityInfo("STRENGTH_CRIT_SPELL_CRIT_DECREASRE_MULT",
+		-- 	STRENGTH_CRIT_SPELL_CRIT_DECREASRE_MULT)
 		self.calculateCooldown = function()
 			if parent then
-				return ((STRENGTH_CRIT_COOLDOWN - STRENGTH_CRIT_COOLDOWN_DECREASE_PER_LEVEL * parent:GetLevel())) * parent:GetCooldownReduction()
+				return ((STRENGTH_CRIT_COOLDOWN - STRENGTH_CRIT_COOLDOWN_DECREASE_PER_LEVEL * math.min(600, parent:GetLevel()))) *
+				parent:GetCooldownReduction()
 			end
 		end
 
-		self.decrease_coeff = STRENGTH_CRIT_DECREASE_COEFF
+		-- self.decrease_coeff = STRENGTH_CRIT_DECREASE_COEFF
 		self.crit_mult = STRENGTH_CRIT_MULTIPLIER
 
 		self:SetDuration(self:calculateCooldown(), true)
-        self.ready = false
+		self.ready = false
 
 		self.OnAttackStart = self.start
+		self:Transmitter()
 		self:StartIntervalThink(0.2)
 	end
 
@@ -62,12 +87,16 @@ if IsServer() then
 		Timers:CreateTimer(0.03, function()
 			self:SetDuration(self:calculateCooldown(), true)
 			self.ready = false
+			Attributes:UpdateSpellDamage(parent)
 
 			if owner:HasModifier("modifier_item_coffee_bean") then
 				self:Refresh()
 				owner:RemoveModifierByName("modifier_item_coffee_bean")
 				owner:EmitSound("DOTA_Item.Refresher.Activate")
-				ParticleManager:SetParticleControlEnt(ParticleManager:CreateParticle("particles/arena/items_fx/coffee_bean_refresh.vpcf", PATTACH_ABSORIGIN_FOLLOW, owner), 0, owner, PATTACH_POINT_FOLLOW, "attach_hitloc", owner:GetAbsOrigin(), true)
+				ParticleManager:SetParticleControlEnt(
+				ParticleManager:CreateParticle("particles/arena/items_fx/coffee_bean_refresh.vpcf",
+					PATTACH_ABSORIGIN_FOLLOW, owner), 0, owner, PATTACH_POINT_FOLLOW, "attach_hitloc",
+					owner:GetAbsOrigin(), true)
 			end
 			self.OnAttackLanded = nil
 		end)
@@ -94,10 +123,23 @@ if IsServer() then
 		self.ready = true
 	end
 
+	function modifier_strength_crit:GetSpellCrit()
+		return 100 + (self:GetStackCount() - 100) / 3
+	end
+
 	function modifier_strength_crit:OnIntervalThink()
 		local parent = self:GetParent()
+		if not parent:IsTrueHero() then
+			self:SetDuration(self:calculateCooldown(), true)
+		end
+		if self.spell_crit ~= self:GetSpellCrit() or
+			self.cooldown ~= self:calculateCooldown() then
+			self:Transmitter()
+		end
+
 		if not self.ready and self:GetRemainingTime() <= 0 then
 			self:Refresh()
+			Attributes:UpdateSpellDamage(parent)
 		end
 	end
 end

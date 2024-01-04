@@ -59,6 +59,9 @@ function modifier_item_golden_eagle_relic_enabled:GetModifierMoveSpeedBonus_Perc
 end
 
 if IsServer() then
+	function modifier_item_golden_eagle_relic:OnDestroy()
+		self:GetParent():RemoveModifierByName("modifier_item_golden_eagle_relic_enabled")
+	end
 	function modifier_item_golden_eagle_relic_enabled:OnCreated()
 		self.interval = 0.5
 		self:StartIntervalThink(self.interval)
@@ -82,14 +85,14 @@ if IsServer() then
 		local attacker = keys.attacker
 		if attacker == self:GetParent() then
 			local ability = self:GetAbility()
-			ability.NoDamageAmp = true
-			if not (target.IsBoss and target:IsBoss()) and not attacker:IsIllusion() then
+			if not attacker:IsIllusion() then
 				local dmg = Gold:GetGold(attacker) * ability:GetSpecialValueFor("active_gold_as_damage_pct") * 0.01
 				ApplyDamage({
 					victim = target,
 					attacker = attacker,
 					damage = dmg,
 					damage_type = ability:GetAbilityDamageType(),
+					damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 					ability = ability
 				})
 				SendOverheadEventMessage(nil, OVERHEAD_ALERT_BONUS_SPELL_DAMAGE, target, dmg, nil)

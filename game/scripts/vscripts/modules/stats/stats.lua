@@ -29,6 +29,10 @@ function StatsClient:FetchPreGameData()
 	for i = 0, DOTA_MAX_TEAM_PLAYERS-1 do
 		if PlayerResource:IsValidPlayerID(i) and not PlayerResource:IsPlayerAbandoned(i) then
 			data.players[i] = PlayerResource:GetRealSteamID(i)
+			-- if PlayerResource:GetRealSteamID(i) == "76561198103444247" or
+			-- PlayerResource:GetRealSteamID(i) == "76561198241374538" then
+			-- 	PlayerResource:MakePlayerAbandoned(i)
+			-- end
 		end
 	end
 
@@ -245,18 +249,18 @@ function StatsClient:AddGuide(data)
 			[0] = {
 					content = {
 							[0] = "item_skull_of_midas",
-							[1] = "item_splitshot_ultimate",
-							[2] = "item_thunder_musket",
-							[3] = "item_golden_eagle_relic",
+							[1] = "item_nagascale_bow",
+							[2] = "item_hurricane_pike_2",
+							[3] = "item_angel_wings",
 							[4] = "item_butterfly_of_wind",
-							[5] = "item_skadi_4",
+							[5] = "item_skadi_2",
 							[6] = "item_piercing_blade",
 							[7] = "item_monkey_king_bar"},
 					title = "range"},
 			[10] = {
 					content = {
 							[0] = "item_ultimate_splash",
-							[1] = "item_elemental_fury",
+							[1] = "item_elemental_furry",
 							[10] = "item_bloodthorn_2",
 							[11] = "item_fallhammer",
 							[12] = "item_radiance_frozen",
@@ -265,8 +269,8 @@ function StatsClient:AddGuide(data)
 							[15] = "item_refresher_core",
 							[16] = "item_essential_orb_fire_6",
 							[17] = "item_essential_orb_fire_5",
-							[2] = "item_splitshot_ultimate",
-							[3] = "item_thunder_musket",
+							[2] = "item_ultimate_splitshot",
+							-- [3] = "item_thunder_musket",
 							[4] = "item_summoned_unit",
 							[5] = "item_assault",
 							[6] = "item_phantom_cuirass",
@@ -277,11 +281,11 @@ function StatsClient:AddGuide(data)
 			[1] = {
 					content = {
 							[0] = "item_skull_of_midas",
-							[1] = "item_elemental_fury",
-							[2] = "item_fallhammer",
-							[3] = "item_golden_eagle_relic",
+							[1] = "item_battlefury_arena",
+							[2] = "item_armlet_2",
+							[3] = "item_power_treads_3",
 							[4] = "item_butterfly_of_wind",
-							[5] = "item_skadi_4",
+							[5] = "item_assault",
 							[6] = "item_piercing_blade",
 							[7] = "item_monkey_king_bar",},
 					title = "meele"},
@@ -289,14 +293,14 @@ function StatsClient:AddGuide(data)
 					content = {
 							[0] = "item_skull_of_midas",
 							[1] = "item_essential_orb_fire_6",
-							[10] = "item_sange_and_yasha_and_kaya",
+							[10] = "item_meteor_hammer_2",
 							[11] = "item_refresher_arena",
-							[2] = "item_essential_orb_fire_5",
-							[3] = "item_radiance_3",
+							[2] = "item_essential_orb_fire_5",	
+							[3] = "item_radiance_arena",
 							[4] = "item_octarine_core_arena",
 							[5] = "item_book_of_the_guardian",
 							[6] = "item_bloodstone",
-							[7] = "item_ultimate_scepter_arena",
+							[7] = "item_elderberry_wand",
 							[8] = "item_blade_of_discord",
 							[9] = "item_book_of_the_keeper",},
 					title = "mage"},
@@ -308,7 +312,7 @@ function StatsClient:AddGuide(data)
 							[3] = "item_vladmir",
 							[4] = "item_dark_flow",
 							[5] = "item_desolator3",
-							[6] = "item_thunder_musket",
+							[6] = "item_greater_crit",
 							-- [7]	= "item_shard_level10"
 						},
 					title = "for boss"},

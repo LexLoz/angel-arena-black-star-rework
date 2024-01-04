@@ -405,7 +405,7 @@
 		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttackDamageMin"			"0"
 		"AttackDamageMax"			"0"
-		"AttackRate"				"0.4"
+		"AttackRate"				"1"
 		"AttackAnimationPoint"		"0.2"
 		"AttackAcquisitionRange"	"500"		// Range within a target can be acquired.
 		"AttackRange"				"150"		// Range within a target can be attacked.
@@ -430,6 +430,8 @@
 		//----------------------------------------------------------------
 		"StatusHealth"				"1"
 		"StatusHealthRegen"			"0"
+
+		"MagicalResistance"	"50"
 
 		// Vision
 		//----------------------------------------------------------------
@@ -463,7 +465,7 @@
 		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttackDamageMin"			"0"
 		"AttackDamageMax"			"0"
-		"AttackRate"				"0.4"
+		"AttackRate"				"1"
 		"AttackAnimationPoint"		"0.41" // 25/60
 		"AttackAcquisitionRange"	"500"		// Range within a target can be acquired.
 		"AttackRange"				"150"		// Range within a target can be attacked.
@@ -483,6 +485,7 @@
 		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
 		"MovementSpeed"				"350"
 		"MovementTurnRate"			"0.6"
+		"MagicalResistance"			"50"
 
 		// Status
 		//----------------------------------------------------------------
@@ -494,4 +497,92 @@
 		"VisionDaytimeRange"		"1800"
 		"VisionNighttimeRange"		"900"
 	}
+
+
+
+
+
+
+
+
+
+
+	"npc_dota_aghanim_icon"
+	{
+		"MinimapIcon"					"minimap_aghanim"
+		"MinimapIconSize"				"600"
+		"MinimapDisableTint"			"1"
+    	"BaseClass"                    	"npc_dota_creature"
+    	"Model"                        	"models/development/invisiblebox.vmdl"
+    	"AttackCapabilities"        	"DOTA_UNIT_CAP_NO_ATTACK"
+    	"VisionDaytimeRange"        	"0"
+    	"VisionNighttimeRange"        	"0"
+    	"UnitRelationshipClass"       	"DOTA_TEAM_NEUTRALS"
+    	"MovementCapabilities"        	"DOTA_UNIT_CAP_MOVE_NONE"
+	}
+    "npc_dota_unit_statue_aghs21_device"
+    {
+        "MinimapIcon"                   ""
+        "MinimapIconSize"               "0"
+        "MinimapDisableTint"            "1"
+        "BaseClass"                     "npc_dota_creature"
+        "Model"                         "models/props_gameplay/aghs21_device/aghs21_device.vmdl"
+        "AttackCapabilities"            "DOTA_UNIT_CAP_NO_ATTACK"
+        "VisionDaytimeRange"            "0"
+        "VisionNighttimeRange"          "0"
+        "MovementCapabilities"          "DOTA_UNIT_CAP_MOVE_GROUND"
+        "ModelScale"                    "3.5"
+    }
+    "npc_dota_unit_statue_aghanim_mad"
+    {
+        "MinimapIcon"                   ""
+        "MinimapIconSize"               "0"
+        "MinimapDisableTint"            "1"
+        "BaseClass"                     "npc_dota_creature"
+        "Model"                         "models/aghanim/aghanim_mad.vmdl"
+        "AttackCapabilities"            "DOTA_UNIT_CAP_NO_ATTACK"
+        "VisionDaytimeRange"            "0"
+        "VisionNighttimeRange"          "0"
+        "MovementCapabilities"          "DOTA_UNIT_CAP_MOVE_GROUND"
+        "ModelScale"                    "0.75"
+    }
+    "npc_dota_unit_statue_aghanim_bath"
+    {
+        "MinimapIcon"                   ""
+        "MinimapIconSize"               "0"
+        "MinimapDisableTint"            "1"
+        "BaseClass"                     "npc_dota_creature"
+        "Model"                         "models/aghanim/aghanim_bath.vmdl"
+        "AttackCapabilities"            "DOTA_UNIT_CAP_NO_ATTACK"
+        "VisionDaytimeRange"            "0"
+        "VisionNighttimeRange"          "0"
+        "MovementCapabilities"          "DOTA_UNIT_CAP_MOVE_GROUND"
+        "ModelScale"                    "0.75"
+    }
+    "npc_dota_unit_statue_aghanim_mech"
+    {
+        "MinimapIcon"                   ""
+        "MinimapIconSize"               "0"
+        "MinimapDisableTint"            "1"
+        "BaseClass"                     "npc_dota_creature"
+        "Model"                         "models/aghanim/aghanim_mech.vmdl"
+        "AttackCapabilities"            "DOTA_UNIT_CAP_NO_ATTACK"
+        "VisionDaytimeRange"            "0"
+        "VisionNighttimeRange"          "0"
+        "MovementCapabilities"          "DOTA_UNIT_CAP_MOVE_GROUND"
+        "ModelScale"                    "0.75"
+    }
+    "npc_dota_unit_statue_aghanim_smith"
+    {
+        "MinimapIcon"                   ""
+        "MinimapIconSize"               "0"
+        "MinimapDisableTint"            "1"
+        "BaseClass"                     "npc_dota_creature"
+        "Model"                         "models/aghanim/aghanim_smith.vmdl"
+        "AttackCapabilities"            "DOTA_UNIT_CAP_NO_ATTACK"
+        "VisionDaytimeRange"            "0"
+        "VisionNighttimeRange"          "0"
+        "MovementCapabilities"          "DOTA_UNIT_CAP_MOVE_GROUND"
+        "ModelScale"                    "0.75"
+    }
 }

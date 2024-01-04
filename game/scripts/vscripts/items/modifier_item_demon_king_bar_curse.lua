@@ -26,6 +26,7 @@ if IsServer() then
 		local parent = self:GetParent()
 		local ability = self:GetAbility()
 
+
 		local damage = self:OnTooltip() * 0.5
 		ApplyInevitableDamage(
 			self:GetCaster(),
@@ -34,6 +35,10 @@ if IsServer() then
 			damage,
 			false
 		)
+		
+		if damage >= parent:GetHealth() and self:GetDuration() < 0 or self:GetDuration() > 999 then
+			self:SetDuration(30, true)
+		end
 		if not parent:IsAlive() then
 			parent:EmitSound("Hero_VengefulSpirit.MagicMissileImpact")
 		end
@@ -41,5 +46,5 @@ if IsServer() then
 end
 
 function modifier_item_demon_king_bar_curse:OnTooltip()
-	return math.min(self:GetParent():GetMaxHealth(), 1.15 ^ math.ceil(self:GetElapsedTime())/2)
+	return (self:GetDuration() < 0 or self:GetDuration() > 999) and math.min(self:GetParent():GetMaxHealth(), 1.15 ^ math.ceil(self:GetElapsedTime())/2) or self:GetParent():GetMaxHealth()
 end

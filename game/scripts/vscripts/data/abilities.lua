@@ -12,6 +12,9 @@ LINKED_ABILITIES = {
 	alchemist_unstable_concoction = { "alchemist_unstable_concoction_throw" },
 	monkey_king_mischief = { "monkey_king_untransform" },
 	monkey_king_primal_spring = { "monkey_king_primal_spring_early" },
+	-- fymryn_mirror = { "fymryn_mirror_cancel" },
+	-- lycan_shapeshift = { "lycan_wolf_bite" },
+	-- bloodseeker_thirst = { "bloodseeker_bloodrage" },
 }
 
 MULTICAST_TYPE_NONE = 0
@@ -24,6 +27,7 @@ MULTICAST_ABILITIES = {
 	ogre_magi_ignite = MULTICAST_TYPE_DIFFERENT,
 	ogre_magi_unrefined_fireblast = MULTICAST_TYPE_SAME,
 	ogre_magi_multicast_arena = MULTICAST_TYPE_NONE,
+	ogre_magi_smash = MULTICAST_TYPE_INSTANT,
 
 	item_manta_arena = MULTICAST_TYPE_NONE,
 	item_diffusal_style = MULTICAST_TYPE_NONE,
@@ -53,12 +57,24 @@ MULTICAST_ABILITIES = {
 
 	terrorblade_conjure_image = MULTICAST_TYPE_INSTANT,
 	terrorblade_reflection = MULTICAST_TYPE_INSTANT,
+	terrorblade_sunder = MULTICAST_TYPE_NONE,
 	magnataur_empower = MULTICAST_TYPE_INSTANT,
 	oracle_purifying_flames = MULTICAST_TYPE_SAME,
 	vengefulspirit_magic_missile = MULTICAST_TYPE_SAME,
 
-	item_scythe_of_the_ancients = MULTICAST_TYPE_NONE,
+	antimage_blink = MULTICAST_TYPE_NONE,
+	void_spirit_astral_step = MULTICAST_TYPE_NONE,
+	sans_dodger = MULTICAST_TYPE_NONE,
+	sans_genocide_mod = MULTICAST_TYPE_NONE,
+	queenofpain_blink = MULTICAST_TYPE_NONE,
+	faceless_void_time_walk = MULTICAST_TYPE_NONE,
+	morphling_waveform = MULTICAST_TYPE_NONE,
+	sara_dark_blink = MULTICAST_TYPE_NONE,
+	fymryn_shadow_step = MULTICAST_TYPE_NONE,
+	stargazer_warp = MULTICAST_TYPE_NONE,
 
+	item_scythe_of_the_ancients = MULTICAST_TYPE_NONE,
+	item_elderberry_wand = MULTICAST_TYPE_NONE,
 	item_blink = MULTICAST_TYPE_NONE,
 	item_arcane_blink = MULTICAST_TYPE_NONE,
 	item_swift_blink = MULTICAST_TYPE_NONE,
@@ -77,6 +93,9 @@ MULTICAST_ABILITIES = {
 	item_summoned_unit = MULTICAST_TYPE_NONE,
 	item_behelit = MULTICAST_TYPE_NONE,
 	item_golden_eagle_relic = MULTICAST_TYPE_NONE,
+	item_casket_of_greed = MULTICAST_TYPE_NONE,
+	item_revenants_brooch = MULTICAST_TYPE_NONE,
+	item_angel_wings = MULTICAST_TYPE_NONE,
 }
 
 REFRESH_LIST_IGNORE_REFRESHER = {
@@ -104,7 +123,7 @@ REFRESH_LIST_IGNORE_REFRESHER = {
 	item_titanium_bar = true,
 
 	item_behelit = true,
-	item_ultimate_scepter_arena = true,
+	item_elderberry_wand = true,
 
 	item_infinity_gauntlet = true,
 }
@@ -131,7 +150,7 @@ REFRESH_LIST_IGNORE_BODY_RECONSTRUCTION = {
 	item_sheepstick = true,
 
 	item_behelit = true,
-	item_ultimate_scepter_arena = true,
+	item_elderberry_wand = true,
 
 	item_infinity_gauntlet = true,
 }
@@ -186,7 +205,7 @@ REFRESH_LIST_IGNORE_REARM = {
 	item_book_of_the_guardian_2 = true,
 
 	item_behelit = true,
-	item_ultimate_scepter_arena = true,
+	item_elderberry_wand = true,
 
 	item_infinity_gauntlet = true,
 }
@@ -197,9 +216,9 @@ COFFEE_BEAN_NOT_REFRESHABLE = {
 	monkey_king_boundless_strike = true,
 	dazzle_shallow_grave = true,
 	destroyer_body_reconstruction = true,
-	--saitama_push_ups = true,
-	--saitama_squats = true,
-	--saitama_sit_ups = true,
+	saitama_push_ups = true,
+	saitama_squats = true,
+	saitama_sit_ups = true,
 }
 
 DUEL_NOT_REFRESHABLE = {
@@ -227,23 +246,24 @@ BOSS_BANNED_ABILITIES = {
 	item_spirit_helix = true,
 	silencer_last_word = true,
 	item_scythe_of_the_ancients = true,
-	item_ultimate_scepter_arena = true,
+	item_elderberry_wand = true,
 	item_harpoon = true,
 }
 
 ATTACK_DAMAGE_ABILITIES = {
-	nevermore_shadowraze1 = true,
-	nevermore_shadowraze2 = true,
-	nevermore_shadowraze3 = true,
+	nevermore_shadowraze1 = "shadowraze_damage",
+	nevermore_shadowraze2 = "shadowraze_damage",
+	nevermore_shadowraze3 = "shadowraze_damage",
 	clinkz_strafe = true,
-	morphling_waveform = 1,
+	morphling_waveform = "damage",
+	puck_phase_shift = true,
 
 	mars_gods_rebuke = true,
 	tidehunter_anchor_smash = true,
 	monkey_king_boundless_strike = true,
 	dawnbreaker_fire_wreath = true,
 	saitama_serious_punch = true,
-	--pangolier_swashbuckle = true,
+	pangolier_swashbuckle = true,
 
 	ember_spirit_sleight_of_fist = true,
 
@@ -264,13 +284,19 @@ ATTACK_DAMAGE_ABILITIES = {
 	muerta_gunslinger = true,
 	primal_beast_trample = true,
 	omniknight_hammer_of_purity = true,
+	mars_bulwark = true,
 
 	hoodwink_acorn_shot = true,
 	templar_assassin_psi_blades = true,
 	dragon_knight_elder_dragon_form = true,
-
+	anakim_wisps = true,
+	aghanim_crystal_attack = true,
 	luna_moon_glaive = true,
 	riki_tricks_of_the_trade = true,
+	kadash_strike_from_shadows = true,
+
+	item_angels_demise = "spell_crit_flat",
+	item_revenants_brooch_2 = true,
 
 	-- item_battlefury_arena = true,
 	-- item_quelling_fury = true,
@@ -285,7 +311,7 @@ SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS = table.deepmerge({
 	venomancer_poison_nova = true,
 	antimage_mana_void = true,
 	zuus_static_field = true,
-	enigma_midnight_pulse = true,
+	enigma_midnight_pulse = "base_damage",
 	enigma_black_hole = "damage",
 	zaken_stitching_strikes = true,
 	morphling_adaptive_strike_agi = "damage_base",
@@ -316,12 +342,18 @@ SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS = table.deepmerge({
 	--witch_doctor_voodoo_restoration = true,
 	sandking_caustic_finale = "caustic_finale_damage_base",
 	antimage_counterspell = true,
-	bloodseeker_bloodrage = true,
 	saber_excalibur = true,
 	venomancer_noxious_plague = true,
 	freya_ice_cage = true,
 	earth_spirit_rolling_boulder = "damage",
 	zuus_thundergods_wrath = "damage",
+	lone_druid_spirit_bear = true,
+	ogre_magi_unrefined_fireblast = true,
+	aghanim_ray = true,
+	aghanim_bath_bubble = "damage",
+	aghanim_waves_storm = "base_num",
+
+	sans_blaster = "damage",
 
 	item_revenants_brooch = true,
 	item_lotus_sphere = true,
@@ -334,8 +366,9 @@ SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS = table.deepmerge({
 	item_bloodthorn = true,
 	item_book_of_the_guardian = true,
 	item_book_of_the_guardian_2 = true,
-	item_unstable_quasar = "base_damage",
+	item_unstable_quasar = true,
 	item_scythe_of_the_ancients = "cast_damage",
+	item_devastator = true,
 
 	item_sunray_dagon_arena = "damage",
 	item_sunray_dagon_2_arena = "damage",
@@ -343,7 +376,8 @@ SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS = table.deepmerge({
 	item_sunray_dagon_4_arena = "damage",
 	item_sunray_dagon_5_arena = "damage",
 
-}, ATTACK_DAMAGE_ABILITIES)
+}, ATTACK_DAMAGE_ABILITIES
+)
 
 MANA_SPEND_SPELLS_EXEPTIONS = {
 	obsidian_destroyer_sanity_eclipse = true,
@@ -369,11 +403,14 @@ MANA_SPEND_SPELLS_EXEPTIONS = {
 	item_mjollnir = true,
 	item_gungir = true,
 	item_diffusal_style = true,
+	item_mjollnir_2 = true,
+	item_mjollnir_3 = true,
+	item_gungir_2 = true,
 
-	zuus_arc_lightning = 50,
-	leshrac_lightning_storm = 50,
-	bristleback_quill_spray = 50,
-	storm_spirit_overload = 50,
+	-- zuus_arc_lightning = 50,
+	-- leshrac_lightning_storm = 50,
+	-- bristleback_quill_spray = 50,
+	-- storm_spirit_overload = 50,
 }
 
 OCTARINE_NOT_LIFESTALABLE_ABILITIES = {
@@ -401,9 +438,6 @@ ARENA_NOT_CASTABLE_ABILITIES = {
 	["skywrath_mage_mystic_flare"] = GetAbilitySpecial("skywrath_mage_mystic_flare", "radius"),
 }
 
-PERCENT_DAMAGE_MODIFIERS = {
-}
-
 -- https://dota2.gamepedia.com/Spell_Reflection#Not_reflected_abilities
 SPELL_REFLECT_IGNORED_ABILITIES = {
 	grimstroke_soul_chain = true,
@@ -417,11 +451,13 @@ NO_HEAL_AMPLIFY = {
 	wisp_tether = true,
 	faceless_void_time_walk = true,
 	bloodseeker_thirst = true,
-	winter_wyvern_cold_embrace = true,
+	winter_wyvern_cold_embrace = "heal_additive",
+	aghanim_water_ray = true,
+	aghanim_waves_storm = "base_num",
 
 	skywrath_mage_arcane_bolt = true,
 	muerta_pierce_the_veil = true,
-	bane_brain_sap = true,
+	bane_brain_sap = "brain_sap_damage",
 	beastmaster_drums_of_slom = true,
 
 	dawnbreaker_converge = true,
@@ -435,6 +471,7 @@ NO_HEAL_AMPLIFY = {
 	marci_guardian = true,
 	bloodseeker_bloodrage = true,
 	juggernaut_blade_dance = true,
+	huskar_inner_fire = true,
 	
 	life_stealer_open_wounds = true,
 	lone_druid_spirit_link = true,
@@ -449,6 +486,7 @@ NO_HEAL_AMPLIFY = {
 
 	item_bloodstone = true,
 	item_voodoo_mask = true,
+	item_revenants_brooch = true,
 }
 
 HP_REGEN_AMP = {
@@ -466,6 +504,8 @@ ABILITIES_TRIGGERS_ATTACKS = {
 	["nevermore_shadowraze3"] = true,
 	["clinkz_strafe"] = true,
 	["morphling_waveform"] = 1,
+	["puck_phase_shift"] = 2,
+	["enchantress_sproink"] = 2,
 
 	["mars_gods_rebuke"] = true,
 	["tidehunter_anchor_smash"] = true,
@@ -483,6 +523,18 @@ GAIN_BONUS_GOLD_ITEMS = {
 	"item_wand_of_midas",
 	"item_blood_of_midas",
 	"item_golden_eagle_relic",
-	"item_ultimate_scepter_arena",
+	"item_elderberry_wand",
 	"item_scythe_of_the_ancients",
+}
+
+NO_SPLASH_ABILITIES = {
+	item_radiance_arena = true,
+	item_radiance_2 = true,
+	item_radiance_3 = true,
+	item_radiance_frozen = true,
+
+	item_battlefury_arena = true,
+	item_quelling_fury = true,
+	item_elemental_fury = true,
+	item_ultimate_splash = true,
 }

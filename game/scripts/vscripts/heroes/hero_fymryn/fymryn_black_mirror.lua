@@ -91,9 +91,9 @@ function fymryn_black_mirror:CreateIllusion()
         unit = self:GetCaster(),
         ability = self,
         origin = self:GetCaster():GetAbsOrigin(),
-        damageIncoming = 0,
-        damageOutgoing = 100,
-        duration = 999,
+        damageIncoming = self:GetSpecialValueFor("illusion_damage_incoming"),
+        damageOutgoing = -self:GetSpecialValueFor("illusion_damage_outgoing"),
+        duration = -1,
     })--CreateUnitByName(self:GetCaster():GetFullName(), self:GetCaster():GetAbsOrigin(), false, self:GetCaster(), self:GetCaster(), self:GetCaster():GetTeamNumber())
 	if illusion then
 		illusion.owner = self:GetCaster()
@@ -554,7 +554,7 @@ function modifier_fymryn_black_mirror_illusion_active:OnCreated(params)
     if neutral_item_new then
         local new_item = CreateItem(neutral_item_new:GetName(), nil, nil)
         local illusion_item = self:GetParent():AddItem(new_item)
-        illusion_item:SetPurchaser(nil)
+        -- illusion_item:SetPurchaser(nil)
         if item and neutral_item_new:GetCurrentCharges() > 0 and new_item and not new_item:IsNull() then
             new_item:SetCurrentCharges(neutral_item_new:GetCurrentCharges())
         end
@@ -849,7 +849,7 @@ function modifier_fymryn_black_mirror_order_filter:OnAbilityFullyCast(params)
         self:GiveIllusionsOrder(order)
         local target = params.target
         if RollPercentage(self:GetAbility():GetSpecialValueFor("chance")) and target ~= nil and target:GetTeamNumber() ~= self:GetCaster():GetTeamNumber() and hAbility:GetAbilityName() ~= "fymryn_black_mirror" then
-            local enemies_targets = FindUnitsInRadius(self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 1000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, 0, FIND_CLOSEST, false)
+            local enemies_targets = FindUnitsInRadius(self:GetCaster():GetTeamNumber(), self:GetCaster():GetAbsOrigin(), nil, 1000, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_BASIC, 0, FIND_CLOSEST, false)
 	        for _, enemy_target in pairs(enemies_targets) do
                 if enemy_target ~= target then
                     self:CreateIllusionTarget(hAbility:GetAbilityName(), enemy_target)
@@ -889,7 +889,7 @@ function modifier_fymryn_black_mirror_order_filter:CreateIllusionTarget(ability,
     local ability_orig = self:GetAbility()
     local illusion = self:GetAbility().illusions[#self:GetAbility().illusions]
     local pos = target:GetAbsOrigin() + RandomVector(RandomInt(200, 300))
-    illusion:SetHealth(illusion:GetMaxHealth())
+    illusion:SetHealth(illusion.GetMaxHealth and illusion:GetMaxHealth() or self:GetParent():GetMaxHealth())
     illusion:SetMana(illusion:GetMaxMana())
     illusion:AddNewModifier(caster, ability_orig, "modifier_fymryn_black_mirror_illusion_active", {target = target:entindex(), illusion_chance = 1})
     illusion:AddNewModifier(caster, nil, "modifier_fymryn_black_mirror_phased", {duration = 2})

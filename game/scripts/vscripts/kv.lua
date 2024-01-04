@@ -139,6 +139,7 @@ function SummonUnit(keys)
 			unit:SetBaseDamageMin(keys.damage)
 			unit:SetBaseDamageMax(keys.damage)
 		end
+		-- unit:SetBaseAttackTime(2)
 		if keys.base_attack_time then
 			unit:SetBaseAttackTime(keys.base_attack_time)
 		end
@@ -160,6 +161,10 @@ function SummonUnit(keys)
 		end
 		if keys.duration then
 			unit:AddNewModifier(caster, ability, "modifier_kill", {duration = keys.duration})
+		end
+		-- unit:SetBaseMagicalResistanceValue(50)
+		if keys.magical_resistance then
+			unit:SetBaseMagicalResistanceValue(keys.magical_resistance)
 		end
 		local ability_name = ability:GetAbilityName()
 		local units_summoned = caster["custom_summoned_unit_ability_" .. ability_name]
@@ -243,13 +248,6 @@ function PercentDamage(keys)
 		if keys.multiplier then damage = damage * keys.multiplier end
 		
 		local CalculateSpellDamageTooltip = keys.CalculateSpellDamageTooltip == 0 and DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION or DOTA_DAMAGE_FLAG_NONE
-
-		if CalculateSpellDamageTooltip == DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION then
-			CalculateSpellDamageTooltip = DOTA_DAMAGE_FLAG_NONE
-			ability.NoDamageAmp = true
-		else
-			ability.NoDamageAmp = false
-		end
 		
 		ApplyDamage({
 			victim = target,
@@ -282,7 +280,6 @@ function ModifyCreepDamage(keys)
 			(keys.damage * (damage_bonus * 0.01 - 1)) or
 			damage_bonus
 
-		ability.NoDamageAmp = true
 		ApplyDamage({
 			attacker = caster,
 			victim = target,

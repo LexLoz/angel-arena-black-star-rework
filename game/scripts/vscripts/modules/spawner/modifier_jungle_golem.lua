@@ -2,8 +2,7 @@ modifier_jungle_golem = class({
 	IsHidden = function() return false end,
 	IsPurgable = function() return false end,
 	RemoveOnDeath = function() return false end,
-	GetModifierIgnoreMovespeedLimit = function() return 1 end,
-	GetModifierAttackSpeed_Limit = function() return 1 end,
+	-- GetModifierIgnoreMovespeedLimit = function() return 1 end,
 })
 
 function modifier_jungle_golem:DeclareFunctions()
@@ -15,7 +14,7 @@ function modifier_jungle_golem:DeclareFunctions()
 		MODIFIER_PROPERTY_IGNORE_MOVESPEED_LIMIT,
 		MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS,
 		MODIFIER_PROPERTY_INCOMING_DAMAGE_PERCENTAGE,
-		MODIFIER_PROPERTY_MODEL_SCALE
+		-- MODIFIER_PROPERTY_MODEL_SCALE
 	}
 	return funcs
 end
@@ -37,16 +36,16 @@ function modifier_jungle_golem:GetModifierMoveSpeedBonus_Percentage()
 end
 
 function modifier_jungle_golem:GetModifierBaseDamageOutgoing_Percentage()
-	return math.floor(self:GetStackCount() * 30)
+	return math.floor(self:GetStackCount() * 15)
 end
 
 local function resistFormula(stacks)
-	return (0.1 * stacks) / (0.9 + 0.1 * stacks)
-
+	return (0.1 * stacks ^ 1.05) / (0.9 + 0.1 * stacks ^ 1.05)
 end
 
 if IsServer() then
 	function modifier_jungle_golem:GetModifierIncomingDamageConstant(keys)
+		if keys.target ~= self:GetParent() then return end
 		return -keys.damage * resistFormula(self:GetStackCount())
 	end
 else
@@ -58,5 +57,6 @@ end
 if IsServer() then
 	function modifier_jungle_golem:OnDestroy()
 		self:GetParent().golem_stacks = 0
+		self:GetParent().gold_buff = 1
 	end
 end

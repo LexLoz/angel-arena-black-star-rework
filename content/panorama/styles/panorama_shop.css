@@ -45,7 +45,9 @@
 	transition-timing-function: ease-in;
 	align: right bottom;
 	flow-children: right;
-	overflow: squish scroll; }
+	overflow: squish scroll; 
+	}
+
 	#ShopBase.ShopBaseOpen {
 	opacity: 1;
 	transform: translateX(0); }
@@ -348,13 +350,16 @@
 	
 	#ShopItems {
 	width: 100%;
-	height: 100%; }
+	height: 100%; 
+}
 	
 	#ShopItemsBase {
 	width: 100%;
 	height: 100%;
 	margin-top: 9px;
-	visibility: visible; }
+	visibility: visible; 
+	overflow: squish scroll;
+}
 	
 	#ShopSearchOverlay {
 	width: 100%;

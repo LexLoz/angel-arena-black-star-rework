@@ -13,6 +13,11 @@ end
 
 if IsServer() then
 	function modifier_talent_mana:GetModifierManaBonus()
-		return self:GetStackCount() * self:GetParent().ManaPerInt * 0.01 * self:GetParent():GetIntellect()
+		local parent = self:GetParent()
+		if parent:HasAbility("ogre_magi_dumb_luck") then
+			return self:GetStackCount() * 6 * 0.01 * parent:GetStrength()
+		else
+			return self:GetStackCount() * self:GetParent().ManaPerInt * 0.01 * self:GetParent():GetIntellect()
+		end
 	end
 end

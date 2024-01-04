@@ -53,7 +53,7 @@ function modifier_fymryn_stretching:OnAttackStart(params)
     if modifier_fymryn_stretching_debuff then
         if modifier_fymryn_stretching_debuff:GetStackCount()+1 >= max_stacks then
             self:GetParent():RemoveGesture(ACT_DOTA_ATTACK_EVENT)
-            self:GetParent():StartGestureWithPlaybackRate(ACT_DOTA_ATTACK_EVENT, self:GetParent():GetAttackSpeed())
+            self:GetParent():StartGestureWithPlaybackRate(ACT_DOTA_ATTACK_EVENT, self:GetParent():GetAttackSpeed(false))
         end
     end
 end

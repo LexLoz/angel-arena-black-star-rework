@@ -44,13 +44,13 @@ if IsServer() then
 
         if not target:IsAlive() then self:Destroy() end
         
-        if parent:Script_GetAttackRange() + 100 >= (pos - enemyPos):Length2D() and parent:IsAlive() and target:IsAlive() and not parent:IsStunned() and not parent:IsHexed() and not parent:IsDisarmed() then
+        if parent:Script_GetAttackRange() + 100 >= (pos - enemyPos):Length2D() and parent:IsAlive() and target:IsAlive() and not parent:IsDisabled() and not parent:IsDisarmed() then
             --self.Damage = parent:GetAgility() * AGILITY_BONUS_BONUS_DAMAGE
-            local orb = false
-            if parent:GetPrimaryAttribute() == 1 and parent:GetNetworkableEntityInfo("BonusPrimaryAttribute1") then
-                orb = true
-            end
-            local attack_damage = parent:GetAverageTrueAttackDamage(parent)
+            -- local orb = false
+            -- if parent:GetPrimaryAttribute() == 1 and parent.bonus_primary_attribute1 then
+            --     orb = true
+            -- end
+            local attack_damage = parent:GetAverageTrueAttackDamage(target)
             local increased_damage = parent:GetReliableDamage() * (self.bonus_damage * 0.01)
             parent.bonus_attack = (AGILITY_BONUS_BASE_DAMAGE - 100) + ((increased_damage + attack_damage) / attack_damage * 100 - 100)
             -- print('bonus attacks: '..(parent.bonus_attack))

@@ -28,7 +28,6 @@ if IsServer() then
 		local target = keys.target
 		local damage = keys.original_damage
 
-		ability.NoDamageAmp = true
 		local dt = {
 			victim = target,
 			attacker = attacker,
@@ -41,9 +40,9 @@ if IsServer() then
 		dt.damage_type = DAMAGE_TYPE_MAGICAL
 		dt.damage = damage * ability:GetSpecialValueFor("magic_damage_pct") * 0.01
 		ApplyDamage(dt)
-		dt.damage_type = DAMAGE_TYPE_PHYSICAL
-		dt.damage = damage * ability:GetSpecialValueFor("physical_damage_pct") * 0.01
-		ApplyDamage(dt)
+		-- dt.damage_type = DAMAGE_TYPE_PHYSICAL
+		-- dt.damage = damage * ability:GetSpecialValueFor("physical_damage_pct") * 0.01
+		-- ApplyDamage(dt)
 	end
 
 	function modifier_anakim_wisps:GetModifierPreAttack_CriticalStrike()

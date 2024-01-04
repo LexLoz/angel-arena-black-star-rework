@@ -1,12 +1,12 @@
 ABILITY_SHOP_BANNED = {
-	["obsidian_destroyer_essence_aura"] = { "nevermore_shadowraze3", "nevermore_shadowraze2", "nevermore_shadowraze1", "tinker_rearm_arena", "rocket_barrage_arena", "storm_spirit_ball_lightning", "bristleback_quill_spray", "pugna_life_drain", "shredder_chakram_2", "shredder_return_chakram_2", "shredder_chakram", "shredder_return_chakram", "techies_focused_detonate", "spectre_reality", "oracle_purifying_flames", "templar_assassin_trap", "skywrath_mage_arcane_bolt", "shadow_demon_shadow_poison_release", "nyx_assassin_unburrow", "nyx_assassin_burrow", "shadow_demon_shadow_poison", "saber_mana_burst", },
+	["obsidian_destroyer_essence_aura"] = { "nevermore_shadowraze3", "nevermore_shadowraze2", "nevermore_shadowraze1", "tinker_rearm_arena", "rocket_barrage_arena", "storm_spirit_ball_lightning", "bristleback_quill_spray", "pugna_life_drain", "shredder_chakram_2", "shredder_return_chakram_2", "shredder_chakram", "shredder_return_chakram", "techies_focused_detonate", "spectre_reality", "oracle_purifying_flames", "templar_assassin_trap", "skywrath_mage_arcane_bolt", "shadow_demon_shadow_poison_release", "nyx_assassin_unburrow", "nyx_assassin_burrow", "shadow_demon_shadow_poison", "saber_mana_burst", "obsidian_destroyer_arcane_orb"},
 	["batrider_sticky_napalm"] = {"rocket_barrage_arena", "sandking_sand_storm", "shadow_shaman_shackles", "doom_bringer_scorched_earth", "venomancer_venomous_gale", "venomancer_poison_nova", "ember_spirit_flame_guard", "weaver_the_swarm", "dark_seer_ion_shell", "spectre_dispersion", "shadow_demon_shadow_poison", "juggernaut_blade_fury" },
 	["earthshaker_aftershock"] = {"tinker_rearm_arena", "rocket_barrage_arena", "obsidian_destroyer_arcane_orb", "storm_spirit_ball_lightning", "pugna_life_drain", "shredder_chakram_2", "shredder_return_chakram_2", "shredder_chakram", "shredder_return_chakram", "techies_focused_detonate", "spectre_reality", "oracle_purifying_flames", "templar_assassin_trap", "skywrath_mage_arcane_bolt", "zuus_arc_lightning", "shadow_demon_shadow_poison_release", "nyx_assassin_unburrow", "nyx_assassin_burrow", "bristleback_quill_spray", "bristleback_viscous_nasal_goo", "shadow_demon_shadow_poison", "jakiro_dual_breath", "saber_mana_burst", },
 	["zuus_static_field"] = { "nevermore_shadowraze3", "nevermore_shadowraze2", "nevermore_shadowraze1", "monkey_king_mischief", "tinker_rearm_arena", "rocket_barrage_arena", "storm_spirit_ball_lightning", "bristleback_quill_spray", "pugna_life_drain", "bristleback_viscous_nasal_goo", "shredder_chakram_2", "shredder_return_chakram_2", "shredder_chakram", "shredder_return_chakram", "techies_focused_detonate", "spectre_reality", "oracle_purifying_flames", "templar_assassin_trap", "skywrath_mage_arcane_bolt", "shadow_demon_shadow_poison_release", "nyx_assassin_unburrow", "nyx_assassin_burrow", "shadow_demon_shadow_poison", "jakiro_dual_breath", "saber_mana_burst", },
 	["storm_spirit_overload"] = { "troll_warlord_berserkers_rage", "wisp_spirits_out", "wisp_spirits_in", "wisp_overcharge", "rocket_barrage_arena", "cherub_synthesis", "pudge_rot_arena", "pudge_rot", "skeleton_king_vampiric_aura", "witch_doctor_voodoo_restoration", "leshrac_pulse_nova", "wisp_overcharge", "pugna_life_drain", "shredder_chakram_2", "shredder_return_chakram_2", "shredder_chakram", "shredder_return_chakram", "techies_focused_detonate", "spectre_reality", "oracle_purifying_flames", "templar_assassin_trap", "skywrath_mage_arcane_bolt", "shadow_demon_shadow_poison_release", "nyx_assassin_unburrow", "nyx_assassin_burrow", "bristleback_viscous_nasal_goo", "shadow_demon_shadow_poison", "jakiro_dual_breath", "saber_mana_burst", },
 	--["pudge_meat_hook_lua"] = { "rocket_barrage_arena", "furion_teleportation", "kunkka_x_marks_the_spot", "ogre_magi_multicast_arena",  "bloodseeker_thirst", "antimage_blink", "queenofpain_blink", },
-	["tusk_walrus_punch"] = { "tiny_grow", "earthshaker_enchant_totem", "drow_ranger_marksmanship", },
-	["bounty_hunter_jinada"] = { "tiny_grow", "earthshaker_enchant_totem", "drow_ranger_marksmanship", },
+	-- ["tusk_walrus_punch"] = { "tiny_grow", "earthshaker_enchant_totem", "drow_ranger_marksmanship", },
+	-- ["bounty_hunter_jinada"] = { "tiny_grow", "earthshaker_enchant_totem", "drow_ranger_marksmanship", },
 	["obsidian_destroyer_arcane_orb"] = { "earthshaker_aftershock", "zuus_static_field", "obsidian_destroyer_essence_aura", },
 	["lina_fiery_soul"] = { "spectre_reality", "templar_assassin_trap", "shadow_demon_shadow_poison_release", "techies_focused_detonate" },
 }
@@ -134,13 +134,15 @@ ABILITY_SHOP_SKIP_HEROES = {
 	npc_dota_hero_phantom_lancer = true,
 	--npc_arena_hero_zaken = true,
 	npc_arena_hero_comic_sans = true,
+	npc_arena_hero_lord_voldemort = true,
+	npc_arena_hero_aghanim = true,
 	-- npc_dota_hero_morphling = true,
 }
 
 ABILITY_SHOP_SKIP_ABILITIES = {
 	"broodmother_spin_web",
-	"morphling_morph_agi",
-	"morphling_morph_str",
+	-- "morphling_morph_agi",
+	-- "morphling_morph_str",
 	"morphling_replicate",
 	"keeper_of_the_light_recall",
 	"keeper_of_the_light_blinding_light",
@@ -155,8 +157,10 @@ ABILITY_SHOP_SKIP_ABILITIES = {
 	"meepo_divided_we_stand",
 	--"saitama_limiter",
 	"sai_release_of_forge",
-	--"spectre_dispersion",
-	"bloodseeker_blood_mist",
-	"beastmaster_drums_of_slom",
+	"spectre_dispersion",
+	-- "bloodseeker_blood_mist",
+	-- "beastmaster_drums_of_slom",
 	"rubick_spell_steal",
+	"shredder_return_chakram",
+	"shredder_return_chakram_2"
 }

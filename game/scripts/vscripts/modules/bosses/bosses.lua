@@ -36,7 +36,7 @@ function Bosses:SpawnBossUnit(name, spawner)
 	local boss = CreateUnitByName("npc_arena_boss_" .. name, spawner:GetAbsOrigin(), true, nil, nil, DOTA_TEAM_NEUTRALS)
 	boss.SpawnerEntity = spawner
 	Bosses:MakeBossAI(boss, name, {})
-	
+
 	boss:AddNewModifier(boss, nil, "modifier_talent_true_strike", {}):SetStackCount(50)
 
 	Bosses:UpgradeBoss(boss)
@@ -47,7 +47,7 @@ end
 function Bosses:UpgradeBoss(unit)
 	if GetDOTATimeInMinutesFull() > START_BOSS_UPGRADE_MIN then
 		local stacks = math.max(1, math.floor(GetDOTATimeInMinutesFull() - START_BOSS_UPGRADE_MIN) / 3)
-		unit:AddNewModifier(unit, nil, "modifier_boss_upgrade", nil):SetStackCount(stacks)
+		-- unit:AddNewModifier(unit, nil, "modifier_boss_upgrade", nil):SetStackCount(stacks)
 		-- unit:SetBaseAttackTime(math.max(0.2, unit:GetBaseAttackTime() - (0.95 + stacks * 0.05)))
 	end
 end
@@ -73,15 +73,41 @@ function Bosses:IsLastBossEntity(unit)
 	return true
 end
 
-function Bosses:RegisterKilledBoss(unit, team)
+function Bosses:RegisterKilledBoss(unit, killer, team)
 	local unitname = unit:GetUnitName()
 	local bossname = string.gsub(unitname, "npc_arena_boss_", "")
+	local killerHero = killer:GetPlayerOwner() and killer:GetPlayerOwner():GetAssignedHero() or nil
+
+	if unitname == "npc_arena_boss_zaken" or unitname ==
+		"npc_arena_boss_freya" then
+		if not GameMode.IsInfinityStonesCanDrop then
+			GameMode.IsInfinityStonesCanDrop = true
+			Notifications:TopToAll({ text = "#arena_infinity_stones_can_be_dropped", duration = 6 })
+		end
+
+		if RollPercentage(10) and not GameMode.InfinityGauntletDropped then
+			GameMode.InfinityGauntletDropped = true
+			local gauntlet = CreateItem("item_infinity_gauntlet", nil, nil)
+			gauntlet.firstDrop = true
+			if killerHero then
+				killerHero:AddItem(gauntlet)
+			else
+				CreateItemOnPositionSync(unit:GetAbsOrigin(), gauntlet)
+			end
+			Notifications:TopToAll({ text = "#arena_infinity_gauntlet_dropped", duration = 6 })
+			EmitGlobalSound("Arena.Gauntlet_Dropped")
+		end
+	end
 
 	if unitname == "npc_arena_boss_cursed_zeld" and not GameMode.InfinityGauntletDropped then
 		GameMode.InfinityGauntletDropped = true
 		local gauntlet = CreateItem("item_infinity_gauntlet", nil, nil)
 		gauntlet.firstDrop = true
-		CreateItemOnPositionSync(unit:GetAbsOrigin(), gauntlet)
+		if killerHero then
+			killerHero:AddItem(gauntlet)
+		else
+			CreateItemOnPositionSync(unit:GetAbsOrigin(), gauntlet)
+		end
 		Notifications:TopToAll({ text = "#arena_infinity_gauntlet_dropped", duration = 6 })
 		EmitGlobalSound("Arena.Gauntlet_Dropped")
 	end

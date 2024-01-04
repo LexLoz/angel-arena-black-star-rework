@@ -27,14 +27,13 @@ if IsServer() then
 		local parent = self:GetParent()
 		for _,v in ipairs(FindUnitsInRadius(parent:GetTeam(), parent:GetAbsOrigin(), nil, 350, DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false)) do
 			if not v:IsBoss() then
-				self:GetAbility().NoDamageAmp = true
 				ApplyDamage({
 					attacker = parent,
 					victim = v,
 					damage_type = DAMAGE_TYPE_MAGICAL,
 					damage = self.damage_per_second_max_hp_pct * v:GetMaxHealth() * 0.01 * 0.1,
 					ability = self:GetAbility(),
-					--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION
+					damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION
 				})
 			end
 		end

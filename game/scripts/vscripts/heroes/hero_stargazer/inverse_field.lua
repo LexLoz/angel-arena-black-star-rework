@@ -17,7 +17,6 @@ function Return(keys)
 		ParticleManager:SetParticleControlEnt(pfx, 0, caster, PATTACH_POINT_FOLLOW, "attach_hitloc", caster:GetAbsOrigin(), true)
 		ParticleManager:SetParticleControlEnt(pfx, 1, attacker, PATTACH_POINT_FOLLOW, "attach_hitloc", attacker:GetAbsOrigin(), true)
 		
-		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = attacker,
 			attacker = caster,

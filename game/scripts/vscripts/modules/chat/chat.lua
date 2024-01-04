@@ -2,13 +2,14 @@ local commands = ModuleRequire(..., "commands")
 
 Chat = Chat or {}
 
-Events:Register("activate", function ()
+Events:Register("activate", function()
 	CustomGameEventManager:RegisterListener("custom_chat_send_message", function(_, data)
+		PrintTable(data)
 		Chat:Send(tonumber(data.PlayerID), data.teamOnly == 1, data)
 	end)
 
 	ListenToGameEvent("player_chat", function(keys)
-		Chat:Send(keys.playerid, keys.teamonly == 1, {text = keys.text})
+		Chat:Send(keys.playerid, keys.teamonly == 1, { text = keys.text })
 	end, nil)
 end)
 
@@ -25,7 +26,7 @@ function Chat:Send(playerId, teamonly, data)
 	if HeroSelection:GetState() == HERO_SELECTION_PHASE_END then
 		heroName = HeroSelection:GetSelectedHeroName(playerId)
 	end
-	local args = {playerId=playerId, hero=heroName}
+	local args = { playerId = playerId, hero = heroName }
 	if data.text then
 		args.text = data.text
 	else
@@ -46,6 +47,24 @@ function Chat:Send(playerId, teamonly, data)
 			elseif data.ability then
 				local ability = EntIndexToHScript(data.ability)
 				if IsValidEntity(ability) then
+					print('ability, ' .. ability:GetName())
+					if ability:GetName() == "item_casket_of_greed" then
+						args.itemslist = {}
+						if ability.modifiers then
+							-- PrintTable(ability.modifiers)
+							local itemscash = {}
+							for _,v in ipairs(ability.modifiers) do
+								local index = v.item:GetEntityIndex() .. ''
+								if not itemscash[index] then
+									itemscash[index] = true
+									local value = "#DOTA_Tooltip_ability_" .. v.item:GetName()
+									-- print("DOTA_Tooltip_ability_" .. v.item:GetName())
+									table.insert(args.itemslist, value)
+								end
+							end
+						end
+						-- PrintTable(args.itemslist)
+					end
 					args.ability = data.ability
 					args.unit = ability:GetCaster():GetEntityIndex()
 					args.player = UnitVarToPlayerID(ability:GetCaster())
@@ -111,7 +130,7 @@ function Chat:ApplyCommand(playerId, teamonly, text)
 		local isCheat = GameRules:IsCheatMode()
 		--print(PlayerResource:GetRealSteamID(playerId))
 		--print(PlayerResource:GetRealSteamID(playerId) == "76561198241374538")
-		if 	PlayerResource:GetRealSteamID(playerId) == "76561198241374538"
+		if PlayerResource:GetRealSteamID(playerId) == "76561198241374538"
 			or data.level == CUSTOMCHAT_COMMAND_LEVEL_PUBLIC
 			or (data.level == CUSTOMCHAT_COMMAND_LEVEL_CHEAT and isCheat)
 			or (data.level == CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER and isDev)

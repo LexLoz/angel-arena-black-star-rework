@@ -5,6 +5,7 @@ var PlayerTables = GameUI.CustomUIConfig().PlayerTables;
 var _ = GameUI.CustomUIConfig()._;
 var Options = GameUI.CustomUIConfig().Options;
 var RegisterKeyBind = GameUI.CustomUIConfig().RegisterKeyBind;
+var CommandEvents = GameUI.CustomUIConfig().CommandEvents;
 var CustomHooks = GameUI.CustomUIConfig().CustomHooks;
 
 var console = {
@@ -174,8 +175,8 @@ function GetPlayerHeroName(playerId) {
 	return '';
 }
 
-function GetPlayerGold(playerId) {
-	return +PlayerTables.GetTableValue('gold', playerId);
+function GetPlayerGold(unit) {
+	return GetStackCountOfModifier("modifier_arena_hero_gold", unit);
 }
 
 function dynamicSort(property) {
@@ -408,6 +409,9 @@ function print(value) {
 	$.Msg(value)
 }
 
+function PrintError(err, txt) {
+	return $.Msg(`${(new Date()).toString()} | ${err.stack}`+(txt != undefined ? txt : ""));
+};
 
 function GetHUDSeed () {
 	return 1080 / Game.GetScreenHeight();
@@ -415,5 +419,40 @@ function GetHUDSeed () {
 function CorrectPositionValue (value) {
 	return GetHUDSeed() * (value || 0);
 };
+
+function transformObjectToArray(obj) {
+    if (!obj) {
+        return [];
+    }
+
+    if (Array.isArray(obj)) {
+        return obj;
+    }
+
+    var arr = [];
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            arr.push(obj[key]);
+        }
+    }
+
+    return arr;
+}
+
+function GetStackCountOfModifier(modifierName, unit) {
+	if (!unit) return 0;
+	for (var i = 0; i < Entities.GetNumBuffs(unit); i++) {
+		var buff = Entities.GetBuff(unit, i);
+		if (buff !== -1) {
+			var buffName = Buffs.GetName(unit, buff);
+			if (buffName == modifierName) {
+				return Buffs.GetStackCount(unit, buff);
+			}
+		}
+	}
+	return 0;
+}
+
+if (CommandEvents) CommandEvents.RegisterKeyBinds();
 
 var hud = GetDotaHud();

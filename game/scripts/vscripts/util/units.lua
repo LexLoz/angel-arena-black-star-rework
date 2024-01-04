@@ -202,7 +202,7 @@ function CDOTA_BaseNPC:ModifyPlayerStat(key, value)
 end
 
 function CDOTA_BaseNPC:IsTrueHero()
-	return self:IsRealHero() and not self:IsTempestDouble() and not self:IsWukongsSummon()
+	return self:IsRealHero() and not self:IsTempestDouble() and not self:IsWukongsSummon() and not self:IsDruidBear()
 end
 
 function CDOTA_BaseNPC:IsMainHero()
@@ -234,6 +234,10 @@ function CDOTA_BaseNPC:IsWukongsSummon()
 		self:HasModifier("modifier_monkey_king_fur_army_soldier_inactive") or
 		self:HasModifier("modifier_monkey_king_fur_army_soldier_hidden")
 	)
+end
+
+function CDOTA_BaseNPC:IsDruidBear()
+	return self:GetName() == 'npc_dota_lone_druid_bear'
 end
 
 function CDOTA_BaseNPC:GetIllusionParent()
@@ -276,6 +280,7 @@ function CDOTA_BaseNPC_Hero:GetTotalHealthReduction()
 	if mod then
 		pct = pct + mod:GetAbility():GetAbilitySpecial("health_decrease_pct")
 	end
+	if self:GetFullName() == "npc_arena_hero_comic_sans" then return 100 end
 
 	--[[local sara_evolution = self:FindAbilityByName("sara_evolution")
 	if sara_evolution then
@@ -292,7 +297,7 @@ end
 function CDOTA_BaseNPC_Hero:CalculateHealthReduction()
 	self:CalculateStatBonus(true)
 	local pct = self:GetTotalHealthReduction()
-	self:SetMaxHealth(pct >= 100 and 1 or self:GetMaxHealth() - pct * (self:GetMaxHealth() / 100))
+	self:SetMaxHealth(math.max(1, pct >= 100 and 1 or self:GetMaxHealth() - pct * (self:GetMaxHealth() / 100)))
 end
 
 function CDOTA_BaseNPC_Hero:ResetAbilityPoints()
@@ -315,7 +320,7 @@ end
 
 function CDOTA_BaseNPC_Hero:GetUniversalAttribute()
 	if self:HasModifier("modifier_universal_attribute") then
-		return (self:GetAttributesSum()) * UNIVERSALES_MULTIPLIER
+		return (self:GetAttributesSum())
 	else
 		return false
 	end
@@ -414,19 +419,19 @@ function CDOTA_BaseNPC_Hero:GetBonusIntellect()
 end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableStrength()
-	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true)
+	local stat_per_level = CalculateStatPerLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true)
 	local bonus_stat = self:GetBonusStrength()
 	return self:GetStrength() - stat_per_level - bonus_stat
 end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableAgility()
-	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT, true)
+	local stat_per_level = CalculateStatPerLevel(self, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT, true)
 	local bonus_stat = self:GetBonusAgility()
 	return self:GetAgility() - stat_per_level - bonus_stat
 end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableIntellect()
-	local stat_per_level = CalculateStatForLevel(self, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT, true)
+	local stat_per_level = CalculateStatPerLevel(self, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT, true)
 	local bonus_stat = self:GetBonusIntellect()
 	return self:GetIntellect() - stat_per_level - bonus_stat
 end
@@ -452,14 +457,14 @@ end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableBonusDamage()
 	local bonus_damage = self:GetBonusDamage()
-	return (bonus_damage > 1000 and
-	bonus_damage - 1000 or 0)
+	return (bonus_damage > RELIABLE_BONUS_DAMAGE_LIMIT and
+	bonus_damage - RELIABLE_BONUS_DAMAGE_LIMIT or 0)
 end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableBaseDamage()
 	return math.max(0, (self:GetUnreliableStrength() +
-	CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true) -
-	CalculateStatForLevel(self, DOTA_ATTRIBUTE_STRENGTH, 600, true)) * DAMAGE_PER_UNRELIABLE_STRENGTH * self.BaseDamagePerStrength)
+	CalculateStatPerLevel(self, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT, true) -
+	CalculateStatPerLevel(self, DOTA_ATTRIBUTE_STRENGTH, 5000, true)) * DAMAGE_PER_UNRELIABLE_STRENGTH * self.BaseDamagePerStrength)
 end
 
 function CDOTA_BaseNPC_Hero:GetUnreliableDamage()
@@ -468,9 +473,29 @@ end
 
 function CDOTA_BaseNPC_Hero:GetReliableDamage()
 	if not self:IsHero() then return 0 end
-	local unreliable_damage = self:GetUnreliableDamage()
-	-- print(damage)
-	return self:GetAverageTrueAttackDamage(self) - unreliable_damage
+	return self.reliable_damage
+end
+
+function CDOTA_BaseNPC:IsStrengthCritReady()
+	local mod = self:FindModifierByName("modifier_strength_crit")
+	if mod then
+		return mod.ready
+	else
+		return false
+	end
+end
+
+function CDOTA_BaseNPC:GetStrengthCritMultiplier()
+	local mod = self:FindModifierByName("modifier_strength_crit")
+	if mod then
+		return mod.strengthCriticalDamage or mod:GetStackCount() - 100
+	else
+		return 0
+	end
+end
+
+function CDOTA_BaseNPC:IsDisabled()
+	return self:IsStunned() or self:IsHexed() or self:IsTaunted() or self:IsFeared()
 end
 
 --[[function CDOTA_BaseNPC_Hero:GetStrengthGain()

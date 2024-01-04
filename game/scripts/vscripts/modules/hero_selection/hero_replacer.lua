@@ -134,6 +134,7 @@ function HeroSelection:ChangeHero(playerId, newHeroName, keepExp, duration, item
 	Timers:CreateTimer(preDuration, function()
 		RemoveAllOwnedUnits(playerId)
 		DropInfinityGauntlet(hero)
+		CustomAbilities:SellAllAbilities(hero)
 		HeroSelection:SelectHero(playerId, newHeroName, function(oldHero)
 			location = hero:GetAbsOrigin()
 			local fountatin = FindFountain(PlayerResource:GetTeam(playerId))

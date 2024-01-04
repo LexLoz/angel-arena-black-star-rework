@@ -73,7 +73,7 @@ function Attributes:CalculateRegen(parent)
     --print('attributes: '..parent.HpRegenAmp)
     parent.HPRegenAmplify = 1 + parent.HpRegenAmp * parent:GetStrength()
     local custom_regen = parent:GetHealthRegen()
-    parent.custom_regen = math.min(parent:GetMaxHealth() / 1, Attributes:RegenExeptions(parent, custom_regen))
+    parent.custom_regen = math.round(math.min(parent:GetMaxHealth() / 1, Attributes:RegenExeptions(parent, custom_regen)))
     --end)
 end
 
@@ -96,14 +96,14 @@ function Attributes:UpdateStrength(parent)
     if parent.FindModifierByName and parent:FindModifierByName("modifier_strength_crit") then
         local mod = parent:FindModifierByName("modifier_strength_crit")
         local multiplier
-        local coeff = (parent:GetStrength()) / STRENGTH_CRIT_THRESHOLD
+        -- local coeff = (parent:GetStrength()) / STRENGTH_CRIT_THRESHOLD
 
-        if parent:GetPrimaryAttribute() == 0 and parent:GetNetworkableEntityInfo("BonusPrimaryAttribute0") and not mod._util then
+        if parent:GetPrimaryAttribute() == 0 and parent.bonus_primary_attribute0 and not mod._util then
             mod._util = true
             --mod.decrease_coeff = STRENGTH_CRIT_DECREASE_COEFF / 1.2
             mod.crit_mult = STRENGTH_CRIT_MULTIPLIER * 1.5
             mod._strength = (parent:GetStrength()) - 1
-        elseif parent:GetPrimaryAttribute() == 0 and not parent:GetNetworkableEntityInfo("BonusPrimaryAttribute0") and mod._util then
+        elseif parent:GetPrimaryAttribute() == 0 and not parent.bonus_primary_attribute0 and mod._util then
             mod._util = false
             mod.crit_mult = STRENGTH_CRIT_MULTIPLIER
             --mod.decrease_coeff = STRENGTH_CRIT_DECREASE_COEFF
@@ -121,10 +121,11 @@ function Attributes:UpdateStrength(parent)
         -- end
 
         mod.strengthCriticalDamage = STRENGTH_BASE_CRIT + multiplier
+        parent.strengthCriticalDamage = mod.strengthCriticalDamage
         mod:SetStackCount(100 + math.round(mod.strengthCriticalDamage))
         parent:SetNetworkableEntityInfo("StrengthCritCooldown", mod:calculateCooldown())
         -- print(math.min(500, 100 + (mod:GetStackCount() - 100) / 3))
-        parent:SetNetworkableEntityInfo("StrengthSpellCrit", 100 + (mod:GetStackCount() - 100) / 3)
+        -- parent:SetNetworkableEntityInfo("StrengthSpellCrit", 100 + (mod:GetStackCount() - 100) / 3)
     end
 
     --regen
@@ -147,11 +148,11 @@ function Attributes:UpdateAgility(parent)
         local max_bonus_attacks = AGILITY_BONUS_ATTACKS_THRESHOULD
         mod.bonus_damage = parent:GetAgility() * AGILITY_BONUS_BONUS_DAMAGE
 
-        if parent.GetPrimaryAttribute and parent:GetPrimaryAttribute() == 1 and parent:GetNetworkableEntityInfo("BonusPrimaryAttribute1") and not mod._util then
+        if parent.GetPrimaryAttribute and parent:GetPrimaryAttribute() == 1 and parent.bonus_primary_attribute1 and not mod._util then
             mod._util = true
             mod.requirement = math.round(AGILITY_BONUS_AGILITY_FOR_BONUS_ATTACK / 4)
             mod.agility = (parent:GetAgility()) - 1
-        elseif parent:GetPrimaryAttribute() == 1 and not parent:GetNetworkableEntityInfo("BonusPrimaryAttribute1") and mod._util then
+        elseif parent:GetPrimaryAttribute() == 1 and not parent.bonus_primary_attribute1 and mod._util then
             mod._util = false
             mod.requirement = AGILITY_BONUS_AGILITY_FOR_BONUS_ATTACK
             mod.agility = (parent:GetAgility()) - 1
@@ -168,8 +169,9 @@ function Attributes:UpdateAgility(parent)
                 current_requirement = current_requirement + base_requirement
             end
         end
-        parent:SetNetworkableEntityInfo("bonus_attacks_requirement", base_requirement)
-        parent:SetNetworkableEntityInfo("agility_for_next_bonus_attack", current_requirement)
+        mod.bonus_attacks_requirement = base_requirement
+        mod.agility_for_next_bonus_attack = current_requirement
+        mod:Transmitter()
         parent:SetNetworkableEntityInfo("AgilityBonusAttacksDamage", AGILITY_BONUS_BASE_DAMAGE + mod.bonus_damage)
         mod:SetStackCount(mod.bonusAttacksCount)
         if (parent:GetAgility()) <= 0 then
@@ -188,11 +190,15 @@ function Attributes:UpdateAgility(parent)
 
 
     --damage multiplier
-    parent.DamageMultiplier = 1 + (parent:GetAgility() * BASE_AGILITY_DAMAGE_AMPLIFY) * 0.01
+    parent.DamageMultiplier = 1 + (parent:GetAgility() * AGILITY_DAMAGE_AMPLIFY) * 0.01
 
     --custom base armor
+    local reality_stone = parent:HasModifier("modifier_reality_stone") and
+        1 +
+        parent:FindModifierByName("modifier_reality_stone"):GetAbility():GetSpecialValueFor("resists_increase") * 0.01 or
+        1
     local agilityArmor = parent:GetAgility() * (AGILITY_ARMOR_BASE_COEFF)
-    local unreliableArmor = parent:GetUnreliableAgility() * UNREABLE_AGILITY_ARMOR_COEFF
+    local unreliableArmor = parent:GetUnreliableAgility() * UNREABLE_AGILITY_ARMOR_COEFF * reality_stone
     -- print('GetUnreliableAgility: '..parent:GetUnreliableAgility())
     local agilityForArmor
     local agilityArmorCoeff = 1 / parent.AgilityArmorMultiplier
@@ -202,7 +208,7 @@ function Attributes:UpdateAgility(parent)
     --((parent.Custom_AttributeBaseAgility or parent:GetKeyValue("AttributeBaseAgility")) / (agilityArmorCoeff / AGILITY_ARMOR_BASE_COEFF))
 
     if agilityForArmor < 0 then agilityForArmor = 0 end
-    local newArmor = agilityForArmor * (agilityArmorCoeff)
+    local newArmor = agilityForArmor * agilityArmorCoeff * reality_stone
 
     if newArmor < 0 then newArmor = 0 end
     if newArmor > AGILITY_MAX_BASE_ARMOR_COUNT then newArmor = AGILITY_MAX_BASE_ARMOR_COUNT end
@@ -218,7 +224,7 @@ function Attributes:UpdateAgility(parent)
     --print(newArmor)
 
     --custom attack speed
-    local level_agility = CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT, true)
+    local level_agility = CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT, true)
     local bonus_agility = math.min(RELIABLE_BONUS_STAT_LIMIT, parent:GetReliableAgility() - level_agility)
     local custom_as = math.max(0,
         bonus_agility * ATTACK_SPEED_PER_BONUS_AGILITY +
@@ -229,7 +235,8 @@ function Attributes:UpdateAgility(parent)
     if custom_as > AGILITY_MAX_ATTACK_SPEED_COUNT then custom_as = AGILITY_MAX_ATTACK_SPEED_COUNT end
     --print(custom_as)
     custom_as = math.min(700, custom_as + parent:GetUnreliableAgility() * (1 / 200))
-    parent:SetNetworkableEntityInfo("ReturnedAttackSpeed", -parent:GetAgility() + custom_as)
+    -- parent:SetNetworkableEntityInfo("ReturnedAttackSpeed", -parent:GetAgility() + custom_as)
+    parent.custom_attack_speed = -parent:GetAgility() + custom_as
     parent:SetNetworkableEntityInfo("AgilityAttackSpeed", custom_as)
 
     --stamina
@@ -245,36 +252,34 @@ function Attributes:UpdateAgility(parent)
     parent:SetNetworkableEntityInfo("BonusAgi", parent:GetBonusAgility())
 
     self:UpdateDamage(parent)
+    self:UpdateSpellDamage(parent)
 end
 
 function Attributes:UpdateIntelligence(parent)
     local unrel_int = parent:GetUnreliableIntellect()
     local rel_int = parent:GetIntellect() - unrel_int
-    local resist = math.min(25, rel_int * 0.05) + math.min(25, unrel_int * (1 / 4000))
+    local reality_stone = parent:HasModifier("modifier_reality_stone") and
+        1 +
+        parent:FindModifierByName("modifier_reality_stone"):GetAbility():GetSpecialValueFor("resists_increase") * 0.01 or
+        1
+    local resist = math.min(74, math.min(MAX_RESIST_PER_RELIABLE_INT, rel_int * 0.05 * reality_stone) + math.min(MAX_RESIST_PER_UNRELIABLE_INT, unrel_int * (1 / 4000) * reality_stone))
+
     parent:SetNetworkableEntityInfo("MagResist", resist)
     parent:SetBaseMagicalResistanceValue((parent.Custom_MagicalResist or 25) + resist)
-
-    Attributes:UpdateManaRegen(parent)
-
     parent:SetNetworkableEntityInfo("ReliableInt", parent:GetReliableIntellect())
     parent:SetNetworkableEntityInfo("UnreliableInt", parent:GetUnreliableIntellect())
     parent:SetNetworkableEntityInfo("BonusInt", parent:GetBonusIntellect())
 
+    self:UpdateManaRegen(parent)
     self:UpdateDamage(parent)
 end
 
 function Attributes:UpdateManaRegen(parent)
     local ManaRegenAmp = parent:GetIntellect() * parent.ManaRegAmpPerInt
-
+    local custom_regen = math.max(0, parent:GetManaRegen())
+    parent:SetNetworkableEntityInfo("ManaRegenAmplify", 1 + (ManaRegenAmp or 0))
     if not parent.GetEnergy and not parent:HasModifier("modifier_filler_heal") and not parent:HasModifier("modifier_fountain_aura_arena") then
-        local custom_regen = parent:GetManaRegen()
-
         parent.custom_mana_regen = custom_regen * ManaRegenAmp
-        parent:SetNetworkableEntityInfo("ManaRegen",
-            (__toFixed(parent:GetManaRegen() + (parent.custom_mana_regen or 0), 1)))
-        parent:SetNetworkableEntityInfo("ManaRegenAmplify", 1 + (ManaRegenAmp or 0))
-    elseif parent.GetEnergy then
-        parent:SetNetworkableEntityInfo("ManaRegenAmplify", 1 + (ManaRegenAmp or 0))
     end
 end
 
@@ -285,16 +290,16 @@ function Attributes:UpdateDamage(parent)
         unreliable_damage)
 
     local reliable_str = (parent:GetStrength() - parent:GetUnreliableStrength() -
-            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT) +
-            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_STRENGTH, 600) + parent:GetUnreliableStrength() * DAMAGE_PER_UNRELIABLE_STAT) *
+            CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT) +
+            CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_STRENGTH, STAT_GAIN_LEVEL_LIMIT) + math.min(RELIABLE_BASE_DAMAGE_LIMIT, parent:GetUnreliableStrength() * DAMAGE_PER_UNRELIABLE_STAT)) *
         parent.BaseDamagePerStrength
     local reliable_agi = (parent:GetAgility() - parent:GetUnreliableAgility() -
-            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT) +
-            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_AGILITY, 600) + parent:GetUnreliableAgility() * DAMAGE_PER_UNRELIABLE_STAT) *
+            CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT) +
+            CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_AGILITY, STAT_GAIN_LEVEL_LIMIT) + math.min(RELIABLE_BASE_DAMAGE_LIMIT, parent:GetUnreliableAgility() * DAMAGE_PER_UNRELIABLE_STAT)) *
         parent.BaseDamagePerStrength
     local reliable_int = (parent:GetIntellect() - parent:GetUnreliableIntellect() -
-            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT) +
-            CalculateStatForLevel(parent, DOTA_ATTRIBUTE_INTELLECT, 600) + parent:GetUnreliableIntellect() * DAMAGE_PER_UNRELIABLE_STAT) *
+            CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT) +
+            CalculateStatPerLevel(parent, DOTA_ATTRIBUTE_INTELLECT, STAT_GAIN_LEVEL_LIMIT) + math.min(RELIABLE_BASE_DAMAGE_LIMIT, parent:GetUnreliableIntellect() * DAMAGE_PER_UNRELIABLE_STAT)) *
         parent.BaseDamagePerStrength
     local reliable_uni = (reliable_str + reliable_agi + reliable_int) * DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
 
@@ -336,11 +341,13 @@ function Attributes:UpdateDamage(parent)
         parent:SetNetworkableEntityInfo("BaseDamagePerInt", 0)
         parent.BaseDamagePerInt = 0
     end
+    -- print('primary_attribute: ' .. primary_attribute)
     if primary_attribute == 3 then
         damage_min = damage_min + reliable_uni
         damage_max = damage_max + reliable_uni
         parent:SetNetworkableEntityInfo("BaseDamagePerUni",
             reliable_uni)
+        -- print(reliable_uni)
         parent.BaseDamagePerUni =
             reliable_uni
     else
@@ -348,85 +355,26 @@ function Attributes:UpdateDamage(parent)
         parent.BaseDamagePerUni = 0;
     end
 
+    parent.reliable_damage = parent:GetAverageTrueAttackDamage(parent) - parent:GetUnreliableDamage()
+    parent.calculated_attack_damage = parent.reliable_damage * ((parent.DamageMultiplier or 2) - 1)
+
+    -- print('' .. reliable_uni)
     parent:SetBaseDamageMin(damage_min + unreliable_damage - primary_stat_value)
     parent:SetBaseDamageMax(damage_max + unreliable_damage - primary_stat_value)
 
     parent:SetNetworkableEntityInfo("BaseDamageMin", parent:GetBaseDamageMin())
     parent:SetNetworkableEntityInfo("BaseDamageMax", parent:GetBaseDamageMax())
 
-    parent:SetNetworkableEntityInfo("BonusAgilityDamage", CalculateAttackDamage(parent, parent))
+    -- parent:SetNetworkableEntityInfo("BonusAgilityDamage", CalculateAttackDamage(parent, parent))
     parent:SetNetworkableEntityInfo('ReliableDamage', parent:GetReliableDamage())
+
+    self:UpdateStaminaCost(parent)
 end
-
-function Attributes:UpdateDamageMultipliers(parent)
-    local attacker = parent
-    local addictive_multiplier = 0
-    for k, v in pairs(ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS) do
-        if attacker:HasModifier(k) then
-            -- print(k)
-            addictive_multiplier = addictive_multiplier + (v.addictive_multiplier(attacker) - 1)
-        end
-    end
-    -- print('addictive_multiplier: '..addictive_multiplier)
-    attacker.addictive_multiplier = addictive_multiplier
-end
-
---------------------------------------------------------------------------
-
-function Attributes:UpdateGoldMultiplier(parent, modifier, bonus_gold)
-    -- print(parent:GetName())
-    if modifier and modifier:GetAbility() ~= nil then
-        local value = modifier:GetAbility():GetSpecialValueFor("bonus_gold_pct")
-        -- print(modifier:GetName() .. ', ' .. value)
-        if value ~= 0 then
-            bonus_gold = (bonus_gold or 0) + value
-            parent.bonus_gold_pct = bonus_gold
-        end
-    end
-    return bonus_gold
-end
-
-function Attributes:CheckExeptionsInModifiersForStamina(parent, modifier, returned_value)
-    -- print(parent:GetName())
-    if modifier and modifier:GetAbility() ~= nil then
-        local value = modifier:GetAbility():GetSpecialValueFor("stamina_drain_reduction")
-        -- print(modifier:GetName() .. ', ' .. value)
-        if value ~= 0 then
-            returned_value = (returned_value or 1) * (1 - value * 0.01)
-            parent.decrease_stamina_cost_mult = returned_value
-        end
-    end
-    return returned_value
-end
-
-function Attributes:CheckModifiers(parent)
-    local modifiers = parent:FindAllModifiers()
-    local value1
-    local value2
-    parent.bonus_gold_pct = 0
-    parent.decrease_stamina_cost_mult = 1
-    for _, modifier in ipairs(modifiers) do
-        value1 = self:UpdateGoldMultiplier(parent, modifier, value1)
-        value2 = self:CheckExeptionsInModifiersForStamina(parent, modifier, value2)
-    end
-end
-
--------------------------------------------------------------------------
 
 function Attributes:UpdateStaminaCost(parent)
     if Options:GetValue("DisableStamina") then return 0 end
     local stamina = parent:FindModifierByName('modifier_stamina')
     if not stamina then return end
-
-    STAMINA_HEROES_CONSUMPTION_EXEPTIONS = {
-        npc_arena_hero_saitama = 0,
-        npc_arena_hero_shinobu = 33,
-        npc_arena_hero_sans = 200,
-        --npc_dota_hero_life_stealer = true,
-        npc_dota_hero_tiny = 0,
-        npc_dota_hero_sniper = 40,
-        npc_dota_hero_gyrocopter = 30,
-    }
 
     local unreliable_damage = parent:GetAverageTrueAttackDamage(self) -
         parent:GetReliableDamage() -
@@ -440,13 +388,22 @@ function Attributes:UpdateStaminaCost(parent)
         end
     end
     bonus_damage = bonus_damage - (parent.FeastBonusDamage or 0) - (parent.PiercingBladeBonusDamage or 0) -
-    (parent.SoulcutterBonusDamage or 0)
+        (parent.SoulcutterBonusDamage or 0)
     unreliable_damage = unreliable_damage +
         (bonus_damage > 1000 and
             bonus_damage - 1000 or 0)
 
+    local power_stone = parent:HasModifier("modifier_power_stone") and
+        1 -
+        parent:FindModifierByName("modifier_power_stone"):GetAbility():GetSpecialValueFor(
+            "stamina_drain_reduction_unique") * 0.01 or 1
+    local fragment_of_hate = parent:HasModifier('modifier_sara_fragment_of_hate_damage') and
+        1 -
+        parent:FindModifierByName('modifier_sara_fragment_of_hate_damage'):GetAbility():GetSpecialValueFor(
+        "stamina_drain_reduction") * 0.01 or 1
     local decrease_cost_multiplier = parent.decrease_stamina_cost_mult *
-        (parent:HasModifier('modifier_arena_rune_tripledamage') and 0.1 or 1)
+        (parent:HasModifier('modifier_arena_rune_tripledamage') and 0.1 or 1) *
+        (parent:GetPrimaryAttribute() == 0 and power_stone or 1) * fragment_of_hate
 
     local exeptions = 1
     local name = parent:GetFullName()
@@ -470,28 +427,136 @@ function Attributes:UpdateSpellDamage(parent)
         mind_stone = mind_stone:GetAbility()
         mind_stone_mult = mind_stone:GetSpecialValueFor("bonus_spell_damage")
     end
+    local all_damage_bonus_pct_mult = parent.addictive_damage_multiplier and
+        parent.addictive_damage_multiplier * 100 or 0
+    local low_mana_mult = GetLowManaMultiplier(parent.DamageMultiplier, parent,
+        SPEND_MANA_PER_DAMAGE_MULT_THRESHOLD,
+        SPEND_MANA_PER_DAMAGE_MAX_REDUCE_THRESHOLD)
+    local strength_mult = parent:IsStrengthCritReady() and (parent:GetStrengthCritMultiplier()) / 3 or
+        0
+    -- print('strength_mult: ' .. strength_mult)
     local agility_mult = ((parent.DamageMultiplier or 1) - 1) * 100
+    local intellect_mult = parent:FindModifierByName("modifier_intelligence_primary_bonus") and
+        parent:FindModifierByName("modifier_intelligence_primary_bonus"):GetStackCount() or 0
     local spell_mult = 1 + (parent:GetSpellAmplification(false) or 0)
-    parent:SetNetworkableEntityInfo("SpellAmp",
-        agility_mult *
-        spell_mult +
-        mind_stone_mult * spell_mult * (1 + agility_mult * 0.01))
+
+    -- print('calc strength mult: ' .. strength_mult * spell_mult * (1 + mind_stone_mult * 0.01) * (1 + intellect_mult * 0.01) * (1 + all_damage_bonus_pct_mult * 0.01))
+
+    -- print(low_mana_mult)
+
+    local function formula()
+        return
+            (agility_mult * spell_mult
+                +
+                mind_stone_mult * spell_mult * (1 + agility_mult * 0.01)
+                +
+                intellect_mult * spell_mult * (1 + agility_mult * 0.01) * (1 + mind_stone_mult * 0.01)
+                +
+                all_damage_bonus_pct_mult * spell_mult * (1 + agility_mult * 0.01) * (1 + mind_stone_mult * 0.01) * (1 + intellect_mult * 0.01)
+                +
+                strength_mult * spell_mult * (1 + mind_stone_mult * 0.01) * (1 + intellect_mult * 0.01) * (1 + all_damage_bonus_pct_mult * 0.01))
+    end
+
+    -- print('formula: ' .. (spell_mult * 100 - 100) * (1 - low_mana_mult))
+
+    parent.client_spell_amp = formula() * low_mana_mult - (spell_mult * 100 - 100) * (1 - low_mana_mult) -
+    100 * (1 - low_mana_mult)
+    -- parent:SetNetworkableEntityInfo("SpellAmp",
+    --     parent.client_spell_amp)
+
+    return parent.client_spell_amp or 0
+end
+
+--------------------------------------------------------------------------
+
+function Attributes:CheckModifiers(parent)
+    local modifiers = parent:FindAllModifiers()
+    local value1
+    local value2
+    local value3
+    local value4
+    parent.bonus_gold_pct = 0
+    parent.decrease_stamina_cost_mult = 1
+    parent.addictive_multiplier = 0
+    parent.creeps_damage_multiplier = 0
+    for _, modifier in ipairs(modifiers) do
+        value1 = self:UpdateGoldMultiplier(parent, modifier, value1)
+        value2 = self:CheckExeptionsInModifiersForStamina(parent, modifier, value2)
+        value3 = self:UpdateDamageMultipliers(parent, modifier, value3,
+            'all_damage_bonus_pct')
+        value4 = self:UpdateDamageMultipliers(parent, modifier, value4,
+            'creep_bonus_damage')
+    end
     parent:SetNetworkableEntityInfo('InstakillResistance', math.min(100, math.floor(parent:GetInstakillResist())))
+    -- print('bonus gold pct: ' .. parent.bonus_gold_pct)
+    -- print('decrease stamina cost mult: ' .. parent.decrease_stamina_cost_mult)
+end
+
+function Attributes:UpdateDamageMultipliers(parent, modifier, addictive_multiplier, key)
+    local ability = modifier:GetAbility()
+    local value
+    if ability then
+        value = ability:GetSpecialValueFor(key)
+    end
+    if value then
+        addictive_multiplier = (addictive_multiplier or 0) + value * 0.01
+        parent[key] = addictive_multiplier
+    end
+    return addictive_multiplier
+end
+
+function Attributes:UpdateGoldMultiplier(parent, modifier, bonus_gold)
+    -- print(parent:GetName())
+    if modifier and modifier:GetAbility() ~= nil then
+        local value = modifier:GetAbility():GetSpecialValueFor("bonus_gold_pct")
+        -- print(modifier:GetName() .. ', ' .. value)
+        if value ~= 0 then
+            bonus_gold = (bonus_gold or 0) + value
+            parent.bonus_gold_pct = bonus_gold
+        end
+    end
+    return bonus_gold
+end
+
+function Attributes:CheckExeptionsInModifiersForStamina(parent, modifier, returned_value)
+    -- print(parent:GetName())
+    if modifier and modifier:GetAbility() ~= nil then
+        local value = modifier:GetAbility():GetSpecialValueFor("stamina_drain_reduction")
+        if modifier:GetDuration() > 0 and (modifier:GetDuration() < 999 and not modifier:IsDebuff() and value > 0) or modifier:GetName() == "modifier_power_stone" then
+            -- print(modifier:GetName() .. ', ' .. value)
+            if value ~= 0 then
+                returned_value = (returned_value or 1) * (1 - value * 0.01)
+                parent.decrease_stamina_cost_mult = returned_value
+            end
+        end
+    end
+    return returned_value
+end
+
+-------------------------------------------------------------------------
+
+function Attributes:UpdateCurrentAttribute(parent, at_ind)
+    if at_ind == 0 then
+        self:UpdateStrength(parent)
+    elseif at_ind == 1 then
+        self:UpdateAgility(parent)
+    elseif at_ind == 2 then
+        self:UpdateIntelligence(parent)
+    elseif at_ind == 4 then
+        self:UpdateDamage(parent)
+    end
 end
 
 function Attributes:UpdateAll(parent, timer)
+    print('update all')
     if parent and not parent._cooldown then
         parent._cooldown = true
         Timers:CreateTimer(timer or 0, function()
             parent._cooldown = false
             self:CheckModifiers(parent)
-            -- print('bonus gold pct: ' .. parent.bonus_gold_pct)
-            -- print('decrease stamina cost mult: ' .. parent.decrease_stamina_cost_mult)
             self:UpdateStrength(parent)
             self:UpdateAgility(parent)
             self:UpdateIntelligence(parent)
-            self:UpdateDamageMultipliers(parent)
-            self:UpdateStaminaCost(parent)
         end)
     end
 end

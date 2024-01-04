@@ -272,6 +272,11 @@
 				"var_type"				"FIELD_FLOAT"
 				"ghostform_duration_scepter"	"1.0"
 			}
+			"06"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"penalty_duration"		"120"
+			}
 		}
 
 		"precache"
@@ -315,6 +320,7 @@
 			}
 			"modifier_kadash_immortality_health_penalty"
 			{
+				"Duration"			"%penalty_duration"
 				"IsPurgable"		"0"
 
 			}

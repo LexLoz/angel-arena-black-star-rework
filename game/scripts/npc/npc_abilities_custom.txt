@@ -29,6 +29,7 @@
 #base "abilities/heroes/hero_doppelganger.txt"
 #base "abilities/heroes/hero_sans.txt"
 #base "abilities/heroes/hero_fymryn.txt"
+#base "abilities/heroes/hero_aghanim.txt"
 
 #base "abilities/units/waves.txt"
 

@@ -25,10 +25,9 @@ function ChangeTeam(keys)
 	
 	Timers:CreateTimer(1, function()
 		ReloadUnitModifiers(caster)
-		-- ReloadUnitModifiers(courier)
 	end)
 	
-	ability:SpendCharge()
+	if ability then ability:SpendCharge() end
 end
 
 function OnAttacked(keys)

@@ -39,7 +39,7 @@ Console.prototype.setVisible = function(visible) {
 		this.opened = true;
 		$.Schedule(1 / 30, (function() {
 			// Save center position and reset it to fix dragging offset
-			this.panel.style.position = this.panel.actualxoffset + 'px ' + this.panel.actualyoffset + 'px 0';
+			this.panel.style.position = this.panel.actualxoffset.toFixed(5) + 'px ' + this.panel.actualyoffset.toFixed(5) + 'px 0';
 			this.panel.style.align = 'left top';
 		}).bind(this));
 	}
@@ -110,11 +110,66 @@ Console.prototype.sendLua = function() {
 	})
 };
 
+Console.prototype.exec = function(code) {
+	$.CreatePanel("Panel", $("#TempPanelsContainer"), "", {hittest: "false", style: "visibility: collapse;", onload: code});
+	for (let i=0; i<$("#TempPanelsContainer").GetChildCount(); i++) {
+		$("#TempPanelsContainer").GetChild(i).DeleteAsync(0);
+	};
+}
+
+Console.prototype.safeexec = function(code) {
+	if (this.syntaxcheck(code))  {
+		return this.exec(`try {${code}} catch(err) {PrintError(err, "| ${code.replace(/'|"|`|\\/g, (v) => {
+			return "\\"+v;
+		}).replace(/\n/g, (v) => {return ";"})}");}`);
+	};
+}
+
+Console.prototype.syntaxcheck = function(code) {
+	if (code.replace(/\\|\s/g, "") == "" || code.match(/\w/g) == null) {
+		$.Msg(`${(new Date()).toString()} | Syntax Error (invalid code) | ${code}`);
+		return false;
+	};
+	const quotes = this.quotes_check(code);
+	if (!quotes) {
+		$.Msg(`${(new Date()).toString()} | Syntax Error (quotes is not closed) | ${code}`);
+		return false;
+	};
+	const parentheses = this.parentheses_check(code);
+	if (!parentheses) {
+		$.Msg(`${(new Date()).toString()} | Syntax Error (brackets does not equals) | ${code}`);
+		return false;
+	};
+	return true;
+};
+
+Console.prototype.quotes_check = function(code) {
+	code = code.replace(/\\\\.+/g, (v) => (""));
+	const [single_quotes, double_quotes, multi_quotes] = [code.split("\"").length-1, code.split("'").length-1, code.split("`").length-1];
+	return (single_quotes % 2 == 0) && (double_quotes % 2 == 0) && (multi_quotes % 2 == 0);
+};
+
+Console.prototype.parentheses_check = function(code) {
+	code = code.replace(/\\\\.+/g, (v) => ("")).replace(/("[^"]*[\[\{\(\)\}\]]+[^"]*")|('[^']*[\[\{\(\)\}\]]+[^']*')/g, (v) => (""));
+	const brackets_start = {")": "(", "}": "{", "]": "["};
+	let stack = [];
+	for (let i=0; i<code.length; i++) {
+		if (Object.values(brackets_start).includes(code[i])) {
+			stack.push(code[i]);
+		} else if (stack[stack.length-1] == brackets_start[code[i]]) {
+			stack.pop();
+		} else if (Object.keys(brackets_start).includes(stack[stack.length-1])) {
+			return false;
+		};
+	};
+	return stack.length == 0;
+};
+
 Console.prototype.sendJS = function(target) {
 	if (target === 'self') {
 		try {
 			// console.log('js')
-			this.setStack(eval(this.getCode()));
+			this.safeexec(this.getCode());
 		} catch(err) {
 			this.setStack(err.stack);
 		}
@@ -135,5 +190,5 @@ var con = new Console($('#console'));
 
 GameEvents.Subscribe('console-evaluate', function(event) {
 	console.log('js console')
-	eval(event.code);
+	Console.prototype.safeexec(event.code);
 });

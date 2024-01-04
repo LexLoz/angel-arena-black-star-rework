@@ -273,7 +273,7 @@ function UpdatePanoramaHUD() {
 function UpdateGoldLabel(playerTeam, unit, label) {
 	if (playerTeam === Entities.GetTeamNumber(unit) || Players.IsSpectator(Game.GetLocalPlayerID())) {
 		var ownerId = Entities.GetPlayerOwnerID(unit);
-		label.text = NumberReduction(GetPlayerGold(ownerId === -1 ? Game.GetLocalPlayerID() : ownerId), 0, 10);
+		label.text = NumberReduction(GetPlayerGold(unit), 0, 10);
 	} else {
 		label.text = '';
 	}
@@ -452,10 +452,10 @@ function HookPanoramaPanels() {
 
 			//print(MANA_PER_INT)
 
-			var BASE_DAMAGE_PER_STRENGTH = custom_entity_value.CustomBaseDamage != null ? custom_entity_value.CustomBaseDamage / STR : constants.BASE_DAMAGE_PER_STRENGTH
+			// var BASE_DAMAGE_PER_STRENGTH = custom_entity_value.CustomBaseDamage != null ? custom_entity_value.CustomBaseDamage / STR : constants.BASE_DAMAGE_PER_STRENGTH
 			// print('BASE_DAMAGE_PER_STRENGTH: ' + custom_entity_value.CustomBaseDamage)
 
-			var AGILITY_DAMAGE_MULTIPLIER = constants.BASE_AGILITY_DAMAGE_AMPLIFY
+			var AGILITY_DAMAGE_MULTIPLIER = constants.AGILITY_DAMAGE_AMPLIFY
 
 			//мана
 			//if (custom_entity_value.IntMana != null) 
@@ -544,6 +544,10 @@ function HookPanoramaPanels() {
 				DOTAHUDDamageArmorTooltip.SetDialogVariable('agility_per_level', custom_entity_value.AttributeAgilityGain.toFixed(1));
 			if (custom_entity_value.AttributeIntelligenceGain != null)
 				DOTAHUDDamageArmorTooltip.SetDialogVariable('intelligence_per_level', custom_entity_value.AttributeIntelligenceGain.toFixed(1));
+			if (custom_entity_value.AttributeAllGain != null)
+				DOTAHUDDamageArmorTooltip.SetDialogVariable('all_per_level', custom_entity_value.AttributeAllGain.toFixed(1));
+
+			print(custom_entity_value.AttributeAllGain)
 
 			// if (custom_entity_value.ReliableStr != null)
 			// 	DOTAHUDDamageArmorTooltip.SetDialogVariable('reliable_strength', NumberReduction(custom_entity_value.ReliableStr, 0));
@@ -562,15 +566,15 @@ function HookPanoramaPanels() {
 			let bonus_str
 			let bonus_agi
 			let bonus_int
-			if (custom_entity_value.BonusStr) {
+			if (custom_entity_value.BonusStr != null) {
 				bonus_str = Math.min(500, custom_entity_value.BonusStr)
 				DOTAHUDDamageArmorTooltip.SetDialogVariable('bonus_strength', '+ ' + NumberReduction(bonus_str, 0));
 			}
-			if (custom_entity_value.BonusAgi) {
+			if (custom_entity_value.BonusAgi != null) {
 				bonus_agi = Math.min(500, custom_entity_value.BonusAgi)
 				DOTAHUDDamageArmorTooltip.SetDialogVariable('bonus_agility', '+ ' + NumberReduction(bonus_agi, 0));
 			}
-			if (custom_entity_value.BonusInt) {
+			if (custom_entity_value.BonusInt != null) {
 				bonus_int = Math.min(500, custom_entity_value.BonusInt)
 				DOTAHUDDamageArmorTooltip.SetDialogVariable('bonus_intelligence', '+ ' + NumberReduction(bonus_int, 0));
 			}

@@ -39,8 +39,8 @@ if IsServer() then
 				target:EmitSound("Hero_SkeletonKing.CriticalStrike")
 				local pfx = ParticleManager:CreateParticle("particles/units/heroes/hero_phantom_assassin/phantom_assassin_crit_impact.vpcf", PATTACH_CUSTOMORIGIN, attacker)
 				ParticleManager:SetParticleControlEnt(pfx, 1, target, PATTACH_POINT_FOLLOW, "follow_origin", target:GetAbsOrigin(), true)
-				target:InstaKill(ability, attacker, true, false, false)
 				if target:IsRealHero() then
+					target:InstaKill(ability, attacker, true, false, false)
 					CreateGlobalParticle("particles/arena/units/heroes/hero_skeletonking/alternative_vsolyanova_screen.vpcf", function(particle)
 						Timers:CreateTimer(duration, function()
 							ParticleManager:DestroyParticle(particle, false)
@@ -58,6 +58,8 @@ if IsServer() then
 							ability:ApplyDataDrivenModifier(attacker, v, "modifier_silence", {duration=duration})
 						end
 					end
+				else
+					target:TrueKill(ability, attacker)
 				end
 			end
 		end

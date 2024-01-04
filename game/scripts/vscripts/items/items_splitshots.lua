@@ -5,25 +5,25 @@ item_nagascale_bow = {
 	GetIntrinsicModifierName = function() return "modifier_item_nagascale_bow" end,
 }
 
-	--[[function item_nagascale_bow:OnProjectileHit(hTarget)
+if IsServer() then
+	function item_nagascale_bow:OnProjectileHit(hTarget)
 		if not hTarget then return end
 		local caster = self:GetCaster()
 		if caster:IsIllusion() then return end
-		local number = #caster:FindAllModifiersByName(self:GetIntrinsicModifierName())
+		-- local number = #caster:FindAllModifiersByName(self:GetIntrinsicModifierName())
 
-		--self.NoDamageAmp = true
-		ApplyDamage({
-			attacker = caster,
-			victim = hTarget,
-			damage_type = DAMAGE_TYPE_PHYSICAL,
-			damage = caster:GetAverageTrueAttackDamage(target) * self:GetSpecialValueFor("split_damage_pct") * 0.01 * number,
-			damage_flags = DOTA_DAMAGE_FLAG_NO_DAMAGE_MULTIPLIERS,
-			ability = self
-		})
+		-- ApplyDamage({
+		-- 	attacker = caster,
+		-- 	victim = hTarget,
+		-- 	damage_type = DAMAGE_TYPE_PHYSICAL,
+		-- 	damage = caster:GetAverageTrueAttackDamage(hTarget) * self:GetSpecialValueFor("split_damage_pct") * 0.01 * number,
+		-- 	damage_flags = DOTA_DAMAGE_FLAG_NO_DAMAGE_MULTIPLIERS,
+		-- 	ability = self
+		-- })
 
 		hTarget:EmitSound("Hero_Medusa.AttackSplit")
-	end]]
---end
+	end
+end
 
 item_splitshot_ultimate = {
 	GetIntrinsicModifierName = function() return "modifier_item_splitshot_ultimate" end,
@@ -44,7 +44,7 @@ function modifier_item_nagascale_bow:DeclareFunctions()
 		MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
 		MODIFIER_PROPERTY_STATS_AGILITY_BONUS,
 		MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
-		--MODIFIER_EVENT_ON_ATTACK,
+		MODIFIER_EVENT_ON_ATTACK,
 	}
 end
 function modifier_item_nagascale_bow:GetModifierPreAttack_BonusDamage()
@@ -65,7 +65,7 @@ local modifier_item_nagascale_bow_projectiles = fireSplitshotProjectilesFactory(
 	"split_radius"
 )
 
---[[function modifier_item_nagascale_bow:OnAttack(keys)
+function modifier_item_nagascale_bow:OnAttack(keys)
 	local target = keys.target
 	local attacker = keys.attacker
 	local ability = self:GetAbility()
@@ -74,14 +74,14 @@ local modifier_item_nagascale_bow_projectiles = fireSplitshotProjectilesFactory(
 	if attacker:FindModifierByName("modifier_splash_timer") then
 		return
 	end
-	--modifier_item_nagascale_bow_projectiles(attacker, target, ability)
-end]]
+	modifier_item_nagascale_bow_projectiles(attacker, target, ability)
+end
 
 LinkLuaModifier("modifier_item_splitshot_ultimate", "items/items_splitshots.lua", LUA_MODIFIER_MOTION_NONE)
 modifier_item_splitshot_ultimate = factorySYK(
 	{ sange = true, yasha = true, kaya = true },
 	{
-		--MODIFIER_EVENT_ON_ATTACK,
+		MODIFIER_EVENT_ON_ATTACK,
 		MODIFIER_EVENT_ON_ABILITY_START
 	}
 )
@@ -100,9 +100,9 @@ function modifier_item_splitshot_ultimate:OnAttack(keys)
 		return
 	end
 
-	--modifier_item_splitshot_ultimate_projectiles(attacker, target, ability)
+	modifier_item_splitshot_ultimate_projectiles(attacker, target, ability)
 
-	--[[if RollPercentage(ability:GetSpecialValueFor("global_attack_chance_pct")) then
+	if RollPercentage(ability:GetSpecialValueFor("global_attack_chance_pct")) then
 		local units = FindUnitsInRadius(
 			attacker:GetTeamNumber(),
 			Vector(0, 0, 0),
@@ -122,5 +122,5 @@ function modifier_item_splitshot_ultimate:OnAttack(keys)
 		projectile_info.iVisionRadius = 50
 		projectile_info.iVisionTeamNumber = attacker:GetTeamNumber()
 		ProjectileManager:CreateTrackingProjectile(projectile_info)
-	end]]
+	end
 end

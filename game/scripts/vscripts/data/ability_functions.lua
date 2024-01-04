@@ -1,45 +1,22 @@
 -- Percentage
 BOSS_DAMAGE_ABILITY_MODIFIERS = {
-	--zuus_static_field = 5,
-	--item_blade_mail = 40,
-	--centaur_return = 15,
-	enigma_midnight_pulse = 15,
-	enigma_black_hole = 200,
-	--techies_suicide = 25,
-	lina_laguna_blade = 200,
-	lion_finger_of_death = 200,
-	--shredder_chakram_2 = 40,
-	--shredder_chakram = 40,
-	--sniper_shrapnel = 40,
-	abyssal_underlord_firestorm = 15,
-	bristleback_quill_spray = 50,
-	--centaur_hoof_stomp = 40,
-	--centaur_double_edge = 40,
-	kunkka_ghostship = 200,
-	kunkka_torrent = 200,
-	ember_spirit_flame_guard = 200,
-	sandking_sand_storm = 200,
-	antimage_mana_void = 25,
-	doom_bringer_infernal_blade = 10,
-	winter_wyvern_arctic_burn = 10,
 	freya_ice_cage = 25,
-	--tinker_march_of_the_machines = 2000,
 	necrolyte_reapers_scythe = 25,
-	huskar_life_break = 20,
-	huskar_burning_spear_arena = 10,
-	phantom_assassin_fan_of_knives = 15,
-	item_unstable_quasar = 15,
-	venomancer_poison_nova = 25,
-	venomancer_noxious_plague = 15,
-	phoenix_sun_ray = 10,
-	zuus_arc_lightning = 15,
-	muerta_pierce_the_veil = 33,
-	witch_doctor_maledict = 25,
+	huskar_burning_spear_arena = 20,
+	item_unstable_quasar = 75,
 
-	item_piercing_blade = 5,
-	item_soulcutter = 10,
-	item_revenants_brooch = 200,
-	item_witch_blade = 600,
+	item_essential_orb_fire_1 = 250,
+	item_essential_orb_fire_2 = 250,
+	item_essential_orb_fire_3 = 250,
+	item_essential_orb_fire_4 = 250,
+	item_essential_orb_fire_5 = 250,
+	item_essential_orb_fire_6 = 250,
+
+	item_radiance_arena = 250,
+	item_radiance_2 = 250,
+	item_radiance_3 = 250,
+	item_radiance_frozen = 250,
+	item_spirit_vessel = 15,
 }
 
 local function OctarineLifesteal(attacker, victim, inflictor, damage, _, damage_flags, itemname, cooldownModifierName)
@@ -59,7 +36,7 @@ local function OctarineLifesteal(attacker, victim, inflictor, damage, _, damage_
 		end
 
 		local item = FindItemInInventoryByName(attacker, itemname, false)
-		if item and RollPercentage(GetAbilitySpecial(itemname, "bash_chance")) and not attacker:HasModifier(cooldownModifierName) then
+		if item and RollPseudoRandomPercentage(GetAbilitySpecial(itemname, "bash_chance"), DOTA_PSEUDO_RANDOM_ITEM_BASHER, attacker) and not attacker:HasModifier(cooldownModifierName) then
 			victim:AddNewModifier(attacker, item, "modifier_stunned",
 				{ duration = GetAbilitySpecial(itemname, "bash_duration") })
 			item:ApplyDataDrivenModifier(attacker, attacker, cooldownModifierName, {})
@@ -69,10 +46,12 @@ end
 
 ON_DAMAGE_MODIFIER_PROCS = {
 	modifier_item_octarine_core_arena = function(attacker, victim, inflictor, damage, damagetype_const, damage_flags)
+		if victim:IsIllusion() or victim:IsStrongIllusion() then return end
 		OctarineLifesteal(attacker, victim, inflictor, damage, damagetype_const, damage_flags, "item_octarine_core_arena",
 			"modifier_octarine_bash_cooldown")
 	end,
 	modifier_item_refresher_core = function(attacker, victim, inflictor, damage, damagetype_const, damage_flags)
+		if victim:IsIllusion() or victim:IsStrongIllusion() then return end
 		OctarineLifesteal(attacker, victim, inflictor, damage, damagetype_const, damage_flags, "item_refresher_core",
 			"modifier_octarine_bash_cooldown")
 	end,
@@ -84,7 +63,7 @@ ON_DAMAGE_MODIFIER_PROCS = {
 	-- end,
 	modifier_item_golden_eagle_relic = function(attacker, victim, inflictor, damage, damagetype_const)
 		--print('golden eagle')
-		if not IsValidEntity(inflictor) then
+		if not IsValidEntity(inflictor) and not victim:IsIllusion() and not victim:IsStrongIllusion() then
 			if damagetype_const == DAMAGE_TYPE_PHYSICAL then
 				local LifestealPercentage = GetAbilitySpecial("item_golden_eagle_relic", "lifesteal_pct")
 				local armor = victim:GetPhysicalArmorValue(false)
@@ -103,7 +82,7 @@ ON_DAMAGE_MODIFIER_PROCS = {
 	end,
 	modifier_talent_lifesteal = function(attacker, victim, inflictor, _, damagetype_const)
 		local lifesteal = 0
-		if not IsValidEntity(inflictor) then
+		if not IsValidEntity(inflictor) and not victim:IsIllusion() and not victim:IsStrongIllusion() then
 			if damagetype_const == DAMAGE_TYPE_PHYSICAL then
 				local stacks = attacker:GetModifierStackCount("modifier_talent_lifesteal", attacker)
 				local armor = victim:GetPhysicalArmorValue(false)
@@ -121,7 +100,7 @@ ON_DAMAGE_MODIFIER_PROCS = {
 	end,
 	modifier_shinobu_vampire_blood = function(attacker, victim, inflictor, damage, damagetype_const)
 		if not IsValidEntity(inflictor) then
-			if damagetype_const == DAMAGE_TYPE_PHYSICAL then
+			if damagetype_const == DAMAGE_TYPE_PHYSICAL and not victim:IsIllusion() and not victim:IsStrongIllusion() then
 				local caster = attacker
 				local ability = caster:FindAbilityByName('shinobu_vampire_blood')
 				local pct = ability:GetAbilitySpecial("lifesteal_pct_lvl" .. ability.CurrentLevel)
@@ -193,53 +172,94 @@ ON_DAMAGE_MODIFIER_PROCS_VICTIM = {
 -- 	}
 -- }
 
-ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS = {
-	modifier_item_desolator6_arena = {
-		addictive_multiplier = function()
-			return 1 + GetAbilitySpecial("item_desolator6", "all_damage_bonus_pct") * 0.01
-		end
-	},
-	modifier_item_demons_paw = {
-		addictive_multiplier = function()
-			return 1 + GetAbilitySpecial("item_demons_paw", "all_damage_bonus_pct") * 0.01
-		end
-	},
-	modifier_kadash_assasins_skills = {
-		addictive_multiplier = function(attacker)
-			local ability = attacker:FindAbilityByName("kadash_assasins_skills")
-			if ability then
-				return 1 + ability:GetSpecialValueFor("all_damage_bonus_pct") * 0.01
-			end
-		end
-	},
-	modifier_item_ultimate_splash = {
-		addictive_multiplier = function()
-			return 1 + GetAbilitySpecial("item_ultimate_splash", "all_damage_bonus_pct") * 0.01
-		end
-	},
-	modifier_item_scythe_of_the_ancients_passive = {
-		addictive_multiplier = function()
-			return 1 + GetAbilitySpecial("item_scythe_of_the_ancients", "all_damage_bonus_pct") * 0.01
-		end
-	},
-	modifier_item_soulcutter = {
-		addictive_multiplier = function()
-			return 1 + GetAbilitySpecial("item_soulcutter", "all_damage_increase") * 0.01
-		end
-	},
-	modifier_item_diffusal_style = {
-		addictive_multiplier = function()
-			return 1 + GetAbilitySpecial("item_diffusal_style", "all_damage_increase") * 0.01
-		end
-	},
+-- CREEPS_DAMAGE_MULTIPLIER = {
+-- 	modifier_item_quelling_fury = {
+-- 		addictive_multiplier = function(attacker)
+-- 			local ability = attacker:FindModifierByName("item_quelling_fury") and attacker:FindModifierByName("item_quelling_fury"):GetAbility()
+-- 			if ability then
+-- 				return 1 + ability:GetSpecialValueFor("creep_bonus_damage") * 0.01
+-- 			end
+-- 			return 1
+-- 		end
+-- 	},
 
-	modifier_item_behelit_buff = {
-		addictive_multiplier = function(attacker)
-			local damage_bonus = attacker:GetNetworkableEntityInfo("behelit_damage_bonus")
-			return 1 + damage_bonus * 0.01
-		end
-	}
-}
+-- 	modifier_item_battlefury_arena = {
+-- 		addictive_multiplier = function(attacker)
+-- 			local ability = attacker:FindModifierByName("item_battlefury_arena") and attacker:FindModifierByName("item_battlefury_arena"):GetAbility()
+-- 			if ability then
+-- 				return 1 + ability:GetSpecialValueFor("creep_bonus_damage") * 0.01
+-- 			end
+-- 			return 1
+-- 		end
+-- 	},
+
+-- 	modifier_item_elemental_fury = {
+-- 		addictive_multiplier = function(attacker)
+-- 			local ability = attacker:FindModifierByName("item_elemental_fury") and  attacker:FindModifierByName("item_elemental_fury"):GetAbility()
+-- 			if ability then
+-- 				return 1 + ability:GetSpecialValueFor("creep_bonus_damage") * 0.01
+-- 			end
+-- 			return 1
+-- 		end
+-- 	},
+
+-- 	modifier_item_ultimate_splash = {
+-- 		addictive_multiplier = function(attacker)
+-- 			local ability = attacker:FindModifierByName("item_ultimate_splash") and attacker:FindModifierByName("item_ultimate_splash"):GetAbility()
+-- 			if ability then
+-- 				return 1 + ability:GetSpecialValueFor("creep_bonus_damage") * 0.01
+-- 			end
+-- 			return 1
+-- 		end
+-- 	},
+-- }
+
+-- ON_ADDICTIVE_DAMAGE_MODIFIER_PROCS = {
+-- 	modifier_item_desolator6_arena = {
+-- 		addictive_multiplier = function()
+-- 			return 1 + GetAbilitySpecial("item_desolator6", "all_damage_bonus_pct") * 0.01
+-- 		end
+-- 	},
+-- 	modifier_item_demons_paw = {
+-- 		addictive_multiplier = function()
+-- 			return 1 + GetAbilitySpecial("item_demons_paw", "all_damage_bonus_pct") * 0.01
+-- 		end
+-- 	},
+-- 	modifier_kadash_assasins_skills = {
+-- 		addictive_multiplier = function(attacker)
+-- 			local ability = attacker:FindAbilityByName("kadash_assasins_skills")
+-- 			if ability then
+-- 				return 1 + ability:GetSpecialValueFor("all_damage_bonus_pct") * 0.01
+-- 			end
+-- 		end
+-- 	},
+-- 	modifier_item_ultimate_splash = {
+-- 		addictive_multiplier = function()
+-- 			return 1 + GetAbilitySpecial("item_ultimate_splash", "all_damage_bonus_pct") * 0.01
+-- 		end
+-- 	},
+-- 	modifier_item_scythe_of_the_ancients_passive = {
+-- 		addictive_multiplier = function()
+-- 			return 1 + GetAbilitySpecial("item_scythe_of_the_ancients", "all_damage_bonus_pct") * 0.01
+-- 		end
+-- 	},
+-- 	modifier_item_soulcutter = {
+-- 		addictive_multiplier = function()
+-- 			return 1 + GetAbilitySpecial("item_soulcutter", "all_damage_bonus_pct") * 0.01
+-- 		end
+-- 	},
+-- 	modifier_item_diffusal_style = {
+-- 		addictive_multiplier = function()
+-- 			return 1 + GetAbilitySpecial("item_diffusal_style", "all_damage_bonus_pct") * 0.01
+-- 		end
+-- 	},
+-- 	modifier_item_behelit_buff = {
+-- 		addictive_multiplier = function(attacker)
+-- 			local damage_bonus = attacker.behelit_bonus_damage
+-- 			return 1 + damage_bonus * 0.01
+-- 		end
+-- 	},
+-- }
 
 OUTGOING_DAMAGE_MODIFIERS = {
 	modifier_item_desolator6_arena = function(attacker, victim, inflictor, damage, damagetype_const, damage_flags,
@@ -253,16 +273,18 @@ OUTGOING_DAMAGE_MODIFIERS = {
 				ability:GetSpecialValueFor('ignore_base_armor_chance')
 
 			if ability:IsCooldownReady() then
-				if RollPercentage(chance) then
+				if RollPseudoRandomPercentage(chance, DOTA_PSEUDO_RANDOM_DROW_MARKSMANSHIP, attacker) then
 					ability:AutoStartCooldown()
 
 					local base_armor = (victim:GetPhysicalArmorValue(false) -
-						(victim:GetPhysicalArmorValue(true) < 0 and math.abs(victim:GetPhysicalArmorValue(true)) or victim:GetPhysicalArmorValue(true))) * 0.75
+						(victim:GetPhysicalArmorValue(true) < 0 and math.abs(victim:GetPhysicalArmorValue(true)) or victim:GetPhysicalArmorValue(true))) *
+					(ability:GetSpecialValueFor('ignored_armor') * 0.01)
 					local total_armor = victim:GetPhysicalArmorValue(false)
 					local ignored_armor = base_armor > total_armor and total_armor or base_armor
 					local ignored_armor_mult = CalculatePhysicalResist(victim, total_armor - ignored_armor)
 
-					local multiplier = OutgoingDamageModifiers(attacker, victim, inflictor, damage, damagetype_const, damage_flags)
+					local multiplier = OutgoingDamageModifiers(attacker, victim, inflictor, damage, damagetype_const,
+						damage_flags)
 					-- for k, v in pairs(OUTGOING_DAMAGE_MODIFIERS) do
 					-- 	if k ~= mod_name and attacker:HasModifier(k) and (type(v) ~= "table" or not v.condition or (v.condition and v.condition(attacker, victim, inflictor, damage, damagetype_const, damage_flags, saved_damage))) then
 					-- 		if multiplier == 0 then break end
@@ -298,8 +320,9 @@ OUTGOING_DAMAGE_MODIFIERS = {
 		condition = function(_, _, inflictor)
 			return not inflictor
 		end,
-		multiplier = function()
-			return 0
+		multiplier = function(attacker)
+			local ability = attacker:FindAbilityByName("anakim_wisps")
+			return ability:GetSpecialValueFor("physical_damage_pct") * 0.01
 		end
 	},
 	modifier_kadash_strike_from_shadows = {
@@ -311,7 +334,6 @@ OUTGOING_DAMAGE_MODIFIERS = {
 			attacker:RemoveModifierByName("modifier_kadash_strike_from_shadows")
 			attacker:RemoveModifierByName("modifier_invisible")
 			if kadash_strike_from_shadows then
-				kadash_strike_from_shadows.NoDamageAmp = true
 				ApplyDamage({
 					victim = victim,
 					attacker = attacker,
@@ -327,19 +349,20 @@ OUTGOING_DAMAGE_MODIFIERS = {
 		end
 	},
 
-	modifier_stamina = function(parent, _, inflictor, _)
-		local stacks = parent:FindModifierByName("modifier_stamina"):GetStackCount()
+	-- modifier_stamina = function(parent, _, inflictor, _)
+	-- 	local stacks = parent:FindModifierByName("modifier_stamina"):GetStackCount()
 
-		if not inflictor then
-			local mult = (1 - stacks / 100) * 70 * 0.01
-			parent:CalculateStatBonus(true)
-			return 1 - mult
-		end
-	end,
+	-- 	if not inflictor then
+	-- 		local mult = (1 - stacks / 100) * STAMINA_DAMAGE_DECREASE_PCT * 0.01
+	-- 		parent:CalculateStatBonus(true)
+	-- 		return 1 - mult
+	-- 	end
+	-- 	return 1
+	-- end,
 
 	modifier_intelligence_primary_bonus = {
 		multiplier = function(attacker, victim)
-			if attacker:PassivesDisabled() or attacker:IsHexed() then return 1 end
+			if attacker:PassivesDisabled() or attacker:IsDisabled() or attacker:IsIllusion() then return 1 end
 			local mod = attacker:FindModifierByName("modifier_intelligence_primary_bonus")
 			if not mod then return 1 end
 			local max_bonus = INTELLECT_PRIMARY_BONUS_MAX_BONUS
@@ -354,23 +377,23 @@ OUTGOING_DAMAGE_MODIFIERS = {
 				local diff
 
 				if attackerInt <= victimInt then
-					mod:SetStackCount(0)
+					UpdateIntellgencePrimaryBonus(mod, 0, attacker)
 					return 1
 				end
 
 				if attackerInt > victimInt then
 					diff = attackerInt / victimInt
 					if diff >= difference then
-						mod:SetStackCount(math.round(max_bonus))
+						UpdateIntellgencePrimaryBonus(mod, math.round(max_bonus), attacker)
 						return 1 + max_bonus * 0.01
 					else
 						diff = 1 - victimInt / attackerInt
-						mod:SetStackCount(math.round(max_bonus * diff))
+						UpdateIntellgencePrimaryBonus(mod, math.round(max_bonus * diff), attacker)
 						return 1 + max_bonus * 0.01 * diff
 					end
 				end
 			elseif (attacker:IsTrueHero() or attacker:IsIllusion()) then
-				mod:SetStackCount(math.round((max_bonus / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE)))
+				UpdateIntellgencePrimaryBonus(mod, math.round((max_bonus / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE)), attacker)
 				return 1 + (max_bonus / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE) * 0.01
 			end
 		end
@@ -381,34 +404,6 @@ OUTGOING_DAMAGE_MODIFIERS = {
 			if inflictor then
 				return 1 + GetAbilitySpecial("item_mind_stone", "bonus_spell_damage") * 0.01
 			end
-		end
-	},
-
-	modifier_item_quelling_fury = {
-		multiplier = function(attacker, victim)
-			local mult = 1 + attacker:FindModifierByName("modifier_item_quelling_fury"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
-			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
-		end
-	},
-
-	modifier_item_battlefury_arena = {
-		multiplier = function(attacker, victim)
-			local mult = 1 + attacker:FindModifierByName("modifier_item_battlefury_arena"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
-			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
-		end
-	},
-
-	modifier_item_elemental_fury = {
-		multiplier = function(attacker, victim)
-			local mult = 1 + attacker:FindModifierByName("modifier_item_elemental_fury"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
-			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
-		end
-	},
-
-	modifier_item_ultimate_splash = {
-		multiplier = function(attacker, victim)
-			local mult = 1 + attacker:FindModifierByName("modifier_item_ultimate_splash"):GetAbility():GetSpecialValueFor('creep_bonus_damage') * 0.01
-			return (victim:IsCreep() and not victim:IsBoss()) and mult or 1
 		end
 	},
 
@@ -440,7 +435,7 @@ OUTGOING_DAMAGE_MODIFIERS = {
 
 	modifier_strength_crit = function(parent, victim, inflictor, damage, _, damage_flags)
 		local modifier = parent:FindModifierByName("modifier_strength_crit")
-		local mult = (modifier.strengthCriticalDamage or modifier:GetStackCount() - 100) * 0.01
+		local mult = (parent:GetStrengthCritMultiplier()) * 0.01
 
 		local proceed_crit = function()
 			SendOverheadEventMessage(nil, OVERHEAD_ALERT_CRITICAL, victim,
@@ -459,9 +454,9 @@ OUTGOING_DAMAGE_MODIFIERS = {
 					-- print('для абилок с уроном от атак: '..mult)
 					proceed_crit()
 					return mult
-
-					--для частично процентных абилок
-				elseif (SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS[inflictor:GetAbilityName()] and
+				end
+				--для частично процентных абилок
+				if (SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS[inflictor:GetAbilityName()] and
 						type(SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS[inflictor:GetAbilityName()]) == "string") then
 					local fixed_damage = inflictor:GetSpecialValueFor(SPELL_AMPLIFY_NOT_SCALABLE_MODIFIERS
 						[inflictor:GetAbilityName()])
@@ -474,10 +469,11 @@ OUTGOING_DAMAGE_MODIFIERS = {
 					--все остальные абилки
 				elseif NeedSpellAmpCondition(inflictor, inflictor:GetAbilityName(), parent, damage_flags) then
 					-- print('strength crit mult: ' .. mult)
+					-- print('spell crit: ' .. GetSpellCrit(mult))
+					-- print('damage mult: ' .. parent.DamageMultiplier)
 					mult = GenerateDamageMultiplier(damage / (parent.DamageMultiplier or 1), damage, GetSpellCrit(mult))
 					-- print('spell crit')
 					proceed_crit()
-					-- print('spell crit: ' .. GetSpellCrit(mult))
 					-- print('все остальные абилки: ' .. mult)
 					return mult
 				end
@@ -525,7 +521,7 @@ INCOMING_DAMAGE_MODIFIERS = {
 	},
 	modifier_item_timelords_butterfly = {
 		multiplier = function(_, victim)
-			if victim:IsAlive() and not victim:IsMuted() and RollPercentage(GetAbilitySpecial("item_timelords_butterfly", "dodge_chance_pct")) then
+			if victim:IsAlive() and not victim:IsMuted() and RollPseudoRandomPercentage(GetAbilitySpecial("item_timelords_butterfly", "dodge_chance_pct"), DOTA_PSEUDO_RANDOM_FACELESS_VOID_BACKTRACK, victim) then
 				ParticleManager:CreateParticle("particles/units/heroes/hero_faceless_void/faceless_void_backtrack.vpcf",
 					PATTACH_ABSORIGIN_FOLLOW, victim)
 				return false
@@ -535,7 +531,7 @@ INCOMING_DAMAGE_MODIFIERS = {
 	modifier_mirratie_sixth_sense = {
 		multiplier = function(_, victim)
 			local mirratie_sixth_sense = victim:FindAbilityByName("mirratie_sixth_sense")
-			if mirratie_sixth_sense and victim:IsAlive() and RollPercentage(mirratie_sixth_sense:GetAbilitySpecial("dodge_chance_pct")) and not victim:PassivesDisabled() then
+			if mirratie_sixth_sense and victim:IsAlive() and RollPseudoRandomPercentage(mirratie_sixth_sense:GetAbilitySpecial("dodge_chance_pct"), DOTA_PSEUDO_RANDOM_FACELESS_VOID_BACKTRACK, victim) and not victim:PassivesDisabled() then
 				ParticleManager:CreateParticle("particles/units/heroes/hero_faceless_void/faceless_void_backtrack.vpcf",
 					PATTACH_ABSORIGIN_FOLLOW, victim)
 				return 0
@@ -559,7 +555,7 @@ INCOMING_DAMAGE_MODIFIERS = {
 						return false
 					end
 				else
-					if RollPercentage(saber_instinct:GetAbilitySpecial("melee_block_chance")) then
+					if RollPseudoRandomPercentage(saber_instinct:GetAbilitySpecial("melee_block_chance"), DOTA_PSEUDO_RANDOM_FACELESS_VOID_BACKTRACK, victim) then
 						local blockPct = saber_instinct:GetAbilitySpecial("melee_damage_pct") * 0.01
 						return {
 							BlockedDamage = blockPct * damage,
@@ -612,7 +608,7 @@ INCOMING_DAMAGE_MODIFIERS = {
 						damage_type = medusa_mana_shield_arena:GetAbilityDamageType(),
 					})
 				end
-				victim:SpendMana(math.min(victim:GetMana(), mana_needed), medusa_mana_shield_arena)
+				victim:SpendMana(math.min(victim:GetMana(), math.min(2147483648, mana_needed)), medusa_mana_shield_arena)
 				local particleName = "particles/units/heroes/hero_medusa/medusa_mana_shield_impact.vpcf"
 				local particle = ParticleManager:CreateParticle(particleName, PATTACH_ABSORIGIN_FOLLOW, victim)
 				ParticleManager:SetParticleControl(particle, 0, victim:GetAbsOrigin())
@@ -649,7 +645,7 @@ INCOMING_DAMAGE_MODIFIERS = {
 	--снижение урона с наинизшим приоритетом
 	modifier_item_behelit_buff = {
 		multiplier = function(_, victim)
-			local damage_resist = victim:GetNetworkableEntityInfo("behelit_damage_resist")
+			local damage_resist = victim.behelit_damage_resist
 			return 1 - damage_resist * 0.01
 		end
 	},
@@ -682,9 +678,12 @@ INCOMING_DAMAGE_MODIFIERS = {
 	},
 	modifier_intelligence_primary_bonus = {
 		multiplier = function(attacker, victim, _, _, _, damage_flags)
-			if victim:PassivesDisabled() or victim:IsHexed() then return 1 end
+			if victim:PassivesDisabled() or victim:IsDisabled() or victim:IsIllusion() then return 1 end
 			if HasDamageFlag(damage_flags, DOTA_DAMAGE_FLAG_REFLECTION) then return 1 end
 			local mod = victim:FindModifierByName("modifier_intelligence_primary_bonus")
+			local function updateMod(stacks)
+				UpdateIntellgencePrimaryBonus(mod, stacks, victim)
+			end
 			local max_bonus = INTELLECT_PRIMARY_BONUS_MAX_BONUS
 			local difference = INTELLECT_PRIMARY_BONUS_DIFF_FOR_MAX_MULT
 			if mod.util_ then
@@ -697,23 +696,23 @@ INCOMING_DAMAGE_MODIFIERS = {
 				local diff
 
 				if attackerInt >= victimInt then
-					mod:SetStackCount(0)
+					updateMod(0)
 					return 1
 				end
 
 				if attackerInt < victimInt then
 					diff = victimInt / attackerInt
 					if diff >= difference then
-						mod:SetStackCount(math.round(max_bonus))
+						updateMod(math.round(max_bonus))
 						return 1 - max_bonus * 0.01
 					else
 						diff = 1 - attackerInt / victimInt
-						mod:SetStackCount(math.round(max_bonus * diff))
+						updateMod(math.round(max_bonus * diff))
 						return 1 - max_bonus * 0.01 * diff
 					end
 				end
 			elseif victim:IsTrueHero() and (attacker:IsCreep() or attacker:IsBoss()) then
-				mod:SetStackCount(math.round(max_bonus / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE))
+				updateMod(math.round(max_bonus / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE))
 				return 1 - (max_bonus / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE) * 0.01
 			end
 		end
@@ -746,7 +745,6 @@ INCOMING_DAMAGE_MODIFIERS = {
 							parent:EmitSound("Ability.LagunaBlade")
 							attacker:EmitSound("Ability.LagunaBladeImpact")
 
-							ability.NoDamageAmp = true
 							ApplyDamage({
 								attacker = parent,
 								victim = attacker,

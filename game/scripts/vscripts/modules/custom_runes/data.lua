@@ -80,11 +80,11 @@ RUNE_SETTINGS = {
 		sound = "Rune.Bounty",
 		GetValues = function(unit)
 			local minute = GetDOTATimeInMinutesFull()
-			local networth = Gold:GetGold(unit:GetPlayerID())
-			local MAP_MULTIPLIER = GameMode.Map_Gold_Multiplier or 1
-			local PLAYERS_COUNT_MULTIPLIER = GetPlayersCountMultiplier()
-			local gold = (125 + minute ^ 2.4) * MAP_MULTIPLIER * PLAYERS_COUNT_MULTIPLIER
-			local xp = 50 + minute ^ 3
+			-- local networth = Gold:GetGold(unit:GetPlayerID())
+			-- local MAP_MULTIPLIER = GameMode.Map_Gold_Multiplier or 1
+			-- local PLAYERS_COUNT_MULTIPLIER = GetPlayersCountMultiplier()
+			local gold = (125 + minute ^ 2.5)
+			local xp = (50 + minute ^ 2.5)
 			local gold_multiplier = 1
 			local xp_multiplier = 1
 

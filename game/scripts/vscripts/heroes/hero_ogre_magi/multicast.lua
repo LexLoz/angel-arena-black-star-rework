@@ -65,6 +65,7 @@ if IsServer() then
 		if parent ~= keys.unit then return end
 		local castedAbility = keys.ability
 		if castedAbility:IsToggle() then return end
+		if castedAbility:GetCooldown(castedAbility:GetLevel()) == 0 or (castedAbility.GetAbilityChargeRestoreTime and castedAbility:GetAbilityChargeRestoreTime(castedAbility:GetLevel()) >= 0.1) and castedAbility:GetManaCost(castedAbility:GetLevel()) == 0 then return end
 
 		local caster = self:GetParent()
 		local target = keys.target or caster:GetCursorPosition()

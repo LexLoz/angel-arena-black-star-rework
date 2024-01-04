@@ -9,7 +9,7 @@ var ItemList = {},
 	LastHero = null,
 	ItemStocks = [];
 
-function OpenCloseShop(newState) {
+function OpenCloseShop(newState) { 
 	$.Msg('open/close')
 	if (typeof newState !== 'boolean') newState = !$('#ShopBase').BHasClass('ShopBaseOpen');
 	$('#ShopBase').SetHasClass('ShopBaseOpen', newState);
@@ -58,7 +58,7 @@ function SearchItems() {
 	}
 }
 
-function PushItemsToList() {
+function PushItemsToList() { 
 	var isTabSelected = false;
 	_.each(ItemList, function(shopContent, shopName) {
 		var TabButton = $.CreatePanel('RadioButton', $('#ShopTabs'), 'shop_tab_' + shopName);
@@ -463,7 +463,7 @@ function ShowItemInShop(itemName) {
 function UpdateShop() {
 	SearchItems();
 	//UpdateItembuildsForHero();
-	var gold = GetPlayerGold(Game.GetLocalPlayerID());
+	var gold = GetPlayerGold(Players.GetLocalPlayerPortraitUnit());
 	_.each(SmallItemsAlwaysUpdated, function(panel) {
 		UpdateSmallItem(panel, gold);
 	});
@@ -497,11 +497,15 @@ function SetItemStock(item, ItemStock) {
 	GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_SHOP, true);
 	GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_SHOP_SUGGESTEDITEMS, true);
 	GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_INVENTORY_QUICKBUY, true);
-	RegisterKeyBind('ShopToggle', OpenCloseShop);
+
+	CommandEvents.Add(DOTAKeybindCommand_t.DOTA_KEYBIND_SHOP_TOGGLE, function() {
+		OpenCloseShop();
+		print('open/close shop');
+	});
 	CustomHooks.panorama_shop_open_close.tap(OpenCloseShop);
 	
 	//$.Msg(DOTAKeybindCommand_t.DOTA_KEYBIND_SHOP_TOGGLE)
-	RegisterKeyBind('PurchaseQuickbuy', function() {
+	CommandEvents.Add(DOTAKeybindCommand_t.DOTA_KEYBIND_PURCHASE_QUICKBUY, function() {
 		if (QuickBuyTarget != []) {
 			var bought = false;
 			var QuickBuyPanelItems = $('#QuickBuyPanelItems');
@@ -527,7 +531,7 @@ function SetItemStock(item, ItemStock) {
 			}
 		}
 	});
-	RegisterKeyBind('PurchaseSticky', function() {
+	CommandEvents.Add(DOTAKeybindCommand_t.DOTA_KEYBIND_PURCHASE_STICKY, function() {
 		SendItemBuyOrder($('#QuickBuyStickyButtonPanel').GetChild(0).itemName);
 	});
 	Game.MouseEvents.OnLeftPressed.push(function(ClickBehaviors, eventName, arg) {

@@ -116,7 +116,6 @@ if IsServer() then
 		ParticleManager:SetParticleControl(ParticleManager:CreateParticle("particles/items2_fx/orchid_pop.vpcf", PATTACH_ABSORIGIN_FOLLOW, parent), 1, Vector(damage))
 		if damage > 0 then
 
-			ability.NoDamageAmp = true
 			ApplyDamage({
 				attacker = self:GetCaster(),
 				victim = parent,

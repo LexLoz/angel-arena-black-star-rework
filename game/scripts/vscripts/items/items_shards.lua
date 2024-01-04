@@ -71,9 +71,9 @@ item_shard_ultimate_baseclass = class(item_shard_baseclass)
 item_shard_ultimate_small = item_shard_ultimate_baseclass
 item_shard_ultimate_medium = item_shard_ultimate_baseclass
 item_shard_ultimate_large = item_shard_ultimate_baseclass
-item_shard_ultimate_extreme = item_shard_ultimate_baseclass
+-- item_shard_ultimate_extreme = item_shard_ultimate_baseclass
 
-item_end_shard = class(item_shard_baseclass)
+-- item_end_shard = class(item_shard_baseclass)
 
 item_shard_level = class(item_shard_baseclass)
 item_shard_level10 = class(item_shard_baseclass)

@@ -96,7 +96,7 @@
 
 				"Properties"
 				{
-					"MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE"				"475"
+					"MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE"				"550"
 				}
 			}
 		}
@@ -107,12 +107,12 @@
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"3500"
+		"ItemCost"						"0"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_butterfly_of_wind"
 		"ItemRequirements"
 		{
-			"01"						"item_butterfly_arena;item_talisman_of_evasion;item_wind_lace"
+			"01"						"item_butterfly_arena;item_eagle;item_talisman_of_evasion;item_wind_lace"
 		}
 	}
 
@@ -133,7 +133,7 @@
 			"01"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility"					"35"
+				"bonus_agility"					"50"
 			}
 			"02"
 			{
@@ -257,12 +257,12 @@
 			"01"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility"					"50"
+				"bonus_agility"					"70"
 			}
 			"02"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_damage"					"30"
+				"bonus_damage"					"50"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"03"

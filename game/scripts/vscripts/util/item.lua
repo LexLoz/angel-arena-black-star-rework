@@ -84,27 +84,3 @@ function CDOTA_Item:SpendCharge(amount)
 		self:SetCurrentCharges(newCharges)
 	end
 end
-
-function CheckBackpack(unit, backpack)
-	local update = false
-	if not backpack then
-		backpack = {}
-	end
-
-	local index = 0
-	for slot = DOTA_ITEM_SLOT_7, DOTA_ITEM_SLOT_9  do
-		index = index + 1
-		local item = unit:GetItemInSlot(slot)
-		if item ~= backpack[index] then
-			backpack[index] = item
-			update = true
-		end
-	end
-
-	if update then
-		--print("yes")
-		Attributes:UpdateAll(unit, 1)
-	end
-
-	return backpack
-end

@@ -1,6 +1,6 @@
 function CustomAbilities:RandomOMGRollAbilities(unit)
 	if Options:IsEquals("EnableRandomAbilities") then
-		local ability_count = 6
+		local ability_count = 10
 		local ultimate_count = 2
 		for i = 0, unit:GetAbilityCount() - 1 do
 			local ability = unit:GetAbilityByIndex(i)

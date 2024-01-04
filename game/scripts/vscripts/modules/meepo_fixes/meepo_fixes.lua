@@ -3,9 +3,9 @@ ModuleRequire(..., "data")
 
 function MeepoFixes:FindMeepos(main, includeMain)
 	local playerId = main:GetPlayerID()
-	local meepos = includeMain and {main} or {}
-	for _,clone in ipairs(Entities:FindAllByName("npc_dota_hero_meepo")) do
-		if clone:IsRealHero() and clone ~= main and clone:GetPlayerID() == playerId then
+	local meepos = includeMain and { main } or {}
+	for _, clone in ipairs(Entities:FindAllByName("npc_dota_hero_meepo")) do
+		if MeepoFixes:IsMeepoClone(clone) then
 			table.insert(meepos, clone)
 		end
 	end
@@ -13,25 +13,36 @@ function MeepoFixes:FindMeepos(main, includeMain)
 end
 
 function MeepoFixes:IsMeepoClone(unit)
-	return unit:GetFullName() == "npc_dota_hero_meepo" and unit:IsTrueHero() and not unit:IsMainHero()
+	return unit:GetFullName() == "npc_dota_hero_meepo" and unit:IsTrueHero() and not unit:IsMainHero() and unit:IsClone()
 end
 
 function MeepoFixes:ShareItems(unit)
 	if unit:GetFullName() == "npc_dota_hero_meepo" then
 		local mainItemHash = MeepoFixes:GetFilteredInventoryHash(unit, MEEPO_SHARED_ITEMS)
-		for _,clone in ipairs(MeepoFixes:FindMeepos(unit)) do
+		-- print(#MeepoFixes:FindMeepos(unit))
+		for _, clone in ipairs(MeepoFixes:FindMeepos(unit)) do
 			if MeepoFixes:GetFilteredInventoryHash(clone, MEEPO_SHARED_ITEMS) ~= mainItemHash then
-				for i,v in ipairs(mainItemHash:split()) do
+				for i, v in ipairs(mainItemHash:split()) do
 					local oldItem = clone:GetItemInSlot(i - 1)
 					--Mostly uselss, because Dota's clears inventory, but should work with default boots
 					if oldItem then
 						local oldItemName = oldItem:GetAbilityName()
 						if oldItemName ~= v then
 							UTIL_Remove(oldItem)
-							clone:AddItemByName(v ~= "nil" and v or "item_dummy"):SetSellable(false)
+							if v ~= "nil" then
+								local item = clone:AddItemByName(v)
+								if item then
+									item:SetSellable(false)
+								end
+							end
 						end
 					else
-						clone:AddItemByName(v ~= "nil" and v or "item_dummy"):SetSellable(false)
+						if v ~= "nil" then
+							local item = clone:AddItemByName(v)
+							if item then
+								item:SetSellable(false)
+							end
+						end
 					end
 				end
 				ClearSlotsFromDummy(clone, true)
@@ -55,7 +66,7 @@ function MeepoFixes:GetFilteredInventoryHash(unit, list)
 end
 
 function MeepoFixes:UpgradeTalent(unit, name)
-	for _,v in pairs(MeepoFixes:FindMeepos(unit)) do
+	for _, v in pairs(MeepoFixes:FindMeepos(unit)) do
 		v:SetAbilityPoints(v:GetAbilityPoints() - CustomTalents:Talent_GetCost(name))
 		v:UpgradeTalentRecord(name)
 	end

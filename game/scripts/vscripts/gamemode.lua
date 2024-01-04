@@ -70,7 +70,7 @@ function GameMode:InitGameMode()
 	PlayerTables:CreateTable("arena", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("player_hero_indexes", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("players_abandoned", {}, AllPlayersInterval)
-	PlayerTables:CreateTable("gold", {}, AllPlayersInterval)
+	-- PlayerTables:CreateTable("gold", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("weather", {}, AllPlayersInterval)
 	PlayerTables:CreateTable("disable_help_data", {[0] = {}, [1] = {}, [2] = {}, [3] = {}, [4] = {}, [5] = {}, [6] = {}, [7] = {}, [8] = {}, [9] = {}, [10] = {}, [11] = {}, [12] = {}, [13] = {}, [14] = {}, [15] = {}, [16] = {}, [17] = {}, [18] = {}, [19] = {}, [20] = {}, [21] = {}, [22] = {}, [23] = {}}, AllPlayersInterval)
 
@@ -83,7 +83,7 @@ function GameMode:InitGameMode()
 end
 
 function GameMode:OnFirstPlayerLoaded()
-	StatsClient:FetchPreGameData()
+	-- StatsClient:FetchPreGameData()
 	if Options:IsEquals("MainHeroList", "NoAbilities") then
 		CustomAbilities:PrepareData()
 	end
@@ -106,6 +106,7 @@ function GameMode:OnHeroSelectionStart()
 	Bosses:InitAllBosses()
 	CustomRunes:Init()
 	CustomTalents:Init()
+	StatsClient:FetchPreGameData()
 	Timers:CreateTimer(0.1, function()
 		for playerId, data in pairs(PLAYER_DATA) do
 			if PlayerResource:IsPlayerAbandoned(playerId) then
@@ -127,7 +128,7 @@ function GameMode:OnHeroSelectionEnd()
 	GameRules:GetGameModeEntity():SetThink( "GameModeThink", GameMode, "GameModeThink", CUSTOM_GOLD_TICK_TIME)
 	Timers:CreateTimer(1, Dynamic_Wrap(InfinityStones, "Think"))
 	--GameRules:GetGameModeEntity():SetThink( "Think", InfinityStones, "InfinityStones", 0.1)
-	Timers:CreateTimer(1, Dynamic_Wrap(GameMode, 'KillWeightIncrease'))
+	Timers:CreateTimer(60, Dynamic_Wrap(GameMode, 'KillWeightIncrease'))
 	PanoramaShop:StartItemStocks()
 	Duel:CreateGlobalTimer()
 	Weather:Init()
@@ -186,41 +187,6 @@ function GameMode:PrecacheUnitQueueed(name)
 end
 
 function GameMode:GameModeThink()
-	--[[for i = 0, 23 do
-		if PlayerResource:IsValidPlayerID(i) then
-			local hero = PlayerResource:GetSelectedHeroEntity(i)
-			if hero then
-				hero:SetNetworkableEntityInfo("unit_name", hero:GetFullName())
-				MeepoFixes:ShareItems(hero)
-				for _, v in ipairs(hero:GetFullName() == "npc_dota_hero_meepo" and MeepoFixes:FindMeepos(hero, true) or { hero }) do
-					local position = v:GetAbsOrigin()
-					if not IsInBox(position, mapMin, mapMax) then
-						FindClearSpaceForUnit(v, VectorOnBoxPerimeter(position, mapClampMin, mapClampMax), true)
-					end
-				end
-			end
-			if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-				local goldPerTick = 0
-
-				local courier = Structures:GetCourier(i)
-				if courier and courier:IsAlive() then
-					goldPerTick = CUSTOM_GOLD_PER_TICK
-				end
-
-				if hero then
-					if hero.talent_keys and hero.talent_keys.bonus_gold_per_minute then
-						goldPerTick = goldPerTick + hero.talent_keys.bonus_gold_per_minute / 60 * CUSTOM_GOLD_TICK_TIME
-					end
-					if hero.talent_keys and hero.talent_keys.bonus_xp_per_minute then
-						hero:AddExperience(hero.talent_keys.bonus_xp_per_minute / 60 * CUSTOM_GOLD_TICK_TIME, 0, false, false)
-					end
-				end
-
-				Gold:AddGold(i, goldPerTick)
-			end
-			AntiAFK:Think(i)
-		end
-	end]]
 	--kill weight increase
 	local dota_time = GetDOTATimeInMinutesFull()
 	--[[dif dota_time >= math.floor(KILL_WEIGHT_START_INCREASE_MINUTE / 2) and not GameMode.bonus_gold_per_kill_activated then
@@ -248,7 +214,7 @@ function GameMode:SetupRules()
 	gameMode:SetTopBarTeamValuesOverride(true)
 	gameMode:SetUseCustomHeroLevels(true)
 	gameMode:SetCustomXPRequiredToReachNextLevel(XP_PER_LEVEL_TABLE)
-	gameMode:SetMaximumAttackSpeed(700)
+	gameMode:SetMaximumAttackSpeed(MAX_ATTACK_SPEED)
 	gameMode:SetMinimumAttackSpeed(20)
 	gameMode:SetNeutralStashEnabled(false)
 

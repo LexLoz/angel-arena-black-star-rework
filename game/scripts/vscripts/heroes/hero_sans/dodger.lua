@@ -170,7 +170,7 @@ if IsServer then
 
     function sans_dodger:GetCooldown()
         local caster = self:GetCaster()
-        return self:GetSpecialValueFor("blink_cooldown") * caster:GetCooldownReduction() / caster:IsGenocideMode(nil, true) / ((caster:HasModifier("modifier_fountain_aura_arena") or caster:HasModifier("modifier_filler_heal")) and 2 or 1)
+        return self:GetSpecialValueFor("blink_cooldown") * caster:GetCooldownReduction() / caster:IsGenocideMode(nil, true) / ((caster:HasModifier("modifier_fountain_aura_arena") or caster:HasModifier("modifier_filler_heal")) and 2 or 1) / (self.space_stone_amp or 1)
     end
 
 ---------------------------------------------------------------------------------------------
@@ -180,10 +180,10 @@ if IsServer then
     end
     function modifier_sans_dodger:DodgeCondition(isSpell)
         local parent = self:GetParent()
-        return self:GetStackCount() >= self:GetAbility():GetSpecialValueFor("spell_dodge_cost") and not parent:IsStunned() and not parent:IsRooted() and not parent:IsHexed() and not parent:IsTaunted() and not parent:IsFeared()
+        return self:GetStackCount() >= self:GetAbility():GetSpecialValueFor("spell_dodge_cost") and not parent:IsRooted() and not parent:IsDisabled()
     end
 
-    modifier_sans_dodger.tick = 1 / 20
+    modifier_sans_dodger.tick = 1 / 40
     function modifier_sans_dodger:OnCreated()
         local parent = self:GetParent()
         local ability = self:GetAbility()
@@ -199,6 +199,8 @@ if IsServer then
     function modifier_sans_dodger:OnIntervalThink()
         local ability = self:GetAbility()
         local parent = self:GetParent()
+
+        parent:CalculateHealthReduction()
 
         if self:GetRemainingTime() <= 0 and not self:AllChargesReady() and parent:IsAlive() then
             ability:ModifyCharges(1)
@@ -248,16 +250,18 @@ if IsServer then
 		end
     end
 
-    function modifier_sans_dodger:GetModifierHealthBonus()
-        return -199 - math.floor(self:GetParent():GetStrength()) * (22)
-    end
+    -- function modifier_sans_dodger:GetModifierHealthBonus()
+    --     return -199 - math.floor(self:GetParent():GetStrength()) * (22)
+    -- end
 end
 
-function modifier_sans_dodger:OnTooltip()
-    return self:GetParent():GetNetworkableEntityInfo("MaxCharges")
-end
-function modifier_sans_dodger:OnTooltip2()
-    return self:GetParent():GetNetworkableEntityInfo("DodgerBonusCharges")
+if IsClient() then
+    function modifier_sans_dodger:OnTooltip()
+        return self:GetParent():GetNetworkableEntityInfo("MaxCharges")
+    end
+    function modifier_sans_dodger:OnTooltip2()
+        return self:GetParent():GetNetworkableEntityInfo("DodgerBonusCharges")
+    end
 end
 function modifier_sans_dodger:GetModifierPercentageManacost()
     return 100

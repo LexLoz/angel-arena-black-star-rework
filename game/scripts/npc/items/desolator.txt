@@ -4,14 +4,14 @@
 	{
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"						"item_datadriven"
-		"ItemCost"						"1000"
+		"ItemCost"						"2000"
 		"AbilityTextureName"			"item_recipe"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_desolator2"
 		"ItemRequirements"
 		{
-			"01"						"item_desolator;item_desolator"
+			"01"						"item_desolator"
 		}
 	}
 
@@ -32,12 +32,12 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"100"
+				"bonus_damage"			"50"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-12"
+				"corruption_armor"		"-10"
 			}
 			"03"
 			{
@@ -133,12 +133,12 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"170"
+				"bonus_damage"			"100"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-18"
+				"corruption_armor"		"-15"
 			}
 			"03"
 			{
@@ -207,7 +207,7 @@
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"                     "item_datadriven"
 		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"10250"
+		"ItemCost"						"10000"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_desolator4"
@@ -235,22 +235,22 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"300"
+				"bonus_damage"			"224"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-24"
+				"corruption_armor"		"-20"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"corruption_duration"	"5.0"
+				"corruption_duration"	"10.0"
 			}
 			"04"
 			{
 				"var_type"							"FIELD_FLOAT"
-				"poison_damage_per_second"			"120"
+				"poison_damage_per_second"			"60"
 			}
 			"05"
 			{
@@ -335,13 +335,13 @@
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"BaseClass"                     "item_datadriven"
 		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"7500"
+		"ItemCost"						"1250"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_desolator5"
 		"ItemRequirements"
 		{
-			"01"						"item_desolator4;item_soul_of_titan;item_moon_dust"
+			"01"						"item_desolator4;item_soul_of_titan;item_skadi_8"
 		}
 	}
 
@@ -363,27 +363,42 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"600"
+				"bonus_damage"			"300"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_all_stats"		"60"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_health"			"900"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_mana"			"1200"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"corruption_armor"		"-25"
+				"corruption_armor"		"-30"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"corruption_duration"	"5.0"
+				"corruption_duration"	"10.0"
 			}
 			"07"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed"	"-20"
+				"cold_movement_speed"	"-40"
 			}
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-100"
+				"cold_attack_speed"		"-50"
 			}
 			"09"
 			{
@@ -397,8 +412,8 @@
 			}
 			"11"
 			{
-				"var_type"							"FIELD_INTEGER"
-				"heal_reduce"						"-0"
+				"var_type"				"FIELD_FLOAT"
+				"heal_decrease"			"-50"
 			}
 		}
 
@@ -430,11 +445,11 @@
 				"Properties"
 				{
 					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE"		"%bonus_damage"
-					//"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%bonus_all_stats"
-					//"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_all_stats"
-					//"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_all_stats"
-					//"MODIFIER_PROPERTY_HEALTH_BONUS"				"%bonus_health"
-					//"MODIFIER_PROPERTY_MANA_BONUS"					"%bonus_mana"
+					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%bonus_all_stats"
+					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_all_stats"
+					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_all_stats"
+					"MODIFIER_PROPERTY_HEALTH_BONUS"				"%bonus_health"
+					"MODIFIER_PROPERTY_MANA_BONUS"					"%bonus_mana"
 				}
 
 				"OnAttackLanded"
@@ -467,10 +482,10 @@
 					"MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS"		"%corruption_armor"
 					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%cold_attack_speed"
 					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%cold_movement_speed"
-					//"MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET"	"%heal_reduce"
-  					//"MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE"		"%heal_reduce"
- 					//"MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
-					//"MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
+					"MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET"	"%heal_reduce"
+					"MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE"		"%heal_reduce"
+					"MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
+					"MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
 				}
 
 				"ThinkInterval" 		"%poison_damage_interval"
@@ -491,8 +506,8 @@
 	"item_recipe_desolator6"
 	{
 		"Model"							"models/props_gameplay/recipe.vmdl"
-		"AbilityTextureName"			"item_recipe"
 		"BaseClass"                     "item_datadriven"
+		"AbilityTextureName"			"item_recipe"
 		"ItemCost"						"20000"
 		"ItemShopTags"					""
 		"ItemRecipe"					"1"
@@ -511,9 +526,9 @@
 		"ItemShopTags"					"damage;unique"
 		"ItemQuality"					"artifact"
 		"ItemAliases"					"ultimate desolator 6"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHT"
+		// "AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHT"
+		"AbilityCooldown"				"2"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
-		"AbilityCooldown"				"3"
 
 		// Special
 		//-------------------------------------------------------------------------------------------------------------
@@ -522,7 +537,22 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_damage"			"1000"
+				"bonus_damage"			"600"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_all_stats"		"60"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_health"			"900"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"bonus_mana"			"1200"
 			}
 			"05"
 			{
@@ -542,22 +572,22 @@
 			"08"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"corruption_duration"	"5.0"
+				"corruption_duration"	"10.0"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed"	"-30"
+				"cold_movement_speed"	"-50"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-200"
+				"cold_attack_speed"		"-100"
 			}
 			"11"
 			{
 				"var_type"							"FIELD_FLOAT"
-				"poison_damage_per_second"			"350"
+				"poison_damage_per_second"			"200"
 			}
 			"12"
 			{
@@ -566,8 +596,18 @@
 			}
 			"13"
 			{
-				"var_type"							"FIELD_FLOAT"
+				"var_type"							"FIELD_INTEGER"
 				"ignore_base_armor_chance"			"25"
+			}
+			"14"
+			{
+				"var_type"							"FIELD_INTEGER"
+				"ignored_armor"						"75"
+			}
+			"15"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"heal_decrease"			"-60"
 			}
 		}
 
@@ -594,18 +634,17 @@
 						"ScriptFile"	"kv.lua"
 						"Function"		"UpdateAttackProjectile"
 					}
-
-					"RemoveModifier"
-					{
-						"ModifierName" 	"modifier_item_desolator6_arena_cutting"
-						"Target" 		"CASTER"
-					}
 				}
-				
 
 				"Properties"
 				{
+					// "MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE"	"%all_damage_bonus_pct"
 					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE"		"%bonus_damage"
+					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%bonus_all_stats"
+					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_all_stats"
+					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_all_stats"
+					"MODIFIER_PROPERTY_HEALTH_BONUS"				"%bonus_health"
+					"MODIFIER_PROPERTY_MANA_BONUS"					"%bonus_mana"
 				}
 
 				"OnAttackLanded"
@@ -648,6 +687,10 @@
 					"MODIFIER_PROPERTY_PHYSICAL_ARMOR_BONUS"		"%corruption_armor"
 					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"		"%cold_attack_speed"
 					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%cold_movement_speed"
+					"MODIFIER_PROPERTY_HEAL_AMPLIFY_PERCENTAGE_TARGET"	"%heal_reduce"
+					"MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE"		"%heal_reduce"
+					"MODIFIER_PROPERTY_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
+					"MODIFIER_PROPERTY_SPELL_LIFESTEAL_AMPLIFY_PERCENTAGE"	"%heal_reduce"
 				}
 
 				"ThinkInterval" 		"%poison_damage_interval"

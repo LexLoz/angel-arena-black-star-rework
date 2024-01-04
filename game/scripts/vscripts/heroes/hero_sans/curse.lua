@@ -7,10 +7,18 @@ sans_curse = class({
     GetIntrinsicModifierName = function() return "modifier_sans_curse_passive" end
 })
 
-function sans_curse:GetBehavior()
-    return self:GetCaster():GetNetworkableEntityInfo('HasKarmaTalent') and
-        DOTA_ABILITY_BEHAVIOR_NO_TARGET + DOTA_ABILITY_BEHAVIOR_TOGGLE or
-        DOTA_ABILITY_BEHAVIOR_PASSIVE
+if IsClient() then
+    function sans_curse:GetBehavior()
+        return self:GetCaster():GetNetworkableEntityInfo('HasKarmaTalent') and
+            DOTA_ABILITY_BEHAVIOR_NO_TARGET + DOTA_ABILITY_BEHAVIOR_TOGGLE or
+            DOTA_ABILITY_BEHAVIOR_PASSIVE
+    end
+else
+    function sans_curse:GetBehavior()
+        return self:GetCaster().has_karma_talent and
+            DOTA_ABILITY_BEHAVIOR_NO_TARGET + DOTA_ABILITY_BEHAVIOR_TOGGLE or
+            DOTA_ABILITY_BEHAVIOR_PASSIVE
+    end
 end
 
 function sans_curse:OnToggle()
@@ -69,11 +77,13 @@ modifier_sans_curse = class({
     RemoveOnDeath                        = function() return true end,
     IsHidden                             = function() return false end,
     GetAttributes                        = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
-    GetModifierHPRegenAmplify_Percentage = function() return -99999 end,
-    DeclareFunctions                     = function()
+    GetModifierHPRegenAmplify_Percentage = function(self)
+        return -(self:GetCaster():GetTalentSpecial("talent_hero_comic_sans_karma_hp_regen_reduce", "hp_regen_reduce") or 0)
+    end,
+    DeclareFunctions = function()
         return {
             MODIFIER_PROPERTY_TOOLTIP,
-            -- MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE
+            MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE
         }
     end
 })
@@ -92,8 +102,10 @@ modifier_sans_curse_aura = class({
     end
 })
 
-function modifier_sans_curse_aura:OnTooltip()
-    return self:GetParent():GetNetworkableEntityInfo('KarmaSins')
+if IsClient() then
+    function modifier_sans_curse_aura:OnTooltip()
+        return self:GetParent():GetNetworkableEntityInfo('KarmaSins')
+    end
 end
 
 if IsServer() then
@@ -133,6 +145,7 @@ if IsServer() then
 
     function modifier_sans_curse_aura:GetModifierIncomingDamageConstant(keys)
         local ability = self:GetAbility()
+        if not ability then return 0 end
         local caster = ability:GetCaster()
         local unit = self:GetParent()
         local talent = caster:HasTalent("talent_hero_comic_sans_karma_aura")
@@ -178,7 +191,7 @@ if IsServer() then
                 unit:EmitSound("Arena.Hero_Sans.Dodger.Curse_Damage")
                 return unit:GetHealth() == 1 and 1 or -keys.damage
             end
-        else
+        elseif keys.attacker == caster or (ability:GetToggleState() and keys.attacker:GetTeam() == caster:GetTeam()) then
             curse.curse_damage = (curse.curse_damage or 0) + (curse_damage * 2)
             local interval = curse:CalculateInterval()
             curse:StartIntervalThink(interval)

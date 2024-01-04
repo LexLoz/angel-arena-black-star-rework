@@ -83,8 +83,8 @@
             }
             "98"
 			{
-				"var_type"				"FIELD_INTEGER"
-				"stamina_drain_reduction"	"70"
+				"var_type"				            "FIELD_INTEGER"
+				"stamina_drain_reduction_unique"	"70"
 			}
         }
     }
@@ -129,7 +129,8 @@
             "04"
             {
                 "var_type"                  "FIELD_INTEGER"
-                "bonus_spell_damage"        "25"
+                "bonus_spell_damage"        "100"
+                "CalculateSpellDamageTooltip"   "0"
             }
         }
     }
@@ -265,7 +266,7 @@
             "03"
             {
                 "var_type"                      "FIELD_FLOAT"
-                "agility_requirement_decrease"  "2"
+                "resists_increase"              "30"
             }
             "04"
             {

@@ -2,9 +2,9 @@
 	<scripts>
 		<include src="file://{resources}/scripts/libraries/lodash.min.js" />
 		<include src="file://{resources}/scripts/libraries/playertables_base.js" />
+		<include src="file://{resources}/scripts/hotkey_tracker.js" />
 		<include src="file://{resources}/scripts/libraries/arena_util.js" />
 		<include src="file://{resources}/scripts/options.js" />
-		<include src="file://{resources}/scripts/hotkey_tracker.js" />
 		<include src="file://{resources}/scripts/vector_targeting.js" />
 		<include src="file://{resources}/scripts/custom_ui_manifest.js" />
 	</scripts>
@@ -25,7 +25,7 @@
 		<CustomUIElement type="HudTopBar" layoutfile="file://{resources}/layout/custom_game/top_scoreboard.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/panorama_shop.xml" />
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/custom_talents.xml" />
-		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ability_shop.xml" />
+		<!-- <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/ability_shop.xml" /> -->
 		<CustomUIElement type="FlyoutScoreboard" layoutfile="file://{resources}/layout/custom_game/scoreboard_flyout.xml" />
 		<CustomUIElement type="EndScreen" layoutfile="file://{resources}/layout/custom_game/arena_end_screen.xml" />
 
@@ -37,5 +37,8 @@
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/libraries/barebones_attachments.xml" />
 
 		<CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/console.xml" />
+
+		<!-- <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/game_info.xml" /> -->
+
 	</Panel>
 </root>

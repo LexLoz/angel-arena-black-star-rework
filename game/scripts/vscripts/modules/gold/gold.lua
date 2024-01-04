@@ -14,7 +14,14 @@ function Gold:UpdatePlayerGold(unitvar)
 	local playerId = UnitVarToPlayerID(unitvar)
 	if playerId and playerId > -1 then
 		PlayerResource:SetGold(playerId, 0, false)
-		PlayerTables:SetTableValue("gold", playerId, PLAYER_DATA[playerId].SavedGold)
+		-- local hero = PlayerResource:GetSelectedHeroEntity(0)
+		-- local modifier = hero:FindModifierByName("modifier_arena_hero_gold")
+		-- if modifier then
+		-- 	modifier:SetStackCount(math.round(PLAYER_DATA[playerId].SavedGold))
+		-- end
+
+
+		-- PlayerTables:SetTableValue("gold", playerId, PLAYER_DATA[playerId].SavedGold)
 		--2^30-1
 	end
 end
@@ -50,7 +57,7 @@ function Gold:AddGold(unitvar, gold)
 		-- print('playerId: ' .. playerId)
 		hero = PlayerResource:GetSelectedHeroEntity(playerId)
 	end
-	gold = gold * GetGoldMultiplier(hero)
+	gold = gold * GetGoldMultiplier(playerId)
 	
 	PLAYER_DATA[playerId].SavedGold = (PLAYER_DATA[playerId].SavedGold or 0) + gold
 	Gold:UpdatePlayerGold(playerId)

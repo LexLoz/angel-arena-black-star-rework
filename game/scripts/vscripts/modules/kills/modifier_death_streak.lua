@@ -8,22 +8,14 @@ modifier_death_streak = class({
     DeclareFunctions = function()
         return {
             MODIFIER_PROPERTY_TOOLTIP,
-            MODIFIER_PROPERTY_TOOLTIP2,
-            MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE
-        }
+            MODIFIER_PROPERTY_TOOLTIP2        }
     end,
 })
-
-if IsClient() then
-    function modifier_death_streak:GetModifierPreAttack_BonusDamage()
-		return -99999999
-	end
-end
 
 function modifier_death_streak:OnTooltip()
     return self:GetStackCount() * 15
 end
 
 function modifier_death_streak:OnTooltip2()
-    return self:GetStackCount() * 5
+    return self:GetStackCount() * 10
 end

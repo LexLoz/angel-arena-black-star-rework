@@ -5,6 +5,7 @@ function LoadTalentTable(table) {
 	_.each(table, function(group, group_index) {
 		var grouppanel = $.CreatePanel('Panel', $('#TalentListContainer'), 'talent_group_' + group_index);
 		grouppanel.BLoadLayoutSnippet('TalentColumn');
+		$.Msg('group_index', group_index) 	
 		grouppanel.FindChildTraverse('TalentColumnHeader').text = groupLevelMap[group_index];
 		grouppanel.RequiredLevel = groupLevelMap[group_index];
 		_.each(group, function(talent) {
@@ -157,12 +158,17 @@ function Update() {
 }
 
 (function() {
+	FindDotaHudElement("TalentDescriptions").style.opacity = 1;
 	$('#TalentListContainer').RemoveAndDeleteChildren();
+	// CommandEvents.Add(DOTAKeybindCommand_t.DOTA_KEYBIND_SHOP_TOGGLE, function () {
+	// 	$.GetContextPanel().ToggleClass('PanelOpened');
+	// });
 	CustomHooks.custom_talents_toggle_tree.tap(function() {
 		$.GetContextPanel().ToggleClass('PanelOpened');
 	});
 	DynamicSubscribePTListener('custom_talents_data', function(tableName, changesObject, deletionsObject) {
 		groupLevelMap = changesObject.groupLevelMap;
+		$.Msg(changesObject.talentList)
 		LoadTalentTable(changesObject.talentList);
 	});
 	$('#ToggleHideRequirementErrors').checked = true;

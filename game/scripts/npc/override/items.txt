@@ -247,10 +247,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_magic_stick;item_branches;item_branches;"
-		}
 	}
 	"item_magic_wand"
 	{
@@ -287,7 +283,7 @@
 		"SideShop"						"0"
 		"ItemStockMax"					"10"
 		"ItemStockInitial"				"3"
-		"ItemStockTime"					"50"
+		"ItemStockTime"					"120"
 		"ItemCost"						"0"
 
 		"AbilitySpecial"
@@ -332,10 +328,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_boots;"
-		}
 	}
 	"item_travel_boots"
 	{
@@ -348,10 +340,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_boots;item_chainmail;item_blades_of_attack;"
-		}
 	}
 	"item_phase_boots"
 	{
@@ -415,17 +403,57 @@
 	}
 	"item_recipe_power_treads"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"Model"							"models/props_gameplay/recipe.vmdl"
+		
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"0"	
+		"ItemShopTags"					""
+		
+		// Recipe
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemRecipe"					"1"
+		"ItemResult"					"item_power_treads"
 		"ItemRequirements"
 		{
-			"01"						"item_boots;item_gloves;item_belt_of_strength;"
+			"01"						"item_boots*;item_gloves;item_belt_of_strength"
+			"04"						"item_boots*;item_gloves;item_robe"
+			"06"						"item_boots*;item_gloves;item_boots_of_elves"
 		}
 	}
+	
+	//=================================================================================================================
+	// Power Treads
+	//=================================================================================================================
 	"item_power_treads"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"1400"
+		"ItemShopTags"					"attack_speed;move_speed;int;agi;str"
+		"ItemQuality"					"common"
+		"ItemAliases"					"power treads"
+		"ItemDeclarations"				"DECLARE_PURCHASES_TO_SPECTATORS"
+		"ShouldBeSuggested"				"1"
+		"MaxUpgradeLevel"				"3"
+		"ItemBaseLevel"					"1"
+		
+		// Special	
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityValues"
+		{
+				"bonus_movement_speed_ranged"  "45 60 70"
+				"bonus_movement_speed_melee"  "55 90 120"
+				"bonus_stat"			"10 25 40"
+				"bonus_attack_speed"			"25 50 75"
+				"bonus_damage"			"0"
+		}
 	}
 	"item_recipe_oblivion_staff"
 	{
@@ -545,10 +573,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_cloak;item_headdress;item_ring_of_health"
-		}
 	}
 	"item_pipe"
 	{
@@ -944,15 +968,28 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
+		"MaxUpgradeLevel"				"2"
+		"ItemBaseLevel"					"1"
+		"AbilitySharedCooldown"			"armlet"
+
+		"AbilityValues"
+		{
+			"bonus_damage"			"15 30"
+			"bonus_attack_speed"	"25 40"
+			"bonus_armor"			"6 12"
+			"bonus_health_regen"	"5 10"
+			"unholy_bonus_damage"	"35 70"
+			"unholy_bonus_strength"	"25 50"
+			"unholy_bonus_armor"	"4 8"
+			"unholy_bonus_slow_resistance"	"35 50"
+			"unholy_health_drain_per_second"	"45 100"
+			"toggle_cooldown"		"0.036"
+		}
 	}
 	"item_recipe_invis_sword"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_shadow_amulet;item_blitz_knuckles;item_broadsword;"
-		}
 	}
 	"item_invis_sword"
 	{
@@ -976,42 +1013,48 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_satanic"
-		"ItemRequirements"
-		{
-			"01"						"item_lifesteal;item_claymore;item_reaver;item_reaver;item_reaver"
-		}
 	}
 	"item_satanic"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"AbilityCooldown"				"50.0"
-
-		"AbilityValues"
-		{
-				"bonus_strength"		"75"
-				"bonus_damage"			"50"
-				"lifesteal_percent"		"30"
-				"creep_lifesteal_reduction_pct"	"0"
-				"unholy_lifesteal_percent"	"175"
-				"unholy_lifesteal_total_tooltip"	"175"
-				"unholy_duration"		"10.0"
-		}
 	}
 	"item_recipe_mjollnir"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_maelstrom;item_hyperstone;"
-		}
 	}
 	"item_mjollnir"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
 		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHTING"
+		"AbilitySharedCooldown"			"mjollnir"
+		"AbilityCooldown"				"35.0 30.0 25.0"
+		"MaxUpgradeLevel"				"3"
+		"ItemBaseLevel"					"1"
+
+		"AbilityValues"
+		{
+			"bonus_damage"			"25 50 200"
+			"bonus_attack_speed"	"90 180 300"
+			"static_duration"		"15.0 16.0 17.0"
+			"static_chance"			"20 30 50"
+			"static_strikes"		"4 6 12"
+			"static_damage"			"225 450 800"
+			"static_primary_radius"	"600"
+			"static_seconary_radius"	"900"
+			"static_radius"			"900"
+			"static_cooldown"		"1.0 0.5 0.0"
+			"chain_chance"			"30 40 60"
+			"chain_damage"			"180 360 700"
+			"chain_strikes"			"12 16 24"
+			"chain_radius"			"650"
+			"chain_delay"			"0.1"
+			"chain_cooldown"		"0.2 0.1 0.0"
+			"max_charges"			"0"
+			"illusion_multiplier_pct"	"150 200 250"
+		}
 	}
 	"item_recipe_helm_of_the_dominator"
 	{
@@ -1072,10 +1115,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_kaya;item_ghost;"
-		}
 	}
 	"item_ethereal_blade"
 	{
@@ -1166,10 +1205,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_boots;item_energy_booster;"
-		}
 	}
 	"item_arcane_boots"
 	{
@@ -1341,10 +1376,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_boots;item_ring_of_regen;item_ring_of_protection;"
-		}
 	}
 	"item_tranquil_boots"
 	{
@@ -1403,10 +1434,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_travel_boots;"
-		}
 	}
 	"item_travel_boots_2"
 	{
@@ -1440,10 +1467,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_invis_sword;item_lesser_crit"
-		}
 	}
 	"item_silver_edge"
 	{
@@ -1455,10 +1478,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_medallion_of_courage;item_crown;item_wind_lace;"
-		}
 	}
 	"item_solar_crest"
 	{
@@ -1469,10 +1488,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_shadow_amulet;item_cloak;"
-		}
 	}
 	"item_glimmer_cape"
 	{
@@ -1498,10 +1513,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_orchid;item_mage_slayer;"
-		}
 	}
 	"item_bloodthorn"
 	{
@@ -1583,27 +1594,81 @@
 	}
 	"item_recipe_hurricane_pike"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"Model"							"models/props_gameplay/recipe.vmdl"
+		
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"350"	
+		"ItemShopTags"					""
+		
+		// Recipe
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemRecipe"					"1"
+		"ItemResult"					"item_hurricane_pike"
 		"ItemRequirements"
 		{
-			"01"						"item_force_staff;item_dragon_lance;"
+			"01"						"item_force_staff*;item_dragon_lance"
 		}
-		
 	}
+	
+	//=================================================================================================================
+	// Hurricane Pike
+	//=================================================================================================================
 	"item_hurricane_pike"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH | DOTA_UNIT_TARGET_TEAM_CUSTOM"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_CUSTOM"
+		"FightRecapLevel"				"1"
+
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"650"
+		"AbilityCastPoint"				"0.0"
+		"AbilityCooldown"				"19.0 14.0"
+		"AbilitySharedCooldown"			"force"
+
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"150"
+		"ItemCost"						"4450"
+		"ItemShopTags"					"int;damage;attack_speed;hard_to_tag"
+		"ItemQuality"					"epic"
+		"ItemAliases"					"fs;force staff"
+		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_TO_SPECTATORS"
+		"ShouldBeSuggested"				"1"
+		"MaxUpgradeLevel"				"2"
+		"ItemBaseLevel"					"1"
+		
+		// Special	
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityValues"
+		{
+			"bonus_intellect"		"15 30"
+			"bonus_health"			"200 400"
+			"bonus_agility"			"20 40"
+			"bonus_strength"		"15 30"
+			"base_attack_range"		"150 300"
+			"push_length"			"600"
+			"enemy_length"			"450"
+			"range_duration"		"8"
+			"cast_range_enemy"		"450"
+			"max_attacks"			"5 10"
+			"bonus_attack_speed"	"100 200"
+			"push_time"				"0.5 0.25"
+			"dizzy_duration"			"0"
+			"dizzy_distance_pct"			"0"
+
+		}
 	}
 	"item_recipe_spirit_vessel"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_urn_of_shadows;item_vitality_booster;"
-		}
 	}
 	"item_spirit_vessel"
 	{
@@ -1681,82 +1746,92 @@
 	}
 	"item_recipe_meteor_hammer"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
-		"ItemCost"						"2000"
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"Model"							"models/props_gameplay/recipe.vmdl"
+		
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"600"	
+		"ItemShopTags"					""
+		
+		// Recipe
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemRecipe"					"1"
+		"ItemResult"					"item_meteor_hammer"
+		"ItemRequirements"
+		{
+			"01"						"item_crown;item_kaya"
+		}
 	}
+	
 	"item_meteor_hammer"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
-		"ItemCost"						"0"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_FIRE"
-		"AbilitySpecial"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+		
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"FightRecapLevel"				"1"
+		"ItemDisassembleRule"			"DOTA_ITEM_DISASSEMBLE_NEVER"
+		
+		
+		"AbilityChannelTime"			"2 1"
+
+		"AbilityCastRange"				"600 800"
+		"AbilityCooldown"				"24 12"
+		"AbilityManaCost"				"100 250"
+
+		"ItemCost"						"3100"
+		"ItemQuality"					"epic"
+		"ItemAliases"					"mh;meteor hammer"
+		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+		"ShouldBeSuggested"				"1"
+
+		"MaxUpgradeLevel"				"2"
+		"ItemBaseLevel"					"1"
+		
+		"AbilityValues"
 		{
-			"05"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"burn_dps_buildings"		"5"
-			}
-			"06"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"burn_dps_units"		"180"
-			}
-			"07"
-			{
-				"var_type"			"FIELD_INTEGER"
+				"bonus_strength"		"6 15"
+				"bonus_agility"		"6 15"
+				"bonus_intellect"			"24 50"
+				"spell_amp"			"10"
+				"mana_regen_multiplier"		"75 100"
+				"spell_lifesteal_amp"	"24 50"
+
+				"burn_dps_buildings"		"50 150"
+				"burn_dps_units"		"50 150"
+				"burn_slow"			"20 40"
 				"burn_duration"		"6"
-			}
-			"08"
-			{
-				"var_type"			"FIELD_FLOAT"
-				"stun_duration"		"2.25"
-			}
-			"12"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"max_duration"		"3.0"
-			}
-			"13"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"impact_damage_buildings"		"10"
-			}
-			"14"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"impact_damage_units"		"280"
-			}
+				"stun_duration"		"0.5 1.0"
+				"burn_interval"				"1.0 0.5"
+				"land_time"				".5"
+				"impact_radius"		
+				{
+					"value"		"400 600"
+					"affected_by_aoe_increase"	"1"
+				}
+				"max_duration"		"2 3"
+				"impact_damage_buildings"		"90 200"
+				"impact_damage_units"		"130 300"
+				"enemy_particles_visible"		"0"
 		}
 	}
 	"item_recipe_arcane_blink"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_blink;item_mystic_staff"
-		}
 	}	
 	"item_recipe_swift_blink"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_blink;item_eagle"
-		}
 	}
 	"item_recipe_overwhelming_blink"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
 		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_FIRE"
-		"ItemRequirements"
-		{
-			"01"						"item_blink;item_reaver"
-		}
 	}
 	"item_overwhelming_blink"
 	{
@@ -1831,10 +1906,6 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_witch_blade;item_mystic_staff"
-		}
 	}
 	"item_revenants_brooch"
 	{
@@ -1842,29 +1913,20 @@
 		"SideShop"						"0"
 		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_DEATH"
 
+		"MaxUpgradeLevel"				"2"
+		"ItemBaseLevel"					"1"
+
 		"AbilityValues"
 		{				
-				"bonus_intellect"		"45"				
-				"bonus_attack_speed"	"40"	
-				"bonus_armor"			"8"
-				"projectile_speed"		"300"
-				"int_damage_multiplier"	"1"
-				"slow"	"25"
-				"slow_duration"	"4"
-				"mana_cost"				"100"
-				"damage_penalty"		"0"
-				"passive_cooldown"		"9"
-				"number_of_attacks"		"20"
-				"active_duration"		"2"
-				"active_attack_speed"	"0"
-				"active_mres_reduction"	"20"
-				"spell_amp_duration"	"3"
+				"bonus_damage"			"70 400"				
+				"spell_lifesteal"		"20 50"	
+				"manacost_per_hit"		"75 500"
 
 				"damage_to_arena_boss"
-			{
-				"CalculateSpellDamageTooltip" "0"
-				"value" "20"
-			}
+				{
+					"CalculateSpellDamageTooltip" "0"
+					"value" "50"
+				}
 		}
 	}
 	"item_wind_waker"
@@ -1876,16 +1938,12 @@
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_cyclone;item_mystic_staff"
-		}
 	}
 	"item_witch_blade"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_POISON"
 
 		"AbilityValues"
 		{
@@ -1898,35 +1956,76 @@
 				"projectile_speed"	"300"
 
 				"damage_to_arena_boss"
-			{
-				"CalculateSpellDamageTooltip" "0"
-				"value" "250"
-			}
+				{
+					"CalculateSpellDamageTooltip" "0"
+					"value" "500"
+				}
 		}
 	}
 	"item_recipe_witch_blade"
 	{
 		"SecretShop"					"0"
 		"SideShop"						"0"
-		"ItemRequirements"
-		{
-			"01"						"item_blitz_knuckles;item_robe;item_chainmail"
-		}
 	}
 	"item_recipe_gungir"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		"Model"							"models/props_gameplay/recipe.vmdl""ItemCost"						"450"	
+		"ItemShopTags"					""
+		
+		"ItemRecipe"					"1"
+		"ItemResult"					"item_gungir"
 		"ItemRequirements"
 		{
-			"01"						"item_maelstrom;item_rod_of_atos"
+			"01"						"item_maelstrom;item_rod_of_atos*"
 		}
 	}
+	
 	"item_gungir"
 	{
-		"SecretShop"					"0"
-		"SideShop"						"0"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"FightRecapLevel"				"1"
+		"SpellDispellableType"			"SPELL_DISPELLABLE_YES"
+		"AbilitySharedCooldown"			"atos"
 		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_LIGHTING"
+
+		"AbilityCooldown"				"18 14"
+		"AbilityCastRange"				"1100 1500"
+		"AbilityCastPoint"				"0.0"
+
+		"AbilityManaCost"				"200 300"
+
+		"ItemCost"						"5650"
+		"ItemShopTags"					"damage;attack_speed;unique"
+		"ItemQuality"					"artifact"
+		"ItemAliases"					"gleipnir;gliepnir;glaypnir"
+		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+		"ShouldBeSuggested"				"1"
+		"MaxUpgradeLevel"				"2"
+		"ItemBaseLevel"					"1"
+		
+		"AbilityValues"
+		{
+				"bonus_damage"			"30 60"
+				"bonus_attack_speed"	"30 60"
+				"chain_chance"			"30 40"
+				"chain_damage"			"160 220"
+				"chain_strikes"			"4 10"
+				"chain_radius"			"650"
+				"chain_delay"			"0.25"
+				"chain_cooldown"		"0.2 0.1"
+				"bonus_intellect"		"24 50"
+				"bonus_hp"				"350 600"
+				"duration"				"2.0 3.0"
+				"radius"				
+				{
+					"value"		"375 450"
+					"affected_by_aoe_increase"	"1"
+				}
+				"active_damage"			"180 350"
+				"illusion_multiplier_pct"	"150 200"
+		}
 	}
 	"item_moon_shard"
 	{
@@ -1944,5 +2043,85 @@
 		"ItemInitialStockTime"			"360.0"
 		"ItemStockTime"					"1"
 		"ItemStockInitial"				"0"
+	}
+
+	"item_angels_demise"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		
+		
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"6.0"
+
+
+		// Item Info
+		//-------------------------------------------------------------------------------------------------------------
+		"ItemCost"						"5000"
+		"ItemShopTags"					"hard_to_tag"
+		"ItemQuality"					"common"
+		"ItemAliases"					"angel;demise"
+		"ShouldBeSuggested"				"1"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_ENERGY"
+
+		// Special	
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityValues"
+		{
+			"bonus_damage"			"50"
+			"crit_chance"			"30"
+			"spell_crit_multiplier"		"75"
+			"spell_crit_flat"			"100"
+			"crit_multiplier"		"160"
+			"tooltip_crit_damage"	"60"
+			"bonus_health"		"200"
+			"bonus_mana"		"200"			
+			"bonus_all_stats"	"8"
+			"slow"						"50"
+			"slow_duration"				"1.5"
+		}
+	}
+
+	"item_devastator"
+	{
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_YES"
+		"AbilityCooldown"				"7"
+
+
+		"ItemCost"						"5575"
+		"ItemShopTags"					"int;hard_to_tag"
+		"ItemQuality"					"rare"
+		"ItemAliases"					"staff;misery;sm"
+		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+		"ShouldBeSuggested"				"1"
+		"AbilityUnitDamageSubType"		"DAMAGE_SUBTYPE_POISON"
+		
+		"AbilityValues"
+		{				
+				"bonus_intellect"		"45"				
+				"bonus_attack_speed"	"40"	
+				"bonus_armor"			"8"
+				"projectile_speed"		"300"
+				"int_damage_multiplier"	"1"
+				"slow"	"25"
+				"slow_duration"	"4"
+				"active_mres_reduction"		"20"
+				"passive_cooldown"		"4"
+				
+				"damage_to_arena_boss"
+				{
+					"CalculateSpellDamageTooltip" "0"
+					"value" "500"
+				}
+		}
+	}
+	"item_recipe_ultimate_scepter"
+	{
+		"ItemCost"						"5800"
+		"SecretShop"					"0"
+		"SideShop"						"0"
 	}
 }

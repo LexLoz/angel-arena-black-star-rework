@@ -50,7 +50,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"70 120"
+				"bonus_intellect"		"40 70"
 			}
 			"02"
 			{
@@ -75,7 +75,7 @@
 			"06"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"spell_amp_pct"			"15 18"
+				"spell_amp_pct"			"15 20"
 			}
 			"07"
 			{
@@ -90,7 +90,7 @@
 			"09"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"blast_damage_int_mult"	"2 4"
+				"blast_damage_int_mult"	"2 3"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"10"
@@ -126,7 +126,7 @@
 			"99"
 			{
 				"var_type" "FIELD_FLOAT"
-				"jungle_bears_damage_multiplier" "1.5 3"
+				"jungle_bears_damage_multiplier" "2 3"
 				"CalculateSpellDamageTooltip" "0"
 			}
 		}
@@ -154,7 +154,7 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"70 120"
+				"bonus_intellect"		"40 70"
 			}
 			"02"
 			{
@@ -179,7 +179,7 @@
 			"06"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"spell_amp_pct"			"15 18"
+				"spell_amp_pct"			"15 20"
 			}
 			"07"
 			{
@@ -194,7 +194,7 @@
 			"09"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"blast_damage_int_mult"	"2 4"
+				"blast_damage_int_mult"	"2 3"
 				"CalculateSpellDamageTooltip"	"0"
 			}
 			"10"
@@ -230,7 +230,7 @@
 			"99"
 			{
 				"var_type" "FIELD_FLOAT"
-				"jungle_bears_damage_multiplier" "1.5 2"
+				"jungle_bears_damage_multiplier" "2 3"
 				"CalculateSpellDamageTooltip" "0"
 			}
 		}

@@ -43,7 +43,6 @@ if IsServer() then
 			target:AddNewModifier(caster, self, "modifier_saitama_serious_punch_stun", {duration = self:GetSpecialValueFor("stun_duration_for_ally")})
 		elseif not permaKill then
 
-			-- self.NoDamageAmp = true
 			ApplyDamage({
 				attacker = caster,
 				victim = target,

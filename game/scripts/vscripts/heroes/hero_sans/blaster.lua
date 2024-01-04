@@ -1,4 +1,22 @@
-sans_blaster = class({})
+LinkLuaModifier("modifier_sans_blaster", "heroes/hero_sans/blaster.lua", LUA_MODIFIER_MOTION_NONE)
+
+modifier_sans_blaster = class({
+    IsHidden         = function() return true end,
+    IsPurgable       = function() return false end,
+    RemoveOnDeath    = function() return false end,
+    DestroyOnExpire  = function() return false end,
+    GetAttributes    = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
+    DeclareFunctions = function()
+        return {
+            MODIFIER_EVENT_ON_ABILITY_FULLY_CAST,
+        }
+    end,
+})
+
+sans_blaster = class({
+    GetIntrinsicModifierName = function() return "modifier_sans_blaster" end,
+})
+sans_blaster.IsCustomVectorTargeting = true
 
 function sans_blaster:GetVectorTargetRange()
     return self:GetSpecialValueFor("ray_length")
@@ -9,17 +27,17 @@ function sans_blaster:GetBehavior()
 end
 
 if IsServer() then
-    function sans_blaster:GetCastPoint()
-        return self:GetCaster():IsGenocideMode() and 0 or 0.2
-    end
-    function sans_blaster:OnVectorCastStart(vStartLocation, vDirection)
+    function modifier_sans_blaster:OnAbilityFullyCast(keys)
+        local ability = self:GetAbility()
+        if keys.ability ~= ability then return end
+
         local caster = self:GetCaster()
 
         local dodger = caster:FindAbilityByName("sans_dodger")
-        local cost = self:GetSpecialValueFor("charges_cost")
+        local cost = ability:GetSpecialValueFor("charges_cost")
 
         if dodger:ModifyCharges() < cost then
-            self:EndCooldown()
+            ability:EndCooldown()
             Containers:DisplayError(caster:GetPlayerID(), "#arena_hud_error_no_charges")
             return
         else
@@ -27,13 +45,21 @@ if IsServer() then
         end
 
         if caster:IsGenocideMode() then
-            self:EndCooldown()
+            ability:EndCooldown()
         end
+    end
+
+    function sans_blaster:GetCastPoint()
+        return self:GetCaster():IsGenocideMode() and 0 or 0.2
+    end
+
+    function sans_blaster:OnVectorCastStart(vStartLocation, vDirection)
+        local caster = self:GetCaster()
 
         local startpoint = self:GetCursorPosition()
         startpoint.z = GetGroundHeight(startpoint, nil) + 64
         local endpoint = startpoint +
-        vDirection * ((self:GetVectorTargetRange() + caster:GetCastRangeBonus()) * caster:IsGenocideMode(self))
+            vDirection * ((self:GetVectorTargetRange() + caster:GetCastRangeBonus()) * caster:IsGenocideMode(self))
         endpoint.z = GetGroundHeight(endpoint, nil) + 64
         local width = self:GetSpecialValueFor("ray_width") * caster:IsGenocideMode(self)
 
@@ -42,6 +68,7 @@ if IsServer() then
         local duration = self:GetSpecialValueFor("duration")
         local delay = self:GetSpecialValueFor("delay")
         local damage = (self:GetSpecialValueFor("damage") --[[* caster:IsGenocideMode(self)]]) --/ duration
+        local talent_damage = (caster:GetTalentSpecial("talent_hero_comic_sans_blaster_percent_damage", "percent_damage") or 0)
         local affectedUnits = {}
 
         Timers:NextTick(function()
@@ -61,7 +88,7 @@ if IsServer() then
                             ApplyDamage({
                                 victim = v,
                                 attacker = caster,
-                                damage = damage,
+                                damage = damage + v:GetMaxHealth() * talent_damage * 0.01,
                                 damage_type = abilityDamage,
                                 ability = self
                             })

@@ -32,13 +32,12 @@ if IsServer() then
 				if not affectedUnits[v] then
 					affectedUnits[v] = true
 
-					--self.NoDamageAmp = true
 					ApplyDamage({
 						attacker = caster,
 						victim = v,
 						damage = caster:GetIntellect() * blast_damage_int_mult,
 						damage_type = self:GetAbilityDamageType(),
-						--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
+						damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 						ability = self
 					})
 

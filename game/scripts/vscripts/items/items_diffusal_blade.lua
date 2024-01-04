@@ -12,7 +12,6 @@ function OnAttackLanded(keys)
 		target:SpendMana(manaburn, ability)
 		caster:GiveMana(manadrain)
 
-		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = target,
 			attacker = caster,

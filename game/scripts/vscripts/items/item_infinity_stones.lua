@@ -27,13 +27,6 @@ item_time_stone = class({
 item_soul_stone = class({
     GetIntrinsicModifierName = function() return "modifier_soul_stone" end,
 })
-if IsServer() then
-    function item_soul_stone:OnSpellStart()
-        local caster = self:GetCaster()
-        caster:AddNewModifier(caster, self, "modifier_soul_stone_active",
-            { duration = self:GetSpecialValueFor("duration") })
-    end
-end
 
 item_mind_stone = class({
     GetIntrinsicModifierName = function() return "modifier_mind_stone" end,
@@ -63,6 +56,7 @@ function infinity_stone_base:DeclareFunctions()
         MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
         MODIFIER_PROPERTY_STATS_AGILITY_BONUS,
         MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
+        MODIFIER_PROPERTY_MP_REGEN_AMPLIFY_PERCENTAGE,
     }
     return table
 end
@@ -70,11 +64,6 @@ end
 modifier_power_stone = class(infinity_stone_base)
 function modifier_power_stone:GetModifierHealthBonus()
     return self:GetParent():GetStrength() * (self.bonus_health or 0)
-end
-
-function modifier_power_stone:GetModifierBaseAttack_BonusDamage()
-    local strength = self:GetParent():GetStrength() -- self:GetAbility():GetSpecialValueFor("bonus_strength")
-    --return strength * self:GetAbility():GetSpecialValueFor("bonus_base_damage_per_strength")
 end
 
 function modifier_power_stone:GetModifierBonusStats_Strength()
@@ -90,20 +79,21 @@ if IsServer() then
         end
         Timers:NextTick(function()
             self.bonus_health = parent.HealthPerStrength *
-            self:GetAbility():GetSpecialValueFor("bonus_hp_per_strength") * 0.01
+                self:GetAbility():GetSpecialValueFor("bonus_hp_per_strength") * 0.01
             parent.HealthPerStrength = parent.HealthPerStrength + self.bonus_health
             parent:SetNetworkableEntityInfo("HealthPerStrength", parent.HealthPerStrength)
 
             self.bonus_damage = parent.BaseDamagePerStrength *
-            self:GetAbility():GetSpecialValueFor("bonus_base_damage_per_strength") * 0.01
+                self:GetAbility():GetSpecialValueFor("bonus_base_damage_per_strength") * 0.01
             parent.BaseDamagePerStrength = parent.BaseDamagePerStrength +
-            self.bonus_damage
+                self.bonus_damage
             parent:SetNetworkableEntityInfo("BaseDamagePerStrength", parent.BaseDamagePerStrength)
             Attributes:UpdateStrength(parent)
             parent:CalculateStatBonus(true)
         end)
 
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute0", true)
+        parent.bonus_primary_attribute0 = true
     end
 
     function modifier_power_stone:OnDestroy()
@@ -114,11 +104,12 @@ if IsServer() then
             end
         end
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute0", nil)
+        parent.bonus_primary_attribute0 = nil
 
         parent.HealthPerStrength = parent.HealthPerStrength - self.bonus_health
         parent:SetNetworkableEntityInfo("HealthPerStrength", parent.HealthPerStrength)
         parent.BaseDamagePerStrength = parent.BaseDamagePerStrength -
-        self.bonus_damage
+            self.bonus_damage
         parent:SetNetworkableEntityInfo("BaseDamagePerStrength", parent.BaseDamagePerStrength)
 
         Attributes:UpdateStrength(parent)
@@ -140,6 +131,7 @@ if IsServer() then
         local parent = self:GetParent()
         parent:AddNewModifier(parent, nil, "modifier_agility_primary_bonus", nil)
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute1", 1)
+        parent.bonus_primary_attribute1 = true
         Attributes:UpdateAgility(parent)
         self.value = 0
         self:StartIntervalThink(1 / 30)
@@ -153,7 +145,8 @@ if IsServer() then
             self.agility = agility
             parent.outside_change_bat = parent.outside_change_bat + self.value
             parent.outside_change_bat = parent.outside_change_bat - value
-            parent:SetNetworkableEntityInfo("BaseAttackTime", (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
+            parent:SetNetworkableEntityInfo("BaseAttackTime",
+                (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
             self.value = value
         end
     end
@@ -167,35 +160,45 @@ if IsServer() then
             end
         end
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute1", nil)
+        parent.bonus_primary_attribute1 = nil
         Attributes:UpdateAgility(parent)
         parent.outside_change_bat = parent.outside_change_bat + self.value
-        parent:SetNetworkableEntityInfo("BaseAttackTime", (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
+        parent:SetNetworkableEntityInfo("BaseAttackTime",
+            (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + parent.outside_change_bat)
     end
 end
 
 modifier_space_stone = class(infinity_stone_base)
--- function modifier_space_stone:GetModifierHealthBonus()
---     return self:GetParent():GetStrength() * (self.health_bonus or 0)
--- end
-
 function modifier_space_stone:GetModifierManaBonus()
-    return self:GetParent():GetIntellect() * (self.mana_bonus or 0)
+    local parent = self:GetParent()
+    return (parent:HasAbility("ogre_magi_dumb_luck") and parent:GetStrength() or parent:GetIntellect()) *
+        (self.mana_bonus or 0)
+end
+
+function modifier_space_stone:GetModifierMPRegenAmplify_Percentage()
+    return self:GetParent():HasAbility("ogre_magi_dumb_luck") and
+        self:GetAbility():GetSpecialValueFor("all_energies_regen_bonus_pct") or 0
 end
 
 if IsServer() then
     function modifier_space_stone:OnCreated()
         local parent = self:GetParent()
+        local ability = self:GetAbility()
         Timers:NextTick(function()
-            self.mpreg_bonus = parent.ManaRegAmpPerInt * self:GetAbility():GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
+            self.mpreg_bonus = parent.ManaRegAmpPerInt *
+                ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
             parent.ManaRegAmpPerInt = parent.ManaRegAmpPerInt + self.mpreg_bonus
             parent:SetNetworkableEntityInfo("ManaRegAmpPerInt", parent.ManaRegAmpPerInt)
 
-            self.hpreg_bonus = parent.HpRegenAmp * self:GetAbility():GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
+            self.hpreg_bonus = parent.HpRegenAmp * ability:GetSpecialValueFor("all_energies_regen_bonus_pct") *
+                0.01
             parent.HpRegenAmp = parent.HpRegenAmp + self.hpreg_bonus
             parent:SetNetworkableEntityInfo("HpRegenAmp", parent.HpRegenAmp)
 
-            self.mana_bonus = parent.ManaPerInt * self:GetAbility():GetSpecialValueFor("all_energies_bonus_pct") * 0.01
-            parent.ManaPerInt = parent.ManaPerInt + self.mana_bonus
+            self.mana_bonus = parent:HasAbility("ogre_magi_dumb_luck") and
+                ability:GetSpecialValueFor("all_energies_bonus_pct") * 6 * 0.01 or
+                ability:GetSpecialValueFor("all_energies_bonus_pct") * parent.ManaPerInt * 0.01
+
             parent:SetNetworkableEntityInfo("ManaPerInt", parent.ManaPerInt)
 
             -- self.health_bonus = parent.HealthPerStrength * self:GetAbility():GetSpecialValueFor("all_energies_bonus_pct") * 0.01
@@ -205,9 +208,9 @@ if IsServer() then
             --local stamina = parent:FindModifierByName("modifier_stamina")
             --if stamina then
             parent.bonus_stamina_pct = parent.bonus_stamina_pct +
-            self:GetAbility():GetSpecialValueFor("all_energies_bonus_pct") * 0.01
+                ability:GetSpecialValueFor("all_energies_bonus_pct") * 0.01
             parent.bonus_stamina_regen_pct = parent.bonus_stamina_regen_pct +
-            self:GetAbility():GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
+                ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
             --end
 
             if parent.GetEnergy then
@@ -215,10 +218,13 @@ if IsServer() then
 
                 if Energy then
                     Energy.energy_limit_boost_pct = Energy.energy_limit_boost_pct +
-                    self:GetAbility():GetSpecialValueFor("all_energies_bonus_pct") * 0.01
+                        ability:GetSpecialValueFor("all_energies_bonus_pct") * 0.01
                     Energy.energy_growth_boost_pct = Energy.energy_growth_boost_pct +
-                    self:GetAbility():GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
+                        ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
                 end
+            end
+            if parent:HasAbility("sans_dodger") then
+                parent:FindAbilityByName("sans_dodger").space_stone_amp = ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01 + 1
             end
             parent:CalculateStatBonus(true)
         end)
@@ -231,9 +237,9 @@ if IsServer() then
             --local stamina = parent:FindModifierByName("modifier_stamina")
             --if stamina then
             parent.bonus_stamina_pct = parent.bonus_stamina_pct -
-            ability:GetSpecialValueFor("all_energies_bonus_pct") * 0.01
+                ability:GetSpecialValueFor("all_energies_bonus_pct") * 0.01
             parent.bonus_stamina_regen_pct = parent.bonus_stamina_regen_pct -
-            ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
+                ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
             --end
 
             if parent.GetEnergy then
@@ -241,10 +247,14 @@ if IsServer() then
 
                 if Energy then
                     Energy.energy_limit_boost_pct = Energy.energy_limit_boost_pct -
-                    ability:GetSpecialValueFor("all_energies_bonus_pct") * 0.01
+                        ability:GetSpecialValueFor("all_energies_bonus_pct") * 0.01
                     Energy.energy_growth_boost_pct = Energy.energy_growth_boost_pct -
-                    ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
+                        ability:GetSpecialValueFor("all_energies_regen_bonus_pct") * 0.01
                 end
+            end
+
+            if parent:HasAbility("sans_dodger") then
+                parent:FindAbilityByName("sans_dodger").space_stone_amp = 1
             end
         end)
 
@@ -273,27 +283,32 @@ end
 
 function modifier_mind_stone:GetModifierBaseAttack_BonusDamage()
     local intellect = self:GetParent():GetIntellect()
-    return 0--intellect * self:GetAbility():GetSpecialValueFor("bonus_base_damage_per_int")
+    return 0 --intellect * self:GetAbility():GetSpecialValueFor("bonus_base_damage_per_int")
 end
 
 function modifier_mind_stone:GetModifierManaBonus()
-    return self:GetParent():GetIntellect() * (self.bonus_mana or 0)
+    local parent = self:GetParent()
+    return (parent:HasAbility("ogre_magi_dumb_luck") and parent:GetStrength() or parent:GetIntellect()) *
+        (self.bonus_mana or 0)
 end
 
 if IsServer() then
     function modifier_mind_stone:OnCreated()
         local parent = self:GetParent()
+        local ability = self:GetAbility()
         if parent:GetPrimaryAttribute() ~= DOTA_ATTRIBUTE_INTELLECT then
             Timers:NextTick(function()
                 parent:AddNewModifier(parent, nil, "modifier_intelligence_primary_bonus", nil)
             end)
         end
 
-        self.bonus_mana = self:GetAbility():GetSpecialValueFor("bonus_mana_pct") *
-        parent.ManaPerInt * 0.01
+        self.bonus_mana = parent:HasAbility("ogre_magi_dumb_luck") and
+            ability:GetSpecialValueFor("bonus_mana_pct") * 6 * 0.01 or
+            ability:GetSpecialValueFor("bonus_mana_pct") * parent.ManaPerInt * 0.01
         parent.ManaPerInt = parent.ManaPerInt + self.bonus_mana
         parent:SetNetworkableEntityInfo("ManaPerInt", parent.ManaPerInt)
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute2", 1)
+        parent.bonus_primary_attribute2 = true
         Attributes:UpdateIntelligence(parent)
     end
 
@@ -309,14 +324,17 @@ if IsServer() then
         parent:SetNetworkableEntityInfo("ManaPerInt", parent.ManaPerInt)
 
         parent:SetNetworkableEntityInfo("BonusPrimaryAttribute2", nil)
+        parent.bonus_primary_attribute2 = nil
         Attributes:UpdateIntelligence(parent)
     end
 end
 
 modifier_soul_stone = class(infinity_stone_base)
-function modifier_soul_stone:GetModifierStatusResistanceStacking()
-    local stat = self:GetParent():GetNetworkableEntityInfo("BonusStat") or 0
-    return self:GetAbility():GetSpecialValueFor("status_resist_per_primary") * stat
+if IsServer() then
+    function modifier_soul_stone:GetModifierStatusResistanceStacking()
+        local stat = self.stat or 0 --self:GetParent():GetNetworkableEntityInfo("BonusStat") or 0
+        return self:GetAbility():GetSpecialValueFor("status_resist_per_primary") * stat
+    end
 end
 
 function modifier_soul_stone:GetModifierBonusStats_Strength()
@@ -406,31 +424,31 @@ if IsServer() then
         local stat
         if primary == 0 then
             stat = parent:GetStrength() - parent:GetUnreliableStrength() -
-            item_bonus
-            
+                item_bonus
+
             if self.stat ~= stat then
                 self.stat = stat
-                parent:SetNetworkableEntityInfo("BonusStat", stat)
+                -- parent:SetNetworkableEntityInfo("BonusStat", stat)
             end
         end
 
         if primary == 1 then
             stat = parent:GetAgility() - parent:GetUnreliableAgility() -
-            item_bonus
-            
+                item_bonus
+
             if self.stat ~= stat then
                 self.stat = stat
-                parent:SetNetworkableEntityInfo("BonusStat", stat)
+                -- parent:SetNetworkableEntityInfo("BonusStat", stat)
             end
         end
 
         if primary == 2 then
             stat = parent:GetIntellect() - parent:GetUnreliableIntellect() -
-            item_bonus
-            
+                item_bonus
+
             if self.stat ~= stat then
                 self.stat = stat
-                parent:SetNetworkableEntityInfo("BonusStat", stat)
+                -- parent:SetNetworkableEntityInfo("BonusStat", stat)
             end
         end
     end
@@ -454,23 +472,30 @@ function modifier_reality_stone:GetModifierHealthBonus()
 end
 
 function modifier_reality_stone:GetModifierManaBonus()
-    return self:GetParent():GetIntellect() * (self.bonus_mana or 0)
+    local parent = self:GetParent()
+    return (parent:HasAbility("ogre_magi_dumb_luck") and parent:GetStrength() or parent:GetIntellect()) *
+        (self.bonus_mana or 0)
+end
+
+function modifier_reality_stone:GetModifierStatusResistanceStacking()
+    return self:GetAbility():GetSpecialValueFor("resists_increase")
 end
 
 if IsServer() then
     function modifier_reality_stone:OnCreated()
         local parent = self:GetParent()
+        local ability = self:GetAbility()
         Timers:NextTick(function()
-            self.bonus_mana = self:GetAbility():GetSpecialValueFor("bonus_mana_per_int") *
-            parent.ManaPerInt * 0.01
+            self.bonus_mana = parent:HasAbility("ogre_magi_dumb_luck") and
+                ability:GetSpecialValueFor("bonus_mana_pct") * 6 * 0.01 or
+                ability:GetSpecialValueFor("bonus_mana_pct") * parent.ManaPerInt * 0.01
             parent.ManaPerInt = parent.ManaPerInt + self.bonus_mana
             parent:SetNetworkableEntityInfo("ManaPerInt", parent.ManaPerInt)
 
-            parent.AgilityArmorMultiplier = parent.AgilityArmorMultiplier -
-            self:GetAbility():GetSpecialValueFor("agility_requirement_decrease")
+            -- parent.AgilityArmorMultiplier = parent.AgilityArmorMultiplier * (1 - self:GetAbility():GetSpecialValueFor("resists_increase") * 0.01)
 
             self.bonus_health = self:GetAbility():GetSpecialValueFor("bonus_hp_per_strength") *
-            parent.HealthPerStrength * 0.01
+                parent.HealthPerStrength * 0.01
             parent.HealthPerStrength = parent.HealthPerStrength + self.bonus_health
             parent:SetNetworkableEntityInfo("HealthPerStrength", parent.HealthPerStrength)
 
@@ -479,7 +504,8 @@ if IsServer() then
         if not parent.random_primary_bonus then
             parent.random_primary_bonus = RandomInt(0, 2)
         end
-        parent:SetNetworkableEntityInfo("BonusPrimaryAttribute"..tostring(parent.random_primary_bonus), 1)
+        parent:SetNetworkableEntityInfo("BonusPrimaryAttribute" .. tostring(parent.random_primary_bonus), 1)
+        parent['bonus_primary_attribute0' .. tostring(parent.random_primary_bonus)] = true
         if parent.random_primary_bonus == 1 then
             parent:AddNewModifier(parent, nil, "modifier_agility_primary_bonus", nil)
             Attributes:UpdateAgility(parent)
@@ -516,11 +542,12 @@ if IsServer() then
                 parent:RemoveModifierByName("modifier_intelligence_primary_bonus")
             end
         end
-        parent:SetNetworkableEntityInfo("BonusPrimaryAttribute"..tostring(parent.random_primary_bonus), nil)
+        parent:SetNetworkableEntityInfo("BonusPrimaryAttribute" .. tostring(parent.random_primary_bonus), nil)
+        parent['bonus_primary_attribute0' .. tostring(parent.random_primary_bonus)] = nil
 
         parent.ManaPerInt = parent.ManaPerInt - self.bonus_mana
         parent:SetNetworkableEntityInfo("ManaPerInt", parent.ManaPerInt)
-        parent.AgilityArmorMultiplier = parent.AgilityArmorMultiplier + self:GetAbility():GetSpecialValueFor("agility_requirement_decrease")
+        -- parent.AgilityArmorMultiplier = parent.AgilityArmorMultiplier / (1 - self:GetAbility():GetSpecialValueFor("resists_increase") * 0.01)
         parent.HealthPerStrength = parent.HealthPerStrength - self.bonus_health
         parent:SetNetworkableEntityInfo("HealthPerStrength", parent.HealthPerStrength)
         parent:CalculateStatBonus(true)

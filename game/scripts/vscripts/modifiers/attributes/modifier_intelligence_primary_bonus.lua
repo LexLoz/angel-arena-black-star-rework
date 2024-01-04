@@ -16,12 +16,14 @@ function modifier_intelligence_primary_bonus:DeclareFunctions()
     }
 end
 
-function modifier_intelligence_primary_bonus:OnTooltip()
-	return self:GetParent():GetNetworkableEntityInfo("IntellectPrimaryBonusMultiplier")
-end
+if IsClient() then
+	function modifier_intelligence_primary_bonus:OnTooltip()
+		return self:GetParent():GetNetworkableEntityInfo("IntellectPrimaryBonusMultiplier")
+	end
 
-function modifier_intelligence_primary_bonus:OnTooltip2()
-	return self:GetParent():GetNetworkableEntityInfo("IntellectPrimaryBonusDifference")
+	function modifier_intelligence_primary_bonus:OnTooltip2()
+		return self:GetParent():GetNetworkableEntityInfo("IntellectPrimaryBonusDifference")
+	end
 end
 
 function modifier_intelligence_primary_bonus:GetModifierStatusResistanceStacking()
@@ -40,12 +42,12 @@ if IsServer() then
 		local parent = self:GetParent()
 		local victim = parent
 
-		if victim:GetPrimaryAttribute() == 2 and victim:GetNetworkableEntityInfo("BonusPrimaryAttribute2") and not self.util_ then
+		if victim:GetPrimaryAttribute() == 2 and victim.bonus_primary_attribute2 and not self.util_ then
 			self.util_ = true
 
 			victim:SetNetworkableEntityInfo("IntellectPrimaryBonusMultiplier", INTELLECT_PRIMARY_BONUS_MAX_BONUS * INTELLECT_PRIMARY_BONUS_UPGRADE_MULT)
 			victim:SetNetworkableEntityInfo("IntellectPrimaryBonusDifference", INTELLECT_PRIMARY_BONUS_DIFF_FOR_MAX_MULT / INTELLECT_PRIMARY_BONUS_UPGRADE_DIFF_MULT)
-		elseif not victim:GetNetworkableEntityInfo("BonusPrimaryAttribute2") and self.util_ then
+		elseif not victim.bonus_primary_attribute2 and self.util_ then
 			self.util_ = false
 
 			victim:SetNetworkableEntityInfo("IntellectPrimaryBonusMultiplier", INTELLECT_PRIMARY_BONUS_MAX_BONUS)
@@ -58,6 +60,9 @@ if IsServer() then
 		local attacker = keys.ability:GetCaster()
 
         if not victim then return end
+		local function updateMod(stacks)
+			UpdateIntellgencePrimaryBonus(self, stacks, self:GetParent())
+		end
 		-- if attacker:PassivesDisabled() then
 		-- 	self.Target_StatusResist = 0
 		-- 	self.Caster_StatusResist = 0
@@ -72,7 +77,7 @@ if IsServer() then
 			end
 			self.Target_StatusResist = INTELLECT_PRIMARY_BONUS_MAX_BONUS * mult / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE
 			self.Caster_StatusResist = INTELLECT_PRIMARY_BONUS_MAX_BONUS * mult / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE
-			self:SetStackCount(math.round(INTELLECT_PRIMARY_BONUS_MAX_BONUS * mult / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE))
+			updateMod(math.round(INTELLECT_PRIMARY_BONUS_MAX_BONUS * mult / INTELLECT_PRIMARY_BONUS_ON_CREEPS_DECREASE))
 			return
 		end
 
@@ -88,7 +93,7 @@ if IsServer() then
 				difference = INTELLECT_PRIMARY_BONUS_DIFF_FOR_MAX_MULT
 			end
 
-			if victim:PassivesDisabled() or victim:IsHexed() then
+			if victim:PassivesDisabled() or victim:IsDisabled() or not victim:IsTrueHero() then
 				self.Target_StatusResist = 0
 				return
 			end
@@ -99,17 +104,17 @@ if IsServer() then
 
             if attackerInt >= victimInt then
 				self.Target_StatusResist = 0
-				self:SetStackCount(math.round(self.Target_StatusResist))
+				updateMod(math.round(self.Target_StatusResist))
 			end
 			if attackerInt < victimInt then
 				diff = victimInt / attackerInt
 				if diff >= difference then
 					self.Target_StatusResist = max_bonus
-					self:SetStackCount(math.round(self.Target_StatusResist))
+					updateMod(math.round(self.Target_StatusResist))
 				else
 					diff = 1 - attackerInt / victimInt
 					self.Target_StatusResist = max_bonus * diff
-					self:SetStackCount(math.round(self.Target_StatusResist))
+					updateMod(math.round(self.Target_StatusResist))
 				end
 			end
 	    end
@@ -122,7 +127,7 @@ if IsServer() then
 				difference = INTELLECT_PRIMARY_BONUS_DIFF_FOR_MAX_MULT
 			end
 
-			if attacker:PassivesDisabled() or attacker:IsHexed() then
+			if attacker:PassivesDisabled() or attacker:IsDisabled() or not attacker:IsTrueHero() then
 				self.Caster_StatusResist = 0
 				return
 			end
@@ -133,17 +138,17 @@ if IsServer() then
 
 			if attackerInt <= victimInt then
 				self.Caster_StatusResist = 0
-				self:SetStackCount(math.round(self.Caster_StatusResist))
+				updateMod(math.round(self.Caster_StatusResist))
 			end
 			if attackerInt > victimInt then
 				diff = attackerInt / victimInt
 				if diff >= difference then
 					self.Caster_StatusResist = -max_bonus
-					self:SetStackCount(math.abs(math.round(self.Caster_StatusResist)))
+					updateMod(math.abs(math.round(self.Caster_StatusResist)))
 				else
 					diff = 1 - victimInt / attackerInt
 					self.Caster_StatusResist = -max_bonus * diff
-					self:SetStackCount(math.abs(math.round(self.Caster_StatusResist)))
+					updateMod(math.abs(math.round(self.Caster_StatusResist)))
 				end
 			end
 		end

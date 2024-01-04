@@ -46,25 +46,25 @@ function GameMode:ModifiersFilter(filterTable)
 			parent.outside_change_bat = parent.outside_change_bat - difference
 			parent.change_bat_modifiers = parent.change_bat_modifiers or {}
 			table.insert(parent.change_bat_modifiers, { name = name, change = difference })
-			parent:SetNetworkableEntityInfo("BaseAttackTime", default_bat + parent.outside_change_bat)
+			parent.custom_base_attack_time = default_bat + parent.outside_change_bat
 		end
 
-		if ON_DAMAGE_MODIFIER_PROCS[name] then
-			parent.ON_DAMAGE_MODIFIER_PROCS = parent.ON_DAMAGE_MODIFIER_PROCS or {}
-			parent.ON_DAMAGE_MODIFIER_PROCS[name] = true
-		end
-		if ON_DAMAGE_MODIFIER_PROCS_VICTIM[name] then
-			parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM = parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM or {}
-			parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM[name] = true
-		end
-		if OUTGOING_DAMAGE_MODIFIERS[name] then
-			parent.OUTGOING_DAMAGE_MODIFIERS = parent.OUTGOING_DAMAGE_MODIFIERS or {}
-			parent.OUTGOING_DAMAGE_MODIFIERS[name] = true
-		end
-		if INCOMING_DAMAGE_MODIFIERS[name] then
-			parent.INCOMING_DAMAGE_MODIFIERS = parent.INCOMING_DAMAGE_MODIFIERS or {}
-			parent.INCOMING_DAMAGE_MODIFIERS[name] = true
-		end
+		-- if ON_DAMAGE_MODIFIER_PROCS[name] then
+		-- 	parent.ON_DAMAGE_MODIFIER_PROCS = parent.ON_DAMAGE_MODIFIER_PROCS or {}
+		-- 	parent.ON_DAMAGE_MODIFIER_PROCS[name] = true
+		-- end
+		-- if ON_DAMAGE_MODIFIER_PROCS_VICTIM[name] then
+		-- 	parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM = parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM or {}
+		-- 	parent.ON_DAMAGE_MODIFIER_PROCS_VICTIM[name] = true
+		-- end
+		-- if OUTGOING_DAMAGE_MODIFIERS[name] then
+		-- 	parent.OUTGOING_DAMAGE_MODIFIERS = parent.OUTGOING_DAMAGE_MODIFIERS or {}
+		-- 	parent.OUTGOING_DAMAGE_MODIFIERS[name] = true
+		-- end
+		-- if INCOMING_DAMAGE_MODIFIERS[name] then
+		-- 	parent.INCOMING_DAMAGE_MODIFIERS = parent.INCOMING_DAMAGE_MODIFIERS or {}
+		-- 	parent.INCOMING_DAMAGE_MODIFIERS[name] = true
+		-- end
 	end
 
 	return true
@@ -98,20 +98,30 @@ function GameMode:HealFilter(filterTable)
 		end
 		--print(healer.HPRegenAmplify)
 		local interval_mult = GetIntervalMult(inflictor, "_healInterval")
-		if inflictorname and (not NO_HEAL_AMPLIFY[inflictorname] and not inflictor.NoHealAmp) then
-			local heal_mult = (healer.HPRegenAmplify or 1) + ((target.HPRegenAmplify or 1) - 1)
-			filterTable.heal = math.min(5000, filterTable.heal)
-			if healer.HPRegenAmplify > SPEND_MANA_PER_HEAL_MULT_THRESHOLD then
-				SpendManaPerDamage(healer, inflictor, filterTable.heal * (heal_mult - SPEND_MANA_PER_HEAL_MULT_THRESHOLD),
-					interval_mult, "ManaSpendCooldownHeal", SPEND_MANA_PER_HEAL)
+		local heal_mult = (healer.HPRegenAmplify or 1) + ((target.HPRegenAmplify or 1) - 1)
+		if inflictorname then
+			if (not NO_HEAL_AMPLIFY[inflictorname] and not inflictor.NoHealAmp) then
+				if healer.HPRegenAmplify > SPEND_MANA_PER_HEAL_MULT_THRESHOLD then
+					SpendManaPerDamage(healer, inflictor,
+						filterTable.heal * (heal_mult - SPEND_MANA_PER_HEAL_MULT_THRESHOLD),
+						interval_mult, "ManaSpendCooldownHeal", SPEND_MANA_PER_HEAL)
+				end
+				filterTable.heal = 
+					filterTable.heal * heal_mult *
+					GetLowManaMultiplier(healer.HPRegenAmplify, healer, SPEND_MANA_PER_HEAL_MULT_THRESHOLD,
+						SPEND_MANA_PER_HEAL_MAX_REDUCE_THRESHOLD)
+			elseif type(NO_HEAL_AMPLIFY[inflictorname]) == "string" then
+				local value = inflictor:GetSpecialValueFor(NO_HEAL_AMPLIFY[inflictorname])
+				if healer.HPRegenAmplify > SPEND_MANA_PER_HEAL_MULT_THRESHOLD then
+					SpendManaPerDamage(healer, inflictor,
+					value * (heal_mult - SPEND_MANA_PER_HEAL_MULT_THRESHOLD),
+						interval_mult, "ManaSpendCooldownHeal", SPEND_MANA_PER_HEAL)
+				end
+				filterTable.heal =
+					(filterTable.heal + value * heal_mult *
+					GetLowManaMultiplier(healer.HPRegenAmplify, healer, SPEND_MANA_PER_HEAL_MULT_THRESHOLD,
+						SPEND_MANA_PER_HEAL_MAX_REDUCE_THRESHOLD))
 			end
-			-- print('heal before amp: ' .. filterTable.heal)
-			-- print('debug: ' .. heal_mult)
-			filterTable.heal = math.min(2000000000,
-				filterTable.heal * heal_mult *
-				GetLowManaMultiplier(healer.HPRegenAmplify, healer, SPEND_MANA_PER_HEAL_MULT_THRESHOLD,
-					SPEND_MANA_PER_HEAL_MAX_REDUCE_THRESHOLD))
-			-- print('heal after amp: ' .. filterTable.heal)
 		end
 	end
 	-- print(filterTable.heal)
@@ -151,7 +161,9 @@ function GameMode:ExecuteOrderFilter(filterTable)
 		abilityname = ability:GetAbilityName()
 	end
 	if order_type == DOTA_UNIT_ORDER_TRAIN_ABILITY and Options:IsEquals("EnableAbilityShop") then
-		CustomAbilities:OnAbilityBuy(playerId, abilityname)
+		local data = CustomAbilities.AbilityInfo[abilityname]
+		PrintTable(data)
+		CustomAbilities:OnAbilityBuy(playerId, abilityname, data.tableIndex, data.heroIndex, data.abilityIndex)
 		return false
 	end
 
@@ -301,43 +313,14 @@ function GameMode:DamageFilter(filterTable)
 	--print(filterTable.damage)
 
 	if IsValidEntity(attacker) then
-		-- if attacker:HasAbility("sans_curse") and (victim:GetTeam() ~= attacker:GetTeam() and victim:IsTrueHero() and victim:IsControllableByAnyPlayer()) then
-		-- 	local percent = victim:GetHealth() / victim:GetMaxHealth() * 100
-		-- 	if percent > 1 then
-		-- 		filterTable.damage = 0
-		-- 	else
-		-- 		filterTable.damage = victim:GetHealth()
-		-- 	end
-		-- end
-		-- if victim:HasModifier("modifier_sans_curse") then
-		-- 	local modifier = victim:FindModifierByName("modifier_sans_curse")
-		-- 	local caster = modifier:GetAbility():GetCaster()
-		-- 	local talent = caster:HasTalent("talent_hero_comic_sans_karma_aura")
-
-		-- 	if talent and attacker ~= caster and (victim:GetTeam() ~= caster:GetTeam() and victim:IsTrueHero() and victim:IsControllableByAnyPlayer()) then
-		-- 		filterTable.damage = filterTable.damage / 2
-		-- 	end
-		-- end
-
 		if IsValidEntity(inflictor) and inflictor.GetAbilityName then
 			filterTable.damage = DamageSubtypesFilter(inflictor, attacker, victim, filterTable.damage) or
 				filterTable.damage
-			--filterTable = DamageHasInflictor(inflictor, filterTable, attacker, victim, damagetype_const)
 		end
-
-		-- for k, v in pairs(ON_DAMAGE_MODIFIER_PROCS) do
-		-- 	if attacker:HasModifier(k) then
 		OnDamageModifierProcs(attacker, victim, inflictor, damage, damagetype_const, 0,
 			0)
-		-- end
-		-- end
-		-- for k, v in pairs(ON_DAMAGE_MODIFIER_PROCS_VICTIM) do
-		-- if victim:HasModifier(k) then
 		OnDamageModifierProcsVictim(attacker, victim, inflictor, damage, damagetype_const,
 			0, 0)
-		-- end
-		-- if damage == 0 then break end
-		-- end
 
 		if attacker.GetPlayerOwnerID then
 			local attackerPlayerId = attacker:GetPlayerOwnerID()
@@ -386,7 +369,8 @@ function GameMode:ModifyExperienceFilter(filterTable)
 				acceleration = acceleration + v.xp_multiplier
 			end
 		end
-		filterTable.experience = filterTable.experience * (1 + item_chest_of_midas + talent + acceleration) * (1 + math.min(10, killStreak) * 0.05)
+		filterTable.experience = filterTable.experience * (1 + item_chest_of_midas + talent + acceleration) +
+		math.min(10, killStreak) * 0.05
 		if hero:GetFullName() == "npc_arena_hero_comic_sans" then
 			filterTable.experience = filterTable.experience * 1.5
 		end

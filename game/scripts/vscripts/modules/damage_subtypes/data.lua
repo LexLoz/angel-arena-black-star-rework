@@ -188,19 +188,37 @@ GREAT_MAGE_TEMPLATE = {
     npc_dota_hero_rubick = true,
 }
 TROLL_TEMPLATE = {
-
+    npc_dota_hero_troll_warlord = true,
+    npc_dota_hero_shadow_shaman = true,
+    npc_dota_hero_batrider = true,
+    npc_dota_hero_dazzle = true,
+    npc_dota_hero_huskar = true,
 }
 
 OGRE_TEMPLATE = {
-
+    npc_dota_hero_alchemist = true,
+    npc_dota_hero_ogre_magi = true,
 }
 
 DWARF_TEMPLATE = {
+    npc_dota_hero_alchemist = true,
+    npc_dota_hero_sniper = true,
+    npc_dota_hero_tinker = true,
+    npc_dota_hero_gyrocopter = true,
+}
 
+GOBLIN_TEMPLATE = {
+    npc_dota_hero_rattletrap = true,
+    npc_dota_hero_techies = true,
+    npc_dota_hero_shredder = true,
 }
 
 ORC_TEMPLATE = {
-
+    npc_dota_hero_axe = true,
+    npc_dota_hero_juggernaut = true,
+    npc_dota_hero_disruptor = true,
+    npc_dota_hero_grimstroke = true,
+    npc_dota_hero_snapfire = true,
 }
 
 ELF_TEMPLATE = {

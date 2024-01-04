@@ -5,6 +5,7 @@ InfinityStones.particle_cash = {}
 
 if IsServer() then
 	function InfinityStones:OnEntityKilled(keys)
+		if not GameMode.IsInfinityStonesCanDrop then return end
 		local killedUnit = EntIndexToHScript(keys.entindex_killed)
 		local killerEntity
 		if keys.entindex_attacker then

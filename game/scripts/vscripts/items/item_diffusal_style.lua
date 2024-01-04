@@ -58,14 +58,13 @@ function OnAttackLanded(keys)
 		target:SpendMana(manaburn, ability)
 		caster:GiveMana(manadrain)
 
-		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = target,
 			attacker = caster,
 			damage = manaburn * keys.damage_per_burn_pct * 0.01,
 			damage_type = ability:GetAbilityDamageType(),
 			ability = ability,
-			--damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION
+			damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION
 		})
 		ParticleManager:CreateParticle("particles/generic_gameplay/generic_manaburn.vpcf", PATTACH_ABSORIGIN_FOLLOW, target)
 		ParticleManager:CreateParticle("particles/arena/generic_gameplay/generic_manasteal.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)

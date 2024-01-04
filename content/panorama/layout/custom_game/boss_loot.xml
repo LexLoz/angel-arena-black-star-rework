@@ -22,7 +22,8 @@
 		<snippet name="BossDropItemVote">
 			<Panel class="BossDropItemVote" hittest="false">
 				<Panel id="KilledBossInfo">
-					<Label id="BossPlayerScore" onmouseout="UIHideTextTooltip()" onmouseover="UIShowTextTooltip(#boss_loot_vote_score_tooltip)" />
+					<Label id="BossPlayerScore" onmouseout="UIHideTextTooltip()"
+						onmouseover="UIShowTextTooltip(#boss_loot_vote_score_tooltip)" />
 					<Image id="KilledBossImage" />
 					<Label id="KilledBossName" />
 				</Panel>
@@ -40,6 +41,17 @@
 			</Panel>
 			<Panel id="BossDropItemVotingsList">
 				<Panel id="BossDropItemVotingsListContainer" />
+			</Panel>
+		</Panel>
+		<Panel id="BossDropConfrimChoose" class="HideConfrimPanel">
+			<Label id="BossDropConfrimTitle" text="#boss_loot_confrim_choose" />
+			<Panel id="BossDropConfrimButtons">
+				<Panel id="BossDropConfrimYes">
+					<Label text="#boss_loot_confrim_choose_yes" />
+				</Panel>
+				<Panel id="BossDropConfrimNo" onactivate="SetBossDropConfrimPanelVisible()">
+					<Label text="#boss_loot_confrim_choose_no" />
+				</Panel>
 			</Panel>
 		</Panel>
 	</Panel>

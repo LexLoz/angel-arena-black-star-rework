@@ -250,7 +250,7 @@ function HeroSelection:StartStateStrategy()
 
 	local current_time = math.abs(GameRules:GetDOTATime(true, true))
 	local needed_time = Options:GetValue("PreGameTime")
-	local difference = current_time - needed_time + HERO_SELECTION_STRATEGY_TIME
+	local difference = current_time - needed_time + HERO_SELECTION_STRATEGY_TIME + 1
 	local mult = math.max(1, difference / HERO_SELECTION_STRATEGY_TIME)
 	-- print('current_time: '..current_time)
 	-- print('needed_time: '..needed_time)

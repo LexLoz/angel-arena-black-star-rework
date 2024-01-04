@@ -223,7 +223,7 @@ function modifier_fymryn_shadow_step:CheckEnemies(radius)
 	for _, target in pairs(enemies) do
         target:AddNewModifier(self:GetCaster(), self:GetAbility(), "modifier_fymryn_shadow_step_debuff", {duration = self:GetAbility():GetSpecialValueFor("duration_slow")})
         local modifier = self:GetCaster():AddNewModifier( self:GetCaster(), self:GetAbility(), "modifier_fymryn_shadow_step_buff_attack", {} )
-        self:GetCaster():PerformAttack ( target, true, true, true, false, false, false, true )
+        self:GetCaster():PerformAttack ( target, false, true, true, false, false, false, true )
         if modifier and not modifier:IsNull() then
             modifier:Destroy()
         end
@@ -248,7 +248,7 @@ function modifier_fymryn_shadow_step:CheckEnemies(radius)
         if not target:HasModifier("modifier_fymryn_shadow_step_creep_damage") then
             target:AddNewModifier(self:GetCaster(), self:GetAbility(), "modifier_fymryn_shadow_step_debuff", {duration = self:GetAbility():GetSpecialValueFor("duration_slow")})
             target:AddNewModifier(self:GetCaster(), self:GetAbility(), "modifier_fymryn_shadow_step_creep_damage", {duration = 0.25})
-            self:GetCaster():PerformAttack ( target, true, true, true, false, false, false, true )
+            self:GetCaster():PerformAttack ( target, false, true, true, false, false, false, true )
         end
     end
 end
@@ -420,7 +420,7 @@ function modifier_fymryn_shadow_step_visual:DeclareFunctions()
     }
 end
 function modifier_fymryn_shadow_step_visual:GetModifierModelChange()
-    return "models/units/fymryn/fymryn_smoke.vmdl"
+    return "models/fymryn_smoke/fymryn2_model.vmdl"
 end
 function modifier_fymryn_shadow_step_visual:OnDestroy()
     if not IsServer() then return end

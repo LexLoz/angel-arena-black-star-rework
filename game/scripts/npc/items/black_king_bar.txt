@@ -190,6 +190,7 @@
 					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
 					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
 					"MODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE"		"%bonus_damage"
+					"MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE"		"1"
 				}
 			}
 			"modifier_item_titanium_bar_active"
@@ -203,7 +204,7 @@
 					"MODIFIER_PROPERTY_STATS_STRENGTH_BONUS"		"%active_bonus_strength"
 					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"	"%active_bonus_attackspeed"
 					//"MODIFIER_PROPERTY_INCOMING_DAMAGE_PERCENTAGE"	"%active_damage_reduction_pct"
-					"MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS"	"70"
+					"MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS"	"80"
 				}
 
 				"States"

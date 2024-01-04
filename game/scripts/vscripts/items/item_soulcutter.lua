@@ -83,7 +83,9 @@ if IsServer() then
 					duration = ability:GetSpecialValueFor("duration")
 				}
 			)
-			modifier:IncrementStackCount()
+			if not target:IsBoss() or (target:IsBoss() and modifier:GetStackCount() < ability:GetSpecialValueFor("max_stacks_boss")) then
+				modifier:IncrementStackCount()
+			end
 			ability:StartCooldown(ability:GetSpecialValueFor("cooldown"))
 		end
 	end

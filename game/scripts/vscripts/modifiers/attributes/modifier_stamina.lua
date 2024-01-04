@@ -30,17 +30,25 @@ function modifier_stamina:OnTooltip()
 end
 
 if IsClient() then
-	function modifier_stamina:GetModifierBaseAttackTimeConstant()
-		return (self:GetParent():GetNetworkableEntityInfo("BaseAttackTime")) +
-			(1 - self:GetStackCount() / 100) * 0.3
+	function modifier_stamina:HandleCustomTransmitterData(data)
+		self.max_bat_decrease = data.max_bat_decrease
+		self.reduce_damage = data.reduce_damage
+		self.reduce_ms = data.reduce_ms
+		self.bat = data.bat
 	end
-	function modifier_stamina:GetModifierDamageOutgoing_Percentage()
-		return (1 - self:GetStackCount() / 100) * -70
+
+	function modifier_stamina:GetModifierBaseAttackTimeConstant()
+		return self.bat +
+			(1 - self:GetStackCount() / 100) * self.max_bat_decrease
 	end
 end
 
+function modifier_stamina:GetModifierDamageOutgoing_Percentage()
+	return (1 - self:GetStackCount() / 100) * self.reduce_damage
+end
+
 function modifier_stamina:GetModifierMoveSpeedBonus_Percentage()
-	return (1 - self:GetStackCount() / 100) * -30
+	return (1 - self:GetStackCount() / 100) * self.reduce_ms
 end
 
 if IsServer() then
@@ -60,7 +68,6 @@ if IsServer() then
 		self.stamina_regen_fountain_bonus = 3
 		self.ret_ms = 0
 		self.attack_time_change = 0
-		self.bat = parent.Custom_AttackRate or parent:GetBaseAttackTime() or parent:GetKeyValue("AttackRate")
 		self.changed_bat = 0
 		self.saved_bat = 0
 		self._bonus_stamina_regen_pct = 1
@@ -69,10 +76,10 @@ if IsServer() then
 		parent.bonus_stamina_regen_pct = 1
 		--self.disable_regen = false
 
-		parent:SetNetworkableEntityInfo("StaminaMSReduce", STAMINA_MAX_MS_REDUSE)
-		parent:SetNetworkableEntityInfo("StaminaDamageReduce", STAMINA_DAMAGE_DECREASE_PCT)
+		-- parent:SetNetworkableEntityInfo("StaminaMSReduce", STAMINA_MAX_MS_REDUSE)
+		-- parent:SetNetworkableEntityInfo("StaminaDamageReduce", STAMINA_DAMAGE_DECREASE_PCT)
 		parent:SetNetworkableEntityInfo("MaxStamina", math.round(self.stamina))
-		parent:SetNetworkableEntityInfo("Stamina", self.stamina)
+		-- parent:SetNetworkableEntityInfo("Stamina", self.stamina)
 		--parent:SetNetworkableEntityInfo("STAMINA_ARMOR_DECREASE_MULT", STAMINA_ARMOR_DECREASE_MULT)
 		--parent:SetNetworkableEntityInfo("STAMINA_DEBUFF_DURATION", STAMINA_DEBUFF_DURATION)
 		--parent:SetNetworkableEntityInfo("StaminaThreshouldForDebuff", STAMINA_THRESHOLD_FOR_DEBUFF)
@@ -134,6 +141,11 @@ if IsServer() then
 			return self.current_stamina
 		end
 
+		--transmitter
+		self.reduce_ms = STAMINA_MAX_MS_REDUSE
+		self.reduce_damage = STAMINA_DAMAGE_DECREASE_PCT
+		self:Transmitter()
+
 		self.tick = 1 / 20
 		self:StartIntervalThink(self.tick)
 	end
@@ -141,7 +153,7 @@ if IsServer() then
 	function modifier_stamina:OnAttackStart(keys)
 		local parent = keys.attacker
 
-		if parent ~= self:GetParent() then return end
+		if parent ~= self:GetParent() or not parent:IsTrueHero() then return end
 
 		if keys.inflictor then return end
 
@@ -161,16 +173,37 @@ if IsServer() then
 	end
 
 	function modifier_stamina:GetModifierBaseAttackTimeConstant()
-		local bat = self.bat or 0
-		local outside_change_bat = self:GetParent().outside_change_bat or 0
-		local total_bat = bat + outside_change_bat
+		local parent = self:GetParent()
+		local total_bat = self.bat
 		return (1 - self:GetStackCount() / 100) * STAMINA_MAX_BAT_DECREASE +
 			total_bat
+	end
+
+	function modifier_stamina:AddCustomTransmitterData()
+		return {
+			max_bat_decrease = STAMINA_MAX_BAT_DECREASE,
+			reduce_damage = self.reduce_damage,
+			reduce_ms = self.reduce_ms,
+			bat = self.bat
+		}
+	end
+
+	function modifier_stamina:Transmitter()
+		local parent = self:GetParent()
+
+		--transmitter
+		self.bat = (parent.Custom_AttackRate or parent:GetKeyValue("AttackRate")) + (parent.outside_change_bat or 0)
+		self:SetHasCustomTransmitterData(false)
+		self:SetHasCustomTransmitterData(true)
+		self:SendBuffRefreshToClients()
 	end
 
 	function modifier_stamina:OnIntervalThink()
 		--self._tick = self._tick + 1
 		local parent = self:GetParent()
+
+		--transmitter
+		self:Transmitter()
 
 		--regen stamina
 		if parent:IsAlive() and not self.debuff and self.current_stamina < self.stamina then
@@ -188,14 +221,14 @@ if IsServer() then
 				self.stamina_regen = self.stamina * STAMINA_REGEN * 0.01
 				self._stamina = self.stamina
 				parent:SetNetworkableEntityInfo("MaxStamina", math.round(self.stamina))
-				parent:SetNetworkableEntityInfo("Stamina", self.stamina)
+				-- parent:SetNetworkableEntityInfo("Stamina", self.stamina)
 			elseif self._stamina > self.stamina then
 				local difference = self._stamina - self.stamina
 				parent:ModifyStamina(-difference)
 				self.stamina_regen = self.stamina * STAMINA_REGEN * 0.01
 				self._stamina = self.stamina
 				parent:SetNetworkableEntityInfo("MaxStamina", math.round(self.stamina))
-				parent:SetNetworkableEntityInfo("Stamina", self.stamina)
+				-- parent:SetNetworkableEntityInfo("Stamina", self.stamina)
 			end
 		end)
 	end

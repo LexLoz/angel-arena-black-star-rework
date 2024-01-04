@@ -81,10 +81,12 @@ if IsServer() then
             local localizedTeam = Teams.Data[team].name2
             local notification1 = "#arena_tower_rage1"
             local notification2 = "#arena_tower_rage2"
+            local notification3 = "#arena_tower_rage3"
 
             Notifications:TopToAll({ text = notification1, duration = 6 })
             Notifications:TopToAll({ text = localizedTeam, continue = true })
             Notifications:TopToAll({ text = notification2, continue = true })
+            Notifications:TopToAll({ text = notification3,  duration = 6 })
 
             tower.boss_armor = tower:AddAbility("boss_armor")
             if tower.boss_armor then
@@ -127,7 +129,7 @@ if IsServer() then
         Notifications:TopToAll({ text = "ㅤ" .. " 2", continue = true })
 
         if keys.attacker:GetTeamNumber() ~= team and keys.attacker:IsTrueHero() then
-            Gold:AddGoldWithMessage(keys.attacker, 10000 + Gold:GetGold(keys.attacker:GetPlayerOwnerID() * 0.5))
+            Gold:AddGoldWithMessage(keys.attacker, 10000 + Gold:GetGold(keys.attacker:GetPlayerOwnerID()) * 0.5)
         end
     end
 end

@@ -8,10 +8,10 @@ function DoSummon(keys)
 		return
 	end
 	local unit
-	local player = caster:GetPlayerOwner()
+	local player = PLAYER_DATA[caster:GetPlayerOwnerID()]
 	if player.custom_summoned_unit_ability_item_summoned_unit then
 		unit = player.custom_summoned_unit_ability_item_summoned_unit
-		--print(unit)
+		print(unit)
 		unit:RespawnUnit()
 		unit:SetMana(unit:GetMaxMana())
 		unit:SetOwner(caster)
@@ -19,7 +19,7 @@ function DoSummon(keys)
 	else
 		unit = CreateUnitByName("npc_arena_item_summoned_unit", caster:GetAbsOrigin(), true, caster, nil, caster:GetTeamNumber())
 		player.custom_summoned_unit_ability_item_summoned_unit = unit
-		unit:SetControllableByPlayer(caster:GetPlayerID(), true)
+		unit:SetControllableByPlayer(caster:GetPlayerOwnerID(), true)
 		unit:SetOwner(caster)
 		for i = 1, 6 - keys.item_slots do
 			unit:AddItem(CreateItem("item_slot_locked", unit, unit))
@@ -67,8 +67,8 @@ end
 function KillSummon(keys)
 	local caster = keys.caster
 	local ability = keys.ability
-	local player = caster:GetPlayerOwner()
+	local player = PLAYER_DATA[caster:GetPlayerOwnerID()]
 	local unit = player.custom_summoned_unit_ability_item_summoned_unit
-	if not IsValidEntity(unit) or not unit:IsAlive() then return end
+	if not IsValidEntity(unit) or not unit:IsAlive() or caster:IsIllusion() or caster:IsStrongIllusion() then return end
 	unit:ForceKill(false)
 end

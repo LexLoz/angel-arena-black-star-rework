@@ -4,6 +4,7 @@
 		<include src="file://{resources}/styles/keyframes.css" />
 		<include src="file://{resources}/styles/custom_hud.css" />
 		<include src="file://{resources}/styles/dynamic_minimap.css" />
+		<include src="file://{resources}/styles/custom_game/game_info.css" />
 	</styles>
 	<scripts>
 		<include src="file://{resources}/scripts/libraries/arena_util.js" />
@@ -42,6 +43,11 @@
 		<Panel id="ButtonSwapMana" class="SwapManaBar" hittest="false">
 			<Image id="Stamina" src="s2r://panorama/images/primary_attribute_icons/primary_attribute_icon_agility_psd.vtex" onactivate="ToggleOnStaminaBar()" hittest="true"/>
 			<Image id="Mana" src="s2r://panorama/images/primary_attribute_icons/primary_attribute_icon_intelligence_psd.vtex" onactivate="ToggleOnManaBar()" hittest="true"/>
+		</Panel>
+		<Panel class="GameInfoMain">
+			<Panel id="Title">
+				<Label id="TitleName" text="#addon_game_name" />
+			</Panel>
 		</Panel>
 	</Panel>
 </root>

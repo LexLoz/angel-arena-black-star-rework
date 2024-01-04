@@ -37,7 +37,7 @@
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"split_damage_pct"		"30"
+				"split_damage_pct"		"50"
 			}
 			"04"
 			{
@@ -74,47 +74,47 @@
 			"01"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_damage"					"50"
+				"bonus_damage"					"60"
 			}
 			"02"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_strength"				"40"
+				"bonus_strength"				"50"
 			}
 			"03"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_agility"					"40"
+				"bonus_agility"					"50"
 			}
 			"04"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_intellect"				"40"
+				"bonus_intellect"				"50"
 			}
 			"05"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_attack_speed"			"40"
+				"bonus_attack_speed"			"50"
 			}
 			"06"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_movement_speed_pct"		"20"
+				"bonus_movement_speed_pct"		"30"
 			}
 			"07"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"spell_amp_pct"					"16"
+				"spell_amp_pct"					"30"
 			}
 			"08"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"split_damage_pct"				"60"
+				"split_damage_pct"				"70"
 			}
 			"09"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"split_radius"					"375"
+				"split_radius"					"500"
 			}
 			"10"
 			{
@@ -124,22 +124,22 @@
 			"11"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"bonus_heal_and_lifesteal"	"22"
+				"bonus_heal_and_lifesteal"	"30"
 			}
 			"12"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"bonus_status_resist"		"20"
+				"bonus_status_resist"		"30"
 			}
 			"13"
 			{
 				"var_type"					"FIELD_INTEGER"
-				"bonus_mana_regen_pct"		"50"
+				"bonus_mana_regen_pct"		"75"
 			}
 			"14"
 			{
 				"var_type"						"FIELD_INTEGER"
-				"bonus_spell_lifesteal_pct"		"36"
+				"bonus_spell_lifesteal_pct"		"40"
 			}
 		}
 	}

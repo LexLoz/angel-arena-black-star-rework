@@ -43,5 +43,6 @@
 				<TextEntry class="content__entry" multiline="true" />
 			</Panel>
 		</Panel>
+		<Panel id="TempPanelsContainer" style="visibility: collapse;"></Panel>
 	</Panel>
 </root>

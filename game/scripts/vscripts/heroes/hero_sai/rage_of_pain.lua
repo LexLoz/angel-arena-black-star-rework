@@ -1,5 +1,4 @@
 LinkLuaModifier("modifier_sai_rage_of_pain", "heroes/hero_sai/rage_of_pain.lua", LUA_MODIFIER_MOTION_NONE)
-LinkLuaModifier("modifier_sai_rage_of_pain_mass_debuff", "heroes/hero_sai/rage_of_pain.lua", LUA_MODIFIER_MOTION_NONE)
 
 sai_rage_of_pain = class({
 	GetIntrinsicModifierName = function() return "modifier_sai_rage_of_pain" end,
@@ -43,7 +42,7 @@ end
 function modifier_sai_rage_of_pain:GetModifierBaseDamageOutgoing_Percentage(keys)
 	local ability = self:GetAbility()
 	local parent = self:GetParent()
-	local bonus = (ability:GetSpecialValueFor("damage_per_stack_pct") + (parent:GetNetworkableEntityInfo("MaxMana") or parent:GetMaxMana()) / ability:GetSpecialValueFor("mana_for_bonus_damage")) * self:GetStackCount()
+	local bonus = ability:GetSpecialValueFor("damage_per_stack_pct") * self:GetStackCount() --+ (parent:GetNetworkableEntityInfo("MaxMana") or parent:GetMaxMana()) / ability:GetSpecialValueFor("mana_for_bonus_damage")) * self:GetStackCount()
 	--[[if parent:HasModifier("modifier_sai_release_of_forge") then
 		local release_of_forge_modifier = parent:FindModifierByName("modifier_sai_release_of_forge")
 		if release_of_forge_modifier then

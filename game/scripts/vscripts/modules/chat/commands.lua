@@ -314,7 +314,7 @@ return {
 		end
 	},
 	["console"] = {
-		level = CUSTOMCHAT_COMMAND_LEVEL_DEVELOPER,
+		level = CUSTOMCHAT_COMMAND_LEVEL_CHEAT_DEVELOPER,
 		f = function(_, _, playerId)
 			Console:SetVisible(PlayerResource:GetPlayer(playerId))
 		end

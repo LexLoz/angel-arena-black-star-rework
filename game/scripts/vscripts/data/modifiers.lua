@@ -161,7 +161,7 @@ RELIABLE_DAMAGE_MODIFIERS = {
 
 BAT_DECREASE_MODIFIERS = {
 	modifier_alchemist_chemical_rage = true,
-	modifier_broodmother_insatiable_hunger = true,
+	-- modifier_broodmother_insatiable_hunger = true,
 	modifier_terrorblade_metamorphosis = true,
 	modifier_troll_warlord_berserkers_rage = true,
 	modifier_snapfire_lil_shredder_buff = true,

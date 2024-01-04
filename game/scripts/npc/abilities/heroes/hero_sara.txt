@@ -209,7 +209,7 @@
 			"10"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"armor_per_agility"		"15"
+				"armor_per_agility"		"10"
 			}
 			"11"
 			{

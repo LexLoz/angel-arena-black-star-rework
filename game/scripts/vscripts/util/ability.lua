@@ -12,6 +12,14 @@ function AbilityHasBehaviorByName(ability_name, behaviorString)
 	return false
 end
 
+function IsAbilityGrantedByScepter(ability_name)
+	return GetKeyValue(ability_name, "IsGrantedByScepter") == 1
+end
+
+function IsAbilityGrantedByShard(ability_name)
+	return GetKeyValue(ability_name, "IsGrantedByShard") == 1
+end
+
 function CDOTABaseAbility:PerformPrecastActions()
 	if self:IsCooldownReady() and self:IsOwnersManaEnough() then
 		self:PayManaCost()

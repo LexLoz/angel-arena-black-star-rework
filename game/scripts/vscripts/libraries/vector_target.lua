@@ -46,8 +46,10 @@ function VectorTarget:OrderFilter(event)
 			direction = Vector(direction.x, direction.y, 0)
 			ability.vectorTargetDirection = direction
 
+			local cashedSpellStart = not ability.IsCustomVectorTargeting and ability.OnSpellStart or function() end
 			local function OverrideSpellStart(self, _position, _direction)
 				self:OnVectorCastStart(_position, _direction)
+				cashedSpellStart(self)
 			end
 			ability.OnSpellStart = function(self) return OverrideSpellStart(self, position, direction) end
 		end

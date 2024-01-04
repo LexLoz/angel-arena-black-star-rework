@@ -249,13 +249,12 @@ if IsServer() then
     end
     function modifier_sara_exhaustion_debuff:OnIntervalThink()
         local parent = self:GetParent()
-        if parent:IsBoss() then return end
         local pos1 = parent:GetAbsOrigin()
         local pos2 = self:GetCaster():GetAbsOrigin()
         local ability = self:GetAbility()
         local distance = (pos1 - pos2):Length2D() > ability:GetAbilitySpecial("distance")
 
-        if parent:GetHealth() > parent:GetMaxHealth() - self:GetStackCount() then
+        if not parent:IsBoss() and parent:GetHealth() > parent:GetMaxHealth() - self:GetStackCount() then
             parent:SetHealth(math.max(parent:GetMaxHealth() - self:GetStackCount(), 1))
         end
 

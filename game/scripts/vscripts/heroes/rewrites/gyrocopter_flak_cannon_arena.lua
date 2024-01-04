@@ -24,7 +24,6 @@ if IsServer() then
 		local caster = self:GetCaster()
 		if caster:IsIllusion() then return end
 
-		self.NoDamageAmp = true
 		ApplyDamage({
 			attacker = caster,
 			victim = hTarget,

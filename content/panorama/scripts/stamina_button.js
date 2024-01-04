@@ -6,21 +6,27 @@ function UpdateHealthBar() {
 	var HealthContainer = FindDotaHudElement('HealthContainer');
 	var HealthLabel = HealthContainer.FindChildTraverse('HealthLabel');
 
-	var HealthRegenLabel = FindDotaHudElement('HealthRegenLabel'); 
+	var HealthRegenLabel = FindDotaHudElement('HealthRegenLabel');
 	if (HealthLabel && HealthRegenLabel && unit && Entities.IsHero(unit)) {
 		var curhealth = (Entities.GetHealth(unit))
 		var maxhealth = (Entities.GetMaxHealth(unit))
 		//HealthRegenLabel.text = "+" + ((custom_entity_value ? custom_entity_value.HealthRegen : Entities.GetHealthThinkRegen(unit)) / Entities.GetMaxHealth(unit) * 100).toFixed(1)+"%"
-		HealthRegenLabel.text = "+" + NumberReduction(custom_entity_value ? custom_entity_value.HealthRegen : Entities.GetHealthThinkRegen(unit), 1, 0.1)
-		curhealth = NumberReduction(Entities.GetHealth(unit))
-		maxhealth = NumberReduction(Entities.GetMaxHealth(unit))
+		let health_regen = GetStackCountOfModifier("modifier_arena_hero_health_regen", unit) / 10 || Entities.GetHealthThinkRegen(unit)
+		if (GameUI.IsAltDown()) {
+			HealthRegenLabel.text = "+" + (health_regen / Entities.GetMaxHealth(unit) * 100).toFixed(1)+"%"
+		} else {
+			HealthRegenLabel.text = "+" + NumberReduction(health_regen, 1, 0.1)
+		}
+		curhealth = GameUI.IsAltDown() ? curhealth : NumberReduction(curhealth)
+		maxhealth = GameUI.IsAltDown() ? maxhealth : NumberReduction(maxhealth)
 		HealthLabel.text = curhealth + " /" + maxhealth
 	} else if (HealthLabel && HealthRegenLabel && unit) {
 		var curhealth = (Entities.GetHealth(unit))
 		var maxhealth = (Entities.GetMaxHealth(unit))
-		curhealth = NumberReduction(curhealth)
-		maxhealth = NumberReduction(maxhealth)
+		curhealth = GameUI.IsAltDown() ? curhealth : NumberReduction(curhealth)
+		maxhealth = GameUI.IsAltDown() ? maxhealth : NumberReduction(maxhealth)
 		HealthLabel.text = curhealth + " /" + maxhealth
+
 		HealthRegenLabel.text = "+" + Entities.GetHealthThinkRegen(unit).toFixed(1)
 	}
 }
@@ -39,24 +45,30 @@ function UpdateManaBar() {
 	if (ManaContainer && unit && ManaProgress) {
 		if (custom_entity_value && !custom_entity_value.Energy) {
 			//$.Msg('mana')
-			var curmana = Entities.GetMaxMana(unit) == 65536 ? custom_entity_value.CurrentMana : Entities.GetMana(unit)
-			var maxmana = Entities.GetMaxMana(unit) == 65536 ? custom_entity_value.MaxMana : Entities.GetMaxMana(unit)
-			var manareg = custom_entity_value.ManaRegen
+			var maxmana = Entities.GetMaxMana(unit) == 65536 ? GetStackCountOfModifier("modifier_arena_hero_max_mana", unit) : Entities.GetMaxMana(unit)
+			// console.log(getCurrentMana())
+			var curmana = Entities.GetMaxMana(unit) == 65536 ? GetStackCountOfModifier("modifier_arena_hero_current_mana", unit) : Entities.GetMana(unit)
+			var manareg = GetStackCountOfModifier("modifier_arena_hero_mana_regen", unit) / 10
+			// print(manareg)
 			var manacount = curmana / maxmana
+			if (GameUI.IsAltDown()) {
+				ManaRegenLabel.text = "+"+(manareg / maxmana * 100).toFixed(1) + "%"
+			} else {
+				ManaRegenLabel.text = "+" + NumberReduction(manareg, 1, 0.1)
+			}
 			//ManaRegenLabel.text = "+"+(manareg / maxmana * 100).toFixed(1) + "%"
-			ManaRegenLabel.text = "+" + NumberReduction(manareg, 1, 0.1)
 			//ManaRegenLabel.text = "+"+(manareg).toFixed(1)
 			ManaProgress.value = manacount
-			curmana = NumberReduction(curmana)
-			maxmana = NumberReduction(maxmana)
+			curmana = GameUI.IsAltDown() ? curmana.toFixed(0) : NumberReduction(curmana)
+			maxmana = GameUI.IsAltDown() ? maxmana.toFixed(0) : NumberReduction(maxmana)
 			ManaLabel.text = curmana + " /" + maxmana
 		} else if (custom_entity_value && custom_entity_value.Energy) {
 			var energy = custom_entity_value.Energy
 			var energyLimit = custom_entity_value.EnergyLimit
 			if (energyLimit != 2000000000) {
 				ManaProgress.value = energy / energyLimit
-				energy = NumberReduction(energy)
-				energyLimit = NumberReduction(energyLimit)
+				energy = GameUI.IsAltDown() ? energy.toFixed(0) : NumberReduction(energy)
+				energyLimit = GameUI.IsAltDown() ? energy.toFixed(0) : NumberReduction(energyLimit)
 				ManaLabel.text = energy + " /" + energyLimit
 			} else {
 				ManaLabel.text = NumberReduction(energy)
@@ -95,8 +107,8 @@ function UpdateStaminaBar() {
 	var ManaLabel = ManaContainer.FindChildTraverse('ManaLabel');
 
 	if (ManaContainer && unit && custom_entity_value && ManaProgress && ManaLabel) {
-		var maxstam = NumberReduction(custom_entity_value.MaxStamina)
-		var curstam = NumberReduction(custom_entity_value.MaxStamina * stacks * 0.01)//NumberReduction(custom_entity_value.CurrentStamina)
+		var maxstam = GameUI.IsAltDown() ? custom_entity_value.MaxStamina : NumberReduction(custom_entity_value.MaxStamina)
+		var curstam = GameUI.IsAltDown() ? Math.round(custom_entity_value.MaxStamina * stacks * 0.01) : NumberReduction(custom_entity_value.MaxStamina * stacks * 0.01)//NumberReduction(custom_entity_value.CurrentStamina)
 		//$.Msg(curstam)
 		var stamreg = custom_entity_value.StaminaRegen
 		var stamperhit = custom_entity_value.StaminaPerHit
@@ -158,31 +170,28 @@ function UpdateButtonSwapManaPosition(first) {
 	if (first) {
 		ButtonSwap.stamina_description_tooltip = $.CreatePanel('Panel', $.GetContextPanel(), '');
 		ButtonSwap.stamina_description_tooltip.style.tooltipPosition = 'top';
-		return ButtonSwap
 	}
 	if (ButtonSwap.stamina_description_tooltip) {
 		ButtonSwap.stamina_description_tooltip.style.position = coords;
 	}
-
-	return ButtonSwap;
 }
 
 function AutoUpdateManaBar() {
 	var ButtonSwap = $.GetContextPanel("ButtonSwapMana");
 	if (!ButtonSwap.Mana) return;
-	$.Schedule(1 / 40, AutoUpdateManaBar);
+	$.Schedule(1 / 80, AutoUpdateManaBar);
 	UpdateManaBar();
 }
 
 function AutoUpdateStaminaBar() {
 	var ButtonSwap = $.GetContextPanel("ButtonSwapMana");
 	if (!ButtonSwap.Stamina) return;
-	$.Schedule(1 / 40, AutoUpdateStaminaBar);
+	$.Schedule(1 / 80, AutoUpdateStaminaBar);
 	UpdateStaminaBar();
 }
 
 function AutoUpdateHealthBar() {
-	$.Schedule(1 / 40, AutoUpdateHealthBar);
+	$.Schedule(1 / 80, AutoUpdateHealthBar);
 	UpdateHealthBar();
 }
 
@@ -206,7 +215,8 @@ function RecolorHealthBar() {
 	RecolorHealthBar();
 	FindDotaHudElement('ManaRegenLabel').style.color = "white";
 
-	var ButtonSwap = UpdateButtonSwapManaPosition(true); 
+	var ButtonSwap = $.GetContextPanel("ButtonSwapMana")
+	UpdateButtonSwapManaPosition(true, ButtonSwap);
 	
 	ButtonSwap.FindChildTraverse("Mana").visible = false;
 	ButtonSwap.FindChildTraverse("Stamina").visible = true;
@@ -214,15 +224,15 @@ function RecolorHealthBar() {
 	ButtonSwap.Stamina = false;
 
 	ButtonSwap.SetPanelEvent('onmouseover', function () {
-		if (ButtonSwap.stamina_description_tooltip){	
-			ButtonSwap.stamina_description_tooltip.visible = true;
-			$.DispatchEvent("DOTAShowTitleTextTooltip", ButtonSwap.stamina_description_tooltip, "#stamina_description_tooltip_name", "#stamina_description_tooltip")
+		if (FindDotaHudElement("ButtonSwapMana").stamina_description_tooltip){	
+			FindDotaHudElement("ButtonSwapMana").stamina_description_tooltip.visible = true;
+			$.DispatchEvent("DOTAShowTitleTextTooltip", FindDotaHudElement("ButtonSwapMana").stamina_description_tooltip, "#stamina_description_tooltip_name", "#stamina_description_tooltip")
 		}
 	});
 	ButtonSwap.SetPanelEvent('onmouseout', function () {
-		if (ButtonSwap.stamina_description_tooltip) {
+		if (FindDotaHudElement("ButtonSwapMana").stamina_description_tooltip) {
 			$.DispatchEvent("DOTAHideTitleTextTooltip");
-			ButtonSwap.stamina_description_tooltip.visible = false;
+			FindDotaHudElement("ButtonSwapMana").stamina_description_tooltip.visible = false;
 		}
 	});
 

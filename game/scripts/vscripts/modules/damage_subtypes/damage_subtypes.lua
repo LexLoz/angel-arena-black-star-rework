@@ -65,7 +65,7 @@ function InitDamageSubtypes()
         end
         if FIRE_TEMPLATE[k] and not WATER_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_FIRE = FIRE_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = -FIRE_TEMPLATE[k]
         elseif FIRE_TEMPLATE[k] and WATER_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_FIRE = FIRE_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = WATER_TEMPLATE[k]
@@ -73,7 +73,7 @@ function InitDamageSubtypes()
 
         if AIR_TEMPLATE[k] and not FIRE_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_AIR = AIR_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_FIRE = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_FIRE = -AIR_TEMPLATE[k]
         elseif AIR_TEMPLATE[k] and FIRE_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_AIR = AIR_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_FIRE = FIRE_TEMPLATE[k]
@@ -81,7 +81,7 @@ function InitDamageSubtypes()
 
         if EARTH_TEMPLATE[k] and not ICE_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_EARTH = EARTH_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_ICE = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_ICE = -EARTH_TEMPLATE[k]
         elseif EARTH_TEMPLATE[k] and ICE_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_EARTH = EARTH_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_ICE = ICE_TEMPLATE[k]
@@ -89,7 +89,7 @@ function InitDamageSubtypes()
 
         if WATER_TEMPLATE[k] and not LIGHTING_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = WATER_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHTING = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHTING = -WATER_TEMPLATE[k]
         elseif WATER_TEMPLATE[k] and LIGHTING_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = WATER_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHTING = LIGHTING_TEMPLATE[k]
@@ -97,7 +97,7 @@ function InitDamageSubtypes()
 
         if LIGHTING_TEMPLATE[k] and not EARTH_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHTING = LIGHTING_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_EARTH = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_EARTH = -LIGHTING_TEMPLATE[k]
         elseif LIGHTING_TEMPLATE[k] and EARTH_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHTING = LIGHTING_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_EARTH = EARTH_TEMPLATE[k]
@@ -105,7 +105,7 @@ function InitDamageSubtypes()
 
         if ICE_TEMPLATE[k] and not AIR_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_ICE = ICE_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_AIR = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_AIR = -ICE_TEMPLATE[k]
         elseif ICE_TEMPLATE[k] and AIR_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_ICE = ICE_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_AIR = AIR_TEMPLATE[k]
@@ -113,7 +113,7 @@ function InitDamageSubtypes()
 
         if DARK_TEMPLATE[k] and not LIGHT_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_DARK = DARK_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHT = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHT = -DARK_TEMPLATE[k]
         elseif DARK_TEMPLATE[k] and LIGHT_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_DARK = DARK_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHT = LIGHT_TEMPLATE[k]
@@ -121,7 +121,7 @@ function InitDamageSubtypes()
 
         if LIGHT_TEMPLATE[k] and not DARK_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHT = LIGHT_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_DARK = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_DARK = -LIGHT_TEMPLATE[k]
         elseif LIGHT_TEMPLATE[k] and DARK_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_LIGHT = LIGHT_TEMPLATE[k]
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_DARK = DARK_TEMPLATE[k]
@@ -146,7 +146,7 @@ function InitDamageSubtypes()
 
         if TECH_TEMPLATE[k] then
             v.DamageSubtypeResistance.DAMAGE_SUBTYPE_TECH = TECH_TEMPLATE[k]
-            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = -25
+            v.DamageSubtypeResistance.DAMAGE_SUBTYPE_WATER = -TECH_TEMPLATE[k]
         end
 
         if ENERGY_TEMPLATE[k] then
@@ -191,7 +191,7 @@ function InitDamageSubtypes()
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_BLOOD", 25)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_POISON", 25)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_SOUND", 25)
-            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_TECH", -25)
+            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_TECH", -100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_ENERGY", 25)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DEATH", 75)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_ICE", 25)
@@ -199,7 +199,7 @@ function InitDamageSubtypes()
         end
         if DEMON_TEMPLATE[k] then
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DARK", 50)
-            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_LIGHT", -25)
+            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_LIGHT", -100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_POISON", 25)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DEATH", 50)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_BLOOD", 50)
@@ -217,19 +217,19 @@ function InitDamageSubtypes()
         if ELEMENTAL_TEMPLATE[k] then
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_BLOOD", 99)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_POISON", 99)
-            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_TECH", -25)
+            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_TECH", -100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_NATURE", 50)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DEATH", 75)
         end
         if UNDEAD_TEMPLATE[k] then
-            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_FIRE", -25)
+            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_FIRE", -100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DARK", 50)
-            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_LIGHT", -25)
+            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_LIGHT", -100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_BLOOD", 99)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_POISON", 100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DEATH", 100)
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_ICE", 90)
-            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_NATURE", -25)
+            v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_NATURE", -100)
         else
             v.DamageSubtypeResistance = SetSubtypeValue(v.DamageSubtypeResistance, "DAMAGE_SUBTYPE_DEATH", -25)
         end

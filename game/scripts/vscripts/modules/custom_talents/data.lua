@@ -5,7 +5,7 @@ CUSTOM_TALENTS_DATA = {
 		group = 9,
 		max_level = 10,
 		special_values = {
-			bonus_all_stats = { 3, 6, 9, 12, 15, 18, 21, 24, 27, 30 }
+			bonus_all_stats = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 }
 		},
 		effect = {
 			calculate_stat_bonus = true,
@@ -442,7 +442,28 @@ CUSTOM_TALENTS_DATA = {
 		effect = {
 			callback = function(hero, data)
 				hero:SetNetworkableEntityInfo('HasKarmaTalent', 1)
+				hero.has_karma_talent = true
 			end
+		}
+	},
+	talent_hero_comic_sans_karma_hp_regen_reduce = {
+		icon = "arena/sans_curse",
+		cost = 10,
+		group = 9,
+		max_level = 3,
+		requirement = "sans_curse",
+		special_values = {
+			hp_regen_reduce = { 30, 50, 70 }
+		}
+	},
+	talent_hero_comic_sans_blaster_percent_damage = {
+		icon = "arena/sans_gaster_blaster",
+		cost = 10,
+		group = 8,
+		max_level = 3,
+		requirement = "sans_blaster",
+		special_values = {
+			percent_damage = { 2, 4, 6 }
 		}
 	},
 	--[[talent_hero_sai_release_of_forge_bonus_respawn_time_reduction = {

@@ -7,10 +7,10 @@ end
 function ModuleLinkLuaModifier(this, className, fileName, LuaModifierType)
 	local path = GetDirectoryFromPath(this) .. (fileName or className)
 	if IsServer() then
-		print('register modifier for server: ' .. className .. ', ' .. path)
+		-- print('register modifier for server: ' .. className .. ', ' .. path)
 	end
 	if IsClient() then
-		print('register modifier for client: ' .. className .. ', ' .. path)
+		-- print('register modifier for client: ' .. className .. ', ' .. path)
 	end
 	return LinkLuaModifier(className, path,
 		LuaModifierType or LUA_MODIFIER_MOTION_NONE)
@@ -58,7 +58,7 @@ function CEntityInstance:IsGenocideMode(ability, isDodgeCooldown)
 	end
 	if self:HasModifier("modifier_sans_genocide_mod") and isDodgeCooldown then
 		return 1 +
-			self:FindModifierByName("modifier_sans_genocide_mod"):GetAbility():GetSpecialValueFor(
+			self:FindAbilityByName("sans_genocide_mod"):GetSpecialValueFor(
 				"charge_gain_increase_pct") *
 			0.01
 	elseif not self:HasModifier("modifier_sans_genocide_mod") and isDodgeCooldown then

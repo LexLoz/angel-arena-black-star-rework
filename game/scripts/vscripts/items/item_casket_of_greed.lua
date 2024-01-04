@@ -60,7 +60,7 @@ if IsServer() then
     function modifier_item_casket_of_greed_passive:OnDeath(k)
         local parent = self:GetParent()
         local ability = self:GetAbility()
-        if k.unit == parent and not parent:IsIllusion() and parent:IsTrueHero() and not parent:IsTempestDouble() and not Duel:IsDuelOngoing() and not parent:HasModifier('modifier_item_demon_king_bar_curse') then
+        if k.unit == parent and not parent:IsIllusion() and parent:IsTrueHero() and not parent:IsTempestDouble() and not Duel:IsDuelOngoing() and not parent:HasModifier('modifier_item_demon_king_bar_curse') and not parent:IsReincarnating() then
             ability.deaths_count = (ability.deaths_count or 0) + 1
             if ability.deaths_count == 2 then
                 parent:RemoveModifierByName("modifier_item_casket_of_greed")
@@ -125,9 +125,14 @@ if IsServer() then
 
         local modifiers = caster:FindAllModifiers()
 
+        local exeptions = {
+            item_talent_modifier_applier = true,
+            item_dummy = true
+        }
+
         for _, v in pairs(modifiers) do
             local ability = v.GetAbility and v:GetAbility() or nil
-            if v:GetDuration() == -1 and not v.item_casket_of_greed and ability and ability:IsItem() and not ability:IsNeutralDrop() then
+            if v:GetDuration() == -1 and not v.item_casket_of_greed and ability and ability:IsItem() and not ability:IsNeutralDrop() and not exeptions[ability:GetName()] then
                 table.insert(self.modifiers, {
                     modifier = v:GetName(),
                     item = caster:TakeItem(ability)

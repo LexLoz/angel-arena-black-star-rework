@@ -57,11 +57,13 @@ end
 
 if IsServer() then
 	function modifier_item_battlefury_arena:OnCreated()
+		if not self:GetParent() then return end
 		Timers:NextTick(function()
 			self:GetParent()._splash = (self:GetParent()._splash or 0) + self:GetAbility():GetSpecialValueFor("cleave_damage_percent")
 		end)
 	end
 	function modifier_item_battlefury_arena:OnDestroy()
+		if not self:GetParent() then return end
 		Timers:NextTick(function()
 			self:GetParent()._splash = (self:GetParent()._splash or 0) - self:GetAbility():GetSpecialValueFor("cleave_damage_percent")
 		end)
@@ -70,15 +72,15 @@ end
 
 function modifier_item_battlefury_arena:GetModifierPreAttack_BonusDamage()
 	-- print(self:GetAbility():GetSpecialValueFor("bonus_damage"))
-	return self:GetAbility():GetSpecialValueFor("bonus_damage")
+	return self:GetAbility() and self:GetAbility():GetSpecialValueFor("bonus_damage") or 0
 end
 
 function modifier_item_battlefury_arena:GetModifierConstantHealthRegen()
-	return self:GetAbility():GetSpecialValueFor("bonus_health_regen")
+	return self:GetAbility() and self:GetAbility():GetSpecialValueFor("bonus_health_regen") or 0
 end
 
 function modifier_item_battlefury_arena:GetModifierConstantManaRegen()
-	return self:GetAbility():GetSpecialValueFor("bonus_mana_regen")
+	return self:GetAbility() and self:GetAbility():GetSpecialValueFor("bonus_mana_regen") or 0
 end
 
 if IsServer() then
@@ -139,24 +141,23 @@ function modifier_item_ultimate_splash:GetModifierAttackRangeBonus()
 end
 
 if IsServer() then
-	--[[function item_ultimate_splash:OnProjectileHit(hTarget)
+	function item_ultimate_splash:OnProjectileHit(hTarget)
 		if not hTarget then return end
 		local caster = self:GetCaster()
 		if caster:IsIllusion() then return end
-		local number = #caster:FindAllModifiersByName(self:GetIntrinsicModifierName())
+		-- local number = #caster:FindAllModifiersByName(self:GetIntrinsicModifierName())
 
-		self.NoDamageAmp = true
-		ApplyDamage({
-			attacker = caster,
-			victim = hTarget,
-			damage_type = DAMAGE_TYPE_PHYSICAL,
-			damage = caster:GetAverageTrueAttackDamage(target) * self:GetSpecialValueFor("split_damage_pct") * 0.01 * number,
-			damage_flags = DOTA_DAMAGE_FLAG_NO_DAMAGE_MULTIPLIERS,
-			ability = self
-		})
+		-- ApplyDamage({
+		-- 	attacker = caster,
+		-- 	victim = hTarget,
+		-- 	damage_type = DAMAGE_TYPE_PHYSICAL,
+		-- 	damage = caster:GetAverageTrueAttackDamage(target) * self:GetSpecialValueFor("split_damage_pct") * 0.01 * number,
+		-- 	damage_flags = DOTA_DAMAGE_FLAG_NO_DAMAGE_MULTIPLIERS,
+		-- 	ability = self
+		-- })
 
 		hTarget:EmitSound("Hero_Medusa.AttackSplit")
-	end]]
+	end
 end
 
 function modifier_item_ultimate_splash:OnAttack(keys)
@@ -165,9 +166,9 @@ function modifier_item_ultimate_splash:OnAttack(keys)
 	local ability = self:GetAbility()
 	if attacker ~= self:GetParent() then return end
 
-	--modifier_item_ultimate_splash_projectiles(attacker, target, ability)
+	modifier_item_ultimate_splash_projectiles(attacker, target, ability)
 
-	--[[if attacker:IsRangedUnit() and not attacker:FindModifierByName("modifier_splash_timer") and RollPercentage(ability:GetSpecialValueFor("global_attack_chance_pct")) then
+	if attacker:IsRangedUnit() and not attacker:FindModifierByName("modifier_splash_timer") and RollPercentage(ability:GetSpecialValueFor("global_attack_chance_pct")) then
 		local units = FindUnitsInRadius(
 			attacker:GetTeamNumber(),
 			Vector(0, 0, 0),
@@ -187,7 +188,7 @@ function modifier_item_ultimate_splash:OnAttack(keys)
 		projectile_info.iVisionRadius = 50
 		projectile_info.iVisionTeamNumber = attacker:GetTeamNumber()
 		ProjectileManager:CreateTrackingProjectile(projectile_info)
-	end]]
+	end
 end
 
 

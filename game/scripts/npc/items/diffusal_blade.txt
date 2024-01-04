@@ -5,7 +5,7 @@
 		"BaseClass"						"item_datadriven"
 		"Model"							"models/props_gameplay/recipe.vmdl"
 		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"1200"
+		"ItemCost"						"2400"
 		"ItemRecipe"					"1"
 		"ItemResult"					"item_diffusal_blade_arena"
 		"ItemRequirements"
@@ -24,50 +24,51 @@
 		"ItemResult"					"item_diffusal_blade_arena_2"
 		"ItemRequirements"
 		{
-			"01"						"item_diffusal_blade_arena"
+			"01"						"item_diffusal_blade_arena;item_moon_dust"
 		}
 	}
 
-	"item_recipe_diffusal_blade_arena_3"
-	{
-		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.vmdl"
-		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"1200"
-		"ItemRecipe"					"1"
-		"ItemResult"					"item_diffusal_blade_arena_3"
-		"ItemRequirements"
-		{
-			"01"						"item_diffusal_blade_arena_2"
-		}
-	}
+	// "item_recipe_diffusal_blade_arena_3"
+	// {
+	// 	"BaseClass"						"item_datadriven"
+	// 	"Model"							"models/props_gameplay/recipe.vmdl"
+	// 	"AbilityTextureName"			"item_recipe"
+	// 	"ItemCost"						"1200"
+	// 	"ItemRecipe"					"1"
+	// 	"ItemResult"					"item_diffusal_blade_arena_3"
+	// 	"ItemRequirements"
+	// 	{
+	// 		"01"						"item_diffusal_blade_arena_2"
+	// 	}
+	// }
 
-	"item_recipe_diffusal_blade_arena_4"
-	{
-		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.vmdl"
-		"ItemCost"						"1200"
-		"ItemRecipe"					"1"
-		"ItemResult"					"item_diffusal_blade_arena_4"
-		"ItemRequirements"
-		{
-			"01"						"item_diffusal_blade_arena_3"
-		}
-	}
+	// "item_recipe_diffusal_blade_arena_4"
+	// {
+	// 	"BaseClass"						"item_datadriven"
+	// 	"Model"							"models/props_gameplay/recipe.vmdl"
+	// 	"AbilityTextureName"			"item_recipe"
+	// 	"ItemCost"						"1200"
+	// 	"ItemRecipe"					"1"
+	// 	"ItemResult"					"item_diffusal_blade_arena_4"
+	// 	"ItemRequirements"
+	// 	{
+	// 		"01"						"item_diffusal_blade_arena_3"
+	// 	}
+	// }
 
-	"item_recipe_diffusal_blade_arena_5"
-	{
-		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.vmdl"
-		"AbilityTextureName"			"item_recipe"
-		"ItemCost"						"1200"
-		"ItemRecipe"					"1"
-		"ItemResult"					"item_diffusal_blade_arena_5"
-		"ItemRequirements"
-		{
-			"01"						"item_diffusal_blade_arena_4"
-		}
-	}
+	// "item_recipe_diffusal_blade_arena_5"
+	// {
+	// 	"BaseClass"						"item_datadriven"
+	// 	"Model"							"models/props_gameplay/recipe.vmdl"
+	// 	"AbilityTextureName"			"item_recipe"
+	// 	"ItemCost"						"1200"
+	// 	"ItemRecipe"					"1"
+	// 	"ItemResult"					"item_diffusal_blade_arena_5"
+	// 	"ItemRequirements"
+	// 	{
+	// 		"01"						"item_diffusal_blade_arena_4"
+	// 	}
+	// }
 
 	"item_diffusal_blade_arena"
 	{
@@ -82,7 +83,7 @@
 
 		// Stats
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"500 550 600 650 700"
+		"AbilityCastRange"				"550 700"
 		"AbilityCastPoint"				"0.0"
 		"AbilityCooldown"				"6"
 		"AbilitySharedCooldown"			"diffusal"
@@ -100,52 +101,52 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"20 25 30 35 40"
+				"bonus_agility"			"20 40"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"10 15 20 25 30"
+				"bonus_intellect"		"10 20"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_burn"	"50 60 70 80 90"
+				"feedback_mana_burn"	"60 120"
 			}
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_drain_pct"	"10 15 20 25 30"
+				"feedback_mana_drain_pct"	"50 75"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
+				"purge_root_duration"	"0.8 1.5"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
+				"purge_slow_duration"	"1.5 4.0"
 			}
 			"07"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
+				"purge_slow_movespeed_pct"	"-70 -100"
 			}
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"50 55 60 65 70"
+				"damage_per_burn_pct"		"50 100"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cast_range_tooltip"		"500 550 600 650 700"
+				"cast_range_tooltip"		"550 700"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
+				"mana_burn_pct"			"0 4.0"
 			}
 			"11"
 			{
@@ -231,7 +232,7 @@
 	"item_diffusal_blade_arena_2"
 	{
 		"BaseClass"             		"item_datadriven"
-		"AbilityTextureName"			"item_arena/diffusal_blade_arena_2"
+		"AbilityTextureName"			"item_arena/diffusal_blade_arena_5"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
@@ -241,7 +242,7 @@
 
 		// Stats
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"500 550 600 650 700"
+		"AbilityCastRange"				"550 700"
 		"AbilityCastPoint"				"0.0"
 		"AbilityCooldown"				"6"
 		"AbilitySharedCooldown"			"diffusal"
@@ -259,52 +260,52 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"20 25 30 35 40"
+				"bonus_agility"			"20 40"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"10 15 20 25 30"
+				"bonus_intellect"		"10 20"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_burn"	"30 40 50 60 70"
+				"feedback_mana_burn"	"60 120"
 			}
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_drain_pct"	"10 15 20 25 30"
+				"feedback_mana_drain_pct"	"50 75"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
+				"purge_root_duration"	"0.8 1.5"
 			}
 			"06"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
+				"purge_slow_duration"	"1.5 4.0"
 			}
 			"07"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
+				"purge_slow_movespeed_pct"	"-70 -100"
 			}
 			"08"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"50 55 60 65 70"
+				"damage_per_burn_pct"		"50 100"
 			}
 			"09"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cast_range_tooltip"		"500 550 600 650 700"
+				"cast_range_tooltip"		"550 700"
 			}
 			"10"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
+				"mana_burn_pct"			"0 4.0"
 			}
 			"11"
 			{
@@ -387,480 +388,480 @@
 		}
 	}
 
-	"item_diffusal_blade_arena_3"
-	{
-		"BaseClass"             		"item_datadriven"
-		"AbilityTextureName"			"item_arena/diffusal_blade_arena_3"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
-		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
-		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
-		"FightRecapLevel"				"1"
+	// "item_diffusal_blade_arena_3"
+	// {
+	// 	"BaseClass"             		"item_datadriven"
+	// 	"AbilityTextureName"			"item_arena/diffusal_blade_arena_3"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	// 	"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+	// 	"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+	// 	"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	// 	"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+	// 	"FightRecapLevel"				"1"
 
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"500 550 600 650 700"
-		"AbilityCastPoint"				"0.0"
-		"AbilityCooldown"				"6"
-		"AbilitySharedCooldown"			"diffusal"
-		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+	// 	// Stats
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityCastRange"				"500 550 600 650 700"
+	// 	"AbilityCastPoint"				"0.0"
+	// 	"AbilityCooldown"				"6"
+	// 	"AbilitySharedCooldown"			"diffusal"
+	// 	"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
-		"ItemShopTags"					"agi;int;unique;hard_to_tag"
-		"ItemQuality"					"artifact"
-		"ItemAliases"					"diffusal blade 3"
+	// 	"ItemShopTags"					"agi;int;unique;hard_to_tag"
+	// 	"ItemQuality"					"artifact"
+	// 	"ItemAliases"					"diffusal blade 3"
 
-		"MaxUpgradeLevel"				"5"
-		"ItemBaseLevel"					"3"
+	// 	"MaxUpgradeLevel"				"5"
+	// 	"ItemBaseLevel"					"3"
 
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"20 25 30 35 40"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"10 15 20 25 30"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_burn"	"30 40 50 60 70"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_drain_pct"	"10 15 20 25 30"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
-			}
-			"06"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
-			}
-			"07"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
-			}
-			"08"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"50 55 60 65 70"
-			}
-			"09"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"cast_range_tooltip"		"500 550 600 650 700"
-			}
-			"10"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
-			}
-			"11"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"illusion_mana_burn"			"30"
-			}
-		}
+	// 	"AbilitySpecial"
+	// 	{
+	// 		"01"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_agility"			"20 25 30 35 40"
+	// 		}
+	// 		"02"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_intellect"		"10 15 20 25 30"
+	// 		}
+	// 		"03"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"feedback_mana_burn"	"30 40 50 60 70"
+	// 		}
+	// 		"04"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"feedback_mana_drain_pct"	"10 15 20 25 30"
+	// 		}
+	// 		"05"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
+	// 		}
+	// 		"06"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
+	// 		}
+	// 		"07"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
+	// 		}
+	// 		"08"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"damage_per_burn_pct"		"50 55 60 65 70"
+	// 		}
+	// 		"09"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"cast_range_tooltip"		"500 550 600 650 700"
+	// 		}
+	// 		"10"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
+	// 		}
+	// 		"11"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"illusion_mana_burn"			"30"
+	// 		}
+	// 	}
 
-		"OnSpellStart"
-		{
-			"RunScript"
-			{
-				"ScriptFile"	"items/items_diffusal_blade.lua"
-				"Function"		"Purge"
-				"modifier_root"	"modifier_item_diffusal_blade_arena_root"
-				"modifier_slow"	"modifier_item_diffusal_blade_arena_slow"
-			}
-		}
+	// 	"OnSpellStart"
+	// 	{
+	// 		"RunScript"
+	// 		{
+	// 			"ScriptFile"	"items/items_diffusal_blade.lua"
+	// 			"Function"		"Purge"
+	// 			"modifier_root"	"modifier_item_diffusal_blade_arena_root"
+	// 			"modifier_slow"	"modifier_item_diffusal_blade_arena_slow"
+	// 		}
+	// 	}
 
-		"Modifiers"
-		{
-			"modifier_item_diffusal_blade_arena"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
-				"Attributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
+	// 	"Modifiers"
+	// 	{
+	// 		"modifier_item_diffusal_blade_arena"
+	// 		{
+	// 			"Passive"			"1"
+	// 			"IsHidden"			"1"
+	// 			"Attributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
 
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
-					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
-				}
-			}
+	// 			"Properties"
+	// 			{
+	// 				"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
+	// 				"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_attack"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
+	// 		"modifier_item_diffusal_blade_arena_attack"
+	// 		{
+	// 			"Passive"			"1"
+	// 			"IsHidden"			"1"
 
-				"OnAttackLanded"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"items/items_diffusal_blade.lua"
-						"Function"		"OnAttackLanded"
-						"feedback_mana_burn"				"%feedback_mana_burn"
-						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
-						"damage_per_burn_pct"				"%damage_per_burn_pct"
-						"mana_burn_pct"						"%mana_burn_pct"
-						"illusion_mana_burn"				"%illusion_mana_burn"
-					}
-				}
-			}
+	// 			"OnAttackLanded"
+	// 			{
+	// 				"RunScript"
+	// 				{
+	// 					"ScriptFile"	"items/items_diffusal_blade.lua"
+	// 					"Function"		"OnAttackLanded"
+	// 					"feedback_mana_burn"				"%feedback_mana_burn"
+	// 					"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
+	// 					"damage_per_burn_pct"				"%damage_per_burn_pct"
+	// 					"mana_burn_pct"						"%mana_burn_pct"
+	// 					"illusion_mana_burn"				"%illusion_mana_burn"
+	// 				}
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_root"
-			{
-				"Duration"			"%purge_root_duration"
-				"EffectName"		"particles/econ/items/outworld_devourer/od_shards_exile/od_shards_exile_ambient_root_b.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"IsDebuff"			"1"
+	// 		"modifier_item_diffusal_blade_arena_root"
+	// 		{
+	// 			"Duration"			"%purge_root_duration"
+	// 			"EffectName"		"particles/econ/items/outworld_devourer/od_shards_exile/od_shards_exile_ambient_root_b.vpcf"
+	// 			"EffectAttachType"	"follow_origin"
+	// 			"IsDebuff"			"1"
 
-				"States"
-				{
-					"MODIFIER_STATE_ROOTED"		"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
+	// 			"States"
+	// 			{
+	// 				"MODIFIER_STATE_ROOTED"		"MODIFIER_STATE_VALUE_ENABLED"
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_slow"
-			{
-				"Duration"			"%purge_slow_duration"
-				"EffectName"		"particles/items_fx/diffusal_slow.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"IsDebuff"			"1"
+	// 		"modifier_item_diffusal_blade_arena_slow"
+	// 		{
+	// 			"Duration"			"%purge_slow_duration"
+	// 			"EffectName"		"particles/items_fx/diffusal_slow.vpcf"
+	// 			"EffectAttachType"	"follow_origin"
+	// 			"IsDebuff"			"1"
 
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%purge_slow_movespeed_pct"
-				}
-			}
-		}
-	}
+	// 			"Properties"
+	// 			{
+	// 				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%purge_slow_movespeed_pct"
+	// 			}
+	// 		}
+	// 	}
+	// }
 
-	"item_diffusal_blade_arena_4"
-	{
-		"BaseClass"             		"item_datadriven"
-		"AbilityTextureName"			"item_arena/diffusal_blade_arena_4"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
-		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
-		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
-		"FightRecapLevel"				"1"
+	// "item_diffusal_blade_arena_4"
+	// {
+	// 	"BaseClass"             		"item_datadriven"
+	// 	"AbilityTextureName"			"item_arena/diffusal_blade_arena_4"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	// 	"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+	// 	"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+	// 	"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	// 	"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+	// 	"FightRecapLevel"				"1"
 
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"500 550 600 650 700"
-		"AbilityCastPoint"				"0.0"
-		"AbilityCooldown"				"7"
-		"AbilitySharedCooldown"			"diffusal"
-		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+	// 	// Stats
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityCastRange"				"500 550 600 650 700"
+	// 	"AbilityCastPoint"				"0.0"
+	// 	"AbilityCooldown"				"7"
+	// 	"AbilitySharedCooldown"			"diffusal"
+	// 	"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
-		"ItemShopTags"					"agi;int;unique;hard_to_tag"
-		"ItemQuality"					"artifact"
-		"ItemAliases"					"diffusal blade 4"
+	// 	"ItemShopTags"					"agi;int;unique;hard_to_tag"
+	// 	"ItemQuality"					"artifact"
+	// 	"ItemAliases"					"diffusal blade 4"
 
-		"MaxUpgradeLevel"				"5"
-		"ItemBaseLevel"					"4"
+	// 	"MaxUpgradeLevel"				"5"
+	// 	"ItemBaseLevel"					"4"
 
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"20 25 30 35 40"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"10 15 20 25 30"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_burn"	"30 40 50 60 70"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_drain_pct"	"10 15 20 25 30"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
-			}
-			"06"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
-			}
-			"07"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
-			}
-			"08"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"50 55 60 65 70"
-			}
-			"09"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"cast_range_tooltip"		"500 550 600 650 700"
-			}
-			"10"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
-			}
-			"11"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"illusion_mana_burn"			"30"
-			}
-		}
+	// 	"AbilitySpecial"
+	// 	{
+	// 		"01"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_agility"			"20 25 30 35 40"
+	// 		}
+	// 		"02"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_intellect"		"10 15 20 25 30"
+	// 		}
+	// 		"03"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"feedback_mana_burn"	"30 40 50 60 70"
+	// 		}
+	// 		"04"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"feedback_mana_drain_pct"	"10 15 20 25 30"
+	// 		}
+	// 		"05"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
+	// 		}
+	// 		"06"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
+	// 		}
+	// 		"07"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
+	// 		}
+	// 		"08"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"damage_per_burn_pct"		"50 55 60 65 70"
+	// 		}
+	// 		"09"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"cast_range_tooltip"		"500 550 600 650 700"
+	// 		}
+	// 		"10"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
+	// 		}
+	// 		"11"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"illusion_mana_burn"			"30"
+	// 		}
+	// 	}
 
-		"OnSpellStart"
-		{
-			"RunScript"
-			{
-				"ScriptFile"	"items/items_diffusal_blade.lua"
-				"Function"		"Purge"
-				"modifier_root"	"modifier_item_diffusal_blade_arena_root"
-				"modifier_slow"	"modifier_item_diffusal_blade_arena_slow"
-			}
-		}
+	// 	"OnSpellStart"
+	// 	{
+	// 		"RunScript"
+	// 		{
+	// 			"ScriptFile"	"items/items_diffusal_blade.lua"
+	// 			"Function"		"Purge"
+	// 			"modifier_root"	"modifier_item_diffusal_blade_arena_root"
+	// 			"modifier_slow"	"modifier_item_diffusal_blade_arena_slow"
+	// 		}
+	// 	}
 
-		"Modifiers"
-		{
-			"modifier_item_diffusal_blade_arena"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
-				"Attributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
+	// 	"Modifiers"
+	// 	{
+	// 		"modifier_item_diffusal_blade_arena"
+	// 		{
+	// 			"Passive"			"1"
+	// 			"IsHidden"			"1"
+	// 			"Attributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
 
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
-					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
-				}
-			}
+	// 			"Properties"
+	// 			{
+	// 				"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
+	// 				"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_attack"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
+	// 		"modifier_item_diffusal_blade_arena_attack"
+	// 		{
+	// 			"Passive"			"1"
+	// 			"IsHidden"			"1"
 
-				"OnAttackLanded"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"items/items_diffusal_blade.lua"
-						"Function"		"OnAttackLanded"
-						"feedback_mana_burn"				"%feedback_mana_burn"
-						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
-						"damage_per_burn_pct"				"%damage_per_burn_pct"
-						"mana_burn_pct"						"%mana_burn_pct"
-						"illusion_mana_burn"				"%illusion_mana_burn"
-					}
-				}
-			}
+	// 			"OnAttackLanded"
+	// 			{
+	// 				"RunScript"
+	// 				{
+	// 					"ScriptFile"	"items/items_diffusal_blade.lua"
+	// 					"Function"		"OnAttackLanded"
+	// 					"feedback_mana_burn"				"%feedback_mana_burn"
+	// 					"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
+	// 					"damage_per_burn_pct"				"%damage_per_burn_pct"
+	// 					"mana_burn_pct"						"%mana_burn_pct"
+	// 					"illusion_mana_burn"				"%illusion_mana_burn"
+	// 				}
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_root"
-			{
-				"Duration"			"%purge_root_duration"
-				"EffectName"		"particles/econ/items/outworld_devourer/od_shards_exile/od_shards_exile_ambient_root_b.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"IsDebuff"			"1"
+	// 		"modifier_item_diffusal_blade_arena_root"
+	// 		{
+	// 			"Duration"			"%purge_root_duration"
+	// 			"EffectName"		"particles/econ/items/outworld_devourer/od_shards_exile/od_shards_exile_ambient_root_b.vpcf"
+	// 			"EffectAttachType"	"follow_origin"
+	// 			"IsDebuff"			"1"
 
-				"States"
-				{
-					"MODIFIER_STATE_ROOTED"		"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
+	// 			"States"
+	// 			{
+	// 				"MODIFIER_STATE_ROOTED"		"MODIFIER_STATE_VALUE_ENABLED"
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_slow"
-			{
-				"Duration"			"%purge_slow_duration"
-				"EffectName"		"particles/items_fx/diffusal_slow.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"IsDebuff"			"1"
+	// 		"modifier_item_diffusal_blade_arena_slow"
+	// 		{
+	// 			"Duration"			"%purge_slow_duration"
+	// 			"EffectName"		"particles/items_fx/diffusal_slow.vpcf"
+	// 			"EffectAttachType"	"follow_origin"
+	// 			"IsDebuff"			"1"
 
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%purge_slow_movespeed_pct"
-				}
-			}
-		}
-	}
+	// 			"Properties"
+	// 			{
+	// 				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%purge_slow_movespeed_pct"
+	// 			}
+	// 		}
+	// 	}
+	// }
 
-	"item_diffusal_blade_arena_5"
-	{
-		"BaseClass"             		"item_datadriven"
-		"AbilityTextureName"			"item_arena/diffusal_blade_arena_5"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
-		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
-		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
-		"FightRecapLevel"				"1"
+	// "item_diffusal_blade_arena_5"
+	// {
+	// 	"BaseClass"             		"item_datadriven"
+	// 	"AbilityTextureName"			"item_arena/diffusal_blade_arena_5"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
+	// 	"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+	// 	"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+	// 	"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	// 	"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+	// 	"FightRecapLevel"				"1"
 
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"500 550 600 650 700"
-		"AbilityCastPoint"				"0.0"
-		"AbilityCooldown"				"8"
-		"AbilitySharedCooldown"			"diffusal"
-		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+	// 	// Stats
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityCastRange"				"500 550 600 650 700"
+	// 	"AbilityCastPoint"				"0.0"
+	// 	"AbilityCooldown"				"8"
+	// 	"AbilitySharedCooldown"			"diffusal"
+	// 	"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
-		"ItemShopTags"					"agi;int;unique;hard_to_tag"
-		"ItemQuality"					"artifact"
-		"ItemAliases"					"diffusal blade 5"
+	// 	"ItemShopTags"					"agi;int;unique;hard_to_tag"
+	// 	"ItemQuality"					"artifact"
+	// 	"ItemAliases"					"diffusal blade 5"
 
-		"MaxUpgradeLevel"				"5"
-		"ItemBaseLevel"					"5"
+	// 	"MaxUpgradeLevel"				"5"
+	// 	"ItemBaseLevel"					"5"
 
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_agility"			"20 25 30 35 40"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_intellect"		"10 15 20 25 30"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_burn"	"30 40 50 60 70"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"feedback_mana_drain_pct"	"10 15 20 25 30"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
-			}
-			"06"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
-			}
-			"07"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
-			}
-			"08"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"damage_per_burn_pct"		"50 55 60 65 70"
-			}
-			"09"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"cast_range_tooltip"		"500 550 600 650 700"
-			}
-			"10"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
-			}
-			"11"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"illusion_mana_burn"			"30"
-			}
-		}
+	// 	"AbilitySpecial"
+	// 	{
+	// 		"01"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_agility"			"20 25 30 35 40"
+	// 		}
+	// 		"02"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_intellect"		"10 15 20 25 30"
+	// 		}
+	// 		"03"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"feedback_mana_burn"	"30 40 50 60 70"
+	// 		}
+	// 		"04"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"feedback_mana_drain_pct"	"10 15 20 25 30"
+	// 		}
+	// 		"05"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"purge_root_duration"	"0.1 0.2 0.3 0.4 0.5"
+	// 		}
+	// 		"06"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"purge_slow_duration"	"2.0 2.5 3.0 3.5 4.0"
+	// 		}
+	// 		"07"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"purge_slow_movespeed_pct"	"-60 -70 -80 -90 -100"
+	// 		}
+	// 		"08"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"damage_per_burn_pct"		"50 55 60 65 70"
+	// 		}
+	// 		"09"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"cast_range_tooltip"		"500 550 600 650 700"
+	// 		}
+	// 		"10"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"mana_burn_pct"			"0.0 0.0 2.0 4.0 6.0"
+	// 		}
+	// 		"11"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"illusion_mana_burn"			"30"
+	// 		}
+	// 	}
 
-		"OnSpellStart"
-		{
-			"RunScript"
-			{
-				"ScriptFile"	"items/items_diffusal_blade.lua"
-				"Function"		"Purge"
-				"modifier_root"	"modifier_item_diffusal_blade_arena_root"
-				"modifier_slow"	"modifier_item_diffusal_blade_arena_slow"
-			}
-		}
+	// 	"OnSpellStart"
+	// 	{
+	// 		"RunScript"
+	// 		{
+	// 			"ScriptFile"	"items/items_diffusal_blade.lua"
+	// 			"Function"		"Purge"
+	// 			"modifier_root"	"modifier_item_diffusal_blade_arena_root"
+	// 			"modifier_slow"	"modifier_item_diffusal_blade_arena_slow"
+	// 		}
+	// 	}
 
-		"Modifiers"
-		{
-			"modifier_item_diffusal_blade_arena"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
-				"Attributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
+	// 	"Modifiers"
+	// 	{
+	// 		"modifier_item_diffusal_blade_arena"
+	// 		{
+	// 			"Passive"			"1"
+	// 			"IsHidden"			"1"
+	// 			"Attributes"		"MODIFIER_ATTRIBUTE_MULTIPLE"
 
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
-					"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
-				}
-			}
+	// 			"Properties"
+	// 			{
+	// 				"MODIFIER_PROPERTY_STATS_AGILITY_BONUS"			"%bonus_agility"
+	// 				"MODIFIER_PROPERTY_STATS_INTELLECT_BONUS"		"%bonus_intellect"
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_attack"
-			{
-				"Passive"			"1"
-				"IsHidden"			"1"
+	// 		"modifier_item_diffusal_blade_arena_attack"
+	// 		{
+	// 			"Passive"			"1"
+	// 			"IsHidden"			"1"
 
-				"OnAttackLanded"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"items/items_diffusal_blade.lua"
-						"Function"		"OnAttackLanded"
-						"feedback_mana_burn"				"%feedback_mana_burn"
-						"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
-						"damage_per_burn_pct"				"%damage_per_burn_pct"
-						"mana_burn_pct"						"%mana_burn_pct"
-						"illusion_mana_burn"				"%illusion_mana_burn"
-					}
-				}
-			}
+	// 			"OnAttackLanded"
+	// 			{
+	// 				"RunScript"
+	// 				{
+	// 					"ScriptFile"	"items/items_diffusal_blade.lua"
+	// 					"Function"		"OnAttackLanded"
+	// 					"feedback_mana_burn"				"%feedback_mana_burn"
+	// 					"feedback_mana_drain_pct"			"%feedback_mana_drain_pct"
+	// 					"damage_per_burn_pct"				"%damage_per_burn_pct"
+	// 					"mana_burn_pct"						"%mana_burn_pct"
+	// 					"illusion_mana_burn"				"%illusion_mana_burn"
+	// 				}
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_root"
-			{
-				"Duration"			"%purge_root_duration"
-				"EffectName"		"particles/econ/items/outworld_devourer/od_shards_exile/od_shards_exile_ambient_root_b.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"IsDebuff"			"1"
+	// 		"modifier_item_diffusal_blade_arena_root"
+	// 		{
+	// 			"Duration"			"%purge_root_duration"
+	// 			"EffectName"		"particles/econ/items/outworld_devourer/od_shards_exile/od_shards_exile_ambient_root_b.vpcf"
+	// 			"EffectAttachType"	"follow_origin"
+	// 			"IsDebuff"			"1"
 
-				"States"
-				{
-					"MODIFIER_STATE_ROOTED"		"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
+	// 			"States"
+	// 			{
+	// 				"MODIFIER_STATE_ROOTED"		"MODIFIER_STATE_VALUE_ENABLED"
+	// 			}
+	// 		}
 
-			"modifier_item_diffusal_blade_arena_slow"
-			{
-				"Duration"			"%purge_slow_duration"
-				"EffectName"		"particles/items_fx/diffusal_slow.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"IsDebuff"			"1"
+	// 		"modifier_item_diffusal_blade_arena_slow"
+	// 		{
+	// 			"Duration"			"%purge_slow_duration"
+	// 			"EffectName"		"particles/items_fx/diffusal_slow.vpcf"
+	// 			"EffectAttachType"	"follow_origin"
+	// 			"IsDebuff"			"1"
 
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%purge_slow_movespeed_pct"
-				}
-			}
-		}
-	}
+	// 			"Properties"
+	// 			{
+	// 				"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%purge_slow_movespeed_pct"
+	// 			}
+	// 		}
+	// 	}
+	// }
 }

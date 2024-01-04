@@ -78,7 +78,8 @@ if IsServer() then
 
 		if (
 				(usedAbility:GetCooldown(usedAbility:GetLevel()) >= 0.1 or (usedAbility.GetAbilityChargeRestoreTime and usedAbility:GetAbilityChargeRestoreTime(usedAbility:GetLevel()) >= 0.1)) and
-				usedAbility:GetManaCost(usedAbility:GetLevel()) ~= 0 and
+				(usedAbility:GetManaCost(usedAbility:GetLevel()) ~= 0 or
+				(usedAbility.GetHealthCost and usedAbility:GetHealthCost(usedAbility:GetLevel()) ~= 0)) and
 				ability:PerformPrecastActions()
 			) then
 			for _, v in ipairs(FindUnitsInRadius(team, pos, nil, radius, ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), FIND_ANY_ORDER, false)) do
@@ -86,25 +87,12 @@ if IsServer() then
 				self:AddStacksToUnit(v, ability:GetSpecialValueFor("magic_resist_decrease_for_cast"))
 
 				local enemyPos = v:GetAbsOrigin()
-				local damage = (v:GetHealth() * ability:GetSpecialValueFor((caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT or caster:GetNetworkableEntityInfo("BonusPrimaryAttribute2")) and "intelligence_damage_pct" or "damage_pct") * 0.01) --* (1 + caster:GetSpellAmplification(false))
+				local damage = (v:GetHealth() * ability:GetSpecialValueFor((caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT or caster.bonus_primary_attribute2) and "intelligence_damage_pct" or "damage_pct") * 0.01)
 
-				--local spellamp = 1 + (caster:GetSpellAmplification(false) - (caster.DamageAmpPerAgility * 0.01))
-
-				--ability.NoDamageAmp = true
-				if not caster:FindModifierByName("sara_evolution_new") then
-					ApplyDamage({
-						attacker = caster,
-						victim = v,
-						damage = (ability:GetManaCost() * ability:GetSpecialValueFor("manacost_in_damage_pct") * 0.01),
-						damage_type = ability:GetAbilityDamageType(),
-						damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
-						ability = ability
-					})
-				end
 				ApplyDamage({
 					attacker = caster,
 					victim = v,
-					damage = damage,
+					damage = damage + (not caster:HasModifier("sara_evolution_new") and ability:GetManaCost() * ability:GetSpecialValueFor("manacost_in_damage_pct") * 0.01 or 0),
 					damage_type = ability:GetAbilityDamageType(),
 					damage_flags = DOTA_DAMAGE_FLAG_NO_SPELL_AMPLIFICATION,
 					ability = ability

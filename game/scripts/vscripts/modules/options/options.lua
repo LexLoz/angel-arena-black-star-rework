@@ -176,6 +176,12 @@ function Options:LoadMapValues()
 	if gamemode == "custom_abilities" then
 		Options:SetValue("MainHeroList", "NoAbilities")
 		Options:SetValue("EnableAbilityShop", true)
+		Options:SetPreGameVoting("random_omg", { "yes", "no" }, "no", {
+			calculationFunction = ">",
+			callback = function(value)
+				Options:SetValue("EnableRandomAbilities", value == "yes")
+			end
+		})
 		CustomAbilities:PostAbilityShopData()
 	elseif gamemode == "ranked" then
 		Options:SetValue("EnableRatingAffection", true)
@@ -213,6 +219,7 @@ function Options:LoadMapValues()
 	elseif gamemode == "" then
 		Options:SetValue("BanningPhaseBannedPercentage", 100)
 	end
+	GameMode.MapName = landscape
 	if landscape == "4v4v4v4" then
 		MAP_LENGTH = 9216
 		Options:SetValue("CustomTeamColors", true)
@@ -225,7 +232,7 @@ function Options:LoadMapValues()
 			end
 		})
 	elseif landscape == "5v5" then
-		GameMode.Map_Gold_Multiplier = 2
+		GameMode.Map_Gold_Multiplier = 1
 		Options:SetPreGameVoting("enable_bears", { "yes", "no" }, "no", {
 			calculationFunction = ">",
 			callback = function(value)
@@ -246,22 +253,21 @@ function Options:LoadMapValues()
 				Options:SetValue("EnableBears", result)
 			end
 		})
-		GameMode.Map_Gold_Multiplier = 2.5
-		GameMode.Jungle_Bears_Reward_Multiplier = 2.5
+		GameMode.Map_Gold_Multiplier = 2
+		GameMode.Jungle_Bears_Reward_Multiplier = 2
 	elseif landscape == "war3" then
-		GameMode.MapName = landscape
-		GameMode.Map_Gold_Multiplier = 4
-		GameMode.Jungle_Bears_Reward_Multiplier = 4
+		GameMode.Map_Gold_Multiplier = 3
+		GameMode.Jungle_Bears_Reward_Multiplier = 2
 		Options:SetInitialValue("EnableBears", true)
-		-- Options:SetPreGameVoting("enable_legacy_bears", { "yes", "no" }, "no", {
-		-- 	calculationFunction = ">",
-		-- 	callback = function(value)
-		-- 		local result = (value == "yes")
-		-- 		print('legacy bears enable: ')
-		-- 		print(result)
-		-- 		Options:SetValue("LegacyBears", result)
-		-- 	end
-		-- })
+		Options:SetPreGameVoting("enable_legacy_bears", { "yes", "no" }, "no", {
+			calculationFunction = ">",
+			callback = function(value)
+				local result = (value == "yes")
+				print('legacy bears enable: ')
+				print(result)
+				Options:SetValue("LegacyBears", result)
+			end
+		})
 	end
 end
 

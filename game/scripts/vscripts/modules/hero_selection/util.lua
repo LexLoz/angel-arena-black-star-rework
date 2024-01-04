@@ -56,7 +56,7 @@ function HeroSelection:ExtractHeroStats(heroTable)
 	local primary_damage
 	if primary == DOTA_ATTRIBUTE_ALL then
 		primary_damage = (heroTable.AttributeBaseStrength + heroTable.AttributeBaseAgility + heroTable.AttributeBaseIntelligence) *
-		DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
+			DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
 	end
 	local attributes = {
 		attribute_primary = _G[heroTable.AttributePrimary],
@@ -74,9 +74,9 @@ function HeroSelection:ExtractHeroStats(heroTable)
 		team = heroTable.Team
 	}
 	attributes.damage_min = math.round(attributes.damage_min +
-	(attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
+		(attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
 	attributes.damage_max = math.round(attributes.damage_max +
-	(attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
+		(attributes["attribute_base_" .. attributes.attribute_primary] or primary_damage))
 
 	local armorForFirstLevel = CalculateBaseArmor(heroTable.AttributeBaseAgility)
 	attributes.armor = attributes.armor + armorForFirstLevel
@@ -103,6 +103,7 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 		--end
 	end
 
+	local primat = 0
 	for key, value in pairs(classTable) do
 		if key == "RemoveItems" then
 			local children = unit:GetChildren()
@@ -115,6 +116,7 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 		if key == "Level" then
 			unit:SetLevel(value)
 		elseif key == "Model" then
+			-- print(value)
 			unit.ModelOverride = value
 			unit:SetModel(value)
 			unit:SetOriginalModel(value)
@@ -143,11 +145,13 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 			unit:SetRangedProjectileName(value)
 		elseif key == "AttributePrimary" then
 			Timers:NextTick(function()
-				--print(_G[value])
-				--print(type(_G[value]))
-				unit:SetPrimaryAttribute(_G[value])
+				print(_G[value])
+				-- print(type(_G[value]))
+				value = _G[value]
+				primat = value
+				unit:SetPrimaryAttribute(value)
 				unit.GetPrimaryAttribute = function()
-					return _G[value]
+					return value
 				end
 				--unit.Custom_PrimaryAttribute = unit:GetPrimaryAttribute()
 				unit:CalculateStatBonus(true)
@@ -182,7 +186,7 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 			unit:SetMaximumGoldBounty(value)
 		elseif key == "RingRadius" then
 			unit:SetHullRadius(value)
-		elseif key == "MovementCapabilities" then
+		elseif key == "MovementCapabilities" and type(value) == "number" then
 			unit:SetMoveCapability(value)
 		elseif key == "MovementSpeed" then
 			unit:SetBaseMoveSpeed(value)
@@ -201,11 +205,20 @@ function TransformUnitClass(unit, classTable, skipAbilityRemap)
 			unit:SetNightTimeVisionRange(value)
 		elseif key == "HasInventory" then
 			--TODO Check
-			unit:SetHasInventory(toboolean(value))
+			print(type(value))
+			unit:SetHasInventory(value == 1 and true or false)
 		elseif key == "AttackRange" then
 			unit:AddNewModifier(unit, nil, "modifier_set_attack_range", { AttackRange = value })
 		end
 	end
+	Timers:CreateTimer(1, function()
+		print('primary attribute, ' .. primat)
+		if primat == DOTA_ATTRIBUTE_ALL and unit.CustomGain_Strength and unit.CustomGain_Agility and unit.CustomGain_Intelligence then
+			unit.CustomGain_All = (unit.CustomGain_Strength + unit.CustomGain_Agility + unit.CustomGain_Intelligence) *
+			DAMAGE_PER_ATTRIBUTE_FOR_UNIVERSALES
+			unit:SetNetworkableEntityInfo("AttributeAllGain", unit.CustomGain_All)
+		end
+	end)
 end
 
 function HeroSelection:InitializeHeroClass(unit, classTable)
@@ -369,7 +382,7 @@ function HeroSelection:GetLinkedHeroNames(hero)
 end
 
 function HeroSelection:NoHeroFix()
-	for pId = 0,23 do
+	for pId = 0, 23 do
 		local player = PlayerResource:GetPlayer(pId)
 		if player and not PlayerResource:GetSelectedHeroEntity(0) then
 			player:SetSelectedHero("npc_dota_hero_target_dummy")

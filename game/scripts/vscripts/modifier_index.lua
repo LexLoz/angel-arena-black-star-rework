@@ -7,14 +7,21 @@ local modifiers = {
 	modifier_charges = "modifiers/modifier_charges",
 	modifier_hero_selection_transformation = "modifiers/modifier_hero_selection_transformation",
 	modifier_max_attack_range = "modifiers/modifier_max_attack_range",
-	modifier_arena_hero = "modifiers/modifier_arena_hero",
 	modifier_item_demon_king_bar_curse = "items/modifier_item_demon_king_bar_curse",
 	modifier_hero_out_of_game = "modifiers/modifier_hero_out_of_game",
+	modifier_summons_upgrade = "modifiers/modifier_summons_upgrade",
 	-- modifier_arena_util = "modifiers/modifier_arena_util",
 
 	modifier_splash_timer = "modifiers/modifier_splash_timer",
 
 	modifier_arena_duel_vision = "modifiers/modifier_arena_duel_vision",
+
+	modifier_arena_hero = "modifiers/modifier_arena_hero",
+	modifier_arena_hero_health_regen = "modifiers/modifier_arena_hero",
+	modifier_arena_hero_mana_regen = "modifiers/modifier_arena_hero",
+	modifier_arena_hero_max_mana = "modifiers/modifier_arena_hero",
+	modifier_arena_hero_current_mana = "modifiers/modifier_arena_hero",
+	modifier_arena_hero_gold = "modifiers/modifier_arena_hero",
 
 	modifier_stamina = "modifiers/attributes/modifier_stamina",
 	modifier_strength_crit = "modifiers/attributes/modifier_strength_crit",

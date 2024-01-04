@@ -18,9 +18,6 @@ function GameMode:InventoryItemAdded(keys)
 
 	if unit:IsHero() and not unit:IsWukongsSummon() then
 		MeepoFixes:ShareItems(unit)
-		Timers:NextTick(function()
-			--Attributes:UpdateAll(unit)
-		end)
 	end
 
 	--print(keys.item_entindex)
@@ -39,6 +36,7 @@ function GameMode:OnReconnected(id)
 	print('reconnect')
 	Timers:CreateTimer(5, function()
 		ReconnectFix(id)
+		-- StatsClient:FetchPreGameData()
 	end)
 end
 
@@ -82,12 +80,16 @@ function GameMode:OnNPCSpawned(keys)
 	local npc = EntIndexToHScript(keys.entindex)
 
 	if npc:IsCourier() then
-		print(npc:GetName())
+		-- print(npc:GetName())
 		Structures:OnCourierSpawn(npc)
 		return
 	end
 
 	--Timers:NextTick(function() npc:AddNewModifier(npc, nil, "modifier_arena_util", nil) end)
+
+	Timers:NextTick(function()
+		UpgradeSummons(npc)
+	end)
 
 	if not npc:IsHero() then return end
 	if HeroSelection:GetState() < HERO_SELECTION_PHASE_END then return end
@@ -98,6 +100,9 @@ function GameMode:OnNPCSpawned(keys)
 		if npc:GetUnitName() == "npc_dota_hero" then
 			npc:SetUnitName("npc_dota_hero_arena_base")
 			npc:AddNewModifier(npc, nil, "modifier_dragon_knight_dragon_form", { duration = 0 })
+		end
+		if npc:GetFullName() == "npc_arena_hero_aghanim" then
+			npc:AddNewModifier(npc, nil, "modifier_invoker_old_beta_invoke_attack", {})
 		end
 
 		if npc.tempestDoubleSpawned then
@@ -138,37 +143,47 @@ function GameMode:OnNPCSpawned(keys)
 			npc:AddNewModifier(npc, nil, "modifier_stamina", nil)
 			-- npc:AddNewModifier(npc, nil, "modifier_arena_util", nil)
 
-			if npc.ArenaHero then
-				local parent = npc
-				--print(parent:GetFullName())
-				parent:CalculateStatBonus(true)
-				local primat = _G[NPC_HEROES_CUSTOM[npc:GetFullName()]["AttributePrimary"]]
-				if not primat then
-					primat = parent:GetPrimaryAttribute()
-				end
-				--print(primat)
-				if primat == DOTA_ATTRIBUTE_AGILITY then npc:AddNewModifier(npc, nil, "modifier_agility_primary_bonus",
-						nil) end
-				if primat == DOTA_ATTRIBUTE_STRENGTH then
-					npc:AddNewModifier(npc, nil, "modifier_strength_crit", nil)
-				end
-				if primat == DOTA_ATTRIBUTE_INTELLECT then npc:AddNewModifier(npc, nil,
-						"modifier_intelligence_primary_bonus", nil) end
-
-				if primat == DOTA_ATTRIBUTE_ALL then npc:AddNewModifier(npc, nil, "modifier_universal_attribute", nil) end
-			else
-				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_STRENGTH then
-					npc:AddNewModifier(npc, nil, "modifier_strength_crit", nil)
-				end
-				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_AGILITY then
-					npc:AddNewModifier(npc, nil,
-						"modifier_agility_primary_bonus", nil)
+			if not npc:IsIllusion() then
+				if npc.ArenaHero then
+					local parent = npc
+					--print(parent:GetFullName())
+					parent:CalculateStatBonus(true)
+					local primat = _G[NPC_HEROES_CUSTOM[npc:GetFullName()]["AttributePrimary"]]
+					if not primat then
+						primat = parent:GetPrimaryAttribute()
 					end
-				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT then npc:AddNewModifier(npc, nil,
-						"modifier_intelligence_primary_bonus", nil) end
+					--print(primat)
+					if primat == DOTA_ATTRIBUTE_AGILITY then
+						npc:AddNewModifier(npc, nil, "modifier_agility_primary_bonus",
+							nil)
+					end
+					if primat == DOTA_ATTRIBUTE_STRENGTH then
+						npc:AddNewModifier(npc, nil, "modifier_strength_crit", nil)
+					end
+					if primat == DOTA_ATTRIBUTE_INTELLECT then
+						npc:AddNewModifier(npc, nil,
+							"modifier_intelligence_primary_bonus", nil)
+					end
 
-				if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_ALL then npc:AddNewModifier(npc, nil,
-						"modifier_universal_attribute", nil) end
+					if primat == DOTA_ATTRIBUTE_ALL then npc:AddNewModifier(npc, nil, "modifier_universal_attribute", nil) end
+				else
+					if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_STRENGTH then
+						npc:AddNewModifier(npc, nil, "modifier_strength_crit", nil)
+					end
+					if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_AGILITY then
+						npc:AddNewModifier(npc, nil,
+							"modifier_agility_primary_bonus", nil)
+					end
+					if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT then
+						npc:AddNewModifier(npc, nil,
+							"modifier_intelligence_primary_bonus", nil)
+					end
+
+					if npc:GetPrimaryAttribute() == DOTA_ATTRIBUTE_ALL then
+						npc:AddNewModifier(npc, nil,
+							"modifier_universal_attribute", nil)
+					end
+				end
 			end
 
 			if npc:IsTrueHero() then
@@ -180,11 +195,13 @@ function GameMode:OnNPCSpawned(keys)
 					Duel:SetUpVisitor(npc)
 				end
 			end
-			if npc:IsIllusion() and not npc.isCustomIllusion then
-				local owner = PlayerResource:GetSelectedHeroEntity(npc:GetPlayerID())
-				Illusions:_copyShards(owner, npc)
+			if (npc:IsIllusion() or npc:IsStrongIllusion()) and not npc.isCustomIllusion then
+				local modifier = npc:FindModifierByName("modifier_illusion")
+				Timers:NextTick(function()
+					Illusions:_copyEverything(modifier:GetCaster(), npc)
+				end)
 			end
-			Attributes:UpdateAll(npc)
+			if npc then Attributes:UpdateAll(npc) end
 		end
 	end)
 end
@@ -265,8 +282,8 @@ function GameMode:OnTeamKillCredit(keys)
 	local victimPlayer = PlayerResource:GetPlayer(keys.victim_userid)
 	--local numKills = keys.herokills
 	--local killerTeamNumber = keys.teamnumber
-	if killerPlayer then
-		Kills:OnEntityKilled(victimPlayer, killerPlayer)
+	if killerPlayer and victimPlayer then
+		Kills:OnEntityKilled(victimPlayer:GetAssignedHero(), killerPlayer:GetAssignedHero())
 	end
 end
 
@@ -347,10 +364,9 @@ function GameMode:OnEntityKilled(keys)
 				Duel:EndIfFinished()
 
 				if not IsValidEntity(killerEntity) or not killerEntity.GetPlayerOwner or not IsValidEntity(killerEntity:GetPlayerOwner()) then
-					Kills:OnEntityKilled(killedUnit:GetPlayerOwner(), nil)
+					Kills:OnEntityKilled(killedUnit, nil)
 				elseif killerEntity == killedUnit then
-					local player = killedUnit:GetPlayerOwner()
-					Kills:OnEntityKilled(player, player)
+					Kills:OnEntityKilled(killedUnit, killedUnit)
 				end
 			end
 		end
@@ -360,7 +376,7 @@ function GameMode:OnEntityKilled(keys)
 			if killerEntity then
 				team = killerEntity:GetTeam()
 			end
-			Bosses:RegisterKilledBoss(killedUnit, team)
+			Bosses:RegisterKilledBoss(killedUnit, killerEntity, team)
 		end
 
 		if killedUnit:IsRealCreep() then
@@ -385,7 +401,7 @@ function GameMode:OnEntityKilled(keys)
 
 			if killerEntity:GetTeam() ~= killedTeam and (killerEntity.GetPlayerID or killerEntity.GetPlayerOwnerID) then
 				local plId = killerEntity.GetPlayerID ~= nil and killerEntity:GetPlayerID() or
-				killerEntity:GetPlayerOwnerID()
+					killerEntity:GetPlayerOwnerID()
 				if plId > -1 and not (killerEntity.HasModifier and killerEntity:HasModifier("modifier_item_golden_eagle_relic_enabled")) then
 					local gold = RandomInt(killedUnit:GetMinimumGoldBounty(), killedUnit:GetMaximumGoldBounty())
 					Gold:ModifyGold(plId, gold)

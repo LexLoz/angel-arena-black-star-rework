@@ -9,7 +9,7 @@
 		"ItemResult"					"item_skadi_arena"
 		"ItemRequirements"
 		{
-			"01"						"item_ultimate_orb;item_ultimate_orb;item_point_booster;item_orb_of_venom"
+			"01"						"item_ultimate_orb;item_point_booster;item_orb_of_venom"
 		}
 	}
 
@@ -26,18 +26,18 @@
 		}
 	}
 
-	"item_recipe_skadi_4"
-	{
-		"BaseClass"						"item_datadriven"
-		"Model"							"models/props_gameplay/recipe.vmdl"
-		"ItemCost"						"0"
-		"ItemRecipe"					"1"
-		"ItemResult"					"item_skadi_4"
-		"ItemRequirements"
-		{
-			"01"						"item_skadi_2;item_skadi_arena"
-		}
-	}
+	// "item_recipe_skadi_4"
+	// {
+	// 	"BaseClass"						"item_datadriven"
+	// 	"Model"							"models/props_gameplay/recipe.vmdl"
+	// 	"ItemCost"						"0"
+	// 	"ItemRecipe"					"1"
+	// 	"ItemResult"					"item_skadi_4"
+	// 	"ItemRequirements"
+	// 	{
+	// 		"01"						"item_skadi_2;item_skadi_arena"
+	// 	}
+	// }
 
 
 	"item_recipe_skadi_8"
@@ -49,7 +49,7 @@
 		"ItemResult"					"item_skadi_8"
 		"ItemRequirements"
 		{
-			"01"						"item_skadi_4;item_skadi_arena;item_moon_dust"
+			"01"						"item_skadi_2;item_skadi_arena;item_moon_dust"
 		}
 	}
 
@@ -63,7 +63,7 @@
 		"ItemAliases"					"eos;eye of skadi"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
-		"MaxUpgradeLevel"				"4"
+		"MaxUpgradeLevel"				"3"
 		"ItemBaseLevel"					"1"
 
 		"AbilitySpecial"
@@ -71,27 +71,27 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"20 40 60 80"
+				"bonus_all_stats"		"20 40 60"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 750 1000"
+				"bonus_health"			"250 500 750"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1050 1400"
+				"bonus_mana"			"350 700 1050"
 			}
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed_pct"	"-30 -35 -40 -45"
+				"cold_movement_speed_pct"	"-30 -35 -40"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-30 -40 -50 -60"
+				"cold_attack_speed"		"-30 -40 -50"
 			}
 			"06"
 			{
@@ -101,7 +101,7 @@
 			"07"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"heal_decrease"			"-20 -30 -40 -50"
+				"heal_decrease"			"-20 -30 -40"
 			}
 		}
 	}
@@ -115,7 +115,7 @@
 		"ItemAliases"					"eos;eye of skadi"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
-		"MaxUpgradeLevel"				"4"
+		"MaxUpgradeLevel"				"3"
 		"ItemBaseLevel"					"2"
 
 		"AbilitySpecial"
@@ -123,27 +123,27 @@
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"20 40 60 80"
+				"bonus_all_stats"		"20 40 60"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 750 1000"
+				"bonus_health"			"250 500 750"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1050 1400"
+				"bonus_mana"			"350 700 1050"
 			}
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed_pct"	"-30 -35 -40 -45"
+				"cold_movement_speed_pct"	"-30 -35 -40"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-30 -40 -50 -60"
+				"cold_attack_speed"		"-30 -40 -50"
 			}
 			"06"
 			{
@@ -153,63 +153,62 @@
 			"07"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"heal_decrease"			"-20 -30 -40 -50"
-			}
-			
-		}
-	}
-
-	"item_skadi_4"
-	{
-		"BaseClass"						"item_lua"
-		"ScriptFile"					"items/item_skadi"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityTextureName"			"item_arena/skadi_4"
-		"ItemAliases"					"eos;eye of skadi"
-		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
-
-		"MaxUpgradeLevel"				"4"
-		"ItemBaseLevel"					"3"
-
-		"AbilitySpecial"
-		{
-			"01"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"20 40 60 80"
-			}
-			"02"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 750 1000"
-			}
-			"03"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1050 1400"
-			}
-			"04"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed_pct"	"-30 -35 -40 -45"
-			}
-			"05"
-			{
-				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-30 -40 -50 -60"
-			}
-			"06"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"cold_duration"			"3.0"
-			}
-			"07"
-			{
-				"var_type"				"FIELD_FLOAT"
-				"heal_decrease"			"-20 -30 -40 -50"
+				"heal_decrease"			"-20 -30 -40"
 			}
 		}
 	}
+
+	// "item_skadi_4"
+	// {
+	// 	"BaseClass"						"item_lua"
+	// 	"ScriptFile"					"items/item_skadi"
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+	// 	"AbilityTextureName"			"item_arena/skadi_4"
+	// 	"ItemAliases"					"eos;eye of skadi"
+	// 	"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+
+	// 	"MaxUpgradeLevel"				"4"
+	// 	"ItemBaseLevel"					"3"
+
+	// 	"AbilitySpecial"
+	// 	{
+	// 		"01"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_all_stats"		"20 40 60 80"
+	// 		}
+	// 		"02"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_health"			"250 500 750 1000"
+	// 		}
+	// 		"03"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"bonus_mana"			"350 700 1050 1400"
+	// 		}
+	// 		"04"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"cold_movement_speed_pct"	"-30 -35 -40 -45"
+	// 		}
+	// 		"05"
+	// 		{
+	// 			"var_type"				"FIELD_INTEGER"
+	// 			"cold_attack_speed"		"-30 -40 -50 -60"
+	// 		}
+	// 		"06"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"cold_duration"			"3.0"
+	// 		}
+	// 		"07"
+	// 		{
+	// 			"var_type"				"FIELD_FLOAT"
+	// 			"heal_decrease"			"-20 -30 -40 -50"
+	// 		}
+	// 	}
+	// }
 
 	"item_skadi_8"
 	{
@@ -220,35 +219,35 @@
 		"ItemAliases"					"eos;eye of skadi"
 		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
 
-		"MaxUpgradeLevel"				"4"
-		"ItemBaseLevel"					"4"
+		"MaxUpgradeLevel"				"3"
+		"ItemBaseLevel"					"3"
 
 		"AbilitySpecial"
 		{
 			"01"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_all_stats"		"20 40 60 80"
+				"bonus_all_stats"		"20 40 60"
 			}
 			"02"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_health"			"250 500 750 1000"
+				"bonus_health"			"250 500 750"
 			}
 			"03"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"bonus_mana"			"350 700 1050 1400"
+				"bonus_mana"			"350 700 1050"
 			}
 			"04"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_movement_speed_pct"	"-30 -35 -40 -45"
+				"cold_movement_speed_pct"	"-30 -35 -40"
 			}
 			"05"
 			{
 				"var_type"				"FIELD_INTEGER"
-				"cold_attack_speed"		"-30 -40 -50 -60"
+				"cold_attack_speed"		"-30 -40 -50"
 			}
 			"06"
 			{
@@ -258,7 +257,7 @@
 			"07"
 			{
 				"var_type"				"FIELD_FLOAT"
-				"heal_decrease"			"-20 -30 -40 -50"
+				"heal_decrease"			"-20 -30 -40"
 			}
 		}
 	}

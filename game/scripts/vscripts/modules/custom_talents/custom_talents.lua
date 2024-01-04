@@ -171,10 +171,6 @@ function CDOTA_BaseNPC:ApplyTalentEffects(name)
 	local effect = talent_data.effect
 	if not effect then return end
 
-	if effect.callback and type(effect.callback) == "function" then
-		effect.callback(self, talent_data)
-	end
-
 	if effect.abilities then
 		if type(effect.abilities) == "string" then
 			effect.abilities = {effect.abilities}
@@ -182,6 +178,15 @@ function CDOTA_BaseNPC:ApplyTalentEffects(name)
 		for _,v in ipairs(effect.abilities) do
 			local ability = self:FindAbilityByName(v) or self:AddNewAbility(v)
 			ability:SetLevel(self.talents[name].level)
+			-- print(ability:GetAbilityName())
+			if v == 'special_bonus_unique_timbersaw' then
+				local abilityName = "shredder_chakram_2"
+				local shredder_chakram_2 = self:FindAbilityByName(abilityName) --or self:AddNewAbility(abilityName)
+				if shredder_chakram_2 then
+					shredder_chakram_2:SetHidden(false)
+				end
+
+			end
 			if not table.includes(self.talents[name].abilities, ability) then
 				table.insert(self.talents[name].abilities, ability)
 			end
@@ -250,6 +255,11 @@ function CDOTA_BaseNPC:ApplyTalentEffects(name)
 			self.talents[name].ability_multicast[k] = v
 		end
 	end
+
+	if effect.callback and type(effect.callback) == "function" then
+		effect.callback(self, talent_data)
+	end
+
 	if effect.calculate_stat_bonus and self.CalculateStatBonus then
 		self:CalculateStatBonus(true)
 	end

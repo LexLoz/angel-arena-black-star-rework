@@ -592,11 +592,15 @@
 
 	"npc_arena_hero_lord_voldemort"
 	{
-		"base_hero"				"npc_dota_hero_warlock"
-		"Model"					"models/heroes/warlock/warlock.vmdl"
-		"RemoveItems"			"1"
-		"RenderColor"			"0 0 0"
-		"ModelScale"			"1.2"
+		"base_hero"				"npc_dota_hero_arena_base"
+		"Model"					"models/am/am_geometry.vmdl"
+		// "RemoveItems"			"1"
+		// "RenderColor"			"0 0 0"
+		"AttackCapabilities"	"DOTA_UNIT_CAP_RANGED_ATTACK"
+		"AttributePrimary"		"DOTA_ATTRIBUTE_INTELLECT"
+		"AttackRange"			"400"
+		"ProjectileModel"		""
+		"ModelScale"			"1"
 		"AttributeBaseStrength"	"16"
 		"AttributeBaseIntelligence"	"24"
 		"AttributeBaseAgility"	"12"
@@ -610,8 +614,9 @@
 
 	"npc_arena_hero_fymryn"
 	{
-		"Model"                             "models/units/fymryn/fymryn.vmdl"
+		"Model"                             "models/fymryn2/fymryn2_model.vmdl"
         "base_hero"							"npc_dota_hero_arena_base"
+		"ModelScale"						"0.9"
 		
         "Ability1"                          "fymryn_shadowmourne"
         "Ability2"                          "fymryn_shadow_step"
@@ -634,5 +639,44 @@
 		"ArmorPhysical"						"0"
         "AttackDamageMin"		            "31"
 		"AttackDamageMax"		            "33"
+	}
+
+	"npc_arena_hero_aghanim"
+	{
+		"base_hero"							"npc_dota_hero_arena_base"
+		"ModelScale"				"0.65"
+		"Model"						"models/aghanim/aghanim.vmdl"
+		// "DisableWearables"			"1"
+		// "SoundSet"					"Hero_Invoker"
+		"ProjectileModel"			"particles/creatures/aghanim/aghanim_crystal_attack.vpcf"
+		// "particle_folder"			"particles/units/heroes/hero_wisp"
+		// "GameSoundsFile"			"soundevents/game_sounds_heroes/game_sounds_wisp.vsndevts"
+		// "VoiceFile"					"soundevents/voscripts/game_sounds_vo_wisp.vsndevts"
+
+		"Ability1"					"aghanim_shard"
+		"Ability2"					"aghanim_blink_cast"
+		"Ability3"					"aghanim_ray"
+		"Ability4"					"aghanim_blink_attack"
+		"Ability5"					"aghanim_ray_stop"
+		"Ability6"					"aghanim_change_style_main"
+
+		"ArmorPhysical"					"0"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
+		"AttackDamageMin"		"20"
+		"AttackDamageMax"		"30"
+		"AttackRate"		"1.700000"
+		"AttackAnimationPoint"		"0.400000"
+		"AttackAcquisitionRange"		"800"
+		"AttackRange"		"500"
+		"ProjectileSpeed"		"900"
+		"AttributePrimary"		"DOTA_ATTRIBUTE_INTELLECT"
+		"AttributeBaseStrength"		"18"
+		"AttributeStrengthGain"		"2.800000"
+		"AttributeBaseAgility"		"23"
+		"AttributeAgilityGain"		"2.200000"
+		"AttributeBaseIntelligence"		"22"
+		"AttributeIntelligenceGain"		"3.600000"
+		"MovementSpeed"		"315"
+		"StatusHealthRegen"		"2.25"
 	}
 }

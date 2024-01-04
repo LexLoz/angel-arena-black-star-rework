@@ -14,6 +14,7 @@ end
 
 if IsServer() then
 	function modifier_arena_healer:GetModifierIncomingDamageConstant(keys)
+		if keys.target ~= self:GetParent() then return end
 		if GetDOTATimeInMinutesFull() < 10 then
 			return -keys.damage
 		end
@@ -77,7 +78,7 @@ if IsServer() then
 		Notifications:TopToAll({ text = "ㅤ".." 1", continue = true })
 
 		if keys.attacker:GetTeamNumber() ~= team and keys.attacker:IsTrueHero() then
-            Gold:AddGoldWithMessage(keys.attacker, 1000 + Gold:GetGold(keys.attacker:GetPlayerOwnerID() * 0.25))
+            Gold:AddGoldWithMessage(keys.attacker, 1000 + Gold:GetGold(keys.attacker:GetPlayerOwnerID()) * 0.25)
         end
 	end
 end

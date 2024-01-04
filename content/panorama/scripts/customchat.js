@@ -41,19 +41,24 @@ function RecieveMessage(data) {
 			var localized;
 			var cooldown = Abilities.GetCooldownTimeRemaining(data.ability);
 			if (Players.GetTeam(data.player) === Players.GetTeam(playerId)) {
-				if (Abilities.GetLevel(data.ability) === 0) {
-					localized = '#chat_message_ability_not_learned';
-				} else if (!Abilities.IsOwnersManaEnough(data.ability)) {
-					localized = '#chat_message_ability_mana';
-				} else if (cooldown > 0) {
-					localized = '#chat_message_ability_cooldown';
-				} else if (Abilities.IsPassive(data.ability)) {
-					localized = '#chat_message_ability_passive';
+				if (data.itemslist) {
+
+					localized = `#chat_message_ability_casket_of_greed`	
 				} else {
-					localized = '#chat_message_ability_ready';
-				}
-				if (data.player !== playerId) {
-					localized = localized.replace('#chat_message_ability_', '#chat_message_ability_ally_');
+					if (Abilities.GetLevel(data.ability) === 0) {
+						localized = '#chat_message_ability_not_learned';
+					} else if (!Abilities.IsOwnersManaEnough(data.ability)) {
+						localized = '#chat_message_ability_mana';
+					} else if (cooldown > 0) {
+						localized = '#chat_message_ability_cooldown';
+					} else if (Abilities.IsPassive(data.ability)) {
+						localized = '#chat_message_ability_passive';
+					} else {
+						localized = '#chat_message_ability_ready';
+					}
+					if (data.player !== playerId) {
+						localized = localized.replace('#chat_message_ability_', '#chat_message_ability_ally_');
+					}
 				}
 			} else {
 				localized = '#chat_message_ability_enemy';
@@ -61,7 +66,9 @@ function RecieveMessage(data) {
 			if (Abilities.IsItem(data.ability) && Abilities.GetLevel(data.ability) === 1 && (localized.endsWith('_passive') || localized.endsWith('_ready') || localized.endsWith('_enemy'))) {
 				localized = localized.replace('#chat_message_ability_', '#chat_message_item_');
 			}
+			// print(transformObjectToArray(data.itemslist))
 			localized = $.Localize(localized);
+			localized = localized.replace('{itemslist}', transformObjectToArray(data.itemslist).map(element => ' ' + $.Localize(element)).join())
 			localized = localized.replace('{ability_level}', Abilities.GetLevel(data.ability));
 			localized = localized.replace('{ability_name}', $.Localize('#DOTA_Tooltip_ability_' + Abilities.GetAbilityName(data.ability)));
 			localized = localized.replace('{ability_cooldown}', cooldown.toFixed(0));

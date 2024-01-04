@@ -64,7 +64,6 @@ if IsServer() then
                 parent:EmitSound("Ability.LagunaBlade")
                 keys.attacker:EmitSound("Ability.LagunaBladeImpact")
 
-                ability.NoDamageAmp = true
                 ApplyDamage({
                     attacker = parent,
                     victim = keys.attacker,

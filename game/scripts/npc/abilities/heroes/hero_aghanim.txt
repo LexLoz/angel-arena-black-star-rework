@@ -1,0 +1,632 @@
+"DOTAAbilities"
+{
+    "aghanim_shard"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_shard"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT" 
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_MAGICAL"   
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "MaxLevel"                      "7"
+
+        "AbilityCastPoint"              "0.45"
+        "AbilityCastRange"              "3000"
+
+        "AbilityChargeRestoreTime"      "12 11 10 9 8 7 6"
+        "AbilityManaCost"               "70 80 90 100 110 120 130"
+
+        "AbilityValues"
+        {
+            "damage"        
+            {
+                "value"                 "80 140 200 260 320 380 440"
+            }
+            "radius"                    "225"   
+            "max_distance"              "1200"
+            "orb_speed"                 "550"
+            "orb_vision"                "450"
+            "vision_duration"           "3.34"
+            "radius_dmg"                "500"
+            "bonus_damage"              "80"
+            "debuff_duration"           "14"
+            "crystal_duration"          "25"
+            "AbilityCharges"
+            {
+                "value"                                      "1"
+            }
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_1"
+    }
+
+    "aghanim_blink_cast"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/blink_cast"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+        "AbilityCastRange"              "1300"
+        "AbilityCastPoint"              "0.2"
+        "AbilityManaCost"               "60"
+        "AbilityCooldown"               "12 11 10 9 8 7 6"
+        "MaxLevel"                      "7"
+        "LinkedAbility"                             "aghanim_blink_attack"
+
+        "AbilityValues"
+        {
+            "distance"                  "500 550 600 650 700 750 800"
+            "ability_duration"          "3"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_2"
+    }
+
+    "aghanim_blink_attack"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/blink_attack"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_MAGICAL"   
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+        "AbilityCastPoint"              "0.3"
+        "LinkedAbility"                 "aghanim_blink_cast"
+        "HasShardUpgrade"               "1"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "radius"                    "400"
+            "damage"                    "75 150 225 300 375 450 525"
+            "slow"                      "-75"
+            "duration"                  "0.5 0.75 1 1.25 1.5 1.75 2"
+            "stun_shard"                "2"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_4"
+    }
+
+    "aghanim_ray"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_ray"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_MAGICAL"   
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT"
+        "AbilityCastPoint"              "0.3"
+        "AbilityManaCost"               "150"
+        "AbilityCooldown"               "45"
+        "HasShardUpgrade"               "1"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "duration"                  "4.5 5 5.5 6"
+            "damage"                    "50 75 100 125 150 175 200"
+            "health_aver"               "50"
+            "damage_multiple"           "2"
+            "duration_debuff"           "3"
+            "min_distance"              "200"
+            "max_distance"              "1000 1100 1200 1300 1400 1500 1600"
+            "mana_damage"  "3"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_3"
+    }
+
+    "aghanim_ray_stop"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_ray_stop"
+        "MaxLevel"                      "1"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+    }
+
+    "aghanim_change_style_main"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_style_main"
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+        "AbilityCastPoint"              "0.1"
+        "AbilityManaCost"               "150 175 200 225 250 275 300"
+        "AbilityCooldown"               "100"
+        "AbilityCastAnimation"          "ACT_DOTA_CAST_ABILITY_6"
+        "LinkedAbility"                 "aghanim_change_style_mad"
+        "HasScepterUpgrade"             "1"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "start_time"            "4 3.75 3.5 3.25 3 2.75 2.5"
+            "choose_time"           "16"
+            "hero_time"             "25 27 29 31 33 35 40"
+            "invul"                 "1.5"
+        }
+    }
+    "aghanim_change_style_mad"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_style_mad"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+        "MaxLevel"                      "1"
+        "LinkedAbility"                 "aghanim_change_style_bath"
+    }
+    "aghanim_change_style_bath"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_style_bath"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+        "MaxLevel"                      "1"
+        "LinkedAbility"                 "aghanim_change_style_mech"
+    }
+    "aghanim_change_style_mech"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_style_mech"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+        "MaxLevel"                      "1"
+        "LinkedAbility"                 "aghanim_change_style_smith"
+    }
+    "aghanim_change_style_smith"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_style_smith"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+        "MaxLevel"                      "1"
+        "LinkedAbility"                 "aghanim_change_style_main"
+    }
+
+    "aghanim_mech_sword"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_sword"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_PHYSICAL"  
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_YES"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT"
+        "AbilityCastPoint"              "0.2"
+        "AbilityCooldown"               "10"
+        "AbilityManaCost"               "55"
+        "AbilityCastRange"              "500"
+        "AbilityCastAnimation"          "ACT_DOTA_CAST_ABILITY_2"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "crit_mult"                 "10"
+            "angle"                     "140"
+            "radius"                    "500"
+            "knockback_duration"        "0.3"
+            "knockback_distance"        "150"
+            "bonus_armor"               "2 3 4 5 6 7 8"
+            "activity_duration"         "6"
+            "bonus_damage_hero"         "10 20 30 40 50 60 70"
+            "bonus_damage_creep"        "2 3 4 5 6 7 8"
+        }
+    }
+
+
+    "aghanim_mech_force"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_force"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_MAGICAL"  
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+        "AbilityCooldown"               "10 9.5 9 8.5 8 7.5 7"
+        "AbilityManaCost"               "85"
+        "MaxLevel"                      "4"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "distance"                  "300 350 400 450 500 550 600"
+            "slow"                      "-100"
+            "slow_duration"             "1"
+
+            "fire_duration"             "7"
+            "debuff_duration"           "2"
+            "slow_debuff"               "-30"
+            "debuff_damage"             "60 70 80 90 100 110 120"
+        }
+    }
+
+
+    "aghanim_mech_shield"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_shield"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+        "AbilityCooldown"               "18 17 16 15 14 13 12"
+        "AbilityManaCost"               "105"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "armor"                     "2 4 6 8 10 12 14"
+            "health"                    "300 500 700 900 1100 1300 1500"
+
+            "radius"                    "800"
+
+            "armor_per_hero"            "10"
+            "magical_per_hero"          "10"
+            "duration"                  "8"
+            "aura_mult"                 "50"
+        }
+    }
+
+    "aghanim_mech_attack"
+    {
+        "BaseClass"                     "ability_lua"
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_attack"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_PHYSICAL"  
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_YES"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT"
+        "AbilityChannelTime"            "5"
+        "AbilityCastPoint"              "0.2"
+        "AbilityCastRange"              "2000"
+        "AbilityCastAnimation"          "ACT_DOTA_CAST_ABILITY_4"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "crit_mult"                 "10"
+            "armor"                     "50 60 70 80 90 100 120"
+            "duration"                  "3 4 5 6 7 8 9"
+            "stun"                      "0.5 0.75 1 1.25 1.5 1.75 2"
+            "distance"                  "2000"
+            "orig_damage"               "150 300 450 600 750 900 1050"
+        }
+    }
+
+    "aghanim_bath_bubble"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_bubble"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT" 
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_PURE"   
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.25"
+        "AbilityCooldown"               "12"
+        "AbilityManaCost"               "140 160 180 200 220 240 260"
+
+        "AbilityValues"
+        {
+            "heal"                      "200 300 400 500 600 700 800"
+            "damage"                    "200 250 300 350 400 450 500"
+            "distance"                  "1200"
+            "attack_speed"              "35"
+            "movespeed"                 "15"
+            "stun_duration"             "4 4.5 5 5.5 6 6.5 7"
+            "buff_duration"             "4 4.5 5 5.5 6 6.5 7"
+            "damage_from_mana"          "10"
+            "lop_damage"                "200 300 400 500 600 700 800"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_1"
+    }
+
+    "aghanim_bath_bubble_lop"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_bubble_stop"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_HIDDEN" 
+        "MaxLevel"                      "1"
+    }
+
+    "aghanim_puddle"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_puddle"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE" 
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastRange"              "600"
+        "AbilityCastPoint"              "0.1"
+        "AbilityCooldown"               "12"
+        "AbilityManaCost"               "120"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "radius"            "400 500 600 700 800 900 1000"
+            "movespeed"         "15"
+            "attackspeed"       "35"
+            "duration"          "3 3.5 4 4.5 5 5.5 6"
+            "buff_duration"     "10"
+            "slow"              "-30"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_2"
+    }
+
+    "aghanim_water_ray"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_water_ray"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT"
+        "AbilityCastPoint"              "0.3"
+        "AbilityManaCost"               "150"
+        "AbilityCooldown"               "45"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "duration"                  "3 3.5 4 4.5 5 5.5 6"
+            "min_distance"              "200"
+            "base_heal"                 "25 50 75 100 125 150 175"
+            "max_distance"              "1000 1100 1200 1300 1400 1500 1600"
+            "heal"  "5"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_3"
+    }
+
+    "aghanim_water_ray_stop"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_water_ray_stop"
+        "MaxLevel"                      "1"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_HIDDEN"
+    }
+
+    "aghanim_waves_storm"
+    {
+        "BaseClass"                     "ability_lua"
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_waves_storm"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+        "AbilityCastPoint"              "0.3"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_PURE"   
+        "AbilityManaCost"               "150"
+        "MaxLevel"                      "7"
+
+        "AbilityValues"
+        {
+            "interval"      "5"
+            "heal"          "2"
+            "damage"        "2"
+            "count"         "5 7 9 11 13 15 17"
+            "slow"          "10"
+            "duration"      "2"
+            "base_num"      "50 150 250 350 450 550 650"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_3"
+    }
+
+    "aghanim_mad_wrench"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_wrench"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT" 
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_MAGICAL"   
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.25"
+        "AbilityCooldown"               "8"
+        "AbilityManaCost"               "120"
+
+        "AbilityValues"
+        {
+            "duration"                  "2 2.5 3 3.5 4 4.5 5"
+            "range"                     "1000 1050 1100 1150 1200 1250 1300"
+            "damage"                    "50 60 70 80 90 100 110"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_1"
+    }
+
+    "aghanim_mad_wrench_buff"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_wrench"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_HIDDEN" 
+        "MaxLevel"                      "1"
+    }
+
+    "aghanim_mad_siled"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_siled"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE" 
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.1"
+        "AbilityCooldown"               "20 19 18 17 16 15 14"
+
+        "AbilityValues"
+        {
+            "duration"                     "2 2.5 3 3.5 4 4.5 5"
+            "damage_return"                "100"
+            "movespeed"                    "10 12 14 16 18 20 25"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_3"
+    }
+
+    "aghanim_chain"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "AbilityTextureName"            "arena/aghanim/aghanim_chain"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED" 
+        "AbilityUnitTargetTeam"         "DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "AbilityUnitTargetType"         "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.1"
+        "AbilityCooldown"               "15"
+        "AbilityManaCost"               "120"
+        "AbilityCastRange"              "800 900 1000 1100 1200 1300 1400"
+        "AbilityChannelTime"            "5"
+
+        "AbilityValues"
+        {
+            "duration"                  "2 2.5 3 3.5 4 4.5 5"
+            "range"                     "400 450 500 550 600 650 700"
+            "damage"                    "60 130 200 270 340 410 480"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_3"
+    }
+
+    "aghanim_mad_chains"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_chains"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE" 
+        "AbilityUnitTargetTeam"         "DOTA_UNIT_TARGET_TEAM_ENEMY"
+        "AbilityUnitTargetType"         "DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_YES"
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.25"
+        "AbilityManaCost"               "120"
+        "AbilityCastRange"              "650"
+
+        "AbilityValues"
+        {
+            "stun_duration"             "1.7 1.75 1.8 1.85 1.9 1.95 2.0"
+            "radius"                    "800"
+            "damage"                    "300 400 500 600 700 800 900"
+            "duration"                  "3"
+            "tick_damage"               "75"
+            "tick_mana"                 "10"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_4"
+    }
+
+    "aghanim_smith_mech"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_mech"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT" 
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_MAGICAL" 
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.3"
+        "AbilityCooldown"               "8"
+        "AbilityManaCost"               "120"
+
+        "AbilityValues"
+        {
+            "cast_anim"         "-40 -50 -60 -70 -80 -90 -100"
+            "duration"          "4"
+            "damage"            "120 220 320 420 520 620 720"
+
+            "cast_anim_b"       "-20 -25 -30 -35 -40 -45 -50"
+            "bonus_duration"    "3"
+            "damage_b"          "30 50 70 90 110 130 150"
+
+            "distance"          "1200"
+            "radius"            "300"
+
+            "slow"              "-20"
+
+            "delay"             "3"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_1"
+    }
+
+    "aghanim_smith_jetpack"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_jetpack"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET" 
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.1"
+        "AbilityCooldown"               "14"
+        "AbilityManaCost"               "120"
+
+        "AbilityValues"
+        {
+            "duration"                  "1.25"
+            "damage"                    "70 140 210 280 350 420 490"
+            "turn_rate"                 "75"
+            "height"                    "250"
+            "bonus_speed"               "120"
+            "radius"                    "200"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_2"
+    }
+
+    "aghanim_smith_crange"
+    {
+        "BaseClass"                     "ability_lua"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_crange"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED" 
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.5"
+        "AbilityCooldown"               "20 18 16 14 12 10 8"
+        "AbilityManaCost"               "400"
+        "AbilityChannelTime"            "5"
+
+        "AbilityValues"
+        {
+            "cast_range"                "150 175 200 225 250 275 300"
+            "aura_radius"               "1200"
+            "duration"                  "5"
+            "radius"                    "200 300 400 500 600 700 800"
+            "cooldown_mult"             "3"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_3"
+    }
+
+    "aghanim_smith_bomb"
+    {
+        "BaseClass"                     "ability_lua"
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "ScriptFile"                    "heroes/hero_aghanim/aghanim.lua"
+        "AbilityTextureName"            "arena/aghanim/aghanim_bomb"
+        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_POINT" 
+        "AbilityUnitDamageType"         "DAMAGE_TYPE_PHYSICAL"   
+        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
+        "MaxLevel"                      "7"
+        "AbilityCastPoint"              "0.15"
+        "AbilityManaCost"               "120"
+        "AbilityCastRange"              "1400"
+
+        "AbilityValues"
+        {
+            "fly_duration"              "0.8"
+            "damage"                    "350 550 750 950 1150 1350 1550"
+            "radius"                    "250"
+            "slow_cd"                   "2"
+            "move_slow"                 "-30"
+            "silence_duration"          "3 4 5 6 7 8 9"
+        }
+
+        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_6"
+    }
+}

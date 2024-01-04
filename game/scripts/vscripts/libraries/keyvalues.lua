@@ -81,7 +81,36 @@ function LoadGameKeyValues()
 		local file = LoadKeyValues(scriptPath .. KVFilePaths.base .. ".txt")
 		-- Replace main game keys by any match on the override file (2)
 		if KVType == "AbilityKV" then
+			local heroesTable = LoadKeyValues(scriptPath .. "npc_heroes.txt")
 			for k, v in pairs(override) do
+				if file[k] then
+					if type(v) == "table" then
+						table.merge(file[k], v)
+					else
+						file[k] = v
+					end
+				elseif KVType == "AbilityKV" then
+					for heroName, _ in pairs(heroesTable) do
+						local heroAbilities = LoadKeyValues(scriptPath .. "heroes/" .. heroName .. ".txt")
+						if heroAbilities then
+							for abilityName, abilityTable in pairs(heroAbilities) do
+								if abilityName == k then
+									if type(v) == "table" then
+										table.merge(heroAbilities[k], v)
+									else
+										heroAbilities[k] = v
+									end
+									file[k] = heroAbilities[k]
+								else
+									file[abilityName] = abilityTable
+								end
+							end
+						end
+					end
+				end
+			end
+		else
+			for k,v in pairs(override) do
 				if file[k] then
 					if type(v) == "table" then
 						table.merge(file[k], v)
@@ -90,18 +119,14 @@ function LoadGameKeyValues()
 					end
 				end
 			end
-			local heroesTable = LoadKeyValues(scriptPath .. "npc_heroes.txt")
-			for heroName, _ in pairs(heroesTable) do
-				local heroAbilities = LoadKeyValues(scriptPath .. "heroes/" .. heroName .. ".txt")
-				for k, v in pairs(override) do
-					if heroAbilities and heroAbilities[k] then
-						if type(v) == "table" then
-							table.merge(heroAbilities[k], v)
-						else
-							heroAbilities[k] = v
-						end
-						file[k] = heroAbilities[k]
-					end
+		end
+
+		for k, v in pairs(override) do
+			if file[k] then
+				if type(v) == "table" then
+					table.merge(file[k], v)
+				else
+					file[k] = v
 				end
 			end
 		end
@@ -130,7 +155,7 @@ function LoadGameKeyValues()
 		file.Version = nil
 		KeyValues[KVType] = file
 	end
-	-- PrintTable(KeyValues.AbilityKV)
+	-- PrintTable(KeyValues.ItemKV)
 
 	-- Merge All KVs
 	KeyValues.All = {}
@@ -296,8 +321,8 @@ function GetItemIdByName(itemName)
 	return KeyValues.ItemKV[itemName].ID
 end
 
---if not KeyValues.All then LoadGameKeyValues() end
-LoadGameKeyValues()
+if not KeyValues.All then LoadGameKeyValues() end
+-- LoadGameKeyValues()
 
 
 
@@ -393,13 +418,27 @@ function PrintGeneratedKV(t, indent, done, fix)
 	end
 end
 
+function GenerateOverrideAbilitiesKV()
+	local returned_table = {}
+
+	for heroName,_ in pairs(NPC_HEROES) do
+		local heroAbilities = LoadKeyValues("scripts/npc/heroes/" .. heroName .. ".txt")
+		if heroAbilities then
+			heroAbilities.Version = nil
+			table.merge(returned_table, heroAbilities)
+		end
+	end
+
+	return returned_table
+end
+
 KV_AVERAGE_MULTIPLIER = 1.5
 function GenerateAbilitiesKVTable(parameters)
 	parameters = parameters or {}
 
 	print('NEW KV TABLE')
-	local overrideKV = LoadKeyValues("scripts/npc/override/abilities.txt")
-	local oldKV = LoadKeyValues("scripts/npc/override/abilities_legacy.txt")
+	local overrideKV = GenerateOverrideAbilitiesKV()
+	local oldKV = LoadKeyValues("scripts/npc/override/abilities.txt")
 	local newKV = {}
 	local localization_eng = {}
 	local localization_ru = {}
@@ -610,7 +649,7 @@ end
 -- PrintGeneratedKV(GenerateAbilitiesKVTable({}))
 
 -- PrintGeneratedKV(GenerateAbilitiesKVTable({
--- 	createLocalization = true,
+-- 	createLocalization = false,
 -- 	stamina_drain_reduction = {
 -- 		isCalculateSpellDamageTooltip = false,
 -- 		localizationRu = "%УМЕНЬШЕНИЕ РАСХОДА ВЫНОСЛИВОСТИ:",
@@ -625,50 +664,50 @@ end
 -- 		isCalculateSpellDamageTooltip = false,
 -- 		localizationRu = "%УРОН ПО БОССАМ:",
 -- 		localizationEng = "%DAMAGE TO BOSSES:",
--- 		table = {
--- 			--zuus_static_field = 5,
--- 			--item_blade_mail = 40,
--- 			--centaur_return = 15,
--- 			enigma_midnight_pulse = 15,
--- 			enigma_black_hole = 200,
--- 			--techies_suicide = 25,
--- 			lina_laguna_blade = 200,
--- 			lion_finger_of_death = 200,
--- 			--shredder_chakram_2 = 40,
--- 			--shredder_chakram = 40,
--- 			--sniper_shrapnel = 40,
--- 			abyssal_underlord_firestorm = 15,
--- 			bristleback_quill_spray = 50,
--- 			--centaur_hoof_stomp = 40,
--- 			--centaur_double_edge = 40,
--- 			kunkka_ghostship = 200,
--- 			kunkka_torrent = 200,
--- 			ember_spirit_flame_guard = 200,
--- 			sandking_sand_storm = 200,
--- 			antimage_mana_void = 25,
--- 			doom_bringer_infernal_blade = 10,
--- 			winter_wyvern_arctic_burn = 10,
--- 			freya_ice_cage = 25,
--- 			--tinker_march_of_the_machines = 2000,
--- 			necrolyte_reapers_scythe = 25,
--- 			huskar_life_break = 20,
--- 			huskar_burning_spear_arena = 10,
--- 			phantom_assassin_fan_of_knives = 15,
--- 			item_unstable_quasar = 30,
--- 			bloodseeker_blood_mist = 200,
--- 			bloodseeker_bloodrage = 20,
--- 			bloodseeker_rupture = 50,
--- 			venomancer_poison_nova = 25,
--- 			venomancer_noxious_plague = 15,
--- 			phoenix_sun_ray = 10,
--- 			zuus_arc_lightning = 15,
--- 			muerta_pierce_the_veil = 33,
--- 			witch_doctor_maledict = 25,
+-- 		-- table = {
+-- 		-- 	--zuus_static_field = 5,
+-- 		-- 	--item_blade_mail = 40,
+-- 		-- 	--centaur_return = 15,
+-- 		-- 	enigma_midnight_pulse = 15,
+-- 		-- 	enigma_black_hole = 200,
+-- 		-- 	--techies_suicide = 25,
+-- 		-- 	lina_laguna_blade = 200,
+-- 		-- 	lion_finger_of_death = 200,
+-- 		-- 	--shredder_chakram_2 = 40,
+-- 		-- 	--shredder_chakram = 40,
+-- 		-- 	--sniper_shrapnel = 40,
+-- 		-- 	abyssal_underlord_firestorm = 15,
+-- 		-- 	bristleback_quill_spray = 50,
+-- 		-- 	--centaur_hoof_stomp = 40,
+-- 		-- 	--centaur_double_edge = 40,
+-- 		-- 	kunkka_ghostship = 200,
+-- 		-- 	kunkka_torrent = 200,
+-- 		-- 	ember_spirit_flame_guard = 200,
+-- 		-- 	sandking_sand_storm = 200,
+-- 		-- 	antimage_mana_void = 25,
+-- 		-- 	doom_bringer_infernal_blade = 10,
+-- 		-- 	winter_wyvern_arctic_burn = 10,
+-- 		-- 	freya_ice_cage = 25,
+-- 		-- 	--tinker_march_of_the_machines = 2000,
+-- 		-- 	necrolyte_reapers_scythe = 25,
+-- 		-- 	huskar_life_break = 20,
+-- 		-- 	huskar_burning_spear_arena = 10,
+-- 		-- 	phantom_assassin_fan_of_knives = 15,
+-- 		-- 	item_unstable_quasar = 30,
+-- 		-- 	bloodseeker_blood_mist = 200,
+-- 		-- 	bloodseeker_bloodrage = 20,
+-- 		-- 	bloodseeker_rupture = 50,
+-- 		-- 	venomancer_poison_nova = 25,
+-- 		-- 	venomancer_noxious_plague = 15,
+-- 		-- 	phoenix_sun_ray = 10,
+-- 		-- 	zuus_arc_lightning = 15,
+-- 		-- 	muerta_pierce_the_veil = 33,
+-- 		-- 	witch_doctor_maledict = 25,
 
--- 			item_piercing_blade = 5,
--- 			item_soulcutter = 10,
--- 			item_revenants_brooch = 200,
--- 			item_witch_blade = 200,
--- 		}
+-- 		-- 	item_piercing_blade = 5,
+-- 		-- 	item_soulcutter = 10,
+-- 		-- 	item_revenants_brooch = 200,
+-- 		-- 	item_witch_blade = 200,
+-- 		-- }
 -- 	}
 -- }))

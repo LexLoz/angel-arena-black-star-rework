@@ -162,7 +162,7 @@
 			"04"
 			{
 				"var_type"			"FIELD_FLOAT"
-				"damage_interval"	"0.1"
+				"damage_interval"	"0.3"
 			}
 			"99"
 			{

@@ -15,9 +15,58 @@
 	transition-property: transform;
 	transition-timing-function: ease-in-out;
 	horizontal-align: right; }
+
+	#BossDropConfrimChoose {
+		width: 400px;
+		height: 200px;
+		padding: 20px;
+		border-radius: 15px;
+		border: 1px solid #363636;
+		background-color: #141414;
+		flow-children: down;
+		horizontal-align: center;
+		vertical-align: center;
+}
+
+	#BossDropConfrimChoose Label {
+		font-size: 32px;
+		color: #fff;
+		text-align: center;
+		text-overflow: shrink;
+		text-shadow: 2px 1px 5px 2 #000;
+	}
+
+	#BossDropConfrimButtons {
+		width: 100%;
+		flow-children: right;
+		vertical-align: center;
+	}
+
+	#BossDropConfrimButtons > Panel {
+		border: 1px solid #363636;
+		padding: 5px;
+		width: 100px;
+		text-align: center;
+		horizontal-align: right;
+		transition: 0.3s;
+		transition-property: color;
+	}
+
+	#BossDropConfrimButtons > Panel:hover {
+		background-color: #424242;
+	}
+
+	#BossDropConfrimButtons > Panel Label {
+		width: 100%;
+	}
+
+	.HideConfrimPanel {
+		transform: scaleX(0);
+}
 	
 	.ShowBossDrop #BossDropItemVotings {
-	transform: translateX(0); }
+		transform: translateX(0); 
+	}
 	
 	.ShowBossDrop #BossDropItemVotingsIcon {
 	transform: rotateZ(-90deg) translateX(10px); }

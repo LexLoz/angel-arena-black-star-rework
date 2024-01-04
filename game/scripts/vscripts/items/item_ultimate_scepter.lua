@@ -1,12 +1,12 @@
-LinkLuaModifier("modifier_item_ultimate_scepter_arena", "items/item_ultimate_scepter.lua", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_item_elderberry_wand", "items/item_ultimate_scepter.lua", LUA_MODIFIER_MOTION_NONE)
 
-item_ultimate_scepter_arena = class({
-	GetIntrinsicModifierName = function() return "modifier_item_ultimate_scepter_arena" end,
+item_elderberry_wand = class({
+	GetIntrinsicModifierName = function() return "modifier_item_elderberry_wand" end,
 })
-function item_ultimate_scepter_arena:HasStaticCooldown() return true end
+function item_elderberry_wand:HasStaticCooldown() return true end
 
 if IsServer() then
-	function item_ultimate_scepter_arena:OnAbilityPhaseStart()
+	function item_elderberry_wand:OnAbilityPhaseStart()
 		--particles/units/heroes/hero_skeletonking/wraith_king_death_e_reincarnate.vpcf
 		self:GetCaster():EmitSound("Arena.Items.Elderberry_Wand.Cast.Start")
 		local timer = 1
@@ -17,7 +17,7 @@ if IsServer() then
 		end)
 		ParticleManager:CreateParticle("particles/items_fx/aegis_respawn_b.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster())
 	end
-	function item_ultimate_scepter_arena:OnSpellStart()
+	function item_elderberry_wand:OnSpellStart()
 		local caster = self:GetCaster()
 		local target = self:GetCursorTarget()
 
@@ -34,14 +34,14 @@ if IsServer() then
 	end
 end
 
-modifier_item_ultimate_scepter_arena = class({
+modifier_item_elderberry_wand = class({
 	RemoveOnDeath = function() return false end,
 	IsHidden      = function() return true end,
 	GetAttributes = function() return MODIFIER_ATTRIBUTE_PERMANENT end,
 	IsPurgable    = function() return false end,
 })
 
-function modifier_item_ultimate_scepter_arena:DeclareFunctions()
+function modifier_item_elderberry_wand:DeclareFunctions()
 	return {
 		MODIFIER_PROPERTY_IS_SCEPTER,
 		MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
@@ -56,48 +56,48 @@ function modifier_item_ultimate_scepter_arena:DeclareFunctions()
 	}
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierScepter()
+function modifier_item_elderberry_wand:GetModifierScepter()
 	return 1
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierBonusStats_Strength()
+function modifier_item_elderberry_wand:GetModifierBonusStats_Strength()
 	return self:GetAbility():GetSpecialValueFor("bonus_strength")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierBonusStats_Agility()
+function modifier_item_elderberry_wand:GetModifierBonusStats_Agility()
 	return self:GetAbility():GetSpecialValueFor("bonus_agility")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierBonusStats_Intellect()
+function modifier_item_elderberry_wand:GetModifierBonusStats_Intellect()
 	return self:GetAbility():GetSpecialValueFor("bonus_intellect")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierSpellAmplify_Percentage()
+function modifier_item_elderberry_wand:GetModifierSpellAmplify_Percentage()
 	return self:GetAbility():GetSpecialValueFor("spell_amp_pct")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierConstantHealthRegen()
+function modifier_item_elderberry_wand:GetModifierConstantHealthRegen()
 	return self:GetAbility():GetSpecialValueFor("bonus_health_regen")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierHealthBonus()
+function modifier_item_elderberry_wand:GetModifierHealthBonus()
 	return self:GetAbility():GetSpecialValueFor("bonus_health")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierManaBonus()
+function modifier_item_elderberry_wand:GetModifierManaBonus()
 	return self:GetAbility():GetSpecialValueFor("bonus_mana")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierConstantManaRegen()
+function modifier_item_elderberry_wand:GetModifierConstantManaRegen()
 	return self:GetAbility():GetSpecialValueFor("bonus_mana_regen")
 end
 
-function modifier_item_ultimate_scepter_arena:GetModifierCastRangeBonus()
+function modifier_item_elderberry_wand:GetModifierCastRangeBonus()
 	return self:GetAbility():GetSpecialValueFor("cast_range_bonus")
 end
 
 if IsServer() then
-	function modifier_item_ultimate_scepter_arena:OnCreated()
+	function modifier_item_elderberry_wand:OnCreated()
 		local parent = self:GetParent()
 		for i = 0, parent:GetAbilityCount() - 1 do
 			local ability = parent:GetAbilityByIndex(i)
@@ -110,7 +110,7 @@ if IsServer() then
 		end
 	end
 
-	function modifier_item_ultimate_scepter_arena:OnDestroy()
+	function modifier_item_elderberry_wand:OnDestroy()
 		local parent = self:GetParent()
 		if not parent:HasScepter() then
 			for i = 0, parent:GetAbilityCount() - 1 do

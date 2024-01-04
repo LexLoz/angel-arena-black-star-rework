@@ -31,7 +31,6 @@ if IsServer() then
 		if IsModifierStrongest(attacker, self:GetName(), MODIFIER_PROC_PRIORITY.pure_damage) then
 
 			-- local damage = target:GetHealth() * ability:GetSpecialValueFor("max_health_damage")  * 0.01
-			-- ability.NoDamageAmp = true
 			-- ApplyDamage({
 			-- 	victim = target,
 			-- 	attacker = attacker,

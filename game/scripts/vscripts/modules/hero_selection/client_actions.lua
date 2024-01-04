@@ -44,7 +44,7 @@ function HeroSelection:OnHeroSelectHero(data)
 		end
 		if HeroSelection:UpdateStatusForPlayer(playerId, newStatus, hero, true) and newStatus == "picked" then
 			PrecacheUnitByNameAsync(GetKeyValue(hero, "base_hero") or hero, function() end, playerId)
-			Gold:ModifyGold(playerId, CUSTOM_STARTING_GOLD)
+			Gold:ModifyGold(playerId, CUSTOM_STARTING_GOLD / GetGoldMultiplier(playerId))
 			HeroSelection:CheckEndHeroSelection()
 		end
 	end

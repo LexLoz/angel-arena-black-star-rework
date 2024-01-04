@@ -52,7 +52,6 @@ if IsServer() then
 		local ability = self:GetAbility()
 		local parent = self:GetParent()
 		local damage = parent:GetMaxHealth() * ability:GetSpecialValueFor("active_self_damage_pct") * 0.01 * ability:GetSpecialValueFor("think_interval")
-		ability.NoDamageAmp = true
 		ApplyDamage({
 			victim = parent,
 			attacker = parent,
